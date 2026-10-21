@@ -13,10 +13,10 @@
       
       
       
-        <link rel="prev" href="../02-ai-cli/">
+        <link rel="prev" href="../08-mongodb/">
       
       
-        <link rel="next" href="../../tools/">
+        <link rel="next" href="../../12-virtualization/">
       
       
         
@@ -27,7 +27,7 @@
     
     
       
-        <title>IaC 与 GitOps 深化 - Ubuntu Server 终极指南与实战教程</title>
+        <title>容器化数据库与主从复制 - Ubuntu Server 终极指南与实战教程</title>
       
     
     
@@ -78,7 +78,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#iac-gitops-ansible-terraform" class="md-skip">
+        <a href="#mysql" class="md-skip">
           跳转至
         </a>
       
@@ -112,7 +112,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              IaC 与 GitOps 深化
+              容器化数据库与主从复制
             
           </span>
         </div>
@@ -467,28 +467,6 @@
   
   
   
-  
-    
-    
-      <li class="md-tabs__item">
-        <a href="../../11-virtualization/" class="md-tabs__link">
-          
-  
-  
-    
-  
-  11 硬件、虚拟化与私有云
-
-        </a>
-      </li>
-    
-  
-
-      
-        
-  
-  
-  
     
   
   
@@ -501,7 +479,51 @@
   
     
   
-  12 AI 工具与智能化运维
+  11 数据库安装、管理与高可用
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../12-virtualization/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  12 硬件、虚拟化与私有云
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../13-ai-ops/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  13 AI 工具与智能化运维
 
         </a>
       </li>
@@ -2533,170 +2555,6 @@
       
   
   
-  
-  
-    
-    
-      
-        
-          
-        
-      
-        
-      
-        
-      
-        
-      
-    
-    
-    
-      
-      
-        
-      
-    
-    
-    <li class="md-nav__item md-nav__item--nested">
-      
-        
-        
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_12" >
-        
-          
-          <div class="md-nav__link md-nav__container">
-            <a href="../../11-virtualization/" class="md-nav__link ">
-              
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    11 硬件、虚拟化与私有云
-  
-
-    
-  </span>
-  
-  
-
-            </a>
-            
-              
-              <label class="md-nav__link " for="__nav_12" id="__nav_12_label" tabindex="0">
-                <span class="md-nav__icon md-icon"></span>
-              </label>
-            
-          </div>
-        
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_12_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_12">
-            <span class="md-nav__icon md-icon"></span>
-            
-  
-    11 硬件、虚拟化与私有云
-  
-
-          </label>
-          <ul class="md-nav__list" data-md-scrollfix>
-            
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../11-virtualization/01-gpu-cuda/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    GPU 与 CUDA
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../11-virtualization/02-kvm-qemu-pve/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    KVM/QEMU 与 Proxmox VE
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../11-virtualization/03-passthrough-sriov/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    PCIe 直通与 SR-IOV
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-          </ul>
-        </nav>
-      
-    </li>
-  
-
-    
-      
-      
-  
-  
     
   
   
@@ -2706,6 +2564,18 @@
       
         
           
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
         
       
         
@@ -2730,7 +2600,7 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_13" checked>
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_12" checked>
         
           
           <div class="md-nav__link md-nav__container">
@@ -2741,7 +2611,7 @@
   <span class="md-ellipsis">
     
   
-    12 AI 工具与智能化运维
+    11 数据库安装、管理与高可用
   
 
     
@@ -2752,18 +2622,18 @@
             </a>
             
               
-              <label class="md-nav__link " for="__nav_13" id="__nav_13_label" tabindex="">
+              <label class="md-nav__link " for="__nav_12" id="__nav_12_label" tabindex="">
                 <span class="md-nav__icon md-icon"></span>
               </label>
             
           </div>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_13_label" aria-expanded="true">
-          <label class="md-nav__title" for="__nav_13">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_12_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_12">
             <span class="md-nav__icon md-icon"></span>
             
   
-    12 AI 工具与智能化运维
+    11 数据库安装、管理与高可用
   
 
           </label>
@@ -2778,14 +2648,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../01-local-llm/" class="md-nav__link">
+      <a href="../01-mysql-install-security/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    本地大模型运维助手
+    MySQL 安装与安全初始化
   
 
     
@@ -2806,14 +2676,182 @@
   
   
     <li class="md-nav__item">
-      <a href="../02-ai-cli/" class="md-nav__link">
+      <a href="../02-mysql-users-remote/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    云端 AI CLI 助手
+    MySQL 用户、权限与远程访问
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../03-mysql-tuning/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MySQL 核心参数调优
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../04-mysql-backup-restore/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MySQL 备份与还原演练
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../05-postgresql-install-auth/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    PostgreSQL 安装与认证
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../06-postgresql-extensions-backup/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    PostgreSQL 插件、备份与 PITR
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../07-redis/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Redis 与 Sentinel 高可用
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../08-mongodb/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MongoDB 安装与调优
   
 
     
@@ -2850,7 +2888,7 @@
   <span class="md-ellipsis">
     
   
-    IaC 与 GitOps 深化
+    容器化数据库与主从复制
   
 
     
@@ -2868,7 +2906,7 @@
   <span class="md-ellipsis">
     
   
-    IaC 与 GitOps 深化
+    容器化数据库与主从复制
   
 
     
@@ -2928,10 +2966,10 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#31-ansible-role" class="md-nav__link">
+  <a href="#31" class="md-nav__link">
     <span class="md-ellipsis">
       
-        3.1 Ansible 基线工程化：role 目录结构
+        3.1 命名卷与绑定挂载对比与选择
       
     </span>
   </a>
@@ -2939,10 +2977,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#32-role" class="md-nav__link">
+  <a href="#32-docker-mysql-postgresql" class="md-nav__link">
     <span class="md-ellipsis">
       
-        3.2 基线 role 示例片段
+        3.2 Docker 运行 MySQL 与 PostgreSQL（含端口安全写法）
       
     </span>
   </a>
@@ -2950,10 +2988,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#33-terraform" class="md-nav__link">
+  <a href="#33-secrets" class="md-nav__link">
     <span class="md-ellipsis">
       
-        3.3 Terraform 入门深化
+        3.3 密码注入的安全注意事项与 secrets 替代
       
     </span>
   </a>
@@ -2961,10 +2999,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#34-gitops" class="md-nav__link">
+  <a href="#34" class="md-nav__link">
     <span class="md-ellipsis">
       
-        3.4 GitOps 流程：从提交到闭环
+        3.4 备份钩子思路
       
     </span>
   </a>
@@ -2972,10 +3010,21 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#35" class="md-nav__link">
+  <a href="#35-mysql" class="md-nav__link">
     <span class="md-ellipsis">
       
-        3.5 漂移检测与合规巡检思路
+        3.5 MySQL 主从复制实战：主库配置
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#36-change-replication-source-to" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.6 从库配置与 CHANGE REPLICATION SOURCE TO
       
     </span>
   </a>
@@ -3024,6 +3073,334 @@
   
 </nav>
       
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_13" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../12-virtualization/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    12 硬件、虚拟化与私有云
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_13" id="__nav_13_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_13_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_13">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    12 硬件、虚拟化与私有云
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../12-virtualization/01-gpu-cuda/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    GPU 与 CUDA
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../12-virtualization/02-kvm-qemu-pve/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    KVM/QEMU 与 Proxmox VE
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../12-virtualization/03-passthrough-sriov/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    PCIe 直通与 SR-IOV
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_14" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../13-ai-ops/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    13 AI 工具与智能化运维
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_14" id="__nav_14_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_14_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_14">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    13 AI 工具与智能化运维
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../13-ai-ops/01-local-llm/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    本地大模型运维助手
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../13-ai-ops/02-ai-cli/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    云端 AI CLI 助手
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../13-ai-ops/03-iac-gitops/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    IaC 与 GitOps 深化
+  
+
+    
+  </span>
+  
+  
+
+      </a>
     </li>
   
 
@@ -3151,10 +3528,10 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#31-ansible-role" class="md-nav__link">
+  <a href="#31" class="md-nav__link">
     <span class="md-ellipsis">
       
-        3.1 Ansible 基线工程化：role 目录结构
+        3.1 命名卷与绑定挂载对比与选择
       
     </span>
   </a>
@@ -3162,10 +3539,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#32-role" class="md-nav__link">
+  <a href="#32-docker-mysql-postgresql" class="md-nav__link">
     <span class="md-ellipsis">
       
-        3.2 基线 role 示例片段
+        3.2 Docker 运行 MySQL 与 PostgreSQL（含端口安全写法）
       
     </span>
   </a>
@@ -3173,10 +3550,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#33-terraform" class="md-nav__link">
+  <a href="#33-secrets" class="md-nav__link">
     <span class="md-ellipsis">
       
-        3.3 Terraform 入门深化
+        3.3 密码注入的安全注意事项与 secrets 替代
       
     </span>
   </a>
@@ -3184,10 +3561,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#34-gitops" class="md-nav__link">
+  <a href="#34" class="md-nav__link">
     <span class="md-ellipsis">
       
-        3.4 GitOps 流程：从提交到闭环
+        3.4 备份钩子思路
       
     </span>
   </a>
@@ -3195,10 +3572,21 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#35" class="md-nav__link">
+  <a href="#35-mysql" class="md-nav__link">
     <span class="md-ellipsis">
       
-        3.5 漂移检测与合规巡检思路
+        3.5 MySQL 主从复制实战：主库配置
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#36-change-replication-source-to" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.6 从库配置与 CHANGE REPLICATION SOURCE TO
       
     </span>
   </a>
@@ -3260,7 +3648,7 @@
 
 
   
-    <a href="https://github.com/curzydj8/ubuntu-server-guide/edit/main/docs/12-ai-ops/03-iac-gitops.md" title="编辑此页" class="md-content__button md-icon" rel="edit">
+    <a href="https://github.com/curzydj8/ubuntu-server-guide/edit/main/docs/11-databases/09-ha-containerized.md" title="编辑此页" class="md-content__button md-icon" rel="edit">
       
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10 20H6V4h7v5h5v3.1l2-2V8l-6-6H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h4zm10.2-7c.1 0 .3.1.4.2l1.3 1.3c.2.2.2.6 0 .8l-1 1-2.1-2.1 1-1c.1-.1.2-.2.4-.2m0 3.9L14.1 23H12v-2.1l6.1-6.1z"/></svg>
     </a>
@@ -3269,373 +3657,294 @@
     
       
     
-    <a href="https://github.com/curzydj8/ubuntu-server-guide/raw/main/docs/12-ai-ops/03-iac-gitops.md" title="查看本页的源代码" class="md-content__button md-icon">
+    <a href="https://github.com/curzydj8/ubuntu-server-guide/raw/main/docs/11-databases/09-ha-containerized.md" title="查看本页的源代码" class="md-content__button md-icon">
       
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 18c.56 0 1 .44 1 1s-.44 1-1 1-1-.44-1-1 .44-1 1-1m0-3c-2.73 0-5.06 1.66-6 4 .94 2.34 3.27 4 6 4s5.06-1.66 6-4c-.94-2.34-3.27-4-6-4m0 6.5a2.5 2.5 0 0 1-2.5-2.5 2.5 2.5 0 0 1 2.5-2.5 2.5 2.5 0 0 1 2.5 2.5 2.5 2.5 0 0 1-2.5 2.5M9.27 20H6V4h7v5h5v4.07c.7.08 1.36.25 2 .49V8l-6-6H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h4.5a8.2 8.2 0 0 1-1.23-2"/></svg>
     </a>
   
 
 
-<h1 id="iac-gitops-ansible-terraform">IaC 与 GitOps 深化（Ansible / Terraform）<a class="headerlink" href="#iac-gitops-ansible-terraform" title="Permanent link">&para;</a></h1>
+<h1 id="mysql">容器化数据库与 MySQL 主从实战<a class="headerlink" href="#mysql" title="Permanent link">&para;</a></h1>
 <h2 id="_1">一、概述与使用场景<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
-<p>本章目标：<strong>任意一台空白 Ubuntu 机器，能用一条流水线自动构建成符合标准的生产基线</strong>——用户、SSH 加固、内核参数、基础软件、防火墙、时间同步全部到位，且可重复、可审计、可回滚。这就是基础设施即代码（IaC）：把「机器应该是什么样」写成代码，而非逐台手敲。</p>
-<p>不用 IaC 的风险：手工机器必然漂移——这台忘关 root 登录、那台参数是旧的；无人说得清每台改过什么；扩容时逐台重复劳动且错误率上升。有了 IaC，基线只有一份代码，变更走 Git 评审，出问题能定位到具体提交。</p>
-<p>工具分工：</p>
-<ul>
-<li><strong>Terraform</strong>：负责「有没有这台机器」——创建/销毁云实例或本地虚拟机，管理资源生命周期。</li>
-<li><strong>Ansible</strong>：负责「机器里是什么样」——系统配置、软件包、服务状态。</li>
-<li><strong>GitOps</strong>：负责「变更怎么生效」——所有变更以 Git 为唯一事实来源，经 CI 校验后自动/半自动执行，并持续检测实际状态与代码的漂移。</li>
-</ul>
-<p>与既有章节分工：<a href="../../07-automation/03-ansible/">第 07 部分 Ansible 入门章</a> 讲安装、inventory、ad-hoc 与第一个 playbook；<strong>本章不重复入门</strong>，直接讲基线 role 工程化、Terraform 落地与 state 管理、GitOps 闭环。没读过入门章请先补完。</p>
+<p>容器化让数据库部署可复制、版本可锁定，适合测试环境、边缘节点与中小规模生产。但容器不会自动带来数据安全：选错存储方式数据随容器删除而丢失、密码写进镜像或仓库、端口映射到全网，都是真实事故来源。本章先讲 Docker 运行 MySQL/PostgreSQL 的最佳实践，再在裸机或容器均适用的层面完整实战 MySQL 主从复制，包括状态判读、延迟排查与经典排错。</p>
+<p>适用边界：核心交易主库、超大规模实例优先裸机或云托管数据库；容器化更适合标准化交付与快速复制环境。无论哪种形态，红线一致：禁空密码、数据库端口不直接对公网全开、应用不用超级用户、备份必须做恢复验证。</p>
 <h2 id="_2">二、环境准备与前置条件<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
+<p>系统为 Ubuntu 22.04/24.04 LTS，已安装 Docker Engine 与 Compose 插件，当前账号在 <code>docker</code> 组内或使用 <code>sudo</code>。MySQL 主从演练需要两台服务器，示例主库 192.0.2.21、从库 192.0.2.22，MySQL 版本为 8.0 系列（以当前官方稳定版为准）。操作前检查：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>docker<span class="w"> </span>--version
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>docker<span class="w"> </span>compose<span class="w"> </span>version
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>docker<span class="w"> </span>ps
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>free<span class="w"> </span>-h
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>df<span class="w"> </span>-h<span class="w"> </span>/
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>ss<span class="w"> </span>-tlnp<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-E<span class="w"> </span><span class="s1">'3306|5432'</span>
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>sudo<span class="w"> </span>ufw<span class="w"> </span>status
+</code></pre></div>
+<h2 id="_3">三、手把手操作步骤<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h2>
+<h3 id="31">3.1 命名卷与绑定挂载对比与选择<a class="headerlink" href="#31" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
 <tr>
-<th>项目</th>
-<th>要求</th>
+<th>对比项</th>
+<th>命名卷（Named Volume）</th>
+<th>绑定挂载（Bind Mount）</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>控制机</td>
-<td>Ubuntu 22.04/24.04 LTS（可为运维跳板机或 CI  runner）</td>
+<td>声明方式</td>
+<td><code>docker volume create</code> 或 Compose <code>volumes</code></td>
+<td>直接映射宿主机目录</td>
 </tr>
 <tr>
-<td>目标机</td>
-<td>Ubuntu 22.04/24.04 LTS，已开启 SSH，控制机可免密登录</td>
+<td>数据位置</td>
+<td>Docker 管理区 <code>/var/lib/docker/volumes</code></td>
+<td>你指定的宿主机路径</td>
 </tr>
 <tr>
-<td>权限</td>
-<td>目标机上有一个可 <code>sudo</code> 的账号（示例用 <code>opsadmin</code>）</td>
+<td>权限处理</td>
+<td>容器镜像默认适配，出错少</td>
+<td>需手动对齐容器内 UID/GID，MySQL 常用 999、PostgreSQL 常用 999 或 70（以镜像为准）</td>
 </tr>
 <tr>
-<td>软件</td>
-<td>Git、Ansible、Terraform（版本以各自官方文档为准）</td>
+<td>备份便利</td>
+<td>需经容器或卷导出</td>
+<td>宿主机直接打包目录</td>
 </tr>
 <tr>
-<td>仓库</td>
-<td>一个私有 Git 仓库存放基线代码（示例 remote 用 <code>git@github.com:example-org/ubuntu-baseline.git</code> 形态表示）</td>
+<td>迁移便利</td>
+<td>换机需导出导入</td>
+<td>拷目录即可，但容易误带权限问题</td>
+</tr>
+<tr>
+<td>推荐场景</td>
+<td>绝大多数生产与测试，图省心与隔离</td>
+<td>需要宿主机工具直接处理数据文件、合规要求数据落指定盘</td>
 </tr>
 </tbody>
 </table>
-<p>安装与自检：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>sudo<span class="w"> </span>apt<span class="w"> </span>update
-<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>sudo<span class="w"> </span>apt<span class="w"> </span>install<span class="w"> </span>-y<span class="w"> </span>git<span class="w"> </span>ansible
-<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>ansible<span class="w"> </span>--version
-<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>git<span class="w"> </span>--version
-<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="c1"># Terraform 请按 HashiCorp 官方文档的 apt 仓库方式安装，装后自检：</span>
-<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>terraform<span class="w"> </span>version
+<p>选择结论：默认用命名卷；只有明确需要宿主机侧直接管理数据目录时才用绑定挂载，并把目录权限一次对齐：MySQL 示例 <code>sudo mkdir -p /data/mysql &amp;&amp; sudo chown 999:999 /data/mysql &amp;&amp; sudo chmod 750 /data/mysql</code>，PostgreSQL 同理替换为其镜像要求的属主。不要把数据目录绑到家目录或 <code>/tmp</code>。</p>
+<h3 id="32-docker-mysql-postgresql">3.2 Docker 运行 MySQL 与 PostgreSQL（含端口安全写法）<a class="headerlink" href="#32-docker-mysql-postgresql" title="Permanent link">&para;</a></h3>
+<p>端口发布是容器数据库第一风险点。写法对比：<code>3306:3306</code> 等同于绑 <code>0.0.0.0</code> 对全网开放，禁止用于生产；<code>127.0.0.1:3306:3306</code> 只绑回环，本机应用与跳板访问可用；绑内网网卡如 <code>192.0.2.21:3306:3306</code> 只对内网暴露，再叠加防火墙白名单。Docker 会直接写 iptables，部分场景下绕过 <code>ufw</code> 默认链，因此端口绑定地址本身必须写对，不能只靠防火墙兜底。</p>
+<p>MySQL 的 Compose 示例文件 <code>docker-compose.yml</code>：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="nt">services</span><span class="p">:</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="w">  </span><span class="nt">mysql</span><span class="p">:</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mysql:8.0</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="w">    </span><span class="nt">container_name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">app-mysql</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="w">    </span><span class="nt">restart</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">unless-stopped</span>
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="w">    </span><span class="nt">environment</span><span class="p">:</span>
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="w">      </span><span class="nt">MYSQL_ROOT_PASSWORD</span><span class="p">:</span><span class="w"> </span><span class="s">"&lt;password&gt;"</span>
+<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="w">      </span><span class="nt">MYSQL_DATABASE</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">appdb</span>
+<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="w">      </span><span class="nt">MYSQL_USER</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">appuser</span>
+<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="w">      </span><span class="nt">MYSQL_PASSWORD</span><span class="p">:</span><span class="w"> </span><span class="s">"&lt;password&gt;"</span>
+<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a><span class="w">      </span><span class="nt">TZ</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Asia/Shanghai</span>
+<a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a><span class="w">    </span><span class="nt">ports</span><span class="p">:</span>
+<a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">"127.0.0.1:3306:3306"</span>
+<a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a><span class="w">    </span><span class="nt">volumes</span><span class="p">:</span>
+<a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mysql_data:/var/lib/mysql</span>
+<a id="__codelineno-1-16" name="__codelineno-1-16" href="#__codelineno-1-16"></a><span class="w">    </span><span class="nt">command</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">--character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci</span>
+<a id="__codelineno-1-17" name="__codelineno-1-17" href="#__codelineno-1-17"></a><span class="nt">volumes</span><span class="p">:</span>
+<a id="__codelineno-1-18" name="__codelineno-1-18" href="#__codelineno-1-18"></a><span class="w">  </span><span class="nt">mysql_data</span><span class="p">:</span>
 </code></pre></div>
-<p>准备工作区：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>mkdir<span class="w"> </span>-p<span class="w"> </span>~/iac<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nb">cd</span><span class="w"> </span>~/iac
-<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>git<span class="w"> </span>clone<span class="w"> </span>git@github.com:example-org/ubuntu-baseline.git
-<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="nb">cd</span><span class="w"> </span>ubuntu-baseline
+<p>PostgreSQL 的 Compose 示例：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="nt">services</span><span class="p">:</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="w">  </span><span class="nt">postgres</span><span class="p">:</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">postgres:16</span>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="w">    </span><span class="nt">container_name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">app-postgres</span>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="w">    </span><span class="nt">restart</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">unless-stopped</span>
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="w">    </span><span class="nt">environment</span><span class="p">:</span>
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="w">      </span><span class="nt">POSTGRES_DB</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">appdb</span>
+<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="w">      </span><span class="nt">POSTGRES_USER</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">appuser</span>
+<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="w">      </span><span class="nt">POSTGRES_PASSWORD</span><span class="p">:</span><span class="w"> </span><span class="s">"&lt;password&gt;"</span>
+<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a><span class="w">      </span><span class="nt">TZ</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Asia/Shanghai</span>
+<a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a><span class="w">    </span><span class="nt">ports</span><span class="p">:</span>
+<a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">"127.0.0.1:5432:5432"</span>
+<a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a><span class="w">    </span><span class="nt">volumes</span><span class="p">:</span>
+<a id="__codelineno-2-14" name="__codelineno-2-14" href="#__codelineno-2-14"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">pg_data:/var/lib/postgresql/data</span>
+<a id="__codelineno-2-15" name="__codelineno-2-15" href="#__codelineno-2-15"></a><span class="nt">volumes</span><span class="p">:</span>
+<a id="__codelineno-2-16" name="__codelineno-2-16" href="#__codelineno-2-16"></a><span class="w">  </span><span class="nt">pg_data</span><span class="p">:</span>
 </code></pre></div>
-<div class="admonition note">
-<p class="admonition-title">控制机不要用生产业务机</p>
-<p>Ansible/Terraform 的控制机持有通往所有目标机的 SSH 凭据与 state 文件，应放在受控的运维机或 CI 环境中，不要与业务服务混部。</p>
-</div>
-<h2 id="_3">三、手把手操作步骤<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h2>
-<h3 id="31-ansible-role">3.1 Ansible 基线工程化：role 目录结构<a class="headerlink" href="#31-ansible-role" title="Permanent link">&para;</a></h3>
-<p>入门章的单文件 playbook 在机器变多后难以维护。基线工程化做法是拆成 role，每个 role 管一个领域：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>ubuntu-baseline/
-<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>├── ansible/
-<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>│   ├── inventory/
-<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>│   │   ├── hosts.yml
-<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>│   │   └── group_vars/
-<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>│   │       └── all.yml
-<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>│   ├── roles/
-<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a>│   │   ├── users/          # 运维账号与 sudo 规则
-<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a>│   │   │   ├── tasks/main.yml
-<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a>│   │   │   └── templates/sudoers_ops.j2
-<a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a>│   │   ├── ssh_hardening/  # SSH 安全加固
-<a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a>│   │   │   ├── tasks/main.yml
-<a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a>│   │   │   ├── handlers/main.yml
-<a id="__codelineno-2-14" name="__codelineno-2-14" href="#__codelineno-2-14"></a>│   │   │   └── templates/sshd_baseline.conf.j2
-<a id="__codelineno-2-15" name="__codelineno-2-15" href="#__codelineno-2-15"></a>│   │   ├── sysctl_baseline/ # 内核参数基线
-<a id="__codelineno-2-16" name="__codelineno-2-16" href="#__codelineno-2-16"></a>│   │   │   └── tasks/main.yml
-<a id="__codelineno-2-17" name="__codelineno-2-17" href="#__codelineno-2-17"></a>│   │   └── packages/       # 基础软件包
-<a id="__codelineno-2-18" name="__codelineno-2-18" href="#__codelineno-2-18"></a>│   │       └── tasks/main.yml
-<a id="__codelineno-2-19" name="__codelineno-2-19" href="#__codelineno-2-19"></a>│   └── playbooks/
-<a id="__codelineno-2-20" name="__codelineno-2-20" href="#__codelineno-2-20"></a>│       └── baseline.yml    # 基线总入口
-<a id="__codelineno-2-21" name="__codelineno-2-21" href="#__codelineno-2-21"></a>└── terraform/
-<a id="__codelineno-2-22" name="__codelineno-2-22" href="#__codelineno-2-22"></a>    └── （见 3.2 节）
+<p>启动与检查：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>docker<span class="w"> </span>compose<span class="w"> </span>up<span class="w"> </span>-d
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>docker<span class="w"> </span>compose<span class="w"> </span>ps
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>docker<span class="w"> </span>compose<span class="w"> </span>logs<span class="w"> </span>-f<span class="w"> </span>mysql
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>docker<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>-it<span class="w"> </span>app-mysql<span class="w"> </span>mysql<span class="w"> </span>-u<span class="w"> </span>appuser<span class="w"> </span>-p<span class="s1">'&lt;password&gt;'</span><span class="w"> </span>-e<span class="w"> </span><span class="s2">"SELECT VERSION();"</span>
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>docker<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>-it<span class="w"> </span>app-postgres<span class="w"> </span>psql<span class="w"> </span>-U<span class="w"> </span>appuser<span class="w"> </span>-d<span class="w"> </span>appdb<span class="w"> </span>-c<span class="w"> </span><span class="s2">"SELECT version();"</span>
 </code></pre></div>
-<p>入口 playbook <code>ansible/playbooks/baseline.yml</code> 完整内容：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="nn">---</span>
-<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">应用 Ubuntu 生产基线</span>
-<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="w">  </span><span class="nt">hosts</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">baseline</span>
-<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="w">  </span><span class="nt">become</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
-<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="w">  </span><span class="nt">roles</span><span class="p">:</span>
-<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">users</span>
-<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ssh_hardening</span>
-<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sysctl_baseline</span>
-<a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">packages</span>
+<h3 id="33-secrets">3.3 密码注入的安全注意事项与 secrets 替代<a class="headerlink" href="#33-secrets" title="Permanent link">&para;</a></h3>
+<p><code>environment</code> 写明文密码的隐患：<code>docker inspect</code> 可见、Compose 文件容易误提交 Git、镜像历史可能带残留。只适合本地演练。生产用 Docker secrets（Compose 支持文件式 secrets，Swarm 与单机 Compose 均可用），把密码放独立文件并设权限 <code>600</code>，且加入 <code>.gitignore</code>：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>mkdir<span class="w"> </span>-p<span class="w"> </span>~/db-secrets
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="nb">printf</span><span class="w"> </span><span class="s1">'&lt;password&gt;'</span><span class="w"> </span>&gt;<span class="w"> </span>~/db-secrets/mysql_root_password.txt
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="nb">printf</span><span class="w"> </span><span class="s1">'&lt;password&gt;'</span><span class="w"> </span>&gt;<span class="w"> </span>~/db-secrets/mysql_app_password.txt
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>chmod<span class="w"> </span><span class="m">600</span><span class="w"> </span>~/db-secrets/mysql_root_password.txt<span class="w"> </span>~/db-secrets/mysql_app_password.txt
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="nb">printf</span><span class="w"> </span><span class="s1">'db-secrets/\n*.txt\n'</span><span class="w"> </span>&gt;&gt;<span class="w"> </span>.gitignore
 </code></pre></div>
-<p>inventory <code>ansible/inventory/hosts.yml</code>（地址为文档示例段）：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="nt">all</span><span class="p">:</span>
-<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="w">  </span><span class="nt">children</span><span class="p">:</span>
-<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="w">    </span><span class="nt">baseline</span><span class="p">:</span>
-<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="w">      </span><span class="nt">hosts</span><span class="p">:</span>
-<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="w">        </span><span class="nt">server-a.example.com</span><span class="p">:</span>
-<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="w">          </span><span class="nt">ansible_host</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">192.0.2.10</span>
-<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a><span class="w">        </span><span class="nt">server-b.example.com</span><span class="p">:</span>
-<a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a><span class="w">          </span><span class="nt">ansible_host</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">192.0.2.11</span>
-<a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a><span class="w">      </span><span class="nt">vars</span><span class="p">:</span>
-<a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a><span class="w">        </span><span class="nt">ansible_user</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">opsadmin</span>
+<p>Compose 改用 <code>_FILE</code> 后缀变量（MySQL 与 PostgreSQL 官方镜像均支持）：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="nt">services</span><span class="p">:</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="w">  </span><span class="nt">mysql</span><span class="p">:</span>
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mysql:8.0</span>
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="w">    </span><span class="nt">environment</span><span class="p">:</span>
+<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a><span class="w">      </span><span class="nt">MYSQL_ROOT_PASSWORD_FILE</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/run/secrets/mysql_root_password</span>
+<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a><span class="w">      </span><span class="nt">MYSQL_PASSWORD_FILE</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/run/secrets/mysql_app_password</span>
+<a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a><span class="w">      </span><span class="nt">MYSQL_DATABASE</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">appdb</span>
+<a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a><span class="w">      </span><span class="nt">MYSQL_USER</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">appuser</span>
+<a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a><span class="w">    </span><span class="nt">secrets</span><span class="p">:</span>
+<a id="__codelineno-5-10" name="__codelineno-5-10" href="#__codelineno-5-10"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mysql_root_password</span>
+<a id="__codelineno-5-11" name="__codelineno-5-11" href="#__codelineno-5-11"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mysql_app_password</span>
+<a id="__codelineno-5-12" name="__codelineno-5-12" href="#__codelineno-5-12"></a><span class="nt">secrets</span><span class="p">:</span>
+<a id="__codelineno-5-13" name="__codelineno-5-13" href="#__codelineno-5-13"></a><span class="w">  </span><span class="nt">mysql_root_password</span><span class="p">:</span>
+<a id="__codelineno-5-14" name="__codelineno-5-14" href="#__codelineno-5-14"></a><span class="w">    </span><span class="nt">file</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">./db-secrets/mysql_root_password.txt</span>
+<a id="__codelineno-5-15" name="__codelineno-5-15" href="#__codelineno-5-15"></a><span class="w">  </span><span class="nt">mysql_app_password</span><span class="p">:</span>
+<a id="__codelineno-5-16" name="__codelineno-5-16" href="#__codelineno-5-16"></a><span class="w">    </span><span class="nt">file</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">./db-secrets/mysql_app_password.txt</span>
 </code></pre></div>
-<h3 id="32-role">3.2 基线 role 示例片段<a class="headerlink" href="#32-role" title="Permanent link">&para;</a></h3>
-<p><strong>用户 role</strong> <code>roles/users/tasks/main.yml</code>：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="nn">---</span>
-<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">创建运维账号 opsadmin</span>
-<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="w">  </span><span class="nt">ansible.builtin.user</span><span class="p">:</span>
-<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">opsadmin</span>
-<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a><span class="w">    </span><span class="nt">shell</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/bin/bash</span>
-<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a><span class="w">    </span><span class="nt">groups</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sudo</span>
-<a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a><span class="w">    </span><span class="nt">append</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
-<a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a><span class="w">    </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">present</span>
-<a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a>
-<a id="__codelineno-5-10" name="__codelineno-5-10" href="#__codelineno-5-10"></a><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">下发 opsadmin 的 sudoers 规则</span>
-<a id="__codelineno-5-11" name="__codelineno-5-11" href="#__codelineno-5-11"></a><span class="w">  </span><span class="nt">ansible.builtin.template</span><span class="p">:</span>
-<a id="__codelineno-5-12" name="__codelineno-5-12" href="#__codelineno-5-12"></a><span class="w">    </span><span class="nt">src</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sudoers_ops.j2</span>
-<a id="__codelineno-5-13" name="__codelineno-5-13" href="#__codelineno-5-13"></a><span class="w">    </span><span class="nt">dest</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/etc/sudoers.d/opsadmin</span>
-<a id="__codelineno-5-14" name="__codelineno-5-14" href="#__codelineno-5-14"></a><span class="w">    </span><span class="nt">mode</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;0440&quot;</span>
-<a id="__codelineno-5-15" name="__codelineno-5-15" href="#__codelineno-5-15"></a><span class="w">    </span><span class="nt">validate</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;visudo</span><span class="nv"> </span><span class="s">-cf</span><span class="nv"> </span><span class="s">%s&quot;</span>
+<p>PostgreSQL 对应变量为 <code>POSTGRES_PASSWORD_FILE</code>，用法相同。更高阶环境把 secrets 文件换成 Vault 等密钥系统动态下发，Compose 结构不用改。</p>
+<h3 id="34">3.4 备份钩子思路<a class="headerlink" href="#34" title="Permanent link">&para;</a></h3>
+<p>思路是把备份做成与容器同生命周期的固定动作，而不是靠人记得执行：其一，宿主机 cron 定时调用逻辑备份命令并落到容器外目录；其二，应用发布流水线在升级镜像前自动触发一次备份并校验文件非空；其三，备份完成后立刻做一次列表校验或试恢复到临时容器。示例 cron 脚本 <code>/usr/local/bin/backup-mysql.sh</code>：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="ch">#!/bin/bash</span>
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="nb">set</span><span class="w"> </span>-e
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="nv">BACKUP_DIR</span><span class="o">=</span>/var/backups/mysql
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a>mkdir<span class="w"> </span>-p<span class="w"> </span><span class="s2">"</span><span class="nv">$BACKUP_DIR</span><span class="s2">"</span>
+<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a>docker<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>app-mysql<span class="w"> </span>mysqldump<span class="w"> </span>-u<span class="w"> </span>root<span class="w"> </span>-p<span class="s2">"</span><span class="k">$(</span>cat<span class="w"> </span>/home/ubuntu/db-secrets/mysql_root_password.txt<span class="k">)</span><span class="s2">"</span><span class="w"> </span>--single-transaction<span class="w"> </span>--routines<span class="w"> </span>appdb<span class="w"> </span><span class="p">|</span><span class="w"> </span>gzip<span class="w"> </span>&gt;<span class="w"> </span><span class="s2">"</span><span class="nv">$BACKUP_DIR</span><span class="s2">/appdb_</span><span class="k">$(</span>date<span class="w"> </span>+%F_%H%M<span class="k">)</span><span class="s2">.sql.gz"</span>
+<a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a>gzip<span class="w"> </span>-t<span class="w"> </span><span class="s2">"</span><span class="nv">$BACKUP_DIR</span><span class="s2">/appdb_</span><span class="k">$(</span>date<span class="w"> </span>+%F_%H%M<span class="k">)</span><span class="s2">.sql.gz"</span>
+<a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a>find<span class="w"> </span><span class="s2">"</span><span class="nv">$BACKUP_DIR</span><span class="s2">"</span><span class="w"> </span>-name<span class="w"> </span><span class="s1">'appdb_*.sql.gz'</span><span class="w"> </span>-mtime<span class="w"> </span>+7<span class="w"> </span>-delete
 </code></pre></div>
-<p>模板 <code>roles/users/templates/sudoers_ops.j2</code>：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="na">opsadmin ALL</span><span class="o">=</span><span class="s">(ALL) NOPASSWD: /usr/bin/systemctl, /usr/bin/journalctl, /usr/bin/apt</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>sudo<span class="w"> </span>chmod<span class="w"> </span><span class="m">750</span><span class="w"> </span>/usr/local/bin/backup-mysql.sh
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>sudo<span class="w"> </span>crontab<span class="w"> </span>-e
 </code></pre></div>
-<p>说明：sudo 只放行常用命令而非 <code>ALL</code>；<code>validate</code> 保证语法错时不写坏 sudoers。</p>
-<p><strong>SSH 加固 role</strong> <code>roles/ssh_hardening/tasks/main.yml</code>：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="nn">---</span>
-<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">备份原 sshd_config（带时间戳，仅首次保留原版）</span>
-<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a><span class="w">  </span><span class="nt">ansible.builtin.copy</span><span class="p">:</span>
-<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a><span class="w">    </span><span class="nt">src</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/etc/ssh/sshd_config</span>
-<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a><span class="w">    </span><span class="nt">dest</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/etc/ssh/sshd_config.orig.bak</span>
-<a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a><span class="w">    </span><span class="nt">remote_src</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
-<a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a><span class="w">    </span><span class="nt">force</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
-<a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a><span class="w">    </span><span class="nt">mode</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;0600&quot;</span>
-<a id="__codelineno-7-9" name="__codelineno-7-9" href="#__codelineno-7-9"></a>
-<a id="__codelineno-7-10" name="__codelineno-7-10" href="#__codelineno-7-10"></a><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">下发 SSH 基线配置片段</span>
-<a id="__codelineno-7-11" name="__codelineno-7-11" href="#__codelineno-7-11"></a><span class="w">  </span><span class="nt">ansible.builtin.template</span><span class="p">:</span>
-<a id="__codelineno-7-12" name="__codelineno-7-12" href="#__codelineno-7-12"></a><span class="w">    </span><span class="nt">src</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sshd_baseline.conf.j2</span>
-<a id="__codelineno-7-13" name="__codelineno-7-13" href="#__codelineno-7-13"></a><span class="w">    </span><span class="nt">dest</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/etc/ssh/sshd_config.d/90-baseline.conf</span>
-<a id="__codelineno-7-14" name="__codelineno-7-14" href="#__codelineno-7-14"></a><span class="w">    </span><span class="nt">mode</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;0600&quot;</span>
-<a id="__codelineno-7-15" name="__codelineno-7-15" href="#__codelineno-7-15"></a><span class="w">  </span><span class="nt">notify</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">重启 ssh 服务</span>
-<a id="__codelineno-7-16" name="__codelineno-7-16" href="#__codelineno-7-16"></a>
-<a id="__codelineno-7-17" name="__codelineno-7-17" href="#__codelineno-7-17"></a><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">校验 sshd 配置语法</span>
-<a id="__codelineno-7-18" name="__codelineno-7-18" href="#__codelineno-7-18"></a><span class="w">  </span><span class="nt">ansible.builtin.command</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sshd -t</span>
-<a id="__codelineno-7-19" name="__codelineno-7-19" href="#__codelineno-7-19"></a><span class="w">  </span><span class="nt">changed_when</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
+<p>在 crontab 追加一行：<code>0 2 * * * /usr/local/bin/backup-mysql.sh</code>。PostgreSQL 对应把命令换为 <code>docker exec app-postgres pg_dump -U appuser -Fc appdb</code>。恢复验证用临时容器导入最近备份并查行数，步骤与本部分 PostgreSQL 备份章节的隔离恢复一致，不在此省略，生产上线前必须实跑一次。</p>
+<h3 id="35-mysql">3.5 MySQL 主从复制实战：主库配置<a class="headerlink" href="#35-mysql" title="Permanent link">&para;</a></h3>
+<p>目标拓扑：主库 192.0.2.21 写、从库 192.0.2.22 只读复制。改主库配置前先备份：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>sudo<span class="w"> </span>cp<span class="w"> </span>/etc/mysql/mysql.conf.d/mysqld.cnf<span class="w"> </span>/etc/mysql/mysql.conf.d/mysqld.cnf.bak.<span class="k">$(</span>date<span class="w"> </span>+%F<span class="k">)</span>
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>sudo<span class="w"> </span>nano<span class="w"> </span>/etc/mysql/mysql.conf.d/mysqld.cnf
 </code></pre></div>
-<p>模板 <code>roles/ssh_hardening/templates/sshd_baseline.conf.j2</code>：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="na">PermitRootLogin no</span>
-<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="na">PasswordAuthentication no</span>
-<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="na">PubkeyAuthentication yes</span>
-<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a><span class="na">MaxAuthTries 3</span>
-<a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a><span class="na">X11Forwarding no</span>
+<p>在 <code>[mysqld]</code> 段设置：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="na">server-id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">1</span>
+<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="na">log_bin</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">/var/log/mysql/mysql-bin.log</span>
+<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a><span class="na">binlog_format</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">ROW</span>
+<a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a><span class="na">binlog_do_db</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">appdb</span>
+<a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a><span class="na">bind-address</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">192.0.2.21</span>
+<a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a><span class="na">max_binlog_size</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">512M</span>
+<a id="__codelineno-9-7" name="__codelineno-9-7" href="#__codelineno-9-7"></a><span class="na">expire_logs_days</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">7</span>
 </code></pre></div>
-<p>handler <code>roles/ssh_hardening/handlers/main.yml</code>：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="nn">---</span>
-<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">重启 ssh 服务</span>
-<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a><span class="w">  </span><span class="nt">ansible.builtin.service</span><span class="p">:</span>
-<a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a><span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ssh</span>
-<a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a><span class="w">    </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">restarted</span>
+<p>逐项讲解：<code>server-id</code> 全拓扑唯一，主库 1、从库 2，以此类推；<code>log_bin</code> 开启二进制日志，是复制的数据来源，没开就无从复制；<code>binlog_format=ROW</code> 按行记录变更，主键冲突定位清晰、一致性最好，<code>STATEMENT</code> 省空间但含函数与临时表时易不一致，<code>MIXED</code> 为折中，新部署统一用 <code>ROW</code>；<code>binlog_do_db</code> 只复制 <code>appdb</code>，多库场景逐行追加或改用从库侧过滤；<code>expire_logs_days=7</code> 自动清理 7 天前 binlog，防止撑满磁盘，取值依据是从库最长允许离线时间，留 7 天表示从库停机一周内可追平。</p>
+<p>重启主库并创建复制专用账号。该账号只给复制权限，禁止复用 root 或应用账号：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>sudo<span class="w"> </span>systemctl<span class="w"> </span>restart<span class="w"> </span>mysql
+<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a>mysql<span class="w"> </span>-u<span class="w"> </span>root<span class="w"> </span>-p<span class="s1">'&lt;password&gt;'</span>
 </code></pre></div>
-<div class="admonition warning">
-<p class="admonition-title">改 SSH 前留好后路</p>
-<p>下发 SSH 加固前，务必确认 <code>opsadmin</code> 的公钥登录已可用，并保持一个已登录的会话不要断开。先在一台测试机执行、验证新会话能登录后，再推广到全量。下发到 <code>sshd_config.d/</code> 片段而非覆盖主文件，也是为了出问题时删片段即可回滚。</p>
-</div>
-<p><strong>sysctl role</strong> <code>roles/sysctl_baseline/tasks/main.yml</code>：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="nn">---</span>
-<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">下发内核参数基线</span>
-<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a><span class="w">  </span><span class="nt">ansible.builtin.copy</span><span class="p">:</span>
-<a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a><span class="w">    </span><span class="nt">dest</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/etc/sysctl.d/90-baseline.conf</span>
-<a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a><span class="w">    </span><span class="nt">mode</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;0644&quot;</span>
-<a id="__codelineno-10-6" name="__codelineno-10-6" href="#__codelineno-10-6"></a><span class="w">    </span><span class="nt">content</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
-<a id="__codelineno-10-7" name="__codelineno-10-7" href="#__codelineno-10-7"></a><span class="w">      </span><span class="no">net.ipv4.ip_forward = 0</span>
-<a id="__codelineno-10-8" name="__codelineno-10-8" href="#__codelineno-10-8"></a><span class="w">      </span><span class="no">net.ipv4.conf.all.accept_redirects = 0</span>
-<a id="__codelineno-10-9" name="__codelineno-10-9" href="#__codelineno-10-9"></a><span class="w">      </span><span class="no">net.ipv4.conf.all.log_martians = 1</span>
-<a id="__codelineno-10-10" name="__codelineno-10-10" href="#__codelineno-10-10"></a><span class="w">      </span><span class="no">kernel.dmesg_restrict = 1</span>
-<a id="__codelineno-10-11" name="__codelineno-10-11" href="#__codelineno-10-11"></a><span class="w">      </span><span class="no">fs.file-max = 2097152</span>
-<a id="__codelineno-10-12" name="__codelineno-10-12" href="#__codelineno-10-12"></a><span class="w">  </span><span class="nt">notify</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">重新加载 sysctl</span>
-<a id="__codelineno-10-13" name="__codelineno-10-13" href="#__codelineno-10-13"></a>
-<a id="__codelineno-10-14" name="__codelineno-10-14" href="#__codelineno-10-14"></a><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">立即应用 sysctl 基线</span>
-<a id="__codelineno-10-15" name="__codelineno-10-15" href="#__codelineno-10-15"></a><span class="w">  </span><span class="nt">ansible.builtin.command</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sysctl --system</span>
-<a id="__codelineno-10-16" name="__codelineno-10-16" href="#__codelineno-10-16"></a><span class="w">  </span><span class="nt">changed_when</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="k">CREATE</span><span class="w"> </span><span class="k">USER</span><span class="w"> </span><span class="s1">'repl'</span><span class="o">@</span><span class="s1">'192.0.2.22'</span><span class="w"> </span><span class="n">IDENTIFIED</span><span class="w"> </span><span class="k">WITH</span><span class="w"> </span><span class="n">mysql_native_password</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="s1">'&lt;password&gt;'</span><span class="p">;</span>
+<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a><span class="k">GRANT</span><span class="w"> </span><span class="n">REPLICATION</span><span class="w"> </span><span class="n">SLAVE</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="o">*</span><span class="p">.</span><span class="o">*</span><span class="w"> </span><span class="k">TO</span><span class="w"> </span><span class="s1">'repl'</span><span class="o">@</span><span class="s1">'192.0.2.22'</span><span class="p">;</span>
+<a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a><span class="n">FLUSH</span><span class="w"> </span><span class="k">PRIVILEGES</span><span class="p">;</span>
+<a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a><span class="k">SHOW</span><span class="w"> </span><span class="n">MASTER</span><span class="w"> </span><span class="n">STATUS</span><span class="p">;</span>
+<a id="__codelineno-11-5" name="__codelineno-11-5" href="#__codelineno-11-5"></a><span class="k">SHOW</span><span class="w"> </span><span class="nb">BINARY</span><span class="w"> </span><span class="n">LOGS</span><span class="p">;</span>
 </code></pre></div>
-<p>参数说明：关闭转发与重定向接受是普通服务器基线（网关/容器宿主机需调整 <code>ip_forward</code>）；<code>log_martians</code> 记录异常源包便于审计；<code>dmesg_restrict</code> 限制普通用户读内核日志；<code>file-max</code> 抬高句柄上限支撑高并发。</p>
-<p><strong>包管理 role</strong> <code>roles/packages/tasks/main.yml</code>：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="nn">---</span>
-<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">更新 apt 缓存（24 小时内不重复更新）</span>
-<a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a><span class="w">  </span><span class="nt">ansible.builtin.apt</span><span class="p">:</span>
-<a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a><span class="w">    </span><span class="nt">update_cache</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
-<a id="__codelineno-11-5" name="__codelineno-11-5" href="#__codelineno-11-5"></a><span class="w">    </span><span class="nt">cache_valid_time</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">86400</span>
-<a id="__codelineno-11-6" name="__codelineno-11-6" href="#__codelineno-11-6"></a>
-<a id="__codelineno-11-7" name="__codelineno-11-7" href="#__codelineno-11-7"></a><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">安装基线软件包</span>
-<a id="__codelineno-11-8" name="__codelineno-11-8" href="#__codelineno-11-8"></a><span class="w">  </span><span class="nt">ansible.builtin.apt</span><span class="p">:</span>
-<a id="__codelineno-11-9" name="__codelineno-11-9" href="#__codelineno-11-9"></a><span class="w">    </span><span class="nt">name</span><span class="p">:</span>
-<a id="__codelineno-11-10" name="__codelineno-11-10" href="#__codelineno-11-10"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">curl</span>
-<a id="__codelineno-11-11" name="__codelineno-11-11" href="#__codelineno-11-11"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">vim</span>
-<a id="__codelineno-11-12" name="__codelineno-11-12" href="#__codelineno-11-12"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">htop</span>
-<a id="__codelineno-11-13" name="__codelineno-11-13" href="#__codelineno-11-13"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ufw</span>
-<a id="__codelineno-11-14" name="__codelineno-11-14" href="#__codelineno-11-14"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">unattended-upgrades</span>
-<a id="__codelineno-11-15" name="__codelineno-11-15" href="#__codelineno-11-15"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">chrony</span>
-<a id="__codelineno-11-16" name="__codelineno-11-16" href="#__codelineno-11-16"></a><span class="w">    </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">present</span>
-<a id="__codelineno-11-17" name="__codelineno-11-17" href="#__codelineno-11-17"></a>
-<a id="__codelineno-11-18" name="__codelineno-11-18" href="#__codelineno-11-18"></a><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">确保时间同步服务运行</span>
-<a id="__codelineno-11-19" name="__codelineno-11-19" href="#__codelineno-11-19"></a><span class="w">  </span><span class="nt">ansible.builtin.service</span><span class="p">:</span>
-<a id="__codelineno-11-20" name="__codelineno-11-20" href="#__codelineno-11-20"></a><span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">chrony</span>
-<a id="__codelineno-11-21" name="__codelineno-11-21" href="#__codelineno-11-21"></a><span class="w">    </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">started</span>
-<a id="__codelineno-11-22" name="__codelineno-11-22" href="#__codelineno-11-22"></a><span class="w">    </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<p><code>SHOW MASTER STATUS</code> 输出中的 <code>File</code> 与 <code>Position</code>（如 <code>mysql-bin.000003</code> 与 <code>157</code>）是从库配置的起点，必须准确记录。若数据量大需先一致性导入：用 <code>mysqldump --single-transaction --master-data=2</code> 在主库导出，注释行内含起点坐标，导入从库后再启动复制。</p>
+<p>放行防火墙只给从库地址：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a>sudo<span class="w"> </span>ufw<span class="w"> </span>allow<span class="w"> </span>from<span class="w"> </span><span class="m">192</span>.0.2.22<span class="w"> </span>to<span class="w"> </span>any<span class="w"> </span>port<span class="w"> </span><span class="m">3306</span><span class="w"> </span>proto<span class="w"> </span>tcp
 </code></pre></div>
-<p>执行基线（先检查模式，再正式执行）：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="nb">cd</span><span class="w"> </span>~/iac/ubuntu-baseline/ansible
-<a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a><span class="c1"># 只演练不改动：--check 输出将变更项</span>
-<a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a>ansible-playbook<span class="w"> </span>-i<span class="w"> </span>inventory/hosts.yml<span class="w"> </span>playbooks/baseline.yml<span class="w"> </span>--check<span class="w"> </span>--diff
-<a id="__codelineno-12-4" name="__codelineno-12-4" href="#__codelineno-12-4"></a><span class="c1"># 确认无误后正式执行</span>
-<a id="__codelineno-12-5" name="__codelineno-12-5" href="#__codelineno-12-5"></a>ansible-playbook<span class="w"> </span>-i<span class="w"> </span>inventory/hosts.yml<span class="w"> </span>playbooks/baseline.yml
+<h3 id="36-change-replication-source-to">3.6 从库配置与 CHANGE REPLICATION SOURCE TO<a class="headerlink" href="#36-change-replication-source-to" title="Permanent link">&para;</a></h3>
+<p>从库同样先备份再改配置：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a>sudo<span class="w"> </span>cp<span class="w"> </span>/etc/mysql/mysql.conf.d/mysqld.cnf<span class="w"> </span>/etc/mysql/mysql.conf.d/mysqld.cnf.bak.<span class="k">$(</span>date<span class="w"> </span>+%F<span class="k">)</span>
+<a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a>sudo<span class="w"> </span>nano<span class="w"> </span>/etc/mysql/mysql.conf.d/mysqld.cnf
 </code></pre></div>
-<h3 id="33-terraform">3.3 Terraform 入门深化<a class="headerlink" href="#33-terraform" title="Permanent link">&para;</a></h3>
-<p><strong>核心概念</strong>：provider 是与目标平台对话的插件（云厂商、<code>libvirt</code> 等）；resource 是要管理的对象（实例、磁盘、网络）；state 记录「代码与真实资源对应关系」，是更新与漂移对比的依据。</p>
-<p><strong>本地 libvirt 示例</strong>（在装有 KVM/libvirt 的 Ubuntu 宿主机上创建一台 Ubuntu 虚拟机，片段）：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="nb">terraform</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a><span class="w">  </span><span class="nb">required_providers</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a><span class="w">    </span><span class="nb">libvirt</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-13-4" name="__codelineno-13-4" href="#__codelineno-13-4"></a><span class="w">      </span><span class="na">source</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;dmacvicar/libvirt&quot;</span>
-<a id="__codelineno-13-5" name="__codelineno-13-5" href="#__codelineno-13-5"></a><span class="w">      </span><span class="na">version</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;~&gt; 0.8&quot;</span>
-<a id="__codelineno-13-6" name="__codelineno-13-6" href="#__codelineno-13-6"></a><span class="w">    </span><span class="p">}</span>
-<a id="__codelineno-13-7" name="__codelineno-13-7" href="#__codelineno-13-7"></a><span class="w">  </span><span class="p">}</span>
-<a id="__codelineno-13-8" name="__codelineno-13-8" href="#__codelineno-13-8"></a><span class="p">}</span>
-<a id="__codelineno-13-9" name="__codelineno-13-9" href="#__codelineno-13-9"></a>
-<a id="__codelineno-13-10" name="__codelineno-13-10" href="#__codelineno-13-10"></a><span class="kr">provider</span><span class="w"> </span><span class="nv">&quot;libvirt&quot;</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-13-11" name="__codelineno-13-11" href="#__codelineno-13-11"></a><span class="w">  </span><span class="na">uri</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;qemu:///system&quot;</span>
-<a id="__codelineno-13-12" name="__codelineno-13-12" href="#__codelineno-13-12"></a><span class="p">}</span>
-<a id="__codelineno-13-13" name="__codelineno-13-13" href="#__codelineno-13-13"></a>
-<a id="__codelineno-13-14" name="__codelineno-13-14" href="#__codelineno-13-14"></a><span class="kr">resource</span><span class="w"> </span><span class="nc">&quot;libvirt_domain&quot;</span><span class="w"> </span><span class="nv">&quot;ubuntu_node&quot;</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-13-15" name="__codelineno-13-15" href="#__codelineno-13-15"></a><span class="w">  </span><span class="na">name</span><span class="w">   </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;ubuntu-baseline-01&quot;</span>
-<a id="__codelineno-13-16" name="__codelineno-13-16" href="#__codelineno-13-16"></a><span class="w">  </span><span class="na">memory</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">4096</span>
-<a id="__codelineno-13-17" name="__codelineno-13-17" href="#__codelineno-13-17"></a><span class="w">  </span><span class="na">vcpu</span><span class="w">   </span><span class="o">=</span><span class="w"> </span><span class="m">2</span>
-<a id="__codelineno-13-18" name="__codelineno-13-18" href="#__codelineno-13-18"></a><span class="p">}</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="na">server-id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">2</span>
+<a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a><span class="na">relay_log</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">/var/log/mysql/mysql-relay-bin.log</span>
+<a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a><span class="na">read_only</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">ON</span>
+<a id="__codelineno-14-4" name="__codelineno-14-4" href="#__codelineno-14-4"></a><span class="na">super_read_only</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">ON</span>
+<a id="__codelineno-14-5" name="__codelineno-14-5" href="#__codelineno-14-5"></a><span class="na">bind-address</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">192.0.2.22</span>
 </code></pre></div>
-<p><strong>云上创建 Ubuntu 实例的通用片段</strong>（资源类型名以厂商 provider 文档为准）：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="kr">variable</span><span class="w"> </span><span class="nv">&quot;region&quot;</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a><span class="w">  </span><span class="na">type</span><span class="w">    </span><span class="o">=</span><span class="w"> </span><span class="kt">string</span>
-<a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a><span class="w">  </span><span class="na">default</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;example-region-1&quot;</span>
-<a id="__codelineno-14-4" name="__codelineno-14-4" href="#__codelineno-14-4"></a><span class="p">}</span>
-<a id="__codelineno-14-5" name="__codelineno-14-5" href="#__codelineno-14-5"></a>
-<a id="__codelineno-14-6" name="__codelineno-14-6" href="#__codelineno-14-6"></a><span class="kr">variable</span><span class="w"> </span><span class="nv">&quot;admin_password&quot;</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-14-7" name="__codelineno-14-7" href="#__codelineno-14-7"></a><span class="w">  </span><span class="na">type</span><span class="w">      </span><span class="o">=</span><span class="w"> </span><span class="kt">string</span>
-<a id="__codelineno-14-8" name="__codelineno-14-8" href="#__codelineno-14-8"></a><span class="w">  </span><span class="na">sensitive</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="no">true</span>
-<a id="__codelineno-14-9" name="__codelineno-14-9" href="#__codelineno-14-9"></a><span class="p">}</span>
-<a id="__codelineno-14-10" name="__codelineno-14-10" href="#__codelineno-14-10"></a>
-<a id="__codelineno-14-11" name="__codelineno-14-11" href="#__codelineno-14-11"></a><span class="kr">resource</span><span class="w"> </span><span class="nc">&quot;examplecloud_instance&quot;</span><span class="w"> </span><span class="nv">&quot;ubuntu_node&quot;</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-14-12" name="__codelineno-14-12" href="#__codelineno-14-12"></a><span class="w">  </span><span class="na">name</span><span class="w">            </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;ubuntu-baseline-01&quot;</span>
-<a id="__codelineno-14-13" name="__codelineno-14-13" href="#__codelineno-14-13"></a><span class="w">  </span><span class="na">region</span><span class="w">          </span><span class="o">=</span><span class="w"> </span><span class="nv">var.region</span>
-<a id="__codelineno-14-14" name="__codelineno-14-14" href="#__codelineno-14-14"></a><span class="w">  </span><span class="na">image</span><span class="w">           </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;ubuntu-24.04&quot;</span>
-<a id="__codelineno-14-15" name="__codelineno-14-15" href="#__codelineno-14-15"></a><span class="w">  </span><span class="na">size</span><span class="w">            </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;2vcpu-4gb&quot;</span>
-<a id="__codelineno-14-16" name="__codelineno-14-16" href="#__codelineno-14-16"></a><span class="w">  </span><span class="na">ssh_keys</span><span class="w">        </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;opsadmin-key&quot;</span><span class="p">]</span>
-<a id="__codelineno-14-17" name="__codelineno-14-17" href="#__codelineno-14-17"></a><span class="w">  </span><span class="na">admin_password</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="nv">var.admin_password</span>
-<a id="__codelineno-14-18" name="__codelineno-14-18" href="#__codelineno-14-18"></a><span class="p">}</span>
-<a id="__codelineno-14-19" name="__codelineno-14-19" href="#__codelineno-14-19"></a>
-<a id="__codelineno-14-20" name="__codelineno-14-20" href="#__codelineno-14-20"></a><span class="kr">output</span><span class="w"> </span><span class="nv">&quot;instance_ip&quot;</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-14-21" name="__codelineno-14-21" href="#__codelineno-14-21"></a><span class="w">  </span><span class="na">value</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">examplecloud_instance.ubuntu_node.ipv4_address</span>
-<a id="__codelineno-14-22" name="__codelineno-14-22" href="#__codelineno-14-22"></a><span class="p">}</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a>sudo<span class="w"> </span>systemctl<span class="w"> </span>restart<span class="w"> </span>mysql
+<a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a>mysql<span class="w"> </span>-u<span class="w"> </span>root<span class="w"> </span>-p<span class="s1">'&lt;password&gt;'</span>
 </code></pre></div>
-<p>工作流命令：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a><span class="nb">cd</span><span class="w"> </span>~/iac/ubuntu-baseline/terraform
-<a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a>cp<span class="w"> </span>terraform.tfstate<span class="w"> </span>terraform.tfstate.bak.<span class="k">$(</span>date<span class="w"> </span>+%F<span class="k">)</span><span class="w"> </span><span class="m">2</span>&gt;/dev/null<span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;尚无 state，跳过备份&quot;</span>
-<a id="__codelineno-15-3" name="__codelineno-15-3" href="#__codelineno-15-3"></a>terraform<span class="w"> </span>init<span class="w">      </span><span class="c1"># 下载 provider，初始化工作目录</span>
-<a id="__codelineno-15-4" name="__codelineno-15-4" href="#__codelineno-15-4"></a>terraform<span class="w"> </span>fmt<span class="w">       </span><span class="c1"># 格式化代码</span>
-<a id="__codelineno-15-5" name="__codelineno-15-5" href="#__codelineno-15-5"></a>terraform<span class="w"> </span>validate<span class="w">  </span><span class="c1"># 语法与配置校验</span>
-<a id="__codelineno-15-6" name="__codelineno-15-6" href="#__codelineno-15-6"></a>terraform<span class="w"> </span>plan<span class="w">      </span><span class="c1"># 预览将创建/修改/销毁什么，不实际执行</span>
-<a id="__codelineno-15-7" name="__codelineno-15-7" href="#__codelineno-15-7"></a>terraform<span class="w"> </span>apply<span class="w">     </span><span class="c1"># 人工确认 plan 输出后执行</span>
+<p>执行复制指向语句（MySQL 8.0.23 起推荐新语法，旧版兼容写法在排错节说明）。把坐标替换为主库 <code>SHOW MASTER STATUS</code> 的实际值：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a><span class="n">CHANGE</span><span class="w"> </span><span class="n">REPLICATION</span><span class="w"> </span><span class="k">SOURCE</span><span class="w"> </span><span class="k">TO</span>
+<a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a><span class="w">  </span><span class="n">SOURCE_HOST</span><span class="o">=</span><span class="s1">'192.0.2.21'</span><span class="p">,</span>
+<a id="__codelineno-16-3" name="__codelineno-16-3" href="#__codelineno-16-3"></a><span class="w">  </span><span class="n">SOURCE_PORT</span><span class="o">=</span><span class="mi">3306</span><span class="p">,</span>
+<a id="__codelineno-16-4" name="__codelineno-16-4" href="#__codelineno-16-4"></a><span class="w">  </span><span class="n">SOURCE_USER</span><span class="o">=</span><span class="s1">'repl'</span><span class="p">,</span>
+<a id="__codelineno-16-5" name="__codelineno-16-5" href="#__codelineno-16-5"></a><span class="w">  </span><span class="n">SOURCE_PASSWORD</span><span class="o">=</span><span class="s1">'&lt;password&gt;'</span><span class="p">,</span>
+<a id="__codelineno-16-6" name="__codelineno-16-6" href="#__codelineno-16-6"></a><span class="w">  </span><span class="n">SOURCE_LOG_FILE</span><span class="o">=</span><span class="s1">'mysql-bin.000003'</span><span class="p">,</span>
+<a id="__codelineno-16-7" name="__codelineno-16-7" href="#__codelineno-16-7"></a><span class="w">  </span><span class="n">SOURCE_LOG_POS</span><span class="o">=</span><span class="mi">157</span><span class="p">,</span>
+<a id="__codelineno-16-8" name="__codelineno-16-8" href="#__codelineno-16-8"></a><span class="w">  </span><span class="n">GET_SOURCE_PUBLIC_KEY</span><span class="o">=</span><span class="mi">1</span><span class="p">;</span>
+<a id="__codelineno-16-9" name="__codelineno-16-9" href="#__codelineno-16-9"></a><span class="k">START</span><span class="w"> </span><span class="n">REPLICA</span><span class="p">;</span>
+<a id="__codelineno-16-10" name="__codelineno-16-10" href="#__codelineno-16-10"></a><span class="k">SHOW</span><span class="w"> </span><span class="n">REPLICA</span><span class="w"> </span><span class="n">STATUS</span><span class="err">\</span><span class="k">G</span>
 </code></pre></div>
-<p><strong>state 管理与敏感变量</strong>：</p>
-<ul>
-<li>state 含资源 ID、IP、甚至明文敏感值，<strong>等同敏感数据</strong>：本地权限设 <code>600</code>，团队协作改用带加密与锁的远程后端（配置以云厂商文档为准）。</li>
-<li>敏感变量声明 <code>sensitive = true</code> 后不会在 plan/apply 输出中回显；真实值通过环境变量注入，不写进代码文件：</li>
-</ul>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a><span class="nb">export</span><span class="w"> </span><span class="nv">TF_VAR_admin_password</span><span class="o">=</span><span class="s2">&quot;&lt;api-key&gt;&quot;</span>
-<a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a>terraform<span class="w"> </span>plan
-</code></pre></div>
-<ul>
-<li><code>.gitignore</code> 必须排除 <code>*.tfstate</code>、<code>*.tfstate.*</code>、<code>.terraform/</code>、<code>*.tfvars</code>（含真实值的变量文件），提交前用 <code>git status</code> 复查。</li>
-</ul>
-<div class="admonition warning">
-<p class="admonition-title">terraform apply 前必看 plan</p>
-<p><code>plan</code> 输出中的 <code>destroy</code> 项意味着资源将被销毁重建。没有逐行看完 plan 就直接 apply，是 Terraform 使用中最常见的事故来源；生产环境应把 apply 设置为人工审批后执行（见 3.4 节流水线）。</p>
-</div>
-<h3 id="34-gitops">3.4 GitOps 流程：从提交到闭环<a class="headerlink" href="#34-gitops" title="Permanent link">&para;</a></h3>
-<pre class="mermaid"><code>flowchart LR
-    A[工程师提交基线代码到 Git] --&gt; B[CI 校验 fmt/validate/语法检查]
-    B --&gt;|校验失败| A
-    B --&gt;|校验通过| C{变更类型}
-    C --&gt;|Terraform 变更| D[生成 plan 并人工审批]
-    C --&gt;|Ansible 变更| E[check 模式演练并人工审批]
-    D --&gt; F[执行 apply / playbook]
-    E --&gt; F
-    F --&gt; G[漂移检测定时巡检]
-    G --&gt;|发现漂移| H[生成工单/告警并重新执行基线]
-    G --&gt;|无漂移| G
-    H --&gt; F</code></pre>
-<p>流程说明：Git 是唯一事实来源，绕过仓库直接改机会在漂移检测环节暴露；CI 挡住语法与格式问题；<code>apply</code> 前保留人工审批；结果回写工单/告警系统形成闭环。CI 要点：把 <code>terraform fmt -check</code>、<code>terraform validate</code>、<code>ansible-playbook --syntax-check</code> 作为合并前必过项。</p>
-<h3 id="35">3.5 漂移检测与合规巡检思路<a class="headerlink" href="#35" title="Permanent link">&para;</a></h3>
-<ul>
-<li><strong>Terraform 侧</strong>：定时（如每日凌晨）在 CI 或巡检机执行 <code>terraform plan -detailed-exitcode</code>：退出码 0 表示无漂移，2 表示存在差异，任务据此告警。</li>
-<li><strong>Ansible 侧</strong>：定时以 <code>--check --diff</code> 模式跑基线 playbook，输出中出现 <code>changed</code> 即说明目标机实际状态与基线不一致，收集汇总成巡检报告。</li>
-<li><strong>合规巡检清单化</strong>：把安全要求写成可检查项——SSH 是否禁 root、UFW 是否开启、自动升级是否启用、sysctl 值是否被改——逐项比对并留档。</li>
-<li><strong>漂移处理原则</strong>：先查原因（临时改机忘回滚，还是基线需更新），该回滚的走流水线重下发，该更新的改代码走评审；<strong>不要</strong>在巡检时「顺手修复」，那会制造新的不可审计变更。巡检脚本只需以 <code>--check --diff</code> 模式定时跑基线 playbook 并汇总日志中的 <code>changed</code> 项即可，只检测、不修改。</li>
-</ul>
+<p><code>GET_SOURCE_PUBLIC_KEY=1</code> 用于主库使用 <code>caching_sha2_password</code> 时从库获取公钥，避免认证卡住；若复制账号用 <code>mysql_native_password</code> 则可省略。旧语法对应为 <code>CHANGE MASTER TO MASTER_HOST=...</code> 与 <code>START SLAVE;</code>，参数名一一对应，排查老系统时注意混用会报错。</p>
 <h2 id="_4">四、效果验证与测试<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a><span class="c1"># 1. 目标机 SSH 基线验证：应输出 no</span>
-<a id="__codelineno-17-2" name="__codelineno-17-2" href="#__codelineno-17-2"></a>ssh<span class="w"> </span>opsadmin@192.0.2.10<span class="w"> </span><span class="s2">&quot;sudo sshd -T | grep -i permitrootlogin&quot;</span>
-<a id="__codelineno-17-3" name="__codelineno-17-3" href="#__codelineno-17-3"></a><span class="c1"># 期望：permitrootlogin no</span>
-<a id="__codelineno-17-4" name="__codelineno-17-4" href="#__codelineno-17-4"></a>
-<a id="__codelineno-17-5" name="__codelineno-17-5" href="#__codelineno-17-5"></a><span class="c1"># 2. sysctl 基线验证</span>
-<a id="__codelineno-17-6" name="__codelineno-17-6" href="#__codelineno-17-6"></a>ssh<span class="w"> </span>opsadmin@192.0.2.10<span class="w"> </span><span class="s2">&quot;sysctl net.ipv4.conf.all.log_martians kernel.dmesg_restrict&quot;</span>
-<a id="__codelineno-17-7" name="__codelineno-17-7" href="#__codelineno-17-7"></a><span class="c1"># 期望：两个值均为 1</span>
-<a id="__codelineno-17-8" name="__codelineno-17-8" href="#__codelineno-17-8"></a>
-<a id="__codelineno-17-9" name="__codelineno-17-9" href="#__codelineno-17-9"></a><span class="c1"># 3. Terraform 无漂移验证：退出码应为 0</span>
-<a id="__codelineno-17-10" name="__codelineno-17-10" href="#__codelineno-17-10"></a><span class="nb">cd</span><span class="w"> </span>~/iac/ubuntu-baseline/terraform
-<a id="__codelineno-17-11" name="__codelineno-17-11" href="#__codelineno-17-11"></a>terraform<span class="w"> </span>plan<span class="w"> </span>-detailed-exitcode<span class="w"> </span>-no-color
-<a id="__codelineno-17-12" name="__codelineno-17-12" href="#__codelineno-17-12"></a><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;退出码：</span><span class="nv">$?</span><span class="s2">&quot;</span>
-<a id="__codelineno-17-13" name="__codelineno-17-13" href="#__codelineno-17-13"></a>
-<a id="__codelineno-17-14" name="__codelineno-17-14" href="#__codelineno-17-14"></a><span class="c1"># 4. Ansible 幂等验证：第二次执行应几乎全为 ok、无 changed</span>
-<a id="__codelineno-17-15" name="__codelineno-17-15" href="#__codelineno-17-15"></a><span class="nb">cd</span><span class="w"> </span>~/iac/ubuntu-baseline/ansible
-<a id="__codelineno-17-16" name="__codelineno-17-16" href="#__codelineno-17-16"></a>ansible-playbook<span class="w"> </span>-i<span class="w"> </span>inventory/hosts.yml<span class="w"> </span>playbooks/baseline.yml
+<p>验证主从状态，重点看字段：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a><span class="k">SHOW</span><span class="w"> </span><span class="n">REPLICA</span><span class="w"> </span><span class="n">STATUS</span><span class="err">\</span><span class="k">G</span>
 </code></pre></div>
-<p>期望输出示例（节选）：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a>PLAY RECAP *********************************************************************
-<a id="__codelineno-18-2" name="__codelineno-18-2" href="#__codelineno-18-2"></a>server-a.example.com : ok=12   changed=0    unreachable=0    failed=0
-<a id="__codelineno-18-3" name="__codelineno-18-3" href="#__codelineno-18-3"></a>server-b.example.com : ok=12   changed=0    unreachable=0    failed=0
+<p>关键字段判读表：</p>
+<table>
+<thead>
+<tr>
+<th>字段</th>
+<th>健康值</th>
+<th>异常含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Replica_IO_Running</code></td>
+<td><code>Yes</code></td>
+<td><code>No</code> 或 <code>Connecting</code> 表示 IO 线程连不上主库</td>
+</tr>
+<tr>
+<td><code>Replica_SQL_Running</code></td>
+<td><code>Yes</code></td>
+<td><code>No</code> 表示回放出错，看 <code>Last_SQL_Error</code></td>
+</tr>
+<tr>
+<td><code>Seconds_Behind_Source</code></td>
+<td>接近 0 的小数值</td>
+<td>持续增大表示从库追不上，见延迟排查</td>
+</tr>
+<tr>
+<td><code>Last_IO_Error</code></td>
+<td>空</td>
+<td>非空即网络、认证或坐标错误原文</td>
+</tr>
+<tr>
+<td><code>Last_SQL_Error</code></td>
+<td>空</td>
+<td>非空即数据冲突错误原文</td>
+</tr>
+<tr>
+<td><code>Retrieved_Gtid_Set</code> 与 <code>Executed_Gtid_Set</code></td>
+<td>持续增长且趋于一致</td>
+<td>开 GTID 时用两者差判断进度</td>
+</tr>
+</tbody>
+</table>
+<p>老版本 MySQL 与 MariaDB 对应命令为 <code>SHOW SLAVE STATUS\G</code>，字段名为 <code>Slave_IO_Running</code> 等，判读方法相同。</p>
+<p>写入验证闭环：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a>mysql<span class="w"> </span>-h<span class="w"> </span><span class="m">192</span>.0.2.21<span class="w"> </span>-u<span class="w"> </span>appuser<span class="w"> </span>-p<span class="s1">'&lt;password&gt;'</span><span class="w"> </span>-e<span class="w"> </span><span class="s2">"USE appdb; INSERT INTO orders (order_id, amount) VALUES ('example-100', 88);"</span>
+<a id="__codelineno-18-2" name="__codelineno-18-2" href="#__codelineno-18-2"></a>sleep<span class="w"> </span><span class="m">2</span>
+<a id="__codelineno-18-3" name="__codelineno-18-3" href="#__codelineno-18-3"></a>mysql<span class="w"> </span>-h<span class="w"> </span><span class="m">192</span>.0.2.22<span class="w"> </span>-u<span class="w"> </span>appuser<span class="w"> </span>-p<span class="s1">'&lt;password&gt;'</span><span class="w"> </span>-e<span class="w"> </span><span class="s2">"USE appdb; SELECT * FROM orders WHERE order_id='example-100';"</span>
+<a id="__codelineno-18-4" name="__codelineno-18-4" href="#__codelineno-18-4"></a>mysql<span class="w"> </span>-h<span class="w"> </span><span class="m">192</span>.0.2.22<span class="w"> </span>-u<span class="w"> </span>root<span class="w"> </span>-p<span class="s1">'&lt;password&gt;'</span><span class="w"> </span>-e<span class="w"> </span><span class="s2">"SHOW REPLICA STATUS\G"</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-E<span class="w"> </span><span class="s2">"Running|Seconds_Behind"</span>
 </code></pre></div>
-<p><code>changed=0</code> 且 <code>failed=0</code> 说明基线已收敛、playbook 具备幂等性，这是基线合格的核心标志。</p>
+<p>从库能查到该行且延迟为 0，才算复制真正跑通。容器验证补充：<code>docker volume ls</code> 确认命名卷存在、删除并重建容器后数据仍在。</p>
 <h2 id="_5">五、常见错误与排坑指南<a class="headerlink" href="#_5" title="Permanent link">&para;</a></h2>
-<p><strong>场景 1：Terraform 执行时报 state 被锁定</strong></p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a>Error: Error acquiring the state lock
-<a id="__codelineno-19-2" name="__codelineno-19-2" href="#__codelineno-19-2"></a>Error message: state blob is already locked
+<p>主从延迟排查先分三步定位：第一看从库负载与大事务，<code>SHOW PROCESSLIST</code> 找长事务；第二看主库突发写入与 binlog 增长，延迟常因单线程回放大事务，老版本可开并行复制参数 <code>replica_parallel_workers</code>；第三看网络与磁盘，从库磁盘满或 IO 差会直接拖慢回放：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a>df<span class="w"> </span>-h<span class="w"> </span>/var/lib/mysql<span class="w"> </span>/var/log/mysql
+<a id="__codelineno-19-2" name="__codelineno-19-2" href="#__codelineno-19-2"></a>mysql<span class="w"> </span>-u<span class="w"> </span>root<span class="w"> </span>-p<span class="s1">'&lt;password&gt;'</span><span class="w"> </span>-e<span class="w"> </span><span class="s2">"SHOW PROCESSLIST;"</span>
+<a id="__codelineno-19-3" name="__codelineno-19-3" href="#__codelineno-19-3"></a>mysql<span class="w"> </span>-u<span class="w"> </span>root<span class="w"> </span>-p<span class="s1">'&lt;password&gt;'</span><span class="w"> </span>-e<span class="w"> </span><span class="s2">"SELECT * FROM performance_schema.replication_applier_status_by_worker;"</span>
 </code></pre></div>
-<p>原因：上一次 apply 被中断，或另一个进程正在操作同一 state。修复：先确认确实无人正在执行 Terraform，再按报错输出给出的信息解锁；使用远程后端时优先排查并发执行，不要养成随手强制解锁的习惯：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-20-1" name="__codelineno-20-1" href="#__codelineno-20-1"></a>terraform<span class="w"> </span>force-unlock<span class="w"> </span>&lt;lock-id&gt;
-<a id="__codelineno-20-2" name="__codelineno-20-2" href="#__codelineno-20-2"></a>terraform<span class="w"> </span>plan
+<p>场景一：IO 线程连不上。<code>Replica_IO_Running</code> 为 <code>Connecting</code>，<code>Last_IO_Error</code> 原文片段：<code>error connecting to master 'repl@192.0.2.21:3306' - retry-time: 60 retries: 1</code>。原因依次排查：主库未绑内网地址、防火墙未放行、复制账号主机段写错（如把授权写成其他 IP）、密码含特殊字符未引号。修复示例：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-20-1" name="__codelineno-20-1" href="#__codelineno-20-1"></a><span class="k">SELECT</span><span class="w"> </span><span class="k">user</span><span class="p">,</span><span class="w"> </span><span class="k">host</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">mysql</span><span class="p">.</span><span class="k">user</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="k">user</span><span class="o">=</span><span class="s1">'repl'</span><span class="p">;</span>
+<a id="__codelineno-20-2" name="__codelineno-20-2" href="#__codelineno-20-2"></a><span class="k">SHOW</span><span class="w"> </span><span class="n">GRANTS</span><span class="w"> </span><span class="k">FOR</span><span class="w"> </span><span class="s1">'repl'</span><span class="o">@</span><span class="s1">'192.0.2.22'</span><span class="p">;</span>
 </code></pre></div>
-<p><strong>场景 2：Ansible 执行 SSH 加固后新会话无法登录</strong></p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-21-1" name="__codelineno-21-1" href="#__codelineno-21-1"></a>opsadmin@192.0.2.10: Permission denied (publickey).
+<div class="highlight"><pre><span></span><code><a id="__codelineno-21-1" name="__codelineno-21-1" href="#__codelineno-21-1"></a>mysql<span class="w"> </span>-h<span class="w"> </span><span class="m">192</span>.0.2.21<span class="w"> </span>-u<span class="w"> </span>repl<span class="w"> </span>-p<span class="s1">'&lt;password&gt;'</span><span class="w"> </span>-e<span class="w"> </span><span class="s2">"SELECT 1;"</span>
+<a id="__codelineno-21-2" name="__codelineno-21-2" href="#__codelineno-21-2"></a>sudo<span class="w"> </span>tail<span class="w"> </span>-n<span class="w"> </span><span class="m">50</span><span class="w"> </span>/var/log/mysql/error.log
 </code></pre></div>
-<p>原因：关闭密码登录后才发现公钥未正确下发，或 <code>sshd_config.d</code> 片段优先级导致预期外的配置生效。修复：用尚存的已登录会话（3.2 节强调保留的原因）或云厂商控制台登录目标机，检查 <code>~/.ssh/authorized_keys</code> 权限（应为 <code>600</code>、家目录不大于 <code>755</code>），用 <code>sudo sshd -T</code> 查看实际生效配置，必要时删除 <code>/etc/ssh/sshd_config.d/90-baseline.conf</code> 并重启 ssh 回滚加固片段。</p>
-<p><strong>场景 3：playbook 重复执行每次都报 changed（不幂等）</strong></p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-22-1" name="__codelineno-22-1" href="#__codelineno-22-1"></a>TASK [sysctl_baseline : 立即应用 sysctl 基线] *** changed: [server-a.example.com]
+<p>从库侧能用 <code>repl</code> 账号直连成功后执行 <code>STOP REPLICA; START REPLICA;</code> 再看状态。</p>
+<p>场景二：SQL 线程冲突。<code>Replica_SQL_Running</code> 为 <code>No</code>，<code>Last_SQL_Error</code> 原文片段：<code>Could not execute Write_rows event: Duplicate entry 'example-100' for key 'PRIMARY', Error_code: 1062</code>。原因：有人直接在从库写过同主键数据，或历史导入与复制起点重叠。修复原则是先对账再处理，不要无脑跳过：确认该行主从一致后才可跳过一个事务；不一致则删从库冲突行或重新导入。确认后操作：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-22-1" name="__codelineno-22-1" href="#__codelineno-22-1"></a><span class="n">STOP</span><span class="w"> </span><span class="n">REPLICA</span><span class="p">;</span>
+<a id="__codelineno-22-2" name="__codelineno-22-2" href="#__codelineno-22-2"></a><span class="k">SET</span><span class="w"> </span><span class="k">GLOBAL</span><span class="w"> </span><span class="n">sql_replica_skip_counter</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<a id="__codelineno-22-3" name="__codelineno-22-3" href="#__codelineno-22-3"></a><span class="k">START</span><span class="w"> </span><span class="n">REPLICA</span><span class="p">;</span>
+<a id="__codelineno-22-4" name="__codelineno-22-4" href="#__codelineno-22-4"></a><span class="k">SHOW</span><span class="w"> </span><span class="n">REPLICA</span><span class="w"> </span><span class="n">STATUS</span><span class="err">\</span><span class="k">G</span>
 </code></pre></div>
-<p>原因：用了 <code>command</code>/<code>shell</code> 模块执行本可由专用模块管理的动作，这类模块默认每次都报告 changed。修复：优先改用幂等模块（如 <code>ansible.builtin.sysctl</code>、<code>apt</code>、<code>template</code>）；确实只能用命令时，加 <code>changed_when: false</code> 明确声明其只读/应用性质，并保证动作本身重复执行无副作用。</p>
+<p>GTID 模式下不能用该变量，需用注入空事务方式处理，以当前版本官方文档为准。<code>super_read_only=ON</code> 就是为防手滑直写从库，必须保持开启。</p>
+<p>场景三：<code>Last_Error</code> 判读总原则。IO 类错误看 <code>Last_IO_Error</code> 与 <code>Last_IO_Errno</code>：<code>1045</code> 为认证失败，<code>2003</code> 为网络不可达，<code>1236</code> 为主库 binlog 坐标已不存在（从库离线超过 binlog 保留期，只能重做从库全量导入）。SQL 类错误看 <code>Last_SQL_Error</code>：<code>1062</code> 主键冲突、<code>1032</code> 记录不存在、<code>1146</code> 表不存在，多为从库被改动或过滤规则不一致。修复后统一用 <code>SHOW REPLICA STATUS\G</code> 复查两线程均为 <code>Yes</code> 且两个 Error 字段为空才算闭环。</p>
 <h2 id="_6">六、生产环境最佳实践与安全建议<a class="headerlink" href="#_6" title="Permanent link">&para;</a></h2>
-<ul>
-<li><strong>变更全走 Git</strong>：基线经提交、评审、合并进入主干；禁止绕过仓库改生产机，紧急修复也要事后补提交。</li>
-<li><strong>审批卡点不可省</strong>：CI 自动校验可以全自动，但 <code>terraform apply</code> 与 Ansible 正式执行在生产环境保留人工审批；审批人要看的是 plan/diff 输出，不是只点同意。</li>
-<li><strong>凭据与 state 当机密管</strong>：私钥、云凭据用密钥管理或 CI 受保护变量注入；state 用加密远程后端加锁，本地副本 <code>600</code> 且不进 Git。</li>
-<li><strong>先灰度后全量</strong>：变更先在金丝雀机执行观察，再分批推广；playbook 用 <code>--limit</code> 控制范围。</li>
-<li><strong>回滚预先演练</strong>：每类变更都要有回滚方式（删配置片段、切回上一 Git 提交重执行、Terraform 回退上一版本 apply），测试环境演练过再上生产。</li>
-<li><strong>巡检常态化</strong>：漂移与合规巡检定时运行、结果进告警工单；每月复盘漂移原因，反向优化基线。</li>
-</ul>
+<p>容器数据库：镜像锁定具体版本标签，不用 <code>latest</code>；容器以官方非 root 约定运行并设资源上限；数据卷定期快照，升级镜像前先备份并在临时容器验证新版本可读旧数据。端口只绑回环或内网地址并复查 <code>docker ps</code> 的 <code>PORTS</code> 列，发现 <code>0.0.0.0</code> 立即整改。</p>
+<p>主从高可用：主从只是复制不是备份，误删会同步到从库，必须与逻辑备份加 binlog 归档并行；切换演练每季度做一次，记录切换命令、耗时与应用改连方式，客户端优先用代理或服务发现指向当前主，不要把主库 IP 写死在各应用配置里。监控告警至少覆盖：两线程任一为 <code>No</code>、<code>Seconds_Behind_Source</code> 超过 60 秒持续 5 分钟、主库 binlog 磁盘使用率超过 80%。复制账号密码定期轮换，轮换流程为先在主库改密码、再在从库 <code>STOP REPLICA</code> 后用 <code>CHANGE REPLICATION SOURCE TO</code> 更新密码并启动，全程记录坐标避免断点丢失。</p>
 
 
 

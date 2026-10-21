@@ -13,10 +13,10 @@
       
       
       
-        <link rel="prev" href="../02-kvm-qemu-pve/">
+        <link rel="prev" href="../01-mysql-install-security/">
       
       
-        <link rel="next" href="../../12-ai-ops/">
+        <link rel="next" href="../03-mysql-tuning/">
       
       
         
@@ -27,7 +27,7 @@
     
     
       
-        <title>PCIe 直通与 SR-IOV - Ubuntu Server 终极指南与实战教程</title>
+        <title>MySQL 用户、权限与远程访问 - Ubuntu Server 终极指南与实战教程</title>
       
     
     
@@ -78,7 +78,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#pcie-sr-iov" class="md-skip">
+        <a href="#mysql" class="md-skip">
           跳转至
         </a>
       
@@ -112,7 +112,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              PCIe 直通与 SR-IOV
+              MySQL 用户、权限与远程访问
             
           </span>
         </div>
@@ -479,7 +479,7 @@
   
     
   
-  11 硬件、虚拟化与私有云
+  11 数据库安装、管理与高可用
 
         </a>
       </li>
@@ -495,13 +495,35 @@
     
     
       <li class="md-tabs__item">
-        <a href="../../12-ai-ops/" class="md-tabs__link">
+        <a href="../../12-virtualization/" class="md-tabs__link">
           
   
   
     
   
-  12 AI 工具与智能化运维
+  12 硬件、虚拟化与私有云
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../13-ai-ops/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  13 AI 工具与智能化运维
 
         </a>
       </li>
@@ -2550,6 +2572,18 @@
       
         
       
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
     
     
     
@@ -2577,7 +2611,7 @@
   <span class="md-ellipsis">
     
   
-    11 硬件、虚拟化与私有云
+    11 数据库安装、管理与高可用
   
 
     
@@ -2599,7 +2633,7 @@
             <span class="md-nav__icon md-icon"></span>
             
   
-    11 硬件、虚拟化与私有云
+    11 数据库安装、管理与高可用
   
 
           </label>
@@ -2614,42 +2648,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../01-gpu-cuda/" class="md-nav__link">
+      <a href="../01-mysql-install-security/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    GPU 与 CUDA
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../02-kvm-qemu-pve/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    KVM/QEMU 与 Proxmox VE
+    MySQL 安装与安全初始化
   
 
     
@@ -2686,7 +2692,7 @@
   <span class="md-ellipsis">
     
   
-    PCIe 直通与 SR-IOV
+    MySQL 用户、权限与远程访问
   
 
     
@@ -2704,7 +2710,7 @@
   <span class="md-ellipsis">
     
   
-    PCIe 直通与 SR-IOV
+    MySQL 用户、权限与远程访问
   
 
     
@@ -2741,13 +2747,157 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_2" class="md-nav__link">
+  <a href="#ubuntu-22042404-lts" class="md-nav__link">
     <span class="md-ellipsis">
       
-        二、环境准备与前置条件
+        二、环境准备与前置条件（Ubuntu 22.04/24.04 LTS、权限、依赖包）
       
     </span>
   </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cp" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        三、手把手操作步骤（完整命令可复制；配置文件给完整路径；改任何配置前先给 cp 备份命令；关键参数逐行/表格讲解；禁止出现「...」省略与「自行配置」「略」字样）
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="三、手把手操作步骤（完整命令可复制；配置文件给完整路径；改任何配置前先给 cp 备份命令；关键参数逐行/表格讲解；禁止出现「...」省略与「自行配置」「略」字样）">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#31-utf8mb4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.1 建库：字符集一次定对 utf8mb4
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#32" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.2 建应用账号：一个应用一个账号，带来源限制
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#33-grant" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.3 按库最小权限授权：GRANT 的正确粒度
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#34" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.4 查看权限与回收权限
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#35-bind-address" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.5 安全远程访问第一层：修改 bind-address
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#36-ufw" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.6 安全远程访问第二层：UFW 只放行内网来源
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        四、效果验证与测试（检查命令 + 期望输出示例）
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#23" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        五、常见错误与排坑指南（2~3 个真实报错场景：报错原文片段+原因+修复命令；含本简报点名的经典报错）
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="五、常见错误与排坑指南（2~3 个真实报错场景：报错原文片段+原因+修复命令；含本简报点名的经典报错）">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#access-denied-for-user-rootlocalhost" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        场景一：Access denied for user 'root'@'localhost'
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cant-connect-to-mysql-serverbind-address" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        场景二：Can't connect to MySQL server（bind-address 原因）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cant-connect-to-mysql-server" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        场景三：Can't connect to MySQL server（防火墙原因）
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -2755,182 +2905,10 @@
   <a href="#_3" class="md-nav__link">
     <span class="md-ellipsis">
       
-        三、手把手操作步骤
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="三、手把手操作步骤">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#31-bios-iommu" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        3.1 在 BIOS 中开启 IOMMU
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#32-grub" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        3.2 备份并修改 GRUB 内核参数
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#33-iommu" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        3.3 验证 IOMMU 与查看分组
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#34-vfio" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        3.4 把设备绑定到 VFIO
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#35-libvirt-xml" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        3.5 用 libvirt XML 把设备直通给虚拟机
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#36-sr-iov-vf" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        3.6 SR-IOV：创建 VF 并直通
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#_4" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        四、效果验证与测试
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#_5" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        五、常见错误与排坑指南
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="五、常见错误与排坑指南">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#iommu" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        场景一：IOMMU 未开启或分组为空
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#_6" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        场景二：虚拟机启动报设备正忙或绑定失败
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#vf" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        场景三：创建 VF 失败
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#_7" class="md-nav__link">
-    <span class="md-ellipsis">
-      
         六、生产环境最佳实践与安全建议
       
     </span>
   </a>
-  
-    <nav class="md-nav" aria-label="六、生产环境最佳实践与安全建议">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#_8" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        风险清单与回滚步骤（必须执行）
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#_9" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        最佳实践
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
       
@@ -2938,6 +2916,202 @@
   
 </nav>
       
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../03-mysql-tuning/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MySQL 核心参数调优
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../04-mysql-backup-restore/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MySQL 备份与还原演练
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../05-postgresql-install-auth/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    PostgreSQL 安装与认证
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../06-postgresql-extensions-backup/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    PostgreSQL 插件、备份与 PITR
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../07-redis/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Redis 与 Sentinel 高可用
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../08-mongodb/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MongoDB 安装与调优
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../09-ha-containerized/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    容器化数据库与主从复制
+  
+
+    
+  </span>
+  
+  
+
+      </a>
     </li>
   
 
@@ -2986,14 +3160,14 @@
         
           
           <div class="md-nav__link md-nav__container">
-            <a href="../../12-ai-ops/" class="md-nav__link ">
+            <a href="../../12-virtualization/" class="md-nav__link ">
               
   
   
   <span class="md-ellipsis">
     
   
-    12 AI 工具与智能化运维
+    12 硬件、虚拟化与私有云
   
 
     
@@ -3015,7 +3189,7 @@
             <span class="md-nav__icon md-icon"></span>
             
   
-    12 AI 工具与智能化运维
+    12 硬件、虚拟化与私有云
   
 
           </label>
@@ -3030,7 +3204,171 @@
   
   
     <li class="md-nav__item">
-      <a href="../../12-ai-ops/01-local-llm/" class="md-nav__link">
+      <a href="../../12-virtualization/01-gpu-cuda/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    GPU 与 CUDA
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../12-virtualization/02-kvm-qemu-pve/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    KVM/QEMU 与 Proxmox VE
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../12-virtualization/03-passthrough-sriov/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    PCIe 直通与 SR-IOV
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_14" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../13-ai-ops/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    13 AI 工具与智能化运维
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_14" id="__nav_14_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_14_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_14">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    13 AI 工具与智能化运维
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../13-ai-ops/01-local-llm/" class="md-nav__link">
         
   
   
@@ -3058,7 +3396,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../12-ai-ops/02-ai-cli/" class="md-nav__link">
+      <a href="../../13-ai-ops/02-ai-cli/" class="md-nav__link">
         
   
   
@@ -3086,7 +3424,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../12-ai-ops/03-iac-gitops/" class="md-nav__link">
+      <a href="../../13-ai-ops/03-iac-gitops/" class="md-nav__link">
         
   
   
@@ -3206,13 +3544,157 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_2" class="md-nav__link">
+  <a href="#ubuntu-22042404-lts" class="md-nav__link">
     <span class="md-ellipsis">
       
-        二、环境准备与前置条件
+        二、环境准备与前置条件（Ubuntu 22.04/24.04 LTS、权限、依赖包）
       
     </span>
   </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cp" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        三、手把手操作步骤（完整命令可复制；配置文件给完整路径；改任何配置前先给 cp 备份命令；关键参数逐行/表格讲解；禁止出现「...」省略与「自行配置」「略」字样）
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="三、手把手操作步骤（完整命令可复制；配置文件给完整路径；改任何配置前先给 cp 备份命令；关键参数逐行/表格讲解；禁止出现「...」省略与「自行配置」「略」字样）">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#31-utf8mb4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.1 建库：字符集一次定对 utf8mb4
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#32" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.2 建应用账号：一个应用一个账号，带来源限制
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#33-grant" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.3 按库最小权限授权：GRANT 的正确粒度
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#34" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.4 查看权限与回收权限
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#35-bind-address" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.5 安全远程访问第一层：修改 bind-address
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#36-ufw" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.6 安全远程访问第二层：UFW 只放行内网来源
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        四、效果验证与测试（检查命令 + 期望输出示例）
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#23" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        五、常见错误与排坑指南（2~3 个真实报错场景：报错原文片段+原因+修复命令；含本简报点名的经典报错）
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="五、常见错误与排坑指南（2~3 个真实报错场景：报错原文片段+原因+修复命令；含本简报点名的经典报错）">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#access-denied-for-user-rootlocalhost" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        场景一：Access denied for user 'root'@'localhost'
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cant-connect-to-mysql-serverbind-address" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        场景二：Can't connect to MySQL server（bind-address 原因）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cant-connect-to-mysql-server" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        场景三：Can't connect to MySQL server（防火墙原因）
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -3220,182 +3702,10 @@
   <a href="#_3" class="md-nav__link">
     <span class="md-ellipsis">
       
-        三、手把手操作步骤
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="三、手把手操作步骤">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#31-bios-iommu" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        3.1 在 BIOS 中开启 IOMMU
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#32-grub" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        3.2 备份并修改 GRUB 内核参数
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#33-iommu" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        3.3 验证 IOMMU 与查看分组
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#34-vfio" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        3.4 把设备绑定到 VFIO
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#35-libvirt-xml" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        3.5 用 libvirt XML 把设备直通给虚拟机
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#36-sr-iov-vf" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        3.6 SR-IOV：创建 VF 并直通
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#_4" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        四、效果验证与测试
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#_5" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        五、常见错误与排坑指南
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="五、常见错误与排坑指南">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#iommu" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        场景一：IOMMU 未开启或分组为空
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#_6" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        场景二：虚拟机启动报设备正忙或绑定失败
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#vf" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        场景三：创建 VF 失败
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#_7" class="md-nav__link">
-    <span class="md-ellipsis">
-      
         六、生产环境最佳实践与安全建议
       
     </span>
   </a>
-  
-    <nav class="md-nav" aria-label="六、生产环境最佳实践与安全建议">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#_8" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        风险清单与回滚步骤（必须执行）
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#_9" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        最佳实践
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
       
@@ -3416,7 +3726,7 @@
 
 
   
-    <a href="https://github.com/curzydj8/ubuntu-server-guide/edit/main/docs/11-virtualization/03-passthrough-sriov.md" title="编辑此页" class="md-content__button md-icon" rel="edit">
+    <a href="https://github.com/curzydj8/ubuntu-server-guide/edit/main/docs/11-databases/02-mysql-users-remote.md" title="编辑此页" class="md-content__button md-icon" rel="edit">
       
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10 20H6V4h7v5h5v3.1l2-2V8l-6-6H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h4zm10.2-7c.1 0 .3.1.4.2l1.3 1.3c.2.2.2.6 0 .8l-1 1-2.1-2.1 1-1c.1-.1.2-.2.4-.2m0 3.9L14.1 23H12v-2.1l6.1-6.1z"/></svg>
     </a>
@@ -3425,19 +3735,18 @@
     
       
     
-    <a href="https://github.com/curzydj8/ubuntu-server-guide/raw/main/docs/11-virtualization/03-passthrough-sriov.md" title="查看本页的源代码" class="md-content__button md-icon">
+    <a href="https://github.com/curzydj8/ubuntu-server-guide/raw/main/docs/11-databases/02-mysql-users-remote.md" title="查看本页的源代码" class="md-content__button md-icon">
       
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 18c.56 0 1 .44 1 1s-.44 1-1 1-1-.44-1-1 .44-1 1-1m0-3c-2.73 0-5.06 1.66-6 4 .94 2.34 3.27 4 6 4s5.06-1.66 6-4c-.94-2.34-3.27-4-6-4m0 6.5a2.5 2.5 0 0 1-2.5-2.5 2.5 2.5 0 0 1 2.5-2.5 2.5 2.5 0 0 1 2.5 2.5 2.5 2.5 0 0 1-2.5 2.5M9.27 20H6V4h7v5h5v4.07c.7.08 1.36.25 2 .49V8l-6-6H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h4.5a8.2 8.2 0 0 1-1.23-2"/></svg>
     </a>
   
 
 
-<h1 id="pcie-sr-iov">PCIe 直通与 SR-IOV<a class="headerlink" href="#pcie-sr-iov" title="Permanent link">&para;</a></h1>
+<h1 id="mysql">MySQL 用户、权限与安全远程访问<a class="headerlink" href="#mysql" title="Permanent link">&para;</a></h1>
 <h2 id="_1">一、概述与使用场景<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
-<p>模拟设备解决能不能用，直通解决够不够快。普通虚拟网卡与虚拟磁盘要经过宿主机软件栈中转，延迟与 CPU 开销随负载放大；PCIe 直通借助 IOMMU 把整块物理设备交给虚拟机，虚拟机用原生驱动直接操作硬件，性能接近裸机。SR-IOV 更进一步：一块物理网卡可在硬件层切出多个虚拟功能 VF，每个 VF 都是一块可独立直通的轻量网卡。</p>
-<p>瓶颈在三类场景最明显：GPU 虚拟机走模拟显卡无法使用 CUDA；高包率网络在虚拟交换路径上丢包抖动；NVMe 虚拟机在模拟控制器下浪费队列与中断优势。直通不是免费的：设备从宿主机消失、无法共享、热迁移受限，配错还可能让宿主机启动异常。因此本章把风险与回滚放在与操作同等重要的位置，每步改动前先备份，每台设备直通前先确认分组与保留策略。适用场景包括 GPU 虚拟机、网关独占网卡、数据库直通 NVMe 与 SR-IOV 多机近裸机网络；普通业务不需要直通。</p>
-<h2 id="_2">二、环境准备与前置条件<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
-<p>系统要求 Ubuntu 22.04 LTS 或 24.04 LTS，已按上一章装好 KVM 与 libvirt，且有一台能正常开关机的测试虚拟机。硬件要求：</p>
+<p>建账号是最容易埋雷的一步。给应用一个 <code>root</code>，或一句 <code>GRANT ALL PRIVILEGES ON *.* TO 'appuser'@'%'</code>，在生产上等于把整库钥匙复制无数份：应用一旦被注入，攻击者拿到的是删库、建后门、读全部数据的能力。本章给出标准动作：用 <code>utf8mb4</code> 建库、一个应用一个账号、按库按操作授予最小权限、用 <code>SHOW GRANTS</code> 复核、用 <code>REVOKE</code> 回收；远程访问走分层防线——<code>bind-address</code> 定监听、UFW 只放行内网来源、账号再限来源，3306 绝不对公网全开。</p>
+<p>适用场景：新业务建库建号、多应用共用一台 MySQL 做隔离、内网远程管理、旧库权限盘查。示例库名 <code>appdb</code>、应用账号 <code>appuser</code>、运维账号 <code>opsadmin</code>，来源只用文档段 <code>192.0.2.0/24</code> 与示例主机 <code>198.51.100.10</code>，密码一律 <code>&lt;password&gt;</code> 占位，请替换为自生成的强口令。</p>
+<h2 id="ubuntu-22042404-lts">二、环境准备与前置条件（Ubuntu 22.04/24.04 LTS、权限、依赖包）<a class="headerlink" href="#ubuntu-22042404-lts" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
 <tr>
@@ -3448,269 +3757,230 @@
 </thead>
 <tbody>
 <tr>
-<td>CPU 与芯片组</td>
-<td>支持 VT-d 或 AMD-Vi</td>
-<td>只有 VT-x 或 AMD-V 而无 IOMMU 扩展时不能直通</td>
+<td>操作系统</td>
+<td>Ubuntu Server 22.04 / 24.04 LTS</td>
+<td>已按第 11.1 章完成 MySQL 8.0 或 MariaDB 安装与安全初始化</td>
 </tr>
 <tr>
-<td>BIOS</td>
-<td>有 IOMMU、Above 4G Decoding 等选项</td>
-<td>多卡或大显存显卡场景常需开启 Above 4G</td>
+<td>数据库权限</td>
+<td>可用 <code>root</code> 或等效管理账号本机登录</td>
+<td>本章的建号、授权、回收都在此账号下执行</td>
 </tr>
 <tr>
-<td>待直通设备</td>
-<td>显卡、网卡或 NVMe 中至少一类</td>
-<td>先查 IOMMU 分组再决定，见第三节</td>
+<td>系统权限</td>
+<td>登录用户 <code>ubuntu</code> / <code>opsadmin</code> 具备 <code>sudo</code></td>
+<td>改配置与防火墙需要</td>
 </tr>
 <tr>
-<td>宿主机显示</td>
-<td>直通独显时宿主机另有核显或带外显示</td>
-<td>否则宿主机本地将无画面</td>
+<td>防火墙</td>
+<td>UFW 已安装（Ubuntu 默认自带）</td>
+<td>未启用时本章给出启用顺序，注意不要把自己锁在 SSH 外面</td>
 </tr>
 <tr>
-<td>网卡（SR-IOV）</td>
-<td>型号明确支持 SR-IOV 且驱动支持创建 VF</td>
-<td>以厂商规格与内核驱动文档为准</td>
+<td>网络规划</td>
+<td>已明确哪些来源需要远程连库</td>
+<td>只写内网段或跳板机地址，禁止写「全网」</td>
 </tr>
 </tbody>
 </table>
-<p>权限与准备：账号 <code>ubuntu</code> 具备 sudo 权限；已准备本地控制台或带外管理；已记录待直通设备的 ID 与 PCI 地址；已做可恢复备份。示例中 PCI 地址与设备 ID 仅为占位格式，执行时必须替换为 <code>lspci</code> 的真实输出。</p>
-<div class="admonition danger">
-<p class="admonition-title">先分组，后直通</p>
-<p>IOMMU 分组决定隔离边界。同一分组内的设备只能一起直通，不能拆开分给不同虚拟机，也不能一半留给宿主机一半直通。没看清分组就写绑定配置，是本章最高发的事故来源。</p>
-</div>
+<p>操作前先确认服务与登录通道正常，并看一眼现有账号清单，做到心里有数再动手：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>sudo<span class="w"> </span>systemctl<span class="w"> </span>status<span class="w"> </span>mysql<span class="w"> </span>--no-pager
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>sudo<span class="w"> </span>mysql<span class="w"> </span>-u<span class="w"> </span>root<span class="w"> </span>-e<span class="w"> </span><span class="s2">"SELECT user, host, plugin FROM mysql.user;"</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>sudo<span class="w"> </span>ufw<span class="w"> </span>status<span class="w"> </span>verbose
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>ip<span class="w"> </span>-4<span class="w"> </span>addr<span class="w"> </span>show
+</code></pre></div>
 <div class="admonition warning">
-<p class="admonition-title">宿主机保留设备警告</p>
-<p>正在承担宿主机控制台显示、宿主机网络或系统盘的设备，默认列为保留设备，禁止直通。直通系统盘所在的 NVMe 控制器或唯一网卡，会让宿主机直接失去磁盘或网络。每一台机器都应先列一张保留清单，再列直通清单。</p>
+<p class="admonition-title">先保住管理通道再改权限</p>
+<p>任何 <code>DROP USER</code>、<code>REVOKE</code>、改 <code>bind-address</code> 或改防火墙的操作，都遵循同一纪律：保持当前已登录的数据库会话与 SSH 会话不关闭，改完先新开一个终端验证成功，再关旧会话。在远程机器上改 UFW 时，务必先放行 SSH 的 22 端口，再启用或收紧规则。</p>
 </div>
-<h2 id="_3">三、手把手操作步骤<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h2>
-<h3 id="31-bios-iommu">3.1 在 BIOS 中开启 IOMMU<a class="headerlink" href="#31-bios-iommu" title="Permanent link">&para;</a></h3>
-<p>进入 BIOS/UEFI：Intel 平台开启 Virtualization Technology 与 VT-d，AMD 平台开启 SVM 与 IOMMU；使用大显存显卡时一并开启 Above 4G Decoding。BIOS 打开不等于内核已启用，还需下一节的内核参数，并用日志验证。</p>
-<h3 id="32-grub">3.2 备份并修改 GRUB 内核参数<a class="headerlink" href="#32-grub" title="Permanent link">&para;</a></h3>
-<p>修改启动参数前必须先备份，这是本章回滚链的第一环：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>sudo<span class="w"> </span>cp<span class="w"> </span>/etc/default/grub<span class="w"> </span>/etc/default/grub.bak-<span class="k">$(</span>date<span class="w"> </span>+%F<span class="k">)</span>-before-iommu
-<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>sudo<span class="w"> </span>cp<span class="w"> </span>-a<span class="w"> </span>/boot/grub<span class="w"> </span>/root/grub-backup-<span class="k">$(</span>date<span class="w"> </span>+%F<span class="k">)</span><span class="w"> </span><span class="m">2</span>&gt;/dev/null<span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;grub 目录备份跳过，以 /etc/default/grub 备份为准&quot;</span>
-<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>cat<span class="w"> </span>/etc/default/grub
+<h2 id="cp">三、手把手操作步骤（完整命令可复制；配置文件给完整路径；改任何配置前先给 cp 备份命令；关键参数逐行/表格讲解；禁止出现「...」省略与「自行配置」「略」字样）<a class="headerlink" href="#cp" title="Permanent link">&para;</a></h2>
+<h3 id="31-utf8mb4">3.1 建库：字符集一次定对 utf8mb4<a class="headerlink" href="#31-utf8mb4" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="k">CREATE</span><span class="w"> </span><span class="k">DATABASE</span><span class="w"> </span><span class="n">appdb</span><span class="w"> </span><span class="nb">CHARACTER</span><span class="w"> </span><span class="k">SET</span><span class="w"> </span><span class="n">utf8mb4</span><span class="w"> </span><span class="k">COLLATE</span><span class="w"> </span><span class="n">utf8mb4_unicode_ci</span><span class="p">;</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="k">SHOW</span><span class="w"> </span><span class="k">CREATE</span><span class="w"> </span><span class="k">DATABASE</span><span class="w"> </span><span class="n">appdb</span><span class="p">;</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="k">SHOW</span><span class="w"> </span><span class="nb">CHARACTER</span><span class="w"> </span><span class="k">SET</span><span class="w"> </span><span class="k">LIKE</span><span class="w"> </span><span class="s1">'utf8mb4'</span><span class="p">;</span>
 </code></pre></div>
-<p>编辑 <code>/etc/default/grub</code>，在 <code>GRUB_CMDLINE_LINUX_DEFAULT</code> 的引号内追加参数。Intel 平台完整示例行：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="na">GRUB_CMDLINE_LINUX_DEFAULT</span><span class="o">=</span><span class="s">&quot;quiet splash intel_iommu=on iommu=pt&quot;</span>
+<p>讲解：<code>utf8mb4</code> 每字符最多 4 字节，能容纳 emoji 与生僻汉字；旧 <code>utf8</code> 实为最多 3 字节的 <code>utf8mb3</code>，存 emoji 会报错，不要选。<code>utf8mb4_unicode_ci</code> 是比较与排序规则，<code>_ci</code> 表示不区分大小写，适合绝大多数业务；全库必须统一规则。MariaDB 建库语句通用。字符集要在建库时定好，事后改库默认值不会自动改已建表，补救成本远高于一次定对（三层配置见第 11.3 章）。</p>
+<p>批量盘查现有库的字符集用：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="k">SELECT</span><span class="w"> </span><span class="k">SCHEMA_NAME</span><span class="p">,</span><span class="w"> </span><span class="n">DEFAULT_CHARACTER_SET_NAME</span><span class="p">,</span><span class="w"> </span><span class="n">DEFAULT_COLLATION_NAME</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="k">FROM</span><span class="w"> </span><span class="n">information_schema</span><span class="p">.</span><span class="n">SCHEMATA</span><span class="p">;</span>
 </code></pre></div>
-<p>AMD 平台完整示例行：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="na">GRUB_CMDLINE_LINUX_DEFAULT</span><span class="o">=</span><span class="s">&quot;quiet splash amd_iommu=on iommu=pt&quot;</span>
+<h3 id="32">3.2 建应用账号：一个应用一个账号，带来源限制<a class="headerlink" href="#32" title="Permanent link">&para;</a></h3>
+<p>MySQL 的账号由「用户名 + 来源主机」共同标识，<code>'appuser'@'localhost'</code> 与 <code>'appuser'@'192.0.2.%'</code> 是两个完全不同的账号，密码与权限互不相通。建号语句：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="c1">-- 应用与数据库同机部署时：只允许本机连接</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="k">CREATE</span><span class="w"> </span><span class="k">USER</span><span class="w"> </span><span class="s1">'appuser'</span><span class="o">@</span><span class="s1">'localhost'</span><span class="w"> </span><span class="n">IDENTIFIED</span><span class="w"> </span><span class="k">WITH</span><span class="w"> </span><span class="n">caching_sha2_password</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="s1">'&lt;password&gt;'</span><span class="p">;</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="c1">-- 应用部署在内网另一台机器时：只允许示例内网段连接，二选一，不要两个都建</span>
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="k">CREATE</span><span class="w"> </span><span class="k">USER</span><span class="w"> </span><span class="s1">'appuser'</span><span class="o">@</span><span class="s1">'192.0.2.%'</span><span class="w"> </span><span class="n">IDENTIFIED</span><span class="w"> </span><span class="k">WITH</span><span class="w"> </span><span class="n">caching_sha2_password</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="s1">'&lt;password&gt;'</span><span class="p">;</span>
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>
+<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="k">SELECT</span><span class="w"> </span><span class="k">user</span><span class="p">,</span><span class="w"> </span><span class="k">host</span><span class="p">,</span><span class="w"> </span><span class="n">plugin</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">mysql</span><span class="p">.</span><span class="k">user</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="k">user</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'appuser'</span><span class="p">;</span>
 </code></pre></div>
-<p>参数讲解：</p>
+<p>要点：<code>%</code> 单独作来源表示任意地址，生产默认禁止；口令不少于 12 位，写入应用侧密钥配置，不要硬编码进代码仓库。MariaDB 建号语法相同。</p>
+<p>再建一个仅供人工运维、来源限定到跳板机的管理账号，日常替代 <code>root</code> 使用：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="k">CREATE</span><span class="w"> </span><span class="k">USER</span><span class="w"> </span><span class="s1">'opsadmin'</span><span class="o">@</span><span class="s1">'198.51.100.10'</span><span class="w"> </span><span class="n">IDENTIFIED</span><span class="w"> </span><span class="k">WITH</span><span class="w"> </span><span class="n">caching_sha2_password</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="s1">'&lt;password&gt;'</span><span class="p">;</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="k">GRANT</span><span class="w"> </span><span class="k">ALL</span><span class="w"> </span><span class="k">PRIVILEGES</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="o">*</span><span class="p">.</span><span class="o">*</span><span class="w"> </span><span class="k">TO</span><span class="w"> </span><span class="s1">'opsadmin'</span><span class="o">@</span><span class="s1">'198.51.100.10'</span><span class="w"> </span><span class="k">WITH</span><span class="w"> </span><span class="k">GRANT</span><span class="w"> </span><span class="k">OPTION</span><span class="p">;</span>
+</code></pre></div>
+<p>注意这句 <code>ALL ON *.*</code> 只允许给这种来源锁死、专人保管的管理账号，应用账号永远不许这样授权，两者的区别正是下一节的主题。</p>
+<h3 id="33-grant">3.3 按库最小权限授权：GRANT 的正确粒度<a class="headerlink" href="#33-grant" title="Permanent link">&para;</a></h3>
+<p>应用账号只给业务库的日常增删改查：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="k">GRANT</span><span class="w"> </span><span class="k">SELECT</span><span class="p">,</span><span class="w"> </span><span class="k">INSERT</span><span class="p">,</span><span class="w"> </span><span class="k">UPDATE</span><span class="p">,</span><span class="w"> </span><span class="k">DELETE</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">appdb</span><span class="p">.</span><span class="o">*</span><span class="w"> </span><span class="k">TO</span><span class="w"> </span><span class="s1">'appuser'</span><span class="o">@</span><span class="s1">'localhost'</span><span class="p">;</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="c1">-- 若 3.2 建的是内网来源账号，则把上一句的主机部分换成对应来源再执行</span>
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="k">GRANT</span><span class="w"> </span><span class="k">SELECT</span><span class="p">,</span><span class="w"> </span><span class="k">INSERT</span><span class="p">,</span><span class="w"> </span><span class="k">UPDATE</span><span class="p">,</span><span class="w"> </span><span class="k">DELETE</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">appdb</span><span class="p">.</span><span class="o">*</span><span class="w"> </span><span class="k">TO</span><span class="w"> </span><span class="s1">'appuser'</span><span class="o">@</span><span class="s1">'192.0.2.%'</span><span class="p">;</span>
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="n">FLUSH</span><span class="w"> </span><span class="k">PRIVILEGES</span><span class="p">;</span>
+</code></pre></div>
+<p><code>appdb.*</code> 表示该库的全部表；需要更细时可收到表级，例如只允许报表程序读一张表：<code>GRANT SELECT ON appdb.report_view TO 'appuser'@'localhost';</code>。<code>CREATE USER</code> 与 <code>GRANT</code> 在当前版本中会自动刷新权限，<code>FLUSH PRIVILEGES</code> 在直接改权限表时才必需，此处保留执行无副作用，养成习惯。</p>
+<p><code>GRANT SELECT, INSERT, UPDATE, DELETE</code> 与 <code>GRANT ALL PRIVILEGES</code> 的区别必须分清：</p>
 <table>
 <thead>
 <tr>
-<th>参数</th>
-<th>含义</th>
+<th>对比项</th>
+<th>SELECT, INSERT, UPDATE, DELETE</th>
+<th>ALL PRIVILEGES</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td><code>intel_iommu=on</code></td>
-<td>强制开启 Intel 平台 IOMMU，不要写成其他拼写</td>
+<td>读、写、改、删数据</td>
+<td>全部具备，满足日常业务</td>
+<td>具备</td>
 </tr>
 <tr>
-<td><code>amd_iommu=on</code></td>
-<td>强制开启 AMD 平台 IOMMU，与上一项二选一，按平台选用</td>
+<td>建表、改表、删表（CREATE / ALTER / DROP）</td>
+<td>不具备，结构变更会被拒绝</td>
+<td>具备，可直接删表删库</td>
 </tr>
 <tr>
-<td><code>iommu=pt</code></td>
-<td>透传模式：未被直通分配的设备走直通域，降低宿主机自身 DMA 开销；需要严格隔离宿主机设备时再评估去掉它</td>
+<td>建索引、建视图、建存储过程</td>
+<td>不具备</td>
+<td>具备</td>
+</tr>
+<tr>
+<td>给别人授权（GRANT OPTION）</td>
+<td>不具备（除非单独加）</td>
+<td>仅在额外带 <code>WITH GRANT OPTION</code> 时具备</td>
+</tr>
+<tr>
+<td>泄露后的破坏半径</td>
+<td>限于该库的数据读写</td>
+<td>整个授权范围内的结构与数据</td>
 </tr>
 </tbody>
 </table>
-<p>应用并重启：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>sudo<span class="w"> </span>update-grub
-<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>sudo<span class="w"> </span>reboot
+<p>结论：应用运行账号用前者；表结构变更走发布流程，用管理账号单独执行，不要为了让迁移脚本跑通就给应用账号长期开 <code>ALL</code>。确实需要应用自动建临时表等特殊能力时，单独评估后追加单项权限，例如 <code>GRANT CREATE TEMPORARY TABLES ON appdb.* TO 'appuser'@'localhost';</code>，加一项记一项，进账号台账。</p>
+<p>只读与备份类账号同理按需拆分，备份账号示例（备份原理见第 11.4 章）：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="k">CREATE</span><span class="w"> </span><span class="k">USER</span><span class="w"> </span><span class="s1">'backupuser'</span><span class="o">@</span><span class="s1">'localhost'</span><span class="w"> </span><span class="n">IDENTIFIED</span><span class="w"> </span><span class="k">WITH</span><span class="w"> </span><span class="n">caching_sha2_password</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="s1">'&lt;password&gt;'</span><span class="p">;</span>
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="k">GRANT</span><span class="w"> </span><span class="k">SELECT</span><span class="p">,</span><span class="w"> </span><span class="k">SHOW</span><span class="w"> </span><span class="k">VIEW</span><span class="p">,</span><span class="w"> </span><span class="k">TRIGGER</span><span class="p">,</span><span class="w"> </span><span class="n">EVENT</span><span class="p">,</span><span class="w"> </span><span class="n">RELOAD</span><span class="p">,</span><span class="w"> </span><span class="k">LOCK</span><span class="w"> </span><span class="n">TABLES</span><span class="p">,</span><span class="w"> </span><span class="n">REPLICATION</span><span class="w"> </span><span class="n">CLIENT</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">appdb</span><span class="p">.</span><span class="o">*</span><span class="w"> </span><span class="k">TO</span><span class="w"> </span><span class="s1">'backupuser'</span><span class="o">@</span><span class="s1">'localhost'</span><span class="p">;</span>
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="k">GRANT</span><span class="w"> </span><span class="k">SELECT</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">mysql</span><span class="p">.</span><span class="o">*</span><span class="w"> </span><span class="k">TO</span><span class="w"> </span><span class="s1">'backupuser'</span><span class="o">@</span><span class="s1">'localhost'</span><span class="p">;</span>
 </code></pre></div>
-<h3 id="33-iommu">3.3 验证 IOMMU 与查看分组<a class="headerlink" href="#33-iommu" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>dmesg<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-i<span class="w"> </span>-E<span class="w"> </span><span class="s2">&quot;iommu|DMAR&quot;</span>
-<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>cat<span class="w"> </span>/proc/cmdline
+<p>不同备份方式需要的权限略有增减，原则不变：只读为主，不给任何写与删权限。</p>
+<h3 id="34">3.4 查看权限与回收权限<a class="headerlink" href="#34" title="Permanent link">&para;</a></h3>
+<p>授权后必须复核，不要凭感觉认为已经生效：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="k">SHOW</span><span class="w"> </span><span class="n">GRANTS</span><span class="w"> </span><span class="k">FOR</span><span class="w"> </span><span class="s1">'appuser'</span><span class="o">@</span><span class="s1">'localhost'</span><span class="p">;</span>
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="k">SHOW</span><span class="w"> </span><span class="n">GRANTS</span><span class="w"> </span><span class="k">FOR</span><span class="w"> </span><span class="s1">'appuser'</span><span class="o">@</span><span class="s1">'192.0.2.%'</span><span class="p">;</span>
+<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a><span class="k">SELECT</span><span class="w"> </span><span class="k">user</span><span class="p">,</span><span class="w"> </span><span class="k">host</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">mysql</span><span class="p">.</span><span class="k">user</span><span class="p">;</span>
 </code></pre></div>
-<p>Intel 平台期望看到 DMAR 与 IOMMU 启用行，AMD 平台期望看到 AMD-Vi 行；<code>/proc/cmdline</code> 应包含 iommu 参数。未开启时回 BIOS 与 GRUB 逐项核对。</p>
-<p>查看分组用下面的脚本，它按分组列出每组内的全部设备：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>cat<span class="w"> </span>&gt;<span class="w"> </span>/tmp/list-iommu.sh<span class="w"> </span><span class="s">&lt;&lt;&#39;EOF&#39;</span>
-<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="s">#!/bin/bash</span>
-<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="s">shopt -s nullglob</span>
-<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="s">for g in /sys/kernel/iommu_groups/*; do</span>
-<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a><span class="s">  echo &quot;IOMMU Group ${g##*/}:&quot;</span>
-<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a><span class="s">  for d in ${g}/devices/*; do</span>
-<a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a><span class="s">    echo -e &quot;  $(lspci -nns ${d##*/})&quot;</span>
-<a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a><span class="s">  done</span>
-<a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a><span class="s">done</span>
-<a id="__codelineno-5-10" name="__codelineno-5-10" href="#__codelineno-5-10"></a><span class="s">EOF</span>
-<a id="__codelineno-5-11" name="__codelineno-5-11" href="#__codelineno-5-11"></a>chmod<span class="w"> </span>+x<span class="w"> </span>/tmp/list-iommu.sh
-<a id="__codelineno-5-12" name="__codelineno-5-12" href="#__codelineno-5-12"></a>/tmp/list-iommu.sh<span class="w"> </span><span class="p">|</span><span class="w"> </span>tee<span class="w"> </span>/tmp/iommu-groups.txt
-<a id="__codelineno-5-13" name="__codelineno-5-13" href="#__codelineno-5-13"></a>lspci<span class="w"> </span>-nn
+<p>回收权限用 <code>REVOKE</code>，人员离职、应用下线、来源地址变更时第一时间执行：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="c1">-- 收回某一类权限</span>
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="k">REVOKE</span><span class="w"> </span><span class="k">DELETE</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">appdb</span><span class="p">.</span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="s1">'appuser'</span><span class="o">@</span><span class="s1">'localhost'</span><span class="p">;</span>
+<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a>
+<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a><span class="c1">-- 收回该账号在某库的全部权限（保留账号本身）</span>
+<a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a><span class="k">REVOKE</span><span class="w"> </span><span class="k">ALL</span><span class="w"> </span><span class="k">PRIVILEGES</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">appdb</span><span class="p">.</span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="s1">'appuser'</span><span class="o">@</span><span class="s1">'localhost'</span><span class="p">;</span>
+<a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a>
+<a id="__codelineno-8-7" name="__codelineno-8-7" href="#__codelineno-8-7"></a><span class="c1">-- 账号不再使用：先改口令封停观察，再删除</span>
+<a id="__codelineno-8-8" name="__codelineno-8-8" href="#__codelineno-8-8"></a><span class="k">ALTER</span><span class="w"> </span><span class="k">USER</span><span class="w"> </span><span class="s1">'appuser'</span><span class="o">@</span><span class="s1">'localhost'</span><span class="w"> </span><span class="n">ACCOUNT</span><span class="w"> </span><span class="k">LOCK</span><span class="p">;</span>
+<a id="__codelineno-8-9" name="__codelineno-8-9" href="#__codelineno-8-9"></a><span class="k">DROP</span><span class="w"> </span><span class="k">USER</span><span class="w"> </span><span class="s1">'appuser'</span><span class="o">@</span><span class="s1">'localhost'</span><span class="p">;</span>
 </code></pre></div>
-<p>判读：目标设备独占一组最理想；显卡的显示与音频功能同组是正常情况，应一起直通。若目标设备与系统盘控制器或宿主机网卡同组，则在当前布局下不适合直通，应换插槽重试分组，不要强行整组直通。</p>
-<p>关于 ACS：ACS 是 PCIe 访问控制服务，完整支持能让每个设备独立成组。部分消费级主板分组较粗，是布线与桥接方式决定的。社区有通过 ACS 覆盖参数强拆分组的做法，它削弱设备间隔离，虚拟机之间可能通过 DMA 互相影响。本书不推荐在生产环境使用，正确处理是调整插槽、更换主板或接受整组直通。</p>
-<h3 id="34-vfio">3.4 把设备绑定到 VFIO<a class="headerlink" href="#34-vfio" title="Permanent link">&para;</a></h3>
-<p>确认分组后，记录目标设备的厂商与设备 ID：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>lspci<span class="w"> </span>-nn<span class="w"> </span>-s<span class="w"> </span><span class="m">03</span>:00
+<p>回收后再次 <code>SHOW GRANTS</code> 验证，并让应用做一次连接回归。特别注意：<code>REVOKE</code> 写错主机部分会收错账号，MySQL 按「用户名 + 来源」精确匹配，执行前先把 <code>SHOW GRANTS</code> 的输出完整抄下来对照再动手。</p>
+<h3 id="35-bind-address">3.5 安全远程访问第一层：修改 bind-address<a class="headerlink" href="#35-bind-address" title="Permanent link">&para;</a></h3>
+<p>默认 <code>bind-address = 127.0.0.1</code> 表示只监听本机回环，同机应用可连、任何远程机器都连不进来。要开放内网远程，先备份再改配置。MySQL 的主配置文件路径为 <code>/etc/mysql/mysql.conf.d/mysqld.cnf</code>：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>sudo<span class="w"> </span>cp<span class="w"> </span>/etc/mysql/mysql.conf.d/mysqld.cnf<span class="w"> </span>/etc/mysql/mysql.conf.d/mysqld.cnf.bak.<span class="k">$(</span>date<span class="w"> </span>+%F-%H%M<span class="k">)</span>
+<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a>sudo<span class="w"> </span>grep<span class="w"> </span>-n<span class="w"> </span><span class="s2">"bind-address"</span><span class="w"> </span>/etc/mysql/mysql.conf.d/mysqld.cnf
 </code></pre></div>
-<p>方括号内的十六进制组合就是 ID，厂商号在前、设备号在后。直通整组时每个功能的 ID 都要列全，包括音频功能。备份并写 VFIO 配置：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>sudo<span class="w"> </span>cp<span class="w"> </span>-a<span class="w"> </span>/etc/modprobe.d<span class="w"> </span>/root/modprobe.d.bak-<span class="k">$(</span>date<span class="w"> </span>+%F<span class="k">)</span>
-<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>sudo<span class="w"> </span>cp<span class="w"> </span>/etc/initramfs-tools/modules<span class="w"> </span>/etc/initramfs-tools/modules.bak-<span class="k">$(</span>date<span class="w"> </span>+%F<span class="k">)</span><span class="w"> </span><span class="m">2</span>&gt;/dev/null<span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;modules 文件不存在，跳过该项备份&quot;</span>
-<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>cat<span class="w"> </span>&gt;<span class="w"> </span>/tmp/vfio-conf.sh<span class="w"> </span><span class="s">&lt;&lt;&#39;EOF&#39;</span>
-<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a><span class="s">#!/bin/bash</span>
-<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a><span class="s">echo &quot;options vfio-pci ids=厂商号:设备号,厂商号:音频设备号&quot; | sudo tee /etc/modprobe.d/vfio.conf</span>
-<a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a><span class="s">echo &quot;softdep nvidia pre: vfio-pci&quot; | sudo tee -a /etc/modprobe.d/vfio.conf</span>
-<a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a><span class="s">cat /etc/modprobe.d/vfio.conf</span>
-<a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a><span class="s">EOF</span>
-<a id="__codelineno-7-9" name="__codelineno-7-9" href="#__codelineno-7-9"></a>bash<span class="w"> </span>/tmp/vfio-conf.sh
+<p>用编辑器打开该文件，找到 <code>[mysqld]</code> 段的 <code>bind-address</code> 一行，按你的部署二选一修改：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="c1"># 方案一：只监听服务器的内网地址（推荐，示例地址替换为本机内网 IP）</span>
+<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="na">bind-address</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">192.0.2.20</span>
+<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a>
+<a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a><span class="c1"># 方案二：监听全部地址，仅当机器有多网卡且外层防火墙已严格收紧时使用</span>
+<a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a><span class="na">bind-address</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">0.0.0.0</span>
 </code></pre></div>
-<p>上面脚本中的中文占位必须替换为真实 ID 后再执行，软依赖一行仅在宿主机同时装有对应原生驱动时按需保留，目的是让 vfio-pci 在原生驱动之前抢先绑定设备。随后把 VFIO 模块写入 initramfs 并重建：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>cat<span class="w"> </span>&gt;<span class="w"> </span>/tmp/vfio-modules.sh<span class="w"> </span><span class="s">&lt;&lt;&#39;EOF&#39;</span>
-<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="s">#!/bin/bash</span>
-<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="s">for m in vfio vfio_iommu_type1 vfio_pci vfio_virqfd; do</span>
-<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a><span class="s">  grep -qx &quot;$m&quot; /etc/initramfs-tools/modules || echo &quot;$m&quot; | sudo tee -a /etc/initramfs-tools/modules</span>
-<a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a><span class="s">done</span>
-<a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a><span class="s">cat /etc/initramfs-tools/modules</span>
-<a id="__codelineno-8-7" name="__codelineno-8-7" href="#__codelineno-8-7"></a><span class="s">EOF</span>
-<a id="__codelineno-8-8" name="__codelineno-8-8" href="#__codelineno-8-8"></a>bash<span class="w"> </span>/tmp/vfio-modules.sh
-<a id="__codelineno-8-9" name="__codelineno-8-9" href="#__codelineno-8-9"></a>sudo<span class="w"> </span>update-initramfs<span class="w"> </span>-u
-<a id="__codelineno-8-10" name="__codelineno-8-10" href="#__codelineno-8-10"></a>sudo<span class="w"> </span>reboot
+<p>逐行讲解：方案一最稳妥——服务只在内网网卡上出现，即使防火墙规则写错，公网网卡上也没有数据库在监听。方案二把把关完全交给防火墙与安全组，任何一层失误都会直接暴露，选它必须同时满足下一节的 UFW 来源限制与云安全组来源限制双双到位。MariaDB 的对应配置常见于 <code>/etc/mysql/mariadb.conf.d/50-server.cnf</code>，改法相同，动手前同样先备份：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>sudo<span class="w"> </span>cp<span class="w"> </span>/etc/mysql/mariadb.conf.d/50-server.cnf<span class="w"> </span>/etc/mysql/mariadb.conf.d/50-server.cnf.bak.<span class="k">$(</span>date<span class="w"> </span>+%F-%H%M<span class="k">)</span>
 </code></pre></div>
-<p>重启后验证绑定结果：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>lspci<span class="w"> </span>-nnk<span class="w"> </span>-s<span class="w"> </span><span class="m">03</span>:00
+<p>改完重启并验证监听：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a>sudo<span class="w"> </span>systemctl<span class="w"> </span>restart<span class="w"> </span>mysql
+<a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a>ss<span class="w"> </span>-tlnp<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span><span class="m">3306</span>
+<a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a>sudo<span class="w"> </span>mysql<span class="w"> </span>-u<span class="w"> </span>root<span class="w"> </span>-e<span class="w"> </span><span class="s2">"SHOW VARIABLES LIKE 'bind_address';"</span>
 </code></pre></div>
-<p>期望目标设备的 Kernel driver in use 一行显示 <code>vfio-pci</code>。若仍显示原生驱动，检查 ids 是否写全、initramfs 是否重建、软依赖是否生效，三项逐一核对。</p>
-<div class="admonition danger">
-<p class="admonition-title">直通后宿主机失去该设备</p>
-<p>绑定生效的那一刻起，宿主机就不再拥有这块设备：直通显卡后宿主机本地画面消失，直通网卡后该口的宿主机网络消失，直通 NVMe 后宿主机看不到这块盘。操作前确认宿主机不依赖它，且你有不经过该设备的登录与显示通道。</p>
-</div>
-<h3 id="35-libvirt-xml">3.5 用 libvirt XML 把设备直通给虚拟机<a class="headerlink" href="#35-libvirt-xml" title="Permanent link">&para;</a></h3>
-<p>先备份虚拟机定义，再编辑：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>virsh<span class="w"> </span>dumpxml<span class="w"> </span>ubuntu-guest-01<span class="w"> </span><span class="p">|</span><span class="w"> </span>sudo<span class="w"> </span>tee<span class="w"> </span>/root/ubuntu-guest-01-before-passthrough.xml
-<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a>virsh<span class="w"> </span>edit<span class="w"> </span>ubuntu-guest-01
+<h3 id="36-ufw">3.6 安全远程访问第二层：UFW 只放行内网来源<a class="headerlink" href="#36-ufw" title="Permanent link">&para;</a></h3>
+<p>服务开始监听内网后，用 UFW 把来源再收一层。先确保 SSH 已放行，再放行数据库，最后检查规则顺序与结果：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a>sudo<span class="w"> </span>ufw<span class="w"> </span>allow<span class="w"> </span><span class="m">22</span>/tcp<span class="w"> </span>comment<span class="w"> </span><span class="s1">'SSH'</span>
+<a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a>sudo<span class="w"> </span>ufw<span class="w"> </span>allow<span class="w"> </span>from<span class="w"> </span><span class="m">192</span>.0.2.0/24<span class="w"> </span>to<span class="w"> </span>any<span class="w"> </span>port<span class="w"> </span><span class="m">3306</span><span class="w"> </span>proto<span class="w"> </span>tcp<span class="w"> </span>comment<span class="w"> </span><span class="s1">'MySQL intranet only'</span>
+<a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a>sudo<span class="w"> </span>ufw<span class="w"> </span><span class="nb">enable</span>
+<a id="__codelineno-13-4" name="__codelineno-13-4" href="#__codelineno-13-4"></a>sudo<span class="w"> </span>ufw<span class="w"> </span>status<span class="w"> </span>numbered
 </code></pre></div>
-<p>在 <code>devices</code> 段内加入 hostdev 片段。显卡显示功能示例（地址与 ID 替换为真实值）：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="nt">&lt;hostdev</span><span class="w"> </span><span class="na">mode=</span><span class="s">&#39;subsystem&#39;</span><span class="w"> </span><span class="na">type=</span><span class="s">&#39;pci&#39;</span><span class="w"> </span><span class="na">managed=</span><span class="s">&#39;yes&#39;</span><span class="nt">&gt;</span>
-<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a><span class="w">  </span><span class="nt">&lt;source&gt;</span>
-<a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a><span class="w">    </span><span class="nt">&lt;address</span><span class="w"> </span><span class="na">domain=</span><span class="s">&#39;0x0000&#39;</span><span class="w"> </span><span class="na">bus=</span><span class="s">&#39;0x03&#39;</span><span class="w"> </span><span class="na">slot=</span><span class="s">&#39;0x00&#39;</span><span class="w"> </span><span class="na">function=</span><span class="s">&#39;0x0&#39;</span><span class="nt">/&gt;</span>
-<a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a><span class="w">  </span><span class="nt">&lt;/source&gt;</span>
-<a id="__codelineno-11-5" name="__codelineno-11-5" href="#__codelineno-11-5"></a><span class="nt">&lt;/hostdev&gt;</span>
-<a id="__codelineno-11-6" name="__codelineno-11-6" href="#__codelineno-11-6"></a><span class="nt">&lt;hostdev</span><span class="w"> </span><span class="na">mode=</span><span class="s">&#39;subsystem&#39;</span><span class="w"> </span><span class="na">type=</span><span class="s">&#39;pci&#39;</span><span class="w"> </span><span class="na">managed=</span><span class="s">&#39;yes&#39;</span><span class="nt">&gt;</span>
-<a id="__codelineno-11-7" name="__codelineno-11-7" href="#__codelineno-11-7"></a><span class="w">  </span><span class="nt">&lt;source&gt;</span>
-<a id="__codelineno-11-8" name="__codelineno-11-8" href="#__codelineno-11-8"></a><span class="w">    </span><span class="nt">&lt;address</span><span class="w"> </span><span class="na">domain=</span><span class="s">&#39;0x0000&#39;</span><span class="w"> </span><span class="na">bus=</span><span class="s">&#39;0x03&#39;</span><span class="w"> </span><span class="na">slot=</span><span class="s">&#39;0x00&#39;</span><span class="w"> </span><span class="na">function=</span><span class="s">&#39;0x1&#39;</span><span class="nt">/&gt;</span>
-<a id="__codelineno-11-9" name="__codelineno-11-9" href="#__codelineno-11-9"></a><span class="w">  </span><span class="nt">&lt;/source&gt;</span>
-<a id="__codelineno-11-10" name="__codelineno-11-10" href="#__codelineno-11-10"></a><span class="nt">&lt;/hostdev&gt;</span>
+<p>这条数据库规则的含义是：仅允许示例内网段 <code>192.0.2.0/24</code> 访问本机 3306，其余来源一律由 UFW 默认策略拒绝。把网段替换为你的真实内网段后执行，绝对不要写成 <code>sudo ufw allow 3306</code>——那等于对所有来源放行，与公网全开没有区别。如果数据库只供同机应用使用，根本不要加这条规则，保持 <code>bind-address = 127.0.0.1</code> 即可，连得越少越安全。云主机还必须同步检查云厂商安全组：入方向 3306 只允许同一内网段，UFW 与安全组两层口径一致才算数。规则变更后，从一台允许段内的机器和一台段外的机器各测一次连通性（命令见第四节），双向验证才算完成。</p>
+<p>远程连接的完整验证命令（在来源机器上执行，需要装有 MySQL 客户端）：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a>mysql<span class="w"> </span>-h<span class="w"> </span><span class="m">192</span>.0.2.20<span class="w"> </span>-P<span class="w"> </span><span class="m">3306</span><span class="w"> </span>-u<span class="w"> </span>appuser<span class="w"> </span>-p<span class="w"> </span>-e<span class="w"> </span><span class="s2">"SELECT CURRENT_USER(), @@hostname;"</span>
 </code></pre></div>
-<p>第二段是同卡音频功能，必须与显示功能一起给出。网卡与 NVMe 直通写法相同，只改 source 地址；NVMe 在客体机中以原生控制器出现，用自带驱动即可。<code>managed='yes'</code> 表示 libvirt 在启停时自动交接设备。某些显卡关机后无法正确复位会导致第二次启动失败，先完整关闭宿主机再排查。</p>
-<p>保存后启动并验证：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a>virsh<span class="w"> </span>start<span class="w"> </span>ubuntu-guest-01
-<a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a>virsh<span class="w"> </span>dominfo<span class="w"> </span>ubuntu-guest-01
+<h2 id="_2">四、效果验证与测试（检查命令 + 期望输出示例）<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a><span class="c1">-- 1. 权限复核：输出应恰好是授权的那一行，没有多余的 ALL 与 *.*</span>
+<a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a><span class="k">SHOW</span><span class="w"> </span><span class="n">GRANTS</span><span class="w"> </span><span class="k">FOR</span><span class="w"> </span><span class="s1">'appuser'</span><span class="o">@</span><span class="s1">'localhost'</span><span class="p">;</span>
 </code></pre></div>
-<p>再进入客体机内用 <code>lspci</code> 确认设备出现，显卡场景在客体机内按第一章方法装驱动并运行 <code>nvidia-smi</code>，网卡场景在客体机内确认接口名与链路状态，NVMe 场景用 <code>lsblk</code> 确认新盘出现。</p>
-<h3 id="36-sr-iov-vf">3.6 SR-IOV：创建 VF 并直通<a class="headerlink" href="#36-sr-iov-vf" title="Permanent link">&para;</a></h3>
-<p>SR-IOV 分两层：物理功能 PF 是网卡本体，由宿主机驱动管理；虚拟功能 VF 是从 PF 切出的轻量实例，有独立 PCI 地址，可直通给不同虚拟机，数据走硬件转发，不经过宿主机软件交换。先确认最大 VF 数：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a>ip<span class="w"> </span>-br<span class="w"> </span>link
-<a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a>cat<span class="w"> </span>/sys/class/net/enp3s0f0/device/sriov_totalvfs
-<a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a>cat<span class="w"> </span>/sys/class/net/enp3s0f0/device/sriov_numvfs
+<p>期望输出示例：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a>Grants for appuser@localhost
+<a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a>GRANT USAGE ON *.* TO `appuser`@`localhost`
+<a id="__codelineno-16-3" name="__codelineno-16-3" href="#__codelineno-16-3"></a>GRANT SELECT, INSERT, UPDATE, DELETE ON `appdb`.* TO `appuser`@`localhost`
 </code></pre></div>
-<p>网卡名替换为你的真实 PF 接口名。临时创建 4 个 VF：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="nb">echo</span><span class="w"> </span><span class="m">4</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>sudo<span class="w"> </span>tee<span class="w"> </span>/sys/class/net/enp3s0f0/device/sriov_numvfs
-<a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a>ip<span class="w"> </span>link<span class="w"> </span>show<span class="w"> </span>enp3s0f0
-<a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a>lspci<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-i<span class="w"> </span>ethernet
+<p>其中 <code>GRANT USAGE ON *.*</code> 仅表示可登录、无任何库表权限，是正常现象，不是越权。</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a><span class="c1"># 2. 应用账号功能验证：可写业务库，不可越界</span>
+<a id="__codelineno-17-2" name="__codelineno-17-2" href="#__codelineno-17-2"></a>mysql<span class="w"> </span>-u<span class="w"> </span>appuser<span class="w"> </span>-p<span class="w"> </span>-e<span class="w"> </span><span class="s2">"USE appdb; CREATE TABLE t_perm (id INT PRIMARY KEY, note VARCHAR(50));"</span>
 </code></pre></div>
-<p>再为每个 VF 设置属性后直通，例如给 0 号 VF 设 MAC 与 VLAN：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a>sudo<span class="w"> </span>ip<span class="w"> </span>link<span class="w"> </span><span class="nb">set</span><span class="w"> </span>dev<span class="w"> </span>enp3s0f0<span class="w"> </span>vf<span class="w"> </span><span class="m">0</span><span class="w"> </span>mac<span class="w"> </span><span class="m">02</span>:00:00:00:00:01
-<a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a>sudo<span class="w"> </span>ip<span class="w"> </span>link<span class="w"> </span><span class="nb">set</span><span class="w"> </span>dev<span class="w"> </span>enp3s0f0<span class="w"> </span>vf<span class="w"> </span><span class="m">0</span><span class="w"> </span>vlan<span class="w"> </span><span class="m">100</span>
-<a id="__codelineno-15-3" name="__codelineno-15-3" href="#__codelineno-15-3"></a>sudo<span class="w"> </span>ip<span class="w"> </span>link<span class="w"> </span><span class="nb">set</span><span class="w"> </span>dev<span class="w"> </span>enp3s0f0<span class="w"> </span>vf<span class="w"> </span><span class="m">0</span><span class="w"> </span>spoofchk<span class="w"> </span>on
-<a id="__codelineno-15-4" name="__codelineno-15-4" href="#__codelineno-15-4"></a>sudo<span class="w"> </span>ip<span class="w"> </span>link<span class="w"> </span><span class="nb">set</span><span class="w"> </span>dev<span class="w"> </span>enp3s0f0<span class="w"> </span>vf<span class="w"> </span><span class="m">0</span><span class="w"> </span>trust<span class="w"> </span>off
+<p>期望结果：因为没有 <code>CREATE</code> 权限，这条建表应被拒绝并返回权限错误，这正是最小权限生效的证据；日常增删改查则应正常：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a><span class="c1">-- 用已有表验证读写（表由管理账号预先建好）</span>
+<a id="__codelineno-18-2" name="__codelineno-18-2" href="#__codelineno-18-2"></a><span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">appdb</span><span class="p">.</span><span class="n">t_demo</span><span class="w"> </span><span class="p">(</span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">note</span><span class="p">)</span><span class="w"> </span><span class="k">VALUES</span><span class="w"> </span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="s1">'ok'</span><span class="p">);</span>
+<a id="__codelineno-18-3" name="__codelineno-18-3" href="#__codelineno-18-3"></a><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">appdb</span><span class="p">.</span><span class="n">t_demo</span><span class="p">;</span>
+<a id="__codelineno-18-4" name="__codelineno-18-4" href="#__codelineno-18-4"></a><span class="c1">-- 越界访问系统库应被拒绝</span>
+<a id="__codelineno-18-5" name="__codelineno-18-5" href="#__codelineno-18-5"></a><span class="k">SELECT</span><span class="w"> </span><span class="k">user</span><span class="p">,</span><span class="w"> </span><span class="k">host</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">mysql</span><span class="p">.</span><span class="k">user</span><span class="p">;</span>
 </code></pre></div>
-<p>参数讲解：<code>mac</code> 固定 VF 的硬件地址，避免每次重启随机变化；<code>vlan</code> 把该 VF 划入指定 VLAN；<code>spoofchk on</code> 开启防欺骗检查，VF 不能伪造源地址；<code>trust off</code> 不信任 VF 自行修改某些网络属性，生产环境保持关闭信任。VF 的直通方式与普通 PCIe 设备相同：找到 VF 的 PCI 地址后，在虚拟机定义中加入同格式的 hostdev 片段，或用托管设备方式引用。</p>
-<p>持久化 VF 数量常用 systemd 开机服务写入 sriov_numvfs，另一种是驱动模块参数，写法随驱动不同。示例用 systemd 服务，写入前先备份将改动的配置：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a><span class="k">[Unit]</span>
-<a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a><span class="na">Description</span><span class="o">=</span><span class="s">Create SR-IOV VFs for enp3s0f0</span>
-<a id="__codelineno-16-3" name="__codelineno-16-3" href="#__codelineno-16-3"></a><span class="na">After</span><span class="o">=</span><span class="s">network-pre.target</span>
-<a id="__codelineno-16-4" name="__codelineno-16-4" href="#__codelineno-16-4"></a><span class="na">Before</span><span class="o">=</span><span class="s">network.target libvirtd.service</span>
-<a id="__codelineno-16-5" name="__codelineno-16-5" href="#__codelineno-16-5"></a>
-<a id="__codelineno-16-6" name="__codelineno-16-6" href="#__codelineno-16-6"></a><span class="k">[Service]</span>
-<a id="__codelineno-16-7" name="__codelineno-16-7" href="#__codelineno-16-7"></a><span class="na">Type</span><span class="o">=</span><span class="s">oneshot</span>
-<a id="__codelineno-16-8" name="__codelineno-16-8" href="#__codelineno-16-8"></a><span class="na">ExecStart</span><span class="o">=</span><span class="s">/bin/bash -c &#39;echo 4 &gt; /sys/class/net/enp3s0f0/device/sriov_numvfs&#39;</span>
-<a id="__codelineno-16-9" name="__codelineno-16-9" href="#__codelineno-16-9"></a><span class="na">RemainAfterExit</span><span class="o">=</span><span class="s">yes</span>
-<a id="__codelineno-16-10" name="__codelineno-16-10" href="#__codelineno-16-10"></a>
-<a id="__codelineno-16-11" name="__codelineno-16-11" href="#__codelineno-16-11"></a><span class="k">[Install]</span>
-<a id="__codelineno-16-12" name="__codelineno-16-12" href="#__codelineno-16-12"></a><span class="na">WantedBy</span><span class="o">=</span><span class="s">multi-user.target</span>
+<p>最后一条期望返回 <code>ERROR 1142 (42000): SELECT command denied</code> 一类拒绝信息。在远程验证环节，段内机器执行 3.6 的远程命令应成功返回当前账号，段外机器执行应超时或被拒绝；本机执行 <code>ss -tlnp | grep 3306</code> 的监听地址应与你选的 <code>bind-address</code> 方案一致。三项全对，本章才算完成。</p>
+<h2 id="23">五、常见错误与排坑指南（2~3 个真实报错场景：报错原文片段+原因+修复命令；含本简报点名的经典报错）<a class="headerlink" href="#23" title="Permanent link">&para;</a></h2>
+<h3 id="access-denied-for-user-rootlocalhost">场景一：Access denied for user 'root'@'localhost'<a class="headerlink" href="#access-denied-for-user-rootlocalhost" title="Permanent link">&para;</a></h3>
+<p>报错原文：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a>ERROR 1698 (28000): Access denied for user 'root'@'localhost'
+<a id="__codelineno-19-2" name="__codelineno-19-2" href="#__codelineno-19-2"></a>ERROR 1045 (28000): Access denied for user 'root'@'localhost' (using password: YES)
 </code></pre></div>
-<p>把该内容保存为 <code>/etc/systemd/system/sriov-vfs.service</code> 后执行启用：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a>sudo<span class="w"> </span>systemctl<span class="w"> </span>daemon-reload
-<a id="__codelineno-17-2" name="__codelineno-17-2" href="#__codelineno-17-2"></a>sudo<span class="w"> </span>systemctl<span class="w"> </span><span class="nb">enable</span><span class="w"> </span>--now<span class="w"> </span>sriov-vfs.service
-<a id="__codelineno-17-3" name="__codelineno-17-3" href="#__codelineno-17-3"></a>cat<span class="w"> </span>/sys/class/net/enp3s0f0/device/sriov_numvfs
+<p>原因分两类：1698 多因 <code>root</code> 走 <code>auth_socket</code>、当前系统身份不匹配（未加 <code>sudo</code>）；1045 带 <code>using password: YES</code> 则是密码不对或账号来源不匹配，例如拿 <code>'root'@'localhost'</code> 的密码去走 TCP 远程连接。修复：本机管理走 <code>sudo</code> 或管理账号，不要尝试远程用 <code>root</code>：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-20-1" name="__codelineno-20-1" href="#__codelineno-20-1"></a>sudo<span class="w"> </span>mysql<span class="w"> </span>-u<span class="w"> </span>root<span class="w"> </span>-e<span class="w"> </span><span class="s2">"SELECT user, host, plugin FROM mysql.user WHERE user='root';"</span>
+<a id="__codelineno-20-2" name="__codelineno-20-2" href="#__codelineno-20-2"></a>mysql<span class="w"> </span>-u<span class="w"> </span>opsadmin<span class="w"> </span>-h<span class="w"> </span><span class="m">127</span>.0.0.1<span class="w"> </span>-p<span class="w"> </span>-e<span class="w"> </span><span class="s2">"SELECT CURRENT_USER();"</span>
 </code></pre></div>
-<p>VF 必须在虚拟机引用前创建完成，服务排序要早于 libvirtd；虚拟机设自启时先确认 VF 已就绪，否则会因找不到设备启动失败。</p>
-<h2 id="_4">四、效果验证与测试<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h2>
-<p>宿主机侧验证清单：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a>cat<span class="w"> </span>/proc/cmdline
-<a id="__codelineno-18-2" name="__codelineno-18-2" href="#__codelineno-18-2"></a>dmesg<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-i<span class="w"> </span>-E<span class="w"> </span><span class="s2">&quot;iommu|AMD-Vi|DMAR&quot;</span>
-<a id="__codelineno-18-3" name="__codelineno-18-3" href="#__codelineno-18-3"></a>lspci<span class="w"> </span>-nnk<span class="w"> </span>-s<span class="w"> </span><span class="m">03</span>:00
-<a id="__codelineno-18-4" name="__codelineno-18-4" href="#__codelineno-18-4"></a>virsh<span class="w"> </span>nodedev-list<span class="w"> </span>--tree
-<a id="__codelineno-18-5" name="__codelineno-18-5" href="#__codelineno-18-5"></a>cat<span class="w"> </span>/sys/class/net/enp3s0f0/device/sriov_numvfs
+<h3 id="cant-connect-to-mysql-serverbind-address">场景二：Can't connect to MySQL server（bind-address 原因）<a class="headerlink" href="#cant-connect-to-mysql-serverbind-address" title="Permanent link">&para;</a></h3>
+<p>报错原文：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-21-1" name="__codelineno-21-1" href="#__codelineno-21-1"></a>ERROR 2003 (HY000): Can't connect to MySQL server on '192.0.2.20:3306' (111)
 </code></pre></div>
-<p>期望：内核参数包含 iommu 开关；目标设备驱动为 vfio-pci 或在虚拟机运行时被客体机占用；numvfs 与规划一致。客体机内 <code>lspci</code> 应看到直通设备，显卡跑 <code>nvidia-smi</code>、网卡做连通测试、NVMe 用 <code>lsblk</code> 加读写冒烟均应正常。两台各持一个 VF 的虚拟机互打流量应明显优于默认虚拟网卡且宿主机 CPU 更低，这是 SR-IOV 的价值证据。</p>
-<h2 id="_5">五、常见错误与排坑指南<a class="headerlink" href="#_5" title="Permanent link">&para;</a></h2>
-<h3 id="iommu">场景一：IOMMU 未开启或分组为空<a class="headerlink" href="#iommu" title="Permanent link">&para;</a></h3>
-<p>报错原文片段：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a>vfio-pci: probe failed
-<a id="__codelineno-19-2" name="__codelineno-19-2" href="#__codelineno-19-2"></a>No IOMMU groups found
-<a id="__codelineno-19-3" name="__codelineno-19-3" href="#__codelineno-19-3"></a>DMAR: IOMMU disabled
+<p>原因定位第一类——服务根本没在目标地址监听：<code>bind-address</code> 仍为 <code>127.0.0.1</code>、改完没重启、或改错了配置文件（MySQL 与 MariaDB 路径不同）。按顺序定位：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-22-1" name="__codelineno-22-1" href="#__codelineno-22-1"></a>ss<span class="w"> </span>-tlnp<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span><span class="m">3306</span>
+<a id="__codelineno-22-2" name="__codelineno-22-2" href="#__codelineno-22-2"></a>sudo<span class="w"> </span>grep<span class="w"> </span>-R<span class="w"> </span><span class="s2">"bind-address"</span><span class="w"> </span>/etc/mysql/
+<a id="__codelineno-22-3" name="__codelineno-22-3" href="#__codelineno-22-3"></a>sudo<span class="w"> </span>systemctl<span class="w"> </span>restart<span class="w"> </span>mysql
+<a id="__codelineno-22-4" name="__codelineno-22-4" href="#__codelineno-22-4"></a>sudo<span class="w"> </span>tail<span class="w"> </span>-n<span class="w"> </span><span class="m">50</span><span class="w"> </span>/var/log/mysql/error.log
 </code></pre></div>
-<p><code>virsh start</code> 时还常见提示设备未分配到任何 IOMMU 组的错误。原因按顺序排查：BIOS 中 IOMMU 未开；GRUB 参数写错或 <code>update-grub</code> 未执行；CPU 本身不支持 VT-d 或 AMD-Vi。修复命令：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-20-1" name="__codelineno-20-1" href="#__codelineno-20-1"></a>cat<span class="w"> </span>/proc/cmdline
-<a id="__codelineno-20-2" name="__codelineno-20-2" href="#__codelineno-20-2"></a>sudo<span class="w"> </span>grep<span class="w"> </span>GRUB_CMDLINE_LINUX_DEFAULT<span class="w"> </span>/etc/default/grub
-<a id="__codelineno-20-3" name="__codelineno-20-3" href="#__codelineno-20-3"></a>sudo<span class="w"> </span>update-grub
-<a id="__codelineno-20-4" name="__codelineno-20-4" href="#__codelineno-20-4"></a>sudo<span class="w"> </span>reboot
-<a id="__codelineno-20-5" name="__codelineno-20-5" href="#__codelineno-20-5"></a>dmesg<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-i<span class="w"> </span>iommu
+<p><code>ss</code> 输出若只有 <code>127.0.0.1:3306</code>，就是监听范围问题，与防火墙无关，先把监听改对再往下查。</p>
+<h3 id="cant-connect-to-mysql-server">场景三：Can't connect to MySQL server（防火墙原因）<a class="headerlink" href="#cant-connect-to-mysql-server" title="Permanent link">&para;</a></h3>
+<p>报错原文：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-23-1" name="__codelineno-23-1" href="#__codelineno-23-1"></a>ERROR 2003 (HY000): Can't connect to MySQL server on '192.0.2.20:3306' (110)
 </code></pre></div>
-<p>参数已在 cmdline 中但日志仍显示 disabled 时，问题在 BIOS 与硬件层面，先真正打开 IOMMU 再继续。</p>
-<h3 id="_6">场景二：虚拟机启动报设备正忙或绑定失败<a class="headerlink" href="#_6" title="Permanent link">&para;</a></h3>
-<p>报错原文片段：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-21-1" name="__codelineno-21-1" href="#__codelineno-21-1"></a>error: internal error: Process exited prior to exec: vfio: Unable to power on device, stuck in D3
-<a id="__codelineno-21-2" name="__codelineno-21-2" href="#__codelineno-21-2"></a>error: Failed to bind PCI device: Device or resource busy
+<p>与场景二的区别在括号里的状态：长时间无响应直至超时（110）更像包被防火墙丢弃，而 111 是目标明确拒绝。定位第二类原因——监听已正确（<code>ss</code> 能看到内网地址在听），但 UFW 或云安全组没有放行你的来源段，或来源 IP 写错（例如写了办公出口 IP 而应用在另一网段）：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-24-1" name="__codelineno-24-1" href="#__codelineno-24-1"></a>sudo<span class="w"> </span>ufw<span class="w"> </span>status<span class="w"> </span>numbered
+<a id="__codelineno-24-2" name="__codelineno-24-2" href="#__codelineno-24-2"></a>sudo<span class="w"> </span>ufw<span class="w"> </span>allow<span class="w"> </span>from<span class="w"> </span><span class="m">192</span>.0.2.0/24<span class="w"> </span>to<span class="w"> </span>any<span class="w"> </span>port<span class="w"> </span><span class="m">3306</span><span class="w"> </span>proto<span class="w"> </span>tcp
+<a id="__codelineno-24-3" name="__codelineno-24-3" href="#__codelineno-24-3"></a><span class="c1"># 在来源机器上分层测：先测端口通不通，再测数据库登录</span>
+<a id="__codelineno-24-4" name="__codelineno-24-4" href="#__codelineno-24-4"></a>nc<span class="w"> </span>-vz<span class="w"> </span><span class="m">192</span>.0.2.20<span class="w"> </span><span class="m">3306</span>
+<a id="__codelineno-24-5" name="__codelineno-24-5" href="#__codelineno-24-5"></a>mysql<span class="w"> </span>-h<span class="w"> </span><span class="m">192</span>.0.2.20<span class="w"> </span>-u<span class="w"> </span>appuser<span class="w"> </span>-p<span class="w"> </span>-e<span class="w"> </span><span class="s2">"SELECT 1;"</span>
 </code></pre></div>
-<p>原因是设备仍被原生驱动占用、组内功能漏写 ids，或复位异常卡在低功耗状态。修复：确认组内每个功能都绑定 vfio-pci，完全关闭虚拟机，必要时重启宿主机：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-22-1" name="__codelineno-22-1" href="#__codelineno-22-1"></a>virsh<span class="w"> </span>shutdown<span class="w"> </span>ubuntu-guest-01
-<a id="__codelineno-22-2" name="__codelineno-22-2" href="#__codelineno-22-2"></a>lspci<span class="w"> </span>-nnk<span class="w"> </span>-s<span class="w"> </span><span class="m">03</span>:00
-<a id="__codelineno-22-3" name="__codelineno-22-3" href="#__codelineno-22-3"></a>cat<span class="w"> </span>/etc/modprobe.d/vfio.conf
-<a id="__codelineno-22-4" name="__codelineno-22-4" href="#__codelineno-22-4"></a>sudo<span class="w"> </span>update-initramfs<span class="w"> </span>-u
+<p>端口不通先查防火墙与安全组，端口通但登录失败再回到账号与密码问题（注意账号的来源主机是否包含你的地址）。两类原因分开定位，不要一上来就把防火墙全关或把 <code>bind-address</code> 改成全网监听来「试试」，那会把排障变成新的事故。</p>
+<h2 id="_3">六、生产环境最佳实践与安全建议<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h2>
+<p>第一，账号台账化：记录用途、负责人、来源、权限与创建时间，离职与下线当天回收，每季度用 <code>SHOW GRANTS</code> 盘查一次，重点清理 <code>'%'</code> 与 <code>ALL</code> 账号。第二，应用绝不用 <code>root</code> 跑业务，口令放密钥管理，不进代码仓库、不写进镜像。第三，远程三层缺一不可：<code>bind-address</code> 限监听、安全组加 UFW 限来源、账号限来源与权限；想省任何一层就不开远程，优先走 SSH 隧道：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-25-1" name="__codelineno-25-1" href="#__codelineno-25-1"></a>ssh<span class="w"> </span>-L<span class="w"> </span><span class="m">13306</span>:127.0.0.1:3306<span class="w"> </span>ubuntu@192.0.2.20
+<a id="__codelineno-25-2" name="__codelineno-25-2" href="#__codelineno-25-2"></a>mysql<span class="w"> </span>-h<span class="w"> </span><span class="m">127</span>.0.0.1<span class="w"> </span>-P<span class="w"> </span><span class="m">13306</span><span class="w"> </span>-u<span class="w"> </span>appuser<span class="w"> </span>-p
 </code></pre></div>
-<p>核对完再重启宿主机与虚拟机。消费级显卡复位问题较常见，选型时先查证该型号的直通口碑。</p>
-<h3 id="vf">场景三：创建 VF 失败<a class="headerlink" href="#vf" title="Permanent link">&para;</a></h3>
-<p>报错原文片段：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-23-1" name="__codelineno-23-1" href="#__codelineno-23-1"></a>RTNETLINK answers: Operation not supported
-<a id="__codelineno-23-2" name="__codelineno-23-2" href="#__codelineno-23-2"></a>bash: echo: write error: Invalid argument
-</code></pre></div>
-<p>原因是网卡或驱动不支持 SR-IOV、固件中 SR-IOV 开关未打开，或请求的 VF 数超过 <code>sriov_totalvfs</code> 上限。修复：先读 totalvfs 确认上限，把请求数降到上限以内；进网卡固件或 BIOS 确认 SR-IOV 选项打开；仍失败则该型号在此驱动版本下不可用，改用普通直通整卡或虚拟网卡方案，不要循环重试写入。</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-24-1" name="__codelineno-24-1" href="#__codelineno-24-1"></a>cat<span class="w"> </span>/sys/class/net/enp3s0f0/device/sriov_totalvfs
-<a id="__codelineno-24-2" name="__codelineno-24-2" href="#__codelineno-24-2"></a><span class="nb">echo</span><span class="w"> </span><span class="m">0</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>sudo<span class="w"> </span>tee<span class="w"> </span>/sys/class/net/enp3s0f0/device/sriov_numvfs
-<a id="__codelineno-24-3" name="__codelineno-24-3" href="#__codelineno-24-3"></a><span class="nb">echo</span><span class="w"> </span><span class="m">2</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>sudo<span class="w"> </span>tee<span class="w"> </span>/sys/class/net/enp3s0f0/device/sriov_numvfs
-</code></pre></div>
-<p>改 VF 数量前必须先写 0 清零，且引用这些 VF 的虚拟机必须关机。</p>
-<h2 id="_7">六、生产环境最佳实践与安全建议<a class="headerlink" href="#_7" title="Permanent link">&para;</a></h2>
-<h3 id="_8">风险清单与回滚步骤（必须执行）<a class="headerlink" href="#_8" title="Permanent link">&para;</a></h3>
-<p>回滚靠事先留好的三份备份：GRUB、modprobe、虚拟机 XML，缺一不可。宿主机无法启动、设备丢失或虚拟机反复失败时按此执行：</p>
-<p>第一步，若宿主机还能登录，恢复 GRUB 并重建启动配置：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-25-1" name="__codelineno-25-1" href="#__codelineno-25-1"></a>sudo<span class="w"> </span>cp<span class="w"> </span>/etc/default/grub.bak-日期-before-iommu<span class="w"> </span>/etc/default/grub
-<a id="__codelineno-25-2" name="__codelineno-25-2" href="#__codelineno-25-2"></a>sudo<span class="w"> </span>update-grub
-</code></pre></div>
-<p>文件名中的日期替换为你的实际备份日期。第二步，解除 VFIO 绑定：删除或改名 <code>/etc/modprobe.d/vfio.conf</code>，把 <code>/etc/initramfs-tools/modules</code> 恢复为备份版本，然后重建 initramfs：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-26-1" name="__codelineno-26-1" href="#__codelineno-26-1"></a>sudo<span class="w"> </span>mv<span class="w"> </span>/etc/modprobe.d/vfio.conf<span class="w"> </span>/root/vfio.conf.disabled
-<a id="__codelineno-26-2" name="__codelineno-26-2" href="#__codelineno-26-2"></a>sudo<span class="w"> </span>cp<span class="w"> </span>/etc/initramfs-tools/modules.bak-日期<span class="w"> </span>/etc/initramfs-tools/modules
-<a id="__codelineno-26-3" name="__codelineno-26-3" href="#__codelineno-26-3"></a>sudo<span class="w"> </span>update-initramfs<span class="w"> </span>-u
-<a id="__codelineno-26-4" name="__codelineno-26-4" href="#__codelineno-26-4"></a>sudo<span class="w"> </span>reboot
-</code></pre></div>
-<p>第三步，恢复虚拟机定义并确认设备回到宿主机：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-27-1" name="__codelineno-27-1" href="#__codelineno-27-1"></a>virsh<span class="w"> </span>define<span class="w"> </span>/root/ubuntu-guest-01-before-passthrough.xml
-<a id="__codelineno-27-2" name="__codelineno-27-2" href="#__codelineno-27-2"></a>lspci<span class="w"> </span>-nnk<span class="w"> </span>-s<span class="w"> </span><span class="m">03</span>:00
-</code></pre></div>
-<p>期望设备驱动重新显示为原生驱动。若宿主机无法启动，从 GRUB 编辑启动项临时删除 iommu 参数进入系统再执行上面三步。SR-IOV 回滚先关机引用 VF 的虚拟机，再把 numvfs 写回 0 并停用 VF 服务。</p>
-<h3 id="_9">最佳实践<a class="headerlink" href="#_9" title="Permanent link">&para;</a></h3>
-<p>直通清单与保留清单成对维护，新设备上线先更新清单再动手；分组记录随机器归档，换插槽或加新卡后重新生成。直通虚拟机在文档中写明绑定的宿主机，避免调度误判；显卡直通的客体机驱动与第一章验证基线保持一致。</p>
-<p>安全上 IOMMU 本身就是安全边界，不要用削弱隔离的参数换表面可用；VF 防欺骗保持开启、信任保持关闭；直通 NVMe 等于把整盘交给虚拟机，归属变更时按整盘标准擦除。监控关注内核日志中的 IOMMU 故障与 DMA 报错，出现后先存日志再安排维护窗口处理。</p>
+<p>第四，权限变更留痕：来源变了就建新账号、验证、切流量、删旧账号。第五，巡查连接失败日志，对 <code>Access denied</code> 激增告警。下一章讲参数调优。</p>
 
 
 
