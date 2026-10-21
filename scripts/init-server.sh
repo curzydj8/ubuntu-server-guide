@@ -24,6 +24,7 @@ if [[ "${EUID}" -ne 0 ]]; then
   exit 1
 fi
 
+# shellcheck disable=SC1091
 . /etc/os-release
 if [[ "${ID}" != "ubuntu" || ! "${VERSION_ID}" =~ ^(22\.04|24\.04)$ ]]; then
   echo "警告：本脚本仅针对 Ubuntu 22.04 / 24.04，当前系统为 ${PRETTY_NAME}" >&2

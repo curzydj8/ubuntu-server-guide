@@ -5162,11 +5162,15 @@
 <ul>
 <li><strong>现象</strong>：权限数字都对，但密钥登录仍失败，服务端日志 <code>/var/log/auth.log</code> 出现 <code>Authentication refused: bad ownership or modes for file</code>。</li>
 <li><strong>原因</strong>：文件属主不是登录用户本人——常见于用 root 或 sudo 代其他用户写入 <code>authorized_keys</code> 后没改属主。</li>
-<li><strong>修复</strong>：
-    <div class="highlight"><pre><span></span><code><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a>sudo<span class="w"> </span>chown<span class="w"> </span>ubuntu:ubuntu<span class="w"> </span>/home/ubuntu/.ssh/authorized_keys
+<li>
+<p><strong>修复</strong>：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a>sudo<span class="w"> </span>chown<span class="w"> </span>ubuntu:ubuntu<span class="w"> </span>/home/ubuntu/.ssh/authorized_keys
 <a id="__codelineno-19-2" name="__codelineno-19-2" href="#__codelineno-19-2"></a>chmod<span class="w"> </span><span class="m">600</span><span class="w"> </span>/home/ubuntu/.ssh/authorized_keys
-</code></pre></div></li>
-<li><strong>验证</strong>：<code>ls -l ~/.ssh/authorized_keys</code> 属主为登录用户，新开会话密钥登录成功。</li>
+</code></pre></div>
+</li>
+<li>
+<p><strong>验证</strong>：<code>ls -l ~/.ssh/authorized_keys</code> 属主为登录用户，新开会话密钥登录成功。</p>
+</li>
 </ul>
 <h3 id="54-could-not-open-a-connection-to-your-authentication-agent">5.4 Could not open a connection to your authentication agent<a class="headerlink" href="#54-could-not-open-a-connection-to-your-authentication-agent" title="Permanent link">&para;</a></h3>
 <ul>

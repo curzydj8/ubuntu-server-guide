@@ -4844,7 +4844,7 @@
 
 <h1 id="_1">文件与权限命令速查<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h1>
 <p>本章覆盖服务器日常最高频的一组命令：查看与定位文件（<code>ls</code>、<code>pwd</code>/<code>cd</code>、<code>find</code>、<code>file</code>、<code>stat</code>）、复制移动与删除（<code>cp</code>、<code>mv</code>、<code>rm</code>、<code>mkdir</code>、<code>touch</code>、<code>rsync</code>、<code>ln</code>），以及权限管理（<code>chmod</code>、<code>chown</code>、<code>sudo</code>、<code>umask</code>）。原理与体系讲解见第 02 部分的用户与权限教程，本章只给参数、示例与坑点。示例用户为 <code>ubuntu</code>，路径以 <code>/home/ubuntu</code> 与 <code>/srv</code> 为主。</p>
-<h3 id="ls"><code>ls</code><a class="headerlink" href="#ls" title="Permanent link">&para;</a></h3>
+<h2 id="ls"><code>ls</code><a class="headerlink" href="#ls" title="Permanent link">&para;</a></h2>
 <ul>
 <li><strong>用途</strong>：列出目录内容与文件属性，是确认目标存在、看清权限属主的第一步。</li>
 <li><strong>语法</strong>：<code>ls [选项] [路径]</code></li>
@@ -4894,7 +4894,7 @@
 <li><strong>常见错误</strong>：只看文件名不看 <code>-l</code> 的权限与属主列，服务读不到文件时还在怀疑程序本身。</li>
 <li><strong>风险提示</strong>：<code>ls</code> 本身只读无风险；养成「改、删之前先 <code>ls</code> 确认目标」的习惯，能挡住多数误删。</li>
 </ul>
-<h3 id="pwd-cd"><code>pwd</code> / <code>cd</code><a class="headerlink" href="#pwd-cd" title="Permanent link">&para;</a></h3>
+<h2 id="pwd-cd"><code>pwd</code> / <code>cd</code><a class="headerlink" href="#pwd-cd" title="Permanent link">&para;</a></h2>
 <ul>
 <li><strong>用途</strong>：<code>pwd</code> 显示当前所在目录，<code>cd</code> 切换目录；脚本与批量操作前先确认位置。</li>
 <li><strong>语法</strong>：<code>pwd</code>；<code>cd [目录]</code></li>
@@ -4946,7 +4946,7 @@
 <li><strong>常见错误</strong>：在相对路径下执行删除或覆盖，又忘了自己当前在哪个目录；路径含空格时不加引号会被拆成两个参数。</li>
 <li><strong>风险提示</strong>：在不确定的目录里执行写操作前先 <code>pwd</code> + <code>ls</code> 双确认，尤其在 <code>sudo</code> 会话中。</li>
 </ul>
-<h3 id="cp"><code>cp</code><a class="headerlink" href="#cp" title="Permanent link">&para;</a></h3>
+<h2 id="cp"><code>cp</code><a class="headerlink" href="#cp" title="Permanent link">&para;</a></h2>
 <ul>
 <li><strong>用途</strong>：复制文件或目录，改配置前备份、部署文件副本都用它。</li>
 <li><strong>语法</strong>：<code>cp [选项] 源 目标</code></li>
@@ -4993,7 +4993,7 @@
 <li><strong>常见错误</strong>：复制目录忘了 <code>-r</code> 直接报错；用普通 <code>cp</code> 备份后权限与时间全变，还原后服务仍异常。</li>
 <li><strong>风险提示</strong>：目标写错会静默覆盖同名文件，覆盖系统配置前先备份原文件。</li>
 </ul>
-<h3 id="mv"><code>mv</code><a class="headerlink" href="#mv" title="Permanent link">&para;</a></h3>
+<h2 id="mv"><code>mv</code><a class="headerlink" href="#mv" title="Permanent link">&para;</a></h2>
 <ul>
 <li><strong>用途</strong>：移动文件或重命名，两者是同一操作。</li>
 <li><strong>语法</strong>：<code>mv [选项] 源 目标</code></li>
@@ -5035,7 +5035,7 @@
 <li><strong>常见错误</strong>：把目录移动到已存在的同名目录下，结果变成嵌进一层（如 <code>mv app /srv/</code> 而 <code>/srv/app</code> 已存在，得到 <code>/srv/app/app</code>）。</li>
 <li><strong>风险提示</strong>：目标同名文件会被直接覆盖且无回收站，重要文件移动时加 <code>-i</code>。</li>
 </ul>
-<h3 id="rm"><code>rm</code><a class="headerlink" href="#rm" title="Permanent link">&para;</a></h3>
+<h2 id="rm"><code>rm</code><a class="headerlink" href="#rm" title="Permanent link">&para;</a></h2>
 <ul>
 <li><strong>用途</strong>：删除文件或目录，删除即不可恢复，默认没有回收站。</li>
 <li><strong>语法</strong>：<code>rm [选项] 文件...</code></li>
@@ -5086,7 +5086,7 @@
 <p class="admonition-title">rm：-rf 与根目录/家目录误删</p>
 <p><code>rm -rf /</code>、<code>rm -rf ~</code>、<code>rm -rf /*</code> 会递归删掉系统或全部个人数据，且多数文件系统下不可恢复。安全替代：①执行前先用 <code>ls</code> 列一遍将删的路径；②批量删除加 <code>-i</code> 或先不带 <code>-f</code> 试跑看报错；③重要数据先 <code>mv</code> 到临时目录观察几天再删，桌面环境可用回收站思路（先移走、后清空），服务器上同理；④路径来自变量时先 <code>echo</code> 打印变量值再执行。</p>
 </div>
-<h3 id="mkdir"><code>mkdir</code><a class="headerlink" href="#mkdir" title="Permanent link">&para;</a></h3>
+<h2 id="mkdir"><code>mkdir</code><a class="headerlink" href="#mkdir" title="Permanent link">&para;</a></h2>
 <ul>
 <li><strong>用途</strong>：创建目录。</li>
 <li><strong>语法</strong>：<code>mkdir [选项] 目录...</code></li>
@@ -5124,7 +5124,7 @@
 <li><strong>常见错误</strong>：不带 <code>-p</code> 创建多级目录时因父目录不存在报错；目录名含空格不加引号被拆开。</li>
 <li><strong>风险提示</strong>：只读风险低；注意默认权限受 <code>umask</code> 影响，需要严格权限时用 <code>-m</code> 显式指定。</li>
 </ul>
-<h3 id="touch"><code>touch</code><a class="headerlink" href="#touch" title="Permanent link">&para;</a></h3>
+<h2 id="touch"><code>touch</code><a class="headerlink" href="#touch" title="Permanent link">&para;</a></h2>
 <ul>
 <li><strong>用途</strong>：更新文件时间戳；文件不存在时创建一个空文件。</li>
 <li><strong>语法</strong>：<code>touch [选项] 文件...</code></li>
@@ -5166,7 +5166,7 @@
 <li><strong>常见错误</strong>：以为 <code>touch</code> 能写内容——它只建空文件或改时间，写内容用编辑器或重定向。</li>
 <li><strong>风险提示</strong>：对已有文件执行会改掉它的修改时间，按 <code>mtime</code> 做清理或增量备份的流程可能因此误判。</li>
 </ul>
-<h3 id="find"><code>find</code><a class="headerlink" href="#find" title="Permanent link">&para;</a></h3>
+<h2 id="find"><code>find</code><a class="headerlink" href="#find" title="Permanent link">&para;</a></h2>
 <ul>
 <li><strong>用途</strong>：按名称、类型、大小、时间等条件递归查找文件，可批量执行后续动作。</li>
 <li><strong>语法</strong>：<code>find [路径] [条件] [动作]</code></li>
@@ -5217,7 +5217,7 @@
 <li><strong>常见错误</strong>：<code>-name</code> 的模式不加引号会被 shell 先展开；<code>-exec rm</code> 前不预览就批量执行，条件写错即批量误删。</li>
 <li><strong>风险提示</strong>：<code>find ... -delete</code> 与 <code>-exec rm</code> 没有回收站，永远先用 <code>-print</code>  dry-run 一遍再执行动作。</li>
 </ul>
-<h3 id="rsync"><code>rsync</code><a class="headerlink" href="#rsync" title="Permanent link">&para;</a></h3>
+<h2 id="rsync"><code>rsync</code><a class="headerlink" href="#rsync" title="Permanent link">&para;</a></h2>
 <ul>
 <li><strong>用途</strong>：高效增量同步文件与目录，支持本地与远程、断点续传与保留属性，是备份与部署的主力。</li>
 <li><strong>语法</strong>：<code>rsync [选项] 源 目标</code></li>
@@ -5267,7 +5267,7 @@
 <li><strong>常见错误</strong>：源末尾斜杠有无搞反导致目录多套一层；在错的主机或错的方向上执行同步。</li>
 <li><strong>风险提示</strong>：<code>--delete</code> 会让目标端与源端完全一致，源端误删会同步成目标端也删；备份场景先不加 <code>--delete</code>，确认策略后再启用。</li>
 </ul>
-<h3 id="ln"><code>ln</code><a class="headerlink" href="#ln" title="Permanent link">&para;</a></h3>
+<h2 id="ln"><code>ln</code><a class="headerlink" href="#ln" title="Permanent link">&para;</a></h2>
 <ul>
 <li><strong>用途</strong>：创建链接：符号链接（软链接）像快捷方式，硬链接是同一文件的另一个名字。</li>
 <li><strong>语法</strong>：<code>ln [选项] 目标 链接名</code></li>
@@ -5310,7 +5310,7 @@
 <li><strong>常见错误</strong>：建符号链接时目标写相对路径，链接换个目录就失效；对目录建硬链接会被系统拒绝（默认不允许）。</li>
 <li><strong>风险提示</strong>：删掉源文件后符号链接会悬空失效；硬链接删其一不影响其余，两者不要混淆。</li>
 </ul>
-<h3 id="file"><code>file</code><a class="headerlink" href="#file" title="Permanent link">&para;</a></h3>
+<h2 id="file"><code>file</code><a class="headerlink" href="#file" title="Permanent link">&para;</a></h2>
 <ul>
 <li><strong>用途</strong>：判断文件的真实类型（看内容不看扩展名），排查「文件打不开/格式不对」时先用它确认。</li>
 <li><strong>语法</strong>：<code>file [选项] 文件...</code></li>
@@ -5354,7 +5354,7 @@
 <li><strong>常见错误</strong>：只信扩展名——Linux 下扩展名可以任意改，类型以 <code>file</code> 的判断为准。</li>
 <li><strong>风险提示</strong>：只读命令，无风险。</li>
 </ul>
-<h3 id="stat"><code>stat</code><a class="headerlink" href="#stat" title="Permanent link">&para;</a></h3>
+<h2 id="stat"><code>stat</code><a class="headerlink" href="#stat" title="Permanent link">&para;</a></h2>
 <ul>
 <li><strong>用途</strong>：显示文件或文件系统的完整元数据：大小、权限八进制、属主、三个时间戳、inode。</li>
 <li><strong>语法</strong>：<code>stat [选项] 文件...</code></li>
@@ -5395,7 +5395,7 @@
 <li><strong>常见错误</strong>：把访问时间 <code>atime</code> 当成修改时间 <code>mtime</code> 判断「文件被改过」；挂载了 <code>noatime</code> 时 <code>atime</code> 本来就不更新。</li>
 <li><strong>风险提示</strong>：只读命令，无风险。</li>
 </ul>
-<h3 id="chmod"><code>chmod</code><a class="headerlink" href="#chmod" title="Permanent link">&para;</a></h3>
+<h2 id="chmod"><code>chmod</code><a class="headerlink" href="#chmod" title="Permanent link">&para;</a></h2>
 <ul>
 <li><strong>用途</strong>：修改文件或目录的读、写、执行权限，权限模型为属主 / 属组 / 其他人三组 <code>rwx</code>。</li>
 <li><strong>语法</strong>：<code>chmod [选项] 权限 文件...</code></li>
@@ -5489,7 +5489,7 @@
 <p class="admonition-title">chmod -R：递归改权限</p>
 <p><code>chmod -R 777 /</code>、<code>chmod -R</code> 作用在 <code>/etc</code>、<code>/var</code>、<code>/home</code> 等系统目录上，会把全站权限一次性打乱：服务读不到或人人可写、SSH 与 sudo 因权限校验失败直接罢工，修复成本极高。原则：<code>-R</code> 只用于明确的业务目录，先在小子目录验证效果；永远不要给系统目录设 <code>777</code>，排障时先查属主与单文件权限，而不是一把 <code>-R 777</code> 放行。</p>
 </div>
-<h3 id="chown"><code>chown</code><a class="headerlink" href="#chown" title="Permanent link">&para;</a></h3>
+<h2 id="chown"><code>chown</code><a class="headerlink" href="#chown" title="Permanent link">&para;</a></h2>
 <ul>
 <li><strong>用途</strong>：修改文件的属主与属组，解决「文件在、权限对，但用户不对」的访问问题。</li>
 <li><strong>语法</strong>：<code>chown [选项] 属主[:属组] 文件...</code></li>
@@ -5543,7 +5543,7 @@
 <p class="admonition-title">chown -R：递归改属主</p>
 <p><code>chown -R</code> 作用错目录会把系统文件的属主整片改掉，例如把 <code>/etc</code> 改给普通用户后，sudo、SSH、定时任务会因所有权校验失败而异常，且很难逐个还原。原则：<code>-R</code> 只对业务数据目录使用；系统目录只改单个明确文件；执行前先 <code>ls -l</code> 核对现任属主，执行后立即用目标账号验证。</p>
 </div>
-<h3 id="sudo"><code>sudo</code><a class="headerlink" href="#sudo" title="Permanent link">&para;</a></h3>
+<h2 id="sudo"><code>sudo</code><a class="headerlink" href="#sudo" title="Permanent link">&para;</a></h2>
 <ul>
 <li><strong>用途</strong>：以 root 或指定用户身份执行单条命令，或切换到管理员会话；权限来自 <code>/etc/sudoers</code> 授权。</li>
 <li><strong>语法</strong>：<code>sudo [选项] 命令</code></li>
@@ -5590,7 +5590,7 @@
 <li><strong>常见错误</strong>：整段会话都开着 root shell 做日常操作，一次手误即系统级事故；给不需要提权的查询命令也习惯性加 <code>sudo</code>，掩盖了真实的权限问题。</li>
 <li><strong>风险提示</strong>：<code>sudo</code> 执行的命令等同 root 操作，粘贴网上命令前逐字看清；授权他人时按最小权限给具体命令，不要轻易给 <code>ALL=(ALL) ALL</code>。</li>
 </ul>
-<h3 id="umask"><code>umask</code><a class="headerlink" href="#umask" title="Permanent link">&para;</a></h3>
+<h2 id="umask"><code>umask</code><a class="headerlink" href="#umask" title="Permanent link">&para;</a></h2>
 <ul>
 <li><strong>用途</strong>：查看或设置新建文件/目录的默认权限掩码，决定新文件的起始权限宽严。</li>
 <li><strong>语法</strong>：<code>umask [值]</code></li>

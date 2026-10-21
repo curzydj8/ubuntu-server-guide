@@ -4668,7 +4668,7 @@
 
 <h1 id="_1">软件包与服务命令速查<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h1>
 <p>本章覆盖装软件与管服务的两组命令：包管理（<code>apt</code>、<code>apt search/show</code>、<code>dpkg</code>）与服务管理（<code>systemctl</code>、<code>journalctl</code>、<code>service</code>、<code>hostnamectl</code>、<code>timedatectl</code>）。完整原理、换源流程与选型对比见教程章 <a href="../../01-basics/04-package-management/">软件源与包管理</a>，定时任务与 timer 单元见 <a href="../../07-automation/02-systemd-timers/">Systemd 服务与定时任务</a>，时间与日志体系见 <a href="../../04-network/04-time-logging/">时间同步与系统日志</a>。本章只给参数、示例与坑点。示例用户为 <code>ubuntu</code>。</p>
-<h3 id="apt"><code>apt</code><a class="headerlink" href="#apt" title="Permanent link">&para;</a></h3>
+<h2 id="apt"><code>apt</code><a class="headerlink" href="#apt" title="Permanent link">&para;</a></h2>
 <ul>
 <li><strong>用途</strong>：从软件源在线安装、升级、卸载软件包并自动处理依赖，是服务器装包的默认工具。</li>
 <li><strong>语法</strong>：<code>sudo apt [子命令] [包名...]</code></li>
@@ -4753,7 +4753,7 @@
 <li><strong>常见错误</strong>：跳过 <code>update</code> 直接装包，报 <code>Unable to locate package</code> 便以为源里没有该软件；<code>remove</code> 后以为配置也删了，残留配置导致重装后旧设置复活，该清配置时用 <code>purge</code>。</li>
 <li><strong>风险提示</strong>：<code>upgrade</code> 涉及内核与关键库时可能要求重启，生产环境安排维护窗口；<code>autoremove</code> 执行前逐行核对删除清单，误删仍被手动依赖的库会带崩服务。</li>
 </ul>
-<h3 id="apt-search-show"><code>apt search / show</code><a class="headerlink" href="#apt-search-show" title="Permanent link">&para;</a></h3>
+<h2 id="apt-search-show"><code>apt search / show</code><a class="headerlink" href="#apt-search-show" title="Permanent link">&para;</a></h2>
 <ul>
 <li><strong>用途</strong>：<code>search</code> 按关键词在源中找包名，<code>show</code> 查看某个包的版本、依赖与描述，装包前先确认装的是不是想要的那个。</li>
 <li><strong>语法</strong>：<code>apt search 关键词</code>；<code>apt show 包名</code></li>
@@ -4800,7 +4800,7 @@
 <li><strong>常见错误</strong>：只看 <code>search</code> 结果第一行就装，同名或近名包（本体、文档、开发包）很容易装错。</li>
 <li><strong>风险提示</strong>：纯查询命令无风险；注意 <code>show</code> 显示的是源中的信息，未 <code>update</code> 时可能已过期。</li>
 </ul>
-<h3 id="dpkg"><code>dpkg</code><a class="headerlink" href="#dpkg" title="Permanent link">&para;</a></h3>
+<h2 id="dpkg"><code>dpkg</code><a class="headerlink" href="#dpkg" title="Permanent link">&para;</a></h2>
 <ul>
 <li><strong>用途</strong>：底层包工具：安装本地 <code>.deb</code> 文件、查询已装包与文件归属、修复半配置状态；不负责从源解决依赖。</li>
 <li><strong>语法</strong>：<code>dpkg [选项] [包名/文件]</code></li>
@@ -4854,7 +4854,7 @@
 <li><strong>常见错误</strong>：用 <code>dpkg -i</code> 硬装缺依赖的包后放着不管，之后所有 <code>apt</code> 操作都会先被这个半成品卡住。</li>
 <li><strong>风险提示</strong>：不要使用 <code>--force-*</code> 类参数跳过依赖与冲突检查强装，包数据库一旦损坏，修复成本远高于重装单个软件。</li>
 </ul>
-<h3 id="systemctl"><code>systemctl</code><a class="headerlink" href="#systemctl" title="Permanent link">&para;</a></h3>
+<h2 id="systemctl"><code>systemctl</code><a class="headerlink" href="#systemctl" title="Permanent link">&para;</a></h2>
 <ul>
 <li><strong>用途</strong>：管理 systemd 服务与系统状态：启停、开机自启、查看状态、重载单元定义。</li>
 <li><strong>语法</strong>：<code>sudo systemctl [动作] [服务名]</code></li>
@@ -4915,7 +4915,7 @@
 <li><strong>常见错误</strong>：<code>start</code> 了服务却忘了 <code>enable</code>，重启后服务没起来；改完单元文件直接 <code>restart</code> 而不 <code>daemon-reload</code>，跑的还是旧定义，还以为改动没生效是程序问题。</li>
 <li><strong>风险提示</strong>：对远程接入类服务（<code>ssh</code>、网络服务）执行 <code>stop</code>/<code>restart</code> 前先留第二通道，停错会把自己关在门外；<code>systemctl</code> 操作生产关键服务先确认服务名，不要靠模糊记忆敲。</li>
 </ul>
-<h3 id="journalctl"><code>journalctl</code><a class="headerlink" href="#journalctl" title="Permanent link">&para;</a></h3>
+<h2 id="journalctl"><code>journalctl</code><a class="headerlink" href="#journalctl" title="Permanent link">&para;</a></h2>
 <ul>
 <li><strong>用途</strong>：查看 systemd 日志：按服务、时间、级别筛选与追踪，是服务排障的主日志入口。</li>
 <li><strong>语法</strong>：<code>journalctl [选项]</code></li>
@@ -4972,7 +4972,7 @@
 <li><strong>常见错误</strong>：不加任何筛选直接翻全量日志找问题，等于大海捞针；<code>--vacuum-*</code> 清完才发现要追溯的日志也在其中——先导出或先确认保留期再清理。</li>
 <li><strong>风险提示</strong>：清理日志是不可逆操作，生产机先看 <code>--disk-usage</code> 与现有保留策略，故障未定位完之前不要清涉事时段的日志。</li>
 </ul>
-<h3 id="service"><code>service</code><a class="headerlink" href="#service" title="Permanent link">&para;</a></h3>
+<h2 id="service"><code>service</code><a class="headerlink" href="#service" title="Permanent link">&para;</a></h2>
 <ul>
 <li><strong>用途</strong>：老式服务管理命令的兼容封装，内部最终仍调用 <code>systemctl</code>；老脚本与老文档中常见，自己新写操作统一用 <code>systemctl</code>。</li>
 <li><strong>语法</strong>：<code>sudo service 服务名 [start|stop|restart|status]</code></li>
@@ -5010,7 +5010,7 @@
 <li><strong>常见错误</strong>：以为 <code>service</code> 与 <code>systemctl</code> 是两套独立机制而重复排查——底层是同一套 systemd。</li>
 <li><strong>风险提示</strong>：风险与 <code>systemctl</code> 相同，停远程关键服务前留退路。</li>
 </ul>
-<h3 id="hostnamectl"><code>hostnamectl</code><a class="headerlink" href="#hostnamectl" title="Permanent link">&para;</a></h3>
+<h2 id="hostnamectl"><code>hostnamectl</code><a class="headerlink" href="#hostnamectl" title="Permanent link">&para;</a></h2>
 <ul>
 <li><strong>用途</strong>：查看与设置主机名，并显示系统版本、内核与机型等概要信息。</li>
 <li><strong>语法</strong>：<code>hostnamectl [选项]</code></li>
@@ -5049,7 +5049,7 @@
 <li><strong>常见错误</strong>：只改了 <code>/etc/hosts</code> 或只改了 <code>/etc/hostname</code> 一处，两处不一致时 <code>sudo</code> 会报无法解析主机名的警告。</li>
 <li><strong>风险提示</strong>：主机名被监控、证书与集群成员身份引用时，改名属于变更操作，先确认引用方再改。</li>
 </ul>
-<h3 id="timedatectl"><code>timedatectl</code><a class="headerlink" href="#timedatectl" title="Permanent link">&para;</a></h3>
+<h2 id="timedatectl"><code>timedatectl</code><a class="headerlink" href="#timedatectl" title="Permanent link">&para;</a></h2>
 <ul>
 <li><strong>用途</strong>：查看与设置系统时间、时区与 NTP 同步状态，日志时间对不上、证书校验失败时先查它。</li>
 <li><strong>语法</strong>：<code>timedatectl [选项]</code></li>

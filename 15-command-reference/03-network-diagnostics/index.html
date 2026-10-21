@@ -4734,7 +4734,7 @@
 
 <h1 id="_1">网络诊断命令速查<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h1>
 <p>本章覆盖网络排查的速查工具箱：看地址与路由（<code>ip</code>）、看监听与连接（<code>ss</code>）、测连通（<code>ping</code>、<code>nc</code>、<code>traceroute</code>）、测应用层（<code>curl</code>）、查解析（<code>dig</code>、<code>nslookup</code>）、抓包定界（<code>tcpdump</code>）与远程操作（<code>ssh</code>、<code>scp</code>）。分层排查的完整案例与判读流程见教程章 <a href="../../08-troubleshooting/02-network-diagnosis/">网络故障排查流程</a>，DNS 原理与搭建见 <a href="../../04-network/01-dns/">DNS 服务器搭建</a>。本章只给参数、示例与坑点。示例统一使用文档段：服务器 <code>192.0.2.10</code>、网关 <code>192.0.2.1</code>、DNS <code>192.0.2.53</code>，网卡示例名 <code>enp3s0</code>，执行前先用 <code>ip -br link</code> 核对本机真实网卡名。</p>
-<h3 id="ip"><code>ip</code><a class="headerlink" href="#ip" title="Permanent link">&para;</a></h3>
+<h2 id="ip"><code>ip</code><a class="headerlink" href="#ip" title="Permanent link">&para;</a></h2>
 <ul>
 <li><strong>用途</strong>：查看与临时修改网卡地址、链路状态与路由表，是网络排查的第一个命令。</li>
 <li><strong>语法</strong>：<code>ip [addr|route|link] [动作] [对象]</code></li>
@@ -4786,7 +4786,7 @@
 <li><strong>常见错误</strong>：用 <code>ip</code> 命令改的地址与路由是临时的，重启即失；验证有效后必须写回 Netplan 等配置文件持久化。</li>
 <li><strong>风险提示</strong>：在 SSH 会话中改地址、路由或停用网卡会立即断开连接，远程操作先留带外通道。</li>
 </ul>
-<h3 id="ss"><code>ss</code><a class="headerlink" href="#ss" title="Permanent link">&para;</a></h3>
+<h2 id="ss"><code>ss</code><a class="headerlink" href="#ss" title="Permanent link">&para;</a></h2>
 <ul>
 <li><strong>用途</strong>：查看监听端口与网络连接，比老命令 <code>netstat</code> 更快，是「端口通不通」排查的第一站。</li>
 <li><strong>语法</strong>：<code>ss [选项] [过滤条件]</code></li>
@@ -4836,7 +4836,7 @@
 <li><strong>常见错误</strong>：不加 <code>sudo</code> 看不到进程名，便误判端口无人监听；把 <code>TIME-WAIT</code> 等正常连接状态当成异常。</li>
 <li><strong>风险提示</strong>：只读命令，无风险。</li>
 </ul>
-<h3 id="ping"><code>ping</code><a class="headerlink" href="#ping" title="Permanent link">&para;</a></h3>
+<h2 id="ping"><code>ping</code><a class="headerlink" href="#ping" title="Permanent link">&para;</a></h2>
 <ul>
 <li><strong>用途</strong>：测目标的 ICMP 连通、时延与丢包，按「网关 → 外网 IP → 域名」顺序分层定位。</li>
 <li><strong>语法</strong>：<code>ping [选项] 目标</code></li>
@@ -4886,7 +4886,7 @@
 <li><strong>常见错误</strong>：只 <code>ping</code> 域名就断定网络不通——先 ping IP 再 ping 域名，才能分清是链路问题还是纯 DNS 问题；目标禁 ICMP 时 ping 不通不等于服务不通，要用 <code>nc</code>/<code>curl</code> 复核端口。</li>
 <li><strong>风险提示</strong>：只读探测无风险；不要对他人网络做高频大包 ping，正常排查控制次数与间隔。</li>
 </ul>
-<h3 id="curl"><code>curl</code><a class="headerlink" href="#curl" title="Permanent link">&para;</a></h3>
+<h2 id="curl"><code>curl</code><a class="headerlink" href="#curl" title="Permanent link">&para;</a></h2>
 <ul>
 <li><strong>用途</strong>：测 HTTP/HTTPS 应用层：看状态码、响应头、证书阶段与耗时，是「网站打不开」的定界工具。</li>
 <li><strong>语法</strong>：<code>curl [选项] URL</code></li>
@@ -4940,7 +4940,7 @@
 <li><strong>常见错误</strong>：只看「打不开」不分阶段，把证书过期当网络故障查半天；用 <code>-k</code> 跳过证书校验测通了就宣布恢复，实际上用户侧仍会报错。</li>
 <li><strong>风险提示</strong>：<code>--data</code> 与请求头里不要放真实口令等敏感信息做随手测试，命令会留在 shell 历史与日志中。</li>
 </ul>
-<h3 id="dig"><code>dig</code><a class="headerlink" href="#dig" title="Permanent link">&para;</a></h3>
+<h2 id="dig"><code>dig</code><a class="headerlink" href="#dig" title="Permanent link">&para;</a></h2>
 <ul>
 <li><strong>用途</strong>：查 DNS 解析的完整细节：状态、答案、实际询问的 DNS 服务器，是域名问题的权威工具。</li>
 <li><strong>语法</strong>：<code>dig [选项] [@DNS服务器] 域名 [记录类型]</code></li>
@@ -4992,7 +4992,7 @@
 <li><strong>常见错误</strong>：未安装时提示命令不存在——<code>dig</code> 在 <code>dnsutils</code> 包里，先 <code>sudo apt install -y dnsutils</code>；只看默认 <code>dig</code> 不通就改本机配置，应先用 <code>@</code> 指定已知 DNS 对照，分清是本机配置问题还是上游问题。</li>
 <li><strong>风险提示</strong>：只读查询，无风险。</li>
 </ul>
-<h3 id="nslookup"><code>nslookup</code><a class="headerlink" href="#nslookup" title="Permanent link">&para;</a></h3>
+<h2 id="nslookup"><code>nslookup</code><a class="headerlink" href="#nslookup" title="Permanent link">&para;</a></h2>
 <ul>
 <li><strong>用途</strong>：简易域名解析查询，输出比 <code>dig</code> 直白；老系统与跨平台场景常见，深度排查仍以 <code>dig</code> 为准。</li>
 <li><strong>语法</strong>：<code>nslookup [域名] [DNS服务器]</code></li>
@@ -5034,7 +5034,7 @@
 <li><strong>常见错误</strong>：看到输出里的 <code>Non-authoritative answer</code> 以为是报错——它只是表示答案来自缓存或非权威服务器，属于正常信息。</li>
 <li><strong>风险提示</strong>：只读查询，无风险。</li>
 </ul>
-<h3 id="nc"><code>nc</code><a class="headerlink" href="#nc" title="Permanent link">&para;</a></h3>
+<h2 id="nc"><code>nc</code><a class="headerlink" href="#nc" title="Permanent link">&para;</a></h2>
 <ul>
 <li><strong>用途</strong>：测 TCP/UDP 端口连通性（不依赖业务协议），区分「端口不通」与「服务内容不对」。</li>
 <li><strong>语法</strong>：<code>nc [选项] 主机 端口</code></li>
@@ -5078,7 +5078,7 @@
 <li><strong>常见错误</strong>：未安装时先 <code>sudo apt install -y netcat-openbsd</code>；用 UDP 测试得到「成功」便下结论——UDP 无握手，<code>nc -u</code> 的结果只能作参考。</li>
 <li><strong>风险提示</strong>：只对自己管理或已获授权的主机与端口做连通测试，不要对他人网络批量扫端口。</li>
 </ul>
-<h3 id="tcpdump"><code>tcpdump</code><a class="headerlink" href="#tcpdump" title="Permanent link">&para;</a></h3>
+<h2 id="tcpdump"><code>tcpdump</code><a class="headerlink" href="#tcpdump" title="Permanent link">&para;</a></h2>
 <ul>
 <li><strong>用途</strong>：抓包取证，回答「请求到底到没到这台机器、出去了没有回来」这一分界问题，需要 root 权限。</li>
 <li><strong>语法</strong>：<code>sudo tcpdump [选项] [过滤表达式]</code></li>
@@ -5132,7 +5132,7 @@
 <p class="admonition-title">tcpdump：抓包内容敏感，生产慎用并先授权</p>
 <p>抓包会记录经过网卡的真实业务内容，可能包含账号、口令、业务数据等敏感信息。生产环境抓包前先取得授权，只抓定位所需的最小范围（限定主机、端口与包数），抓包文件加密保存、限定访问人员，问题关闭后及时销毁；不要在无过滤条件下长时间全量抓包。</p>
 </div>
-<h3 id="traceroute"><code>traceroute</code><a class="headerlink" href="#traceroute" title="Permanent link">&para;</a></h3>
+<h2 id="traceroute"><code>traceroute</code><a class="headerlink" href="#traceroute" title="Permanent link">&para;</a></h2>
 <ul>
 <li><strong>用途</strong>：显示到目标逐跳经过的路径与每跳时延，定位丢包与高时延出现在哪一段。</li>
 <li><strong>语法</strong>：<code>traceroute [选项] 目标</code></li>
@@ -5177,7 +5177,7 @@
 <li><strong>常见错误</strong>：未安装时提示命令不存在，先 <code>sudo apt install -y traceroute</code>，或改用系统自带的 <code>tracepath</code> 查路径、用 <code>mtr</code> 看持续统计。</li>
 <li><strong>风险提示</strong>：只读探测无风险；不要凭中间跳的单点数据就向运营商报障，先用持续 <code>ping</code> 与终点数据交叉验证。</li>
 </ul>
-<h3 id="ssh"><code>ssh</code><a class="headerlink" href="#ssh" title="Permanent link">&para;</a></h3>
+<h2 id="ssh"><code>ssh</code><a class="headerlink" href="#ssh" title="Permanent link">&para;</a></h2>
 <ul>
 <li><strong>用途</strong>：加密远程登录与远程执行命令，是服务器管理的主通道；本条只给速查参数，密钥、配置与加固的完整教程见 <a href="../../14-ssh/02-connect-config/">SSH 连接与客户端配置</a>。</li>
 <li><strong>语法</strong>：<code>ssh [选项] [用户@]主机 [远程命令]</code></li>
@@ -5228,7 +5228,7 @@
 <li><strong>常见错误</strong>：私钥权限过宽（非 <code>600</code>）时 SSH 直接拒绝使用并报错；首次连接的主机指纹提示要核对后再接受，不要无脑输 yes 绕过校验。</li>
 <li><strong>风险提示</strong>：确认目标主机无误再登录执行写操作——在错的机器上执行正确的命令同样是事故；口令与私钥不要写进脚本或命令参数。</li>
 </ul>
-<h3 id="scp"><code>scp</code><a class="headerlink" href="#scp" title="Permanent link">&para;</a></h3>
+<h2 id="scp"><code>scp</code><a class="headerlink" href="#scp" title="Permanent link">&para;</a></h2>
 <ul>
 <li><strong>用途</strong>：经 SSH 通道复制文件（本机与远程之间、远程与远程之间），小文件传输的速查选择；批量与增量同步改用 <code>rsync</code>，完整讲解见 <a href="../../14-ssh/04-transfer-remote-exec/">文件传输与远程执行</a>。</li>
 <li><strong>语法</strong>：<code>scp [选项] 源 目标</code>（远程一侧写 <code>用户@主机:路径</code>）</li>
