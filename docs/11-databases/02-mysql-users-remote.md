@@ -1,3 +1,7 @@
+---
+description: "建账号是最容易埋雷的一步。给应用一个 root，或一句 GRANT ALL PRIVILEGES ON . TO 'appuser'@'%'，在生产上等于把整库钥匙复制无数份：应用一旦被注入，"
+---
+
 # MySQL 用户、权限与安全远程访问
 
 ## 一、概述与使用场景
