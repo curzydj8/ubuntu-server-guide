@@ -6,7 +6,8 @@ description: "软件包与服务命令速查：apt、dpkg、systemctl、journalc
 
 本章覆盖装软件与管服务的两组命令：包管理（`apt`、`apt search/show`、`dpkg`）与服务管理（`systemctl`、`journalctl`、`service`、`hostnamectl`、`timedatectl`）。完整原理、换源流程与选型对比见教程章 [软件源与包管理](../01-basics/04-package-management.md)，定时任务与 timer 单元见 [Systemd 服务与定时任务](../07-automation/02-systemd-timers.md)，时间与日志体系见 [时间同步与系统日志](../04-network/04-time-logging.md)。本章只给参数、示例与坑点。示例用户为 `ubuntu`。
 
-### `apt`
+## `apt`
+
 - **用途**：从软件源在线安装、升级、卸载软件包并自动处理依赖，是服务器装包的默认工具。
 - **语法**：`sudo apt [子命令] [包名...]`
 
@@ -45,7 +46,8 @@ sudo apt autoremove
 - **常见错误**：跳过 `update` 直接装包，报 `Unable to locate package` 便以为源里没有该软件；`remove` 后以为配置也删了，残留配置导致重装后旧设置复活，该清配置时用 `purge`。
 - **风险提示**：`upgrade` 涉及内核与关键库时可能要求重启，生产环境安排维护窗口；`autoremove` 执行前逐行核对删除清单，误删仍被手动依赖的库会带崩服务。
 
-### `apt search / show`
+## `apt search / show`
+
 - **用途**：`search` 按关键词在源中找包名，`show` 查看某个包的版本、依赖与描述，装包前先确认装的是不是想要的那个。
 - **语法**：`apt search 关键词`；`apt show 包名`
 
@@ -75,7 +77,8 @@ nginx:
 - **常见错误**：只看 `search` 结果第一行就装，同名或近名包（本体、文档、开发包）很容易装错。
 - **风险提示**：纯查询命令无风险；注意 `show` 显示的是源中的信息，未 `update` 时可能已过期。
 
-### `dpkg`
+## `dpkg`
+
 - **用途**：底层包工具：安装本地 `.deb` 文件、查询已装包与文件归属、修复半配置状态；不负责从源解决依赖。
 - **语法**：`dpkg [选项] [包名/文件]`
 
@@ -104,7 +107,8 @@ sudo dpkg --configure -a
 - **常见错误**：用 `dpkg -i` 硬装缺依赖的包后放着不管，之后所有 `apt` 操作都会先被这个半成品卡住。
 - **风险提示**：不要使用 `--force-*` 类参数跳过依赖与冲突检查强装，包数据库一旦损坏，修复成本远高于重装单个软件。
 
-### `systemctl`
+## `systemctl`
+
 - **用途**：管理 systemd 服务与系统状态：启停、开机自启、查看状态、重载单元定义。
 - **语法**：`sudo systemctl [动作] [服务名]`
 
@@ -134,7 +138,8 @@ systemctl list-units --failed --no-pager
 - **常见错误**：`start` 了服务却忘了 `enable`，重启后服务没起来；改完单元文件直接 `restart` 而不 `daemon-reload`，跑的还是旧定义，还以为改动没生效是程序问题。
 - **风险提示**：对远程接入类服务（`ssh`、网络服务）执行 `stop`/`restart` 前先留第二通道，停错会把自己关在门外；`systemctl` 操作生产关键服务先确认服务名，不要靠模糊记忆敲。
 
-### `journalctl`
+## `journalctl`
+
 - **用途**：查看 systemd 日志：按服务、时间、级别筛选与追踪，是服务排障的主日志入口。
 - **语法**：`journalctl [选项]`
 
@@ -163,7 +168,8 @@ sudo journalctl --vacuum-time=7d
 - **常见错误**：不加任何筛选直接翻全量日志找问题，等于大海捞针；`--vacuum-*` 清完才发现要追溯的日志也在其中——先导出或先确认保留期再清理。
 - **风险提示**：清理日志是不可逆操作，生产机先看 `--disk-usage` 与现有保留策略，故障未定位完之前不要清涉事时段的日志。
 
-### `service`
+## `service`
+
 - **用途**：老式服务管理命令的兼容封装，内部最终仍调用 `systemctl`；老脚本与老文档中常见，自己新写操作统一用 `systemctl`。
 - **语法**：`sudo service 服务名 [start|stop|restart|status]`
 
@@ -185,7 +191,8 @@ sudo service nginx restart
 - **常见错误**：以为 `service` 与 `systemctl` 是两套独立机制而重复排查——底层是同一套 systemd。
 - **风险提示**：风险与 `systemctl` 相同，停远程关键服务前留退路。
 
-### `hostnamectl`
+## `hostnamectl`
+
 - **用途**：查看与设置主机名，并显示系统版本、内核与机型等概要信息。
 - **语法**：`hostnamectl [选项]`
 
@@ -208,7 +215,8 @@ hostname
 - **常见错误**：只改了 `/etc/hosts` 或只改了 `/etc/hostname` 一处，两处不一致时 `sudo` 会报无法解析主机名的警告。
 - **风险提示**：主机名被监控、证书与集群成员身份引用时，改名属于变更操作，先确认引用方再改。
 
-### `timedatectl`
+## `timedatectl`
+
 - **用途**：查看与设置系统时间、时区与 NTP 同步状态，日志时间对不上、证书校验失败时先查它。
 - **语法**：`timedatectl [选项]`
 

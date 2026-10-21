@@ -310,10 +310,12 @@ ssh ubuntu@192.0.2.10 'sudo sshd -t && echo config-ok'
 - **现象**：权限数字都对，但密钥登录仍失败，服务端日志 `/var/log/auth.log` 出现 `Authentication refused: bad ownership or modes for file`。
 - **原因**：文件属主不是登录用户本人——常见于用 root 或 sudo 代其他用户写入 `authorized_keys` 后没改属主。
 - **修复**：
+
     ```bash
     sudo chown ubuntu:ubuntu /home/ubuntu/.ssh/authorized_keys
     chmod 600 /home/ubuntu/.ssh/authorized_keys
     ```
+
 - **验证**：`ls -l ~/.ssh/authorized_keys` 属主为登录用户，新开会话密钥登录成功。
 
 ### 5.4 Could not open a connection to your authentication agent

@@ -100,11 +100,11 @@ IT IS POSSIBLE THAT SOMEONE IS DOING SOMETHING NASTY!
 1. **先核实**：通过云控制台或带外通道登录服务器，重跑 `ssh-keygen -lf /etc/ssh/ssh_host_ed25519_key.pub`，确认新指纹确实来自这台机器，并问清变更原因（重装？迁移？没人动过却变了，就要按入侵事件处理）。
 2. **再删除旧记录**：确认无误后，在客户端删除该主机的旧指纹：
 
-```bash
-ssh-keygen -R 192.0.2.10
-```
+   ```bash
+   ssh-keygen -R 192.0.2.10
+   ```
 
-改过端口的主机记录要连端口一起删：`ssh-keygen -R "[192.0.2.10]:2222"`。该命令会同时生成一份 `known_hosts.old` 备份。
+   改过端口的主机记录要连端口一起删：`ssh-keygen -R "[192.0.2.10]:2222"`。该命令会同时生成一份 `known_hosts.old` 备份。
 
 3. **重新连接并核对**：再次 `ssh`，出现首次连接提示时按 3.2 节核对新指纹后再输 `yes`。
 

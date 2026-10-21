@@ -135,7 +135,6 @@ submission inet n       -       y       -       -       smtpd
 
 逐行要点：`encrypt` 表示 587 **强制** TLS，没加密不许提交（与 25 的 may 对比）；`smtpd_recipient_restrictions` 在此被覆盖为「只有已认证用户能提交」；最后一行告诉 milter 这是本机外发信，OpenDKIM 据此签名而非验签。改完先不启动，等 Dovecot 与证书就位后一起重载。
 
-
 ### 3.4 Dovecot：IMAP、存储与 SASL 对接
 
 Dovecot 配置在 `/etc/dovecot/conf.d/` 下按文件逐个改（已在 3.1 备份）。
