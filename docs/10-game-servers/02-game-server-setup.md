@@ -1,3 +1,7 @@
+---
+description: "本章是整个第 10 部分的动手核心：把服务端真正装起来、配好、跑通第一次启动。三条路线有先后关系——先装 SteamCMD 建好统一底座（Palworld 靠它下载，大量 Steam 游戏服务端也靠它），"
+---
+
 # 游戏服务端实战：SteamCMD、Minecraft 与 Palworld
 
 ## 一、概述与使用场景
