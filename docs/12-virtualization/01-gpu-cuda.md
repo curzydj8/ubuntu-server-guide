@@ -1,3 +1,7 @@
+---
+description: "本地大模型推理、绘图、视频转码与科学计算都需要把计算卸载到 GPU。NVIDIA 的 CUDA 是 PyTorch、TensorFlow、vLLM 等框架的共同底座。"
+---
+
 # GPU 与 CUDA：NVIDIA 驱动与容器调用
 
 ## 一、概述与使用场景
