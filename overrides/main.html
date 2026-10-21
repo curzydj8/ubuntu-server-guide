@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{# 站点级 Open Graph / Twitter Card 标签：Material 默认不输出 og 标签，统一在此补齐。
+   标题与描述优先取页面 front-matter（description），缺省回退到站点级配置。 #}
+{% block extrahead %}
+  {% set og_title = config.site_name %}
+  {% if page and page.title and not page.is_homepage %}
+    {% set og_title = page.title ~ " - " ~ config.site_name %}
+  {% endif %}
+  {% set og_desc = config.site_description %}
+  {% if page and page.meta and page.meta.description %}
+    {% set og_desc = page.meta.description %}
+  {% endif %}
+  {% set og_url = config.site_url %}
+  {% if page and page.canonical_url %}
+    {% set og_url = page.canonical_url %}
+  {% endif %}
+  {% set og_image = config.site_url ~ "assets/og-image.png" %}
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="{{ config.site_name }}">
+  <meta property="og:title" content="{{ og_title | e }}">
+  <meta property="og:description" content="{{ og_desc | e }}">
+  <meta property="og:url" content="{{ og_url }}">
+  <meta property="og:image" content="{{ og_image }}">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="{{ og_title | e }}">
+  <meta name="twitter:description" content="{{ og_desc | e }}">
+  <meta name="twitter:image" content="{{ og_image }}">
+{% endblock %}
