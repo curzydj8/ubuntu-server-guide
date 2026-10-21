@@ -63,8 +63,9 @@
 | 08 | 故障排查与应急响应 | 启动修复、网络排查、磁盘爆满、性能定位 |
 | 09 | 网站搭建、域名与应用部署 | 域名解析、宝塔面板、LNMP/LAMP、Docker 应用、HTTPS 证书 |
 | 10 | 游戏服务器部署与端口映射 | 端口三重门、游戏服务端、性能守护、内网穿透 |
-| 11 | 硬件、虚拟化与私有云 | GPU/CUDA、KVM/QEMU/PVE、直通与 SR-IOV |
-| 12 | AI 工具与智能化运维 | 本地大模型、AI CLI 安全边界、IaC 与 GitOps |
+| 11 | 数据库安装、管理与高可用 | MySQL/MariaDB、PostgreSQL、Redis、MongoDB、主从与备份恢复 |
+| 12 | 硬件、虚拟化与私有云 | GPU/CUDA、KVM/QEMU/PVE、直通与 SR-IOV |
+| 13 | AI 工具与智能化运维 | 本地大模型、AI CLI 安全边界、IaC 与 GitOps |
 
 另有：[互动工具](tools/index.md)（Netplan / UFW 在线生成器）与[更新日志](changelog.md)。
 
