@@ -15,6 +15,7 @@ description: "网站搭建、域名与应用部署：DNS 解析与 Cloudflare、
 | 经典 LNMP/LAMP 自建 | `03-lnmp-lamp.md` | 不用面板，手工装 Nginx 或 Apache、MySQL、PHP，每一行配置都知道在干什么 |
 | Docker 部署常用应用 | `04-docker-apps.md` | 用容器跑 Halo、Nextcloud 这类现成应用，升级和迁移都不动宿主机环境 |
 | HTTPS 自动化证书 | `05-https-certificates.md` | 免费证书自动签发和续期，告别浏览器红色警告和手动换证书 |
+| 邮件服务器 | `06-mail-server.md` | 用 Postfix + Dovecot 自建邮件收发，配齐 SPF/DKIM/DMARC/PTR 送达四件套，把信真正送进对方收件箱 |
 
 ## 每章一句话
 

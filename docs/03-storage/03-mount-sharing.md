@@ -151,6 +151,19 @@ df -h /mnt/share
 
 NFSv4 路径按服务端导出表填写，上例导出 `/srv/share`，客户端就按 `:/srv/share` 挂载，挂不上时先用 `exportfs -v` 核对。
 
+#### NFS 加密进阶：Kerberos 的 sec 选项
+
+默认 NFS 只按地址与 UID 信任，不加密、不强校验，可信内网可接受；跨不可信网络时在 NFSv4 上叠加 Kerberos，用 `sec=` 指定等级：
+
+| 取值 | 区别 |
+|------|------|
+| `sec=sys` | 默认档，不用 Kerberos，只信地址与 UID，无完整性与加密，仅限可信内网 |
+| `sec=krb5` | 只做身份校验，挡冒充，成本最低 |
+| `sec=krb5i` | 在 krb5 上加完整性校验，防中途篡改，不加密 |
+| `sec=krb5p` | 身份、完整性、加密全有，最安全，CPU 开销最大、吞吐下降 |
+
+服务端在 `/etc/exports` 写如 `/srv/share 192.0.2.0/24(rw,sync,sec=krb5i)`，客户端带同样的 `sec=krb5i`，不一致直接失败。前置是两端已加入同一 Kerberos 域、票据有效且时间严格同步（容差数分钟）。身份基础见 [企业身份：LDAP、Kerberos 与域](../02-security/05-enterprise-identity.md)。
+
 ### 3.3 Samba 共享
 
 Samba 让 Windows 与 Linux 客户端通过 SMB 协议访问共享，适合混合操作系统环境。准备目录并备份主配置：
@@ -204,6 +217,133 @@ ls /mnt/teamshare
 
 !!! warning "Samba 安全红线"
     禁止开启匿名可写共享，`guest ok = yes` 加 `read only = no` 的组合等于对整个网段开放任意写入，是勒索软件传播与数据被删的高发配置。确需访客只读，也应单独建只读共享段并限制来源地址，不要在业务共享上放开。
+
+#### Samba 深化：权限映射与多用户治理
+
+用户一多就会遇到保存报无权限、属主混乱、谁能改说不清。本小节讲清权限模型、凭据、配额、回收站、审计与多用户案例。
+
+**第一，权限模型：两道门取更严者。** SMB 访问连过两道门：共享级权限（`smb.conf` 的 `valid users`、`read only`、`write list`，决定能不能进、能不能写）与文件系统权限（目录的 Linux 属主、属组与权限位）。两者叠加取更严一方：共享放行写但目录只读，照样写不进，反之亦然。Samba 默认把 SMB 账号映射为同名 Linux 账号，SMB 密码、Linux 账号、目录属主必须对得上。关键参数逐行看：
+
+```ini
+[teamshare]
+   path = /srv/samba-share
+   valid users = @team
+   force group = team
+   create mask = 0664
+   directory mask = 0775
+```
+
+`valid users = @team` 中 `@` 表示用户组，只有组员能进，人员进出只改组员更可维护，也可写用户名列表；`force group = team` 强制经此共享访问的有效属组为 team，避免新建文件跟随个人主组导致同事打不开；`force user = ubuntu`（本例未写）把全部访问映射为同一账号，适合共用一份数据的简单共享，但审计与配额都分不到人，多用户慎用；`create mask = 0664` 是新建文件权限上限掩码，与客户端请求按位与，即组内可读写、其他人只读；`directory mask = 0775` 同理管新建目录。掩码只管新建，存量另用 `chmod`、`chown`、`setfacl` 治理。
+
+**第二，凭据保护：密码不要出现在命令行里。** 把密码写进挂载参数（如 `-o username=ubuntu,password=...`）或 fstab 明文是常见坏写法：`ps` 能看到完整参数，命令还会留在 shell 历史里。正确做法是凭据单独成文件，放 `/root` 下收紧到只有 root 可读（密码为占位符，实际值从密码库取）：
+
+```bash
+sudo nano /root/.smbcredentials-teamshare
+sudo chmod 600 /root/.smbcredentials-teamshare
+sudo mount -t cifs //192.0.2.10/teamshare /mnt/teamshare -o credentials=/root/.smbcredentials-teamshare,vers=3.0,uid=ubuntu,gid=ubuntu
+echo '//192.0.2.10/teamshare /mnt/teamshare cifs credentials=/root/.smbcredentials-teamshare,vers=3.0,nofail,_netdev 0 0' | sudo tee -a /etc/fstab
+```
+
+凭据文件只有三行：`username=ubuntu`、`password=ExamplePass123`、`domain=WORKGROUP`。挂载与 fstab 只引用文件，轮换只改这一处。
+
+!!! danger "凭据文件权限必须先收紧"
+    写入真实密码前先 `chmod 600` 并确认属主 root。停留在默认 644 等于把密码发给本机所有账号，`mount.cifs` 对权限过宽的文件也会警告。不要在各机器脚本里各存一份明文。
+
+**第三，配额：防止一个人写满整块盘。** ext4 基本流程：挂载选项加配额后重挂，生成账本，开启，再逐用户设限：
+
+```bash
+sudo apt install -y quota
+sudo mount -o remount,usrquota,grpquota /srv
+sudo quotacheck -cug /srv
+sudo quotaon /srv
+sudo setquota -u ubuntu 4000000 5000000 0 0 /srv
+sudo repquota /srv
+```
+
+`quotacheck` 扫描生成账本，首次启用与异常重启后都要跑；`quotaon` 打开强制检查；`setquota` 前两个数是块软限与硬限（KiB，上例约 3.8 与 4.8 GiB），后两个 0 表示 inode 不限；`repquota` 是用量报表。xfs 配额为内建能力，用 `xfs_quota` 管理、无需 `quotacheck` 外部账本。配额按 Linux 账号计数，用了 `force user` 就分不到人。
+
+**第四，回收站。** recycle 模块让删文件先移进回收目录而非真删：
+
+```ini
+[teamshare]
+   vfs objects = recycle
+   recycle:repository = .recycle/%U
+   recycle:keeptree = yes
+   recycle:versions = yes
+   recycle:touch = yes
+   recycle:maxsize = 0
+```
+
+逐行：`vfs objects = recycle` 加载模块，叠加其他模块时同行空格分隔（见下文审计）；`repository` 是回收目录，`%U` 按用户名分开；`keeptree` 保留原目录结构；`versions` 同名重复删除保留多版本；`touch` 把删除时间写入时间戳便于按期清理；`maxsize` 是进回收站的单文件上限，0 为不限，大文件多的共享应设上限。回收站不是备份：只防误删，并要配定期清理（如清超过 30 天的内容）。
+
+**第五，只读共享与审计。** 发布资料用只读加白名单写者：`read only = yes` 定全共享只读，`write list` 单独给写权限，名单外无论文件权限如何都写不进：
+
+```ini
+[pubdocs]
+   path = /srv/pubdocs
+   browseable = yes
+   read only = yes
+   write list = @doceditors
+   valid users = @team, @doceditors
+```
+
+有追责需求时叠加 `full_audit` 把关键操作写进日志：
+
+```ini
+[teamshare]
+   vfs objects = recycle full_audit
+   full_audit:prefix = %u|%I|%S
+   full_audit:success = open write rename unlink mkdir rmdir
+   full_audit:failure = all
+   full_audit:facility = local5
+   full_audit:priority = notice
+```
+
+`prefix` 依次记用户名、客户端地址、共享名；`success` 只记列出的成功操作防日志爆量；`failure = all` 记全部失败尝试，越权试探正藏在这里；日志走 local5 通道可在 rsyslog 单独分文件。改完用 `testparm -s` 检查并实删一文件验证日志产生。
+
+**第六，多用户案例：部门共享加个人目录。** team 共用一目录、每人另有仅自己可见的个人目录：
+
+```ini
+[global]
+   workgroup = WORKGROUP
+   server min protocol = SMB2
+   disable netbios = yes
+   smb ports = 445
+
+[teamshare]
+   path = /srv/samba/team
+   browseable = yes
+   read only = no
+   valid users = @team
+   force group = team
+   create mask = 0664
+   directory mask = 0775
+   vfs objects = recycle
+   recycle:repository = .recycle/%U
+   recycle:keeptree = yes
+
+[homes]
+   browseable = no
+   read only = no
+   valid users = %S
+```
+
+逐段讲解：`[global]` 延续安全基线（SMB2 以上、只走 445）；`[teamshare]` 用组限定准入、掩码保证组内协作、回收站按用户分目录；`[homes]` 是特殊段，自动以用户名为共享名提供各人主目录，`valid users = %S` 中 `%S` 即当前共享名，每人只能进自己那份，`browseable = no` 让它不在列表里露面。配套动作不要漏：
+
+```bash
+sudo mkdir -p /srv/samba/team
+sudo groupadd team
+sudo chown root:team /srv/samba/team
+sudo chmod 2770 /srv/samba/team
+sudo usermod -aG team ubuntu
+sudo smbpasswd -a ubuntu
+sudo testparm -s
+sudo systemctl restart smbd
+```
+
+2770 首位 2 是 setgid，新建文件自动继承 team 属组，与 `force group` 双保险；入组后需重登 SMB 会话才生效。各人主目录须为 700 或更严，否则 `[homes]` 隔离形同虚设，上线前逐个核查。
+
+**第七，断线恢复与性能注记。** CIFS 软硬取舍：默认接近 `hard`，失联时阻塞等恢复，一致性好但应用可能假死；`soft` 超时报错但写者可能拿到不完整结果，办公共享保持默认、仅能容忍重试的批处理才考虑 `soft`。开机挂载组合 `_netdev` 与 `x-systemd.automount` 推迟到首次访问，服务端没开机时客户端也能启动，再配 `x-systemd.mount-timeout` 给明确超时。共享慢先分层判读：客户端复制 1 GiB 文件计时、服务端本地盘同法测速、再测裸网络吞吐，三段一比即知瓶颈在盘、网还是协议；唯独 SMB 慢再查是否回落 SMB1。
 
 ### 3.4 iSCSI 入门：target 与 initiator
 
@@ -285,6 +425,17 @@ showmount -e 192.0.2.10
 
 Samba 验证：`smbclient //192.0.2.10/teamshare -U ubuntu -c 'ls'` 能列目录即通过。iSCSI 验证：`sudo iscsiadm -m session` 显示会话，`lsblk` 中新盘容量与 LUN 一致即通过。
 
+Samba 深化验证：组内能读写、组外被拒绝才证明组控制生效，删掉测试文件后应能在回收目录找回：
+
+```bash
+smbclient //192.0.2.10/teamshare -U ubuntu -c 'put /etc/hostname test.txt; ls'
+smbclient //192.0.2.10/teamshare -U guestuser -c 'ls'
+sudo ls -l /srv/samba/team /srv/samba/team/.recycle/ubuntu/
+sudo repquota /srv
+```
+
+期望：文件属组为 team、权限合掩码，`repquota` 列出用量与限额。NFS Kerberos 验证（仅 `sec=krb5*` 环境）：`klist` 确认票据后带 `sec=krb5i` 挂载并写入，`mount` 能看到该选项且写入成功才通过；票据过期应报权限错误，不得静默降级。
+
 ## 五、常见错误与排坑指南
 
 场景一：改完 fstab 重启，系统进入 emergency mode。控制台原文片段：
@@ -344,6 +495,26 @@ smbclient //192.0.2.10/teamshare -U ubuntu -c 'ls'
 
 先用 `smbclient` 验证通过，再让 Windows 重试并删除其缓存的旧凭据。
 
+场景四：Windows 能进共享、能看但保存报无权限。按两道门模型判读，不要急着放宽：
+
+```bash
+sudo testparm -s
+namei -l /srv/samba/team/report.docx
+sudo id ubuntu
+```
+
+`namei -l` 逐级列出每层目录权限，常见真因是上级目录缺 team 组执行位，或文件属主为个人且权限 600；拷入文件带原属主同理，掩码只管新建，存量用 `chown`、`chmod` 治理。只在某个账号出现时再查其组员身份与是否重登过会话。
+
+场景五：挂载报凭据文件权限过宽警告（非 600 或属主不对）。把文件移入 `/root` 并收紧，脚本与 fstab 只留 `credentials=` 引用：
+
+```bash
+sudo chmod 600 /root/.smbcredentials-teamshare
+sudo chown root:root /root/.smbcredentials-teamshare
+history | grep -i password
+```
+
+最后一行自查：历史里若搜得到明文密码命令，该密码视为已泄露，删对应历史行并立即轮换。
+
 ## 六、生产环境最佳实践与安全建议
 
 第一，fstab 治理。非根挂载统一加 `nofail`，网络挂载统一加 `_netdev` 与 automount；变更纳入流程，附带备份与 `mount -a` 验证记录；定期用 `findmnt` 与文档比对。
@@ -355,3 +526,5 @@ smbclient //192.0.2.10/teamshare -U ubuntu -c 'ls'
 第四，监控挂载存活。目录存在不等于盘已挂载，用 `findmnt` 巡检或挂载点标记文件校验，防止应用把数据写进未挂载的空目录；容量盯 80%、90% 两档阈值。
 
 第五，文档与演练。维护共享清单（路径、协议、授权对象、负责人、备份归属），成员变动同步回收授权；每季度做一次共享盘误删恢复演练。
+
+第六，Samba 以组治理、以凭据文件交付：授权落到组、人员变动只调组员；凭据走 `/root` 下 600 文件；启用配额的每月看一次 `repquota`。第七，回收站纳入容量巡检并按期清理，`full_audit` 日志单独分文件与保留期，每季度抽查失败操作记录。

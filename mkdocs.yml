@@ -79,12 +79,16 @@ nav:
       - 系统安装: 01-basics/02-installation.md
       - 首次登录与网络初始化: 01-basics/03-first-login-network.md
       - 软件源与包管理: 01-basics/04-package-management.md
+      - 云初始化与无人值守安装: 01-basics/05-cloud-init-autoinstall.md
   - 02 系统安全与权限管理:
       - 02-security/index.md
       - SSH 安全加固: 02-security/01-ssh-hardening.md
       - 用户、Sudo 与 PAM: 02-security/02-users-sudo-pam.md
       - 防火墙管理: 02-security/03-firewall.md
       - 系统防御与入侵检测: 02-security/04-defense.md
+      - 企业身份认证: 02-security/05-enterprise-identity.md
+      - CIS 安全基线审计: 02-security/06-cis-baseline.md
+      - 自动安全更新: 02-security/07-unattended-upgrades.md
   - 03 磁盘、文件系统与存储:
       - 03-storage/index.md
       - LVM 动态卷管理: 03-storage/01-lvm.md
@@ -94,6 +98,7 @@ nav:
   - 04 网络服务与核心架构:
       - 04-network/index.md
       - DNS 服务器搭建: 04-network/01-dns.md
+      - DNS 进阶与 DNSSEC: 04-network/05-dnssec-advanced.md
       - Web 服务器与反向代理: 04-network/02-web-proxy.md
       - 网络隧道与 VPN: 04-network/03-vpn-tunnel.md
       - 时间同步与系统日志: 04-network/04-time-logging.md
@@ -127,6 +132,7 @@ nav:
       - 经典 LNMP / LAMP 自建: 09-web-hosting/03-lnmp-lamp.md
       - Docker 部署常用应用: 09-web-hosting/04-docker-apps.md
       - HTTPS 自动化证书: 09-web-hosting/05-https-certificates.md
+      - 邮件服务器与送达: 09-web-hosting/06-mail-server.md
   - 10 游戏服务器部署与端口映射:
       - 10-game-servers/index.md
       - 端口开放「三重门」: 10-game-servers/01-port-opening.md
@@ -170,5 +176,12 @@ nav:
       - 磁盘与进程速查: 15-command-reference/04-disk-process.md
       - 文本与归档速查: 15-command-reference/05-text-archive.md
       - 定时、容器与系统速查: 15-command-reference/06-scheduling-containers-more.md
+  - 参考索引:
+      - reference/index.md
+      - 术语表: reference/glossary.md
+      - 命令索引: reference/command-index.md
+      - 端口与协议目录: reference/ports.md
+      - 配置文件索引: reference/config-files.md
+      - 内容贡献规范: reference/contributing.md
   - 互动工具: tools/index.md
   - 更新日志: changelog.md
