@@ -21,6 +21,7 @@ description: "Ubuntu Server 容器化与云原生：Docker Engine 与 Compose �
 - **Docker 基础与进阶**：一次讲透 Engine 安装、镜像与容器命令、Compose 编排和镜像优化，学完即可独立交付一个多容器应用。
 - **Podman 无根容器**：不依赖常驻守护进程、普通用户即可运行容器，重点讲清 rootless 原理、与 Docker 的对照关系以及和 systemd 的集成方式。
 - **Kubernetes 轻量集群**：对比 k3s 与 microk8s 两种轻量发行版，完成从单节点体验到多节点搭建、发布示例应用的完整入门路径。
+- **软件供应链安全**：让镜像可信可查：来源治理与 digest 锁定、cosign 验签、syft 生成 SBOM、trivy 漏洞扫描与基础镜像更新策略。
 
 ## 推荐学习顺序
 

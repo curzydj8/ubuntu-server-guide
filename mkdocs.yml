@@ -80,6 +80,8 @@ nav:
       - 首次登录与网络初始化: 01-basics/03-first-login-network.md
       - 软件源与包管理: 01-basics/04-package-management.md
       - 云初始化与无人值守安装: 01-basics/05-cloud-init-autoinstall.md
+      - 系统升级与版本生命周期: 01-basics/06-release-upgrade-lifecycle.md
+      - 多架构服务器: 01-basics/07-multiarch.md
   - 02 系统安全与权限管理:
       - 02-security/index.md
       - SSH 安全加固: 02-security/01-ssh-hardening.md
@@ -89,12 +91,15 @@ nav:
       - 企业身份认证: 02-security/05-enterprise-identity.md
       - CIS 安全基线审计: 02-security/06-cis-baseline.md
       - 自动安全更新: 02-security/07-unattended-upgrades.md
+      - 证书与密钥生命周期: 02-security/08-certificate-lifecycle.md
+      - 秘密信息管理: 02-security/09-secrets-management.md
   - 03 磁盘、文件系统与存储:
       - 03-storage/index.md
       - LVM 动态卷管理: 03-storage/01-lvm.md
       - ZFS 与 Btrfs: 03-storage/02-zfs-btrfs.md
       - 挂载与存储共享: 03-storage/03-mount-sharing.md
       - 磁盘健康与备份: 03-storage/04-backup.md
+      - 硬件健康检查: 03-storage/05-hardware-health.md
   - 04 网络服务与核心架构:
       - 04-network/index.md
       - DNS 服务器搭建: 04-network/01-dns.md
@@ -102,22 +107,27 @@ nav:
       - Web 服务器与反向代理: 04-network/02-web-proxy.md
       - 网络隧道与 VPN: 04-network/03-vpn-tunnel.md
       - 时间同步与系统日志: 04-network/04-time-logging.md
+      - 负载均衡 HAProxy: 04-network/06-haproxy.md
   - 05 容器化与云原生:
       - 05-containers/index.md
       - Docker 基础与进阶: 05-containers/01-docker.md
       - Podman 无根容器: 05-containers/02-podman.md
       - Kubernetes 轻量集群: 05-containers/03-kubernetes-light.md
+      - 软件供应链安全: 05-containers/04-supply-chain-security.md
   - 06 系统监控、日志与性能调优:
       - 06-monitoring/index.md
       - 命令行即时监控工具: 06-monitoring/01-cli-tools.md
       - Prometheus + Grafana 监控栈: 06-monitoring/02-prometheus-grafana.md
       - 集中式日志收集: 06-monitoring/03-logging-stack.md
       - 内核与性能调优: 06-monitoring/04-kernel-tuning.md
+      - 可观测性与告警治理: 06-monitoring/05-observability-alerting.md
+      - 容量规划与日志治理: 06-monitoring/06-capacity-log-governance.md
   - 07 自动化运维与脚本:
       - 07-automation/index.md
       - Shell 脚本规范与范例: 07-automation/01-shell-scripting.md
       - Systemd 服务与定时任务: 07-automation/02-systemd-timers.md
       - Ansible 自动化配置管理: 07-automation/03-ansible.md
+      - 服务工程化与配置漂移: 07-automation/04-systemd-engineering-drift.md
   - 08 故障排查与应急响应:
       - 08-troubleshooting/index.md
       - 系统无法启动修复: 08-troubleshooting/01-boot-repair.md
@@ -125,6 +135,8 @@ nav:
       - 磁盘爆满与句柄耗尽: 08-troubleshooting/03-disk-full.md
       - CPU / 内存异常定位: 08-troubleshooting/04-cpu-memory.md
       - 灾难恢复与系统迁移: 08-troubleshooting/05-disaster-recovery-migration.md
+      - 内核与启动恢复深化: 08-troubleshooting/06-kernel-boot-remote-recovery.md
+      - 事故响应与取证: 08-troubleshooting/07-incident-response.md
   - 09 网站搭建、域名与应用部署:
       - 09-web-hosting/index.md
       - 域名解析与网络连接: 09-web-hosting/01-dns-resolution.md
@@ -150,6 +162,7 @@ nav:
       - Redis 与 Sentinel 高可用: 11-databases/07-redis.md
       - MongoDB 安装与调优: 11-databases/08-mongodb.md
       - 容器化数据库与主从复制: 11-databases/09-ha-containerized.md
+      - 高可用实战与恢复演练: 11-databases/10-ha-recovery-drills.md
   - 12 硬件、虚拟化与私有云:
       - 12-virtualization/index.md
       - GPU 与 CUDA: 12-virtualization/01-gpu-cuda.md

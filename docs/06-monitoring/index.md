@@ -14,6 +14,8 @@ description: "Ubuntu Server 系统监控、日志与性能调优：htop/btop/gla
 | 第 2 章 | 02-prometheus-grafana.md | 用 Prometheus 加 Grafana 搭建带告警的企业级监控栈 |
 | 第 3 章 | 03-logging-stack.md | 用 Loki 加 Vector 集中收集日志并规划保留与磁盘 |
 | 第 4 章 | 04-kernel-tuning.md | 用 sysctl、Governor、zram 做有依据可回滚的内核调优 |
+| 第 5 章 | 05-observability-alerting.md | 从指标、日志、追踪三支柱看全系统，并把告警的分级、抑制与升级治理好 |
+| 第 6 章 | 06-capacity-log-governance.md | 用趋势数据做容量规划，用上限与轮转策略管住日志膨胀 |
 
 ## 推荐阅读顺序
 

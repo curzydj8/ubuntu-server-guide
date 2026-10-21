@@ -15,6 +15,7 @@ description: "Ubuntu Server 网络服务与核心架构：BIND9/dnsmasq DNS 服�
 | 第 3 章 | [03-vpn-tunnel.md](03-vpn-tunnel.md) | 用 WireGuard 打点对点加密隧道，再用 Tailscale 解决无公网 IP 时的异地组网。 |
 | 第 4 章 | [04-time-logging.md](04-time-logging.md) | 用 Chrony 对齐全网时间（含时间同步深化：选型、漂移与对 TLS、复制、Kerberos 的连锁影响），用 rsyslog 与 journald 把日志收齐、留存并查得动。 |
 | 第 5 章 | [05-dnssec-advanced.md](05-dnssec-advanced.md) | DNS 进阶：分清权威/递归/缓存三角色，逐行拆解区域文件，用 DNSSEC 给解析结果加上可验证的签名，并安全完成记录迁移。 |
+| 第 6 章 | [06-haproxy.md](06-haproxy.md) | 用 HAProxy 做四层/七层负载均衡：健康检查、故障摘除、连接排空与统计面安全。 |
 
 ## 推荐阅读顺序
 

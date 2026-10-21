@@ -62,17 +62,17 @@ description: "Ubuntu Server 终极指南与实战教程：从安装、安全加�
 
 | 部分 | 主题 | 章节 |
 | --- | --- | --- |
-| 01 | 基础入门与安装 | 版本与 Lifecycle、系统安装、网络初始化、包管理、云初始化与 Autoinstall |
-| 02 | 系统安全与权限管理 | SSH 加固、用户/Sudo/PAM、防火墙、入侵防御、企业身份认证、CIS 基线审计、自动安全更新 |
-| 03 | 磁盘、文件系统与存储 | LVM、ZFS/Btrfs、挂载共享（含 Samba 深化）、备份 |
-| 04 | 网络服务与核心架构 | DNS、DNSSEC 进阶、Web/反代、VPN 隧道、时间与日志（含时间同步深化） |
-| 05 | 容器化与云原生 | Docker、Podman、k3s/microk8s |
-| 06 | 监控、日志与调优 | CLI 工具、Prometheus/Grafana、日志栈、内核调优 |
-| 07 | 自动化运维与脚本 | Shell 规范、Systemd Timers、Ansible |
-| 08 | 故障排查与应急响应 | 启动修复、网络排查、磁盘爆满、性能定位 |
+| 01 | 基础入门与安装 | 版本与 Lifecycle、系统安装、网络初始化、包管理、云初始化与 Autoinstall、系统升级与生命周期、多架构 |
+| 02 | 系统安全与权限管理 | SSH 加固、用户/Sudo/PAM、防火墙、入侵防御、企业身份认证、CIS 基线审计、自动安全更新、证书生命周期、秘密管理 |
+| 03 | 磁盘、文件系统与存储 | LVM、ZFS/Btrfs、挂载共享（含 Samba 深化）、备份、硬件健康检查 |
+| 04 | 网络服务与核心架构 | DNS、DNSSEC 进阶、Web/反代、VPN 隧道、时间与日志（含时间同步深化）、HAProxy 负载均衡 |
+| 05 | 容器化与云原生 | Docker、Podman、k3s/microk8s、供应链安全 |
+| 06 | 监控、日志与调优 | CLI 工具、Prometheus/Grafana、日志栈、内核调优、可观测性与告警治理、容量与日志治理 |
+| 07 | 自动化运维与脚本 | Shell 规范、Systemd Timers、Ansible、服务工程化与漂移检测 |
+| 08 | 故障排查与应急响应 | 启动修复、网络排查、磁盘爆满、性能定位、灾难恢复、内核启动恢复、事故响应 |
 | 09 | 网站搭建、域名与应用部署 | 域名解析、宝塔面板、LNMP/LAMP、Docker 应用、HTTPS 证书、邮件服务器 |
 | 10 | 游戏服务器部署与端口映射 | 端口三重门、游戏服务端、性能守护、内网穿透 |
-| 11 | 数据库安装、管理与高可用 | MySQL/MariaDB、PostgreSQL、Redis、MongoDB、主从与备份恢复 |
+| 11 | 数据库安装、管理与高可用 | MySQL/MariaDB、PostgreSQL、Redis、MongoDB、主从与备份恢复、HA 实战与恢复演练 |
 | 12 | 硬件、虚拟化与私有云 | GPU/CUDA、KVM/QEMU/PVE、直通与 SR-IOV |
 | 13 | AI 工具与智能化运维 | 本地大模型、AI CLI 安全边界、IaC 与 GitOps |
 | 14 | SSH 专题：连接、密钥与隧道 | 原理与安装、连接与配置、密钥与 Agent、传输与远程执行、隧道与跳板机、排错与加固 |
