@@ -127,3 +127,54 @@
 
 - 发布通道：Git Database API 增量建树推送（main 源码 + gh-pages 构建产物），逐 blob SHA 断言、推后递归 tree 与本地全量比对。本节定稿时推送执行中，最终 commit ID 以仓库历史为准，并由本期交付回报给出（main / gh-pages 双 commit 均已在回报中列明）；Pages 状态以 API 查询 `built` 为准。
 - CI 首跑修复（2026-10-21）：首轮 Actions（run 39569371392）中 Markdown 格式校验（79 项：MD001/012/022/029/031/032）与脚本冒烟（shellcheck SC1091）两 Job 红；未改 ci.yml 与 .markdownlint.json，仅修内容文件——速查三章与 changelog 条目标题 ### → ##（slug 不变、锚点无损）、SSH 章列表缩进修复、全文空行机械修复、两脚本在 `. /etc/os-release` 上方加 `# shellcheck disable=SC1091`。本地复验 markdownlint 0 error、shellcheck exit 0；修复后 Actions run 39572377654 结论 success，五 Job（MkDocs 构建 / 死链扫描 / Markdown 校验 / 脚本冒烟 ×22.04 与 24.04）全绿。
+
+## 第二期扩展报告（v7.0，2026-10-21）
+
+### 一、审计基线与范围
+
+- 动手前远程 HEAD：main `cd843c08bacf10fa88428de378a659aeb8aabf46`、gh-pages `6aa26e57d9705abf5a147949851c7770916ea22b`。
+- 范围：扩展清单第二期「生产深度专题」，共 13 个新章，全部挂现有部分（01/02/03/04/05/06/07/08/11），未新建大部、未动 CI 配置与 lint 规则。
+
+### 二、新增文件（13 章，磁盘字节数）
+
+- `docs/01-basics/06-release-upgrade-lifecycle.md`（29,277）：do-release-upgrade 全流程与前置检查、Prompt 通道、第三方源/PPA 升级时禁用与逐个恢复、EOL/ESM、Ubuntu Pro、Livepatch；如实说明发行版升级无官方回滚，回退只靠快照/备份。
+- `docs/01-basics/07-multiarch.md`（14,876）：x86-64 与 ARM64 差异、dpkg 架构与多架构支持、容器镜像 manifest/buildx、qemu-user 边界与排坑。
+- `docs/02-security/08-certificate-lifecycle.md`（27,909）：证书链结构、私钥权限与存放、续期失败处置、吊销 CRL/OCSP、密钥轮换、到期监控脚本加 systemd timer；与 09 部分 HTTPS 签发章互链分工。
+- `docs/02-security/09-secrets-management.md`（21,926）：凭据分类与反模式、EnvironmentFile 边界、LoadCredential、Vault/KMS/SOPS 选型、轮换五步、泄露应急；与 13 部分 AI 凭据章互链。
+- `docs/03-storage/05-hardware-health.md`（14,978）：SMART/NVMe 健康判读、smartd、ECC 与 rasdaemon、温度、mdadm 状态、换盘流程衔接。
+- `docs/04-network/06-haproxy.md`：HAProxy 完整配置逐段讲解、主动健康检查、故障摘除、Runtime API 连接排空、统计页安全（danger 标注）、与 Nginx 反代分工、TLS 终止与证书章互链。
+- `docs/05-containers/04-supply-chain-security.md`（23,382）：digest 锁定、cosign 签名、syft SBOM、trivy/grype 扫描实操、基础镜像更新与回滚、provenance 说明。
+- `docs/06-monitoring/05-observability-alerting.md`（19,992）：指标/日志/追踪三支柱、OpenTelemetry 与 Collector 最小配置、COS 与现有 Prometheus/Grafana 章分工、告警抑制/分组/升级、postmortem 模板。
+- `docs/06-monitoring/06-capacity-log-governance.md`（20,965）：容量增长预测、journald 上限逐行讲解、logrotate、远程日志回链、敏感数据脱敏规范。
+- `docs/07-automation/04-systemd-engineering-drift.md`（27,784）：unit 依赖语义、重启策略、WatchdogSec、资源限制、完整 unit 示例；Ansible 加 Git 的漂移检查（--check --diff）与回滚；与 07-03、13-03、02-09 互链。
+- `docs/08-troubleshooting/06-kernel-boot-remote-recovery.md`（23,976）：GRUB 旧内核启动、initramfs 重建、DKMS 失败处置、kdump 要点；远程失联分级处置（云控制台、串口、救援模式、带外 IPMI）。
+- `docs/08-troubleshooting/07-incident-response.md`（20,835）：SEV 分级、止血与证据保全取舍、时间线模板、dd 取证 danger 标注、全量凭据轮换清单、复盘模板；与 8.5 灾难恢复章互链。
+- `docs/11-databases/10-ha-recovery-drills.md`（23,971）：仲裁 quorum 与见证、fencing/STONITH、脑裂成因与防护、Pacemaker/Corosync 最小示例、DRBD 概念、切换与回切检查表、PG PITR 到新主机演练、复制延迟双口径判读、备份一致性三关；与 11-04/06/09 互链不重复。
+
+### 三、集成改动
+
+- `mkdocs.yml`：nav 新增 13 条，全部挂现有部分。
+- 部分导览：01/02/03/04/05/06/07/08/11 共 9 个 index.md 按现有格式加行或条目。
+- `docs/index.md`：内容地图 9 行同步更新。
+- `docs/compatibility.md`：逐章表新增 13 行；新增内容 22.04/24.04 标「文档核对」、26.04 标「待核验」，口径与前两期一致。
+- `docs/changelog.md`：新增 v7.0 条目段与版本表行。
+
+### 四、自动化检查结果
+
+- `npx markdownlint-cli2 "docs/**/*.md"`：111 个文件 0 issues（未改 ci.yml、未放宽 .markdownlint.json）。
+- `mkdocs build`：成功，零内容警告。
+- Shell 语法：13 个新章共 157 个 bash 代码块全部 `bash -n` 通过（0 失败）。
+- 搜索索引：构建后 1423 条；新关键词命中——Livepatch 10、HAProxy 17、OpenTelemetry 2、cosign 6、fencing 7、kdump 3；新页构建产物含侧边导航与上一篇/下一篇页脚。
+- 线上抽查（Pages built 后）：HAProxy 章、系统升级与版本生命周期章、数据库高可用实战章三页均可访问且内容完整。
+
+### 五、如实项与已知缺口
+
+- 13 个新章全部为「文档核对」级别：命令与配置按官方文档核对整理，未在本机实测，章内均已如实标注。
+- 26.04 全部新内容为「待核验」：zhang-new2（Ubuntu 26.04.1）SSH 链路仍未恢复，本期未做任何 26.04 实机冒烟；兼容页口径与全站一致。
+- Pacemaker 最小示例只演示资源与约束写法，章内已标注不可直接上生产。
+
+### 六、发布状态
+
+- 发布通道：Git Database API 增量建树推送（main 源码 + gh-pages 构建产物），逐文件 SHA 比对。
+- main 新提交 `77929ee34bcba9efd55f607bb26b4c37efe4e534`（125 文件，VERIFY PASS）；gh-pages 新提交 `5cdace42abffdb6fb1945d59c8c0ba61365f377b`（161 文件，VERIFY PASS）；Pages API 状态 built。
+- CI：main 77929ee3 触发的 Actions run 39575166218 结论 success（五 Job 全绿）；pages 部署 run 39575718811 结论 success。本报告补推后以最新一轮 CI 结论为终验。
