@@ -1,3 +1,7 @@
+---
+description: "很多优秀应用官方直接提供 Docker 镜像，部署工作就简化为写一份 docker-compose.yml、准备好数据目录、起一个反向代理。"
+---
+
 # Docker 部署常用应用
 
 ## 一、概述与使用场景
