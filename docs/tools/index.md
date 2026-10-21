@@ -129,19 +129,31 @@ function bindCopy(btnId, outId, msgId) {
     });
   });
 }
-["np-iface", "np-dhcp", "np-ip", "np-gw", "np-dns"].forEach(function (id) {
-  document.getElementById(id).addEventListener("input", npGenerate);
-  document.getElementById(id).addEventListener("change", npGenerate);
-});
-document.querySelectorAll(".ufw-preset").forEach(function (el) {
-  el.addEventListener("change", ufwGenerate);
-});
-["ufw-port", "ufw-proto", "ufw-src"].forEach(function (id) {
-  document.getElementById(id).addEventListener("input", ufwGenerate);
-  document.getElementById(id).addEventListener("change", ufwGenerate);
-});
-bindCopy("np-copy", "np-out", "np-msg");
-bindCopy("ufw-copy", "ufw-out", "ufw-msg");
-npGenerate();
-ufwGenerate();
+function initGuideTools() {
+  var out = document.getElementById("np-out");
+  if (!out || out.getAttribute("data-ready") === "1") {
+    return;
+  }
+  out.setAttribute("data-ready", "1");
+  ["np-iface", "np-dhcp", "np-ip", "np-gw", "np-dns"].forEach(function (id) {
+    document.getElementById(id).addEventListener("input", npGenerate);
+    document.getElementById(id).addEventListener("change", npGenerate);
+  });
+  document.querySelectorAll(".ufw-preset").forEach(function (el) {
+    el.addEventListener("change", ufwGenerate);
+  });
+  ["ufw-port", "ufw-proto", "ufw-src"].forEach(function (id) {
+    document.getElementById(id).addEventListener("input", ufwGenerate);
+    document.getElementById(id).addEventListener("change", ufwGenerate);
+  });
+  bindCopy("np-copy", "np-out", "np-msg");
+  bindCopy("ufw-copy", "ufw-out", "ufw-msg");
+  npGenerate();
+  ufwGenerate();
+}
+if (window.document$ && typeof document$.subscribe === "function") {
+  document$.subscribe(initGuideTools);
+}
+document.addEventListener("DOMContentLoaded", initGuideTools);
+initGuideTools();
 </script>
