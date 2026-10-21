@@ -285,6 +285,62 @@
          <lastmod>2026-10-21</lastmod>
     </url>
     <url>
+         <loc>https://curzydj8.github.io/ubuntu-server-guide/14-ssh/</loc>
+         <lastmod>2026-10-21</lastmod>
+    </url>
+    <url>
+         <loc>https://curzydj8.github.io/ubuntu-server-guide/14-ssh/01-principles-install/</loc>
+         <lastmod>2026-10-21</lastmod>
+    </url>
+    <url>
+         <loc>https://curzydj8.github.io/ubuntu-server-guide/14-ssh/02-connect-config/</loc>
+         <lastmod>2026-10-21</lastmod>
+    </url>
+    <url>
+         <loc>https://curzydj8.github.io/ubuntu-server-guide/14-ssh/03-keys-agent/</loc>
+         <lastmod>2026-10-21</lastmod>
+    </url>
+    <url>
+         <loc>https://curzydj8.github.io/ubuntu-server-guide/14-ssh/04-transfer-remote-exec/</loc>
+         <lastmod>2026-10-21</lastmod>
+    </url>
+    <url>
+         <loc>https://curzydj8.github.io/ubuntu-server-guide/14-ssh/05-tunnels-jump/</loc>
+         <lastmod>2026-10-21</lastmod>
+    </url>
+    <url>
+         <loc>https://curzydj8.github.io/ubuntu-server-guide/14-ssh/06-troubleshooting-hardening/</loc>
+         <lastmod>2026-10-21</lastmod>
+    </url>
+    <url>
+         <loc>https://curzydj8.github.io/ubuntu-server-guide/15-command-reference/</loc>
+         <lastmod>2026-10-21</lastmod>
+    </url>
+    <url>
+         <loc>https://curzydj8.github.io/ubuntu-server-guide/15-command-reference/01-files-permissions/</loc>
+         <lastmod>2026-10-21</lastmod>
+    </url>
+    <url>
+         <loc>https://curzydj8.github.io/ubuntu-server-guide/15-command-reference/02-packages-services/</loc>
+         <lastmod>2026-10-21</lastmod>
+    </url>
+    <url>
+         <loc>https://curzydj8.github.io/ubuntu-server-guide/15-command-reference/03-network-diagnostics/</loc>
+         <lastmod>2026-10-21</lastmod>
+    </url>
+    <url>
+         <loc>https://curzydj8.github.io/ubuntu-server-guide/15-command-reference/04-disk-process/</loc>
+         <lastmod>2026-10-21</lastmod>
+    </url>
+    <url>
+         <loc>https://curzydj8.github.io/ubuntu-server-guide/15-command-reference/05-text-archive/</loc>
+         <lastmod>2026-10-21</lastmod>
+    </url>
+    <url>
+         <loc>https://curzydj8.github.io/ubuntu-server-guide/15-command-reference/06-scheduling-containers-more/</loc>
+         <lastmod>2026-10-21</lastmod>
+    </url>
+    <url>
          <loc>https://curzydj8.github.io/ubuntu-server-guide/tools/</loc>
          <lastmod>2026-10-21</lastmod>
     </url>

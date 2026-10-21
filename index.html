@@ -6,7 +6,7 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="Ubuntu Server 终极指南与实战教程：从安装、安全加固、存储网络、容器监控到数据库、虚拟化与 AI 运维，13 个部分、开箱即用的完整命令，适配 Ubuntu 22.04 / 24.04 LTS。">
+        <meta name="description" content="Ubuntu Server 终极指南与实战教程：从安装、安全加固、存储网络、容器监控到数据库、虚拟化、AI 运维与 SSH 专题，15 个部分、开箱即用的完整命令，适配 Ubuntu 22.04 / 24.04 LTS。">
       
       
         <meta name="author" content="火星极客">
@@ -73,12 +73,12 @@
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Ubuntu Server 终极指南与实战教程">
   <meta property="og:title" content="Ubuntu Server 终极指南与实战教程">
-  <meta property="og:description" content="Ubuntu Server 终极指南与实战教程：从安装、安全加固、存储网络、容器监控到数据库、虚拟化与 AI 运维，13 个部分、开箱即用的完整命令，适配 Ubuntu 22.04 / 24.04 LTS。">
+  <meta property="og:description" content="Ubuntu Server 终极指南与实战教程：从安装、安全加固、存储网络、容器监控到数据库、虚拟化、AI 运维与 SSH 专题，15 个部分、开箱即用的完整命令，适配 Ubuntu 22.04 / 24.04 LTS。">
   <meta property="og:url" content="https://curzydj8.github.io/ubuntu-server-guide/">
   <meta property="og:image" content="https://curzydj8.github.io/ubuntu-server-guide/assets/og-image.png">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Ubuntu Server 终极指南与实战教程">
-  <meta name="twitter:description" content="Ubuntu Server 终极指南与实战教程：从安装、安全加固、存储网络、容器监控到数据库、虚拟化与 AI 运维，13 个部分、开箱即用的完整命令，适配 Ubuntu 22.04 / 24.04 LTS。">
+  <meta name="twitter:description" content="Ubuntu Server 终极指南与实战教程：从安装、安全加固、存储网络、容器监控到数据库、虚拟化、AI 运维与 SSH 专题，15 个部分、开箱即用的完整命令，适配 Ubuntu 22.04 / 24.04 LTS。">
   <meta name="twitter:image" content="https://curzydj8.github.io/ubuntu-server-guide/assets/og-image.png">
 
   </head>
@@ -565,6 +565,50 @@
     
   
   13 AI 工具与智能化运维
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="14-ssh/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  14 SSH 专题：连接、密钥与隧道
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="15-command-reference/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  15 Linux 命令速查手册
 
         </a>
       </li>
@@ -3418,6 +3462,514 @@
   
   
   
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_16" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="14-ssh/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    14 SSH 专题：连接、密钥与隧道
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_16" id="__nav_16_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_16_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_16">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    14 SSH 专题：连接、密钥与隧道
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="14-ssh/01-principles-install/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SSH 原理与服务端安装
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="14-ssh/02-connect-config/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    连接与客户端配置
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="14-ssh/03-keys-agent/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    密钥、Agent 与轮换
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="14-ssh/04-transfer-remote-exec/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    文件传输与远程执行
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="14-ssh/05-tunnels-jump/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    隧道与跳板机
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="14-ssh/06-troubleshooting-hardening/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    故障排查与安全加固要点
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_17" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="15-command-reference/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    15 Linux 命令速查手册
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_17" id="__nav_17_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_17_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_17">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    15 Linux 命令速查手册
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="15-command-reference/01-files-permissions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    文件与权限速查
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="15-command-reference/02-packages-services/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    软件包与服务速查
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="15-command-reference/03-network-diagnostics/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    网络诊断速查
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="15-command-reference/04-disk-process/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    磁盘与进程速查
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="15-command-reference/05-text-archive/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    文本与归档速查
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="15-command-reference/06-scheduling-containers-more/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    定时、容器与系统速查
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
     <li class="md-nav__item">
       <a href="tools/" class="md-nav__link">
         
@@ -3595,6 +4147,7 @@
 <p>日常维护与架构搭建：</p>
 <ul>
 <li>安全基线：<a href="02-security/02-users-sudo-pam/">用户与 Sudo</a> → <a href="02-security/03-firewall/">防火墙</a> → <a href="02-security/04-defense/">入侵防御</a></li>
+<li>SSH 实战：<a href="14-ssh/">SSH 专题</a>——连接、密钥、隧道与排错（服务端加固见第 02 部分）；命令忘了查 <a href="15-command-reference/">Linux 命令速查手册</a></li>
 <li>存储：<a href="03-storage/01-lvm/">LVM</a> → <a href="03-storage/02-zfs-btrfs/">ZFS/Btrfs</a> → <a href="03-storage/04-backup/">备份</a></li>
 <li>服务：<a href="04-network/01-dns/">DNS</a> → <a href="04-network/02-web-proxy/">Web 与反向代理</a> → <a href="04-network/03-vpn-tunnel/">VPN 组网</a></li>
 </ul>
@@ -3700,9 +4253,19 @@
 <td>AI 工具与智能化运维</td>
 <td>本地大模型、AI CLI 安全边界、IaC 与 GitOps</td>
 </tr>
+<tr>
+<td>14</td>
+<td>SSH 专题：连接、密钥与隧道</td>
+<td>原理与安装、连接与配置、密钥与 Agent、传输与远程执行、隧道与跳板机、排错与加固</td>
+</tr>
+<tr>
+<td>15</td>
+<td>Linux 命令速查手册</td>
+<td>文件权限、软件包服务、网络诊断、磁盘进程、文本归档、定时容器系统</td>
+</tr>
 </tbody>
 </table>
-<p>另有：<a href="tools/">互动工具</a>（Netplan / UFW 在线生成器）与<a href="changelog/">更新日志</a>。</p>
+<p>另有：<a href="tools/">互动工具</a>（Netplan / UFW / SSH 在线生成器）与<a href="changelog/">更新日志</a>。</p>
 <h2 id="_4">与旧教程的关系<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h2>
 <p>站长此前维护了一套偏桌面与远程控制场景的 <a href="https://github.com/curzydj8/ubuntu-server-tutorial">Ubuntu Server 教程（旧版）</a>（安装、桌面环境、Python、远程桌面、模拟键鼠等）。本指南是面向<strong>服务器运维</strong>的新体系：结构更完整、模板更严格、深度对标生产环境。两者互补——需要图形桌面与远程自动化场景时查旧版，需要服务器全栈能力时查本指南。</p>
 <div class="admonition note">
