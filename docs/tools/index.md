@@ -1,10 +1,10 @@
 ---
-description: "互动工具：九个纯前端小工具——Netplan、UFW、SSH、子网计算、Cron、systemd unit、Nginx 反代、Docker Compose 与 LVM 扩容，填表实时生成可直接复制的配置与命令，纯前端运行、不上传任何数据。"
+description: "互动工具：十五个纯前端小工具——Netplan、UFW、SSH、子网计算、Cron、systemd unit、Nginx 反代、Docker Compose、LVM 扩容、TLS 证书解析、权限计算、Hash 计算、版本比较、Docker 资源换算与 HTTP 状态码查询，填表实时生成可直接复制的配置与命令，纯前端运行、不上传任何数据。"
 ---
 
 # 互动工具
 
-九个纯前端小工具：在浏览器里填表，实时生成可复制的配置与命令，**不上传任何数据**。本站工具只在浏览器本地生成文本，**不连接任何服务器、也不执行任何命令**；生成结果请先在目标机上核对、审阅、验证后再使用，不要把「生成成功」当成「已在真实服务器验证」。
+十五个纯前端小工具：在浏览器里填表或粘贴，实时生成可复制的配置与命令、或在本地完成解析计算，**不上传任何数据**。本站工具只在浏览器本地运行，**不连接任何服务器、也不执行任何命令**；生成结果请先在目标机上核对、审阅、验证后再使用，不要把「生成成功」当成「已在真实服务器验证」。
 
 !!! warning "使用前必读"
 
@@ -645,7 +645,40 @@ description: "互动工具：九个纯前端小工具——Netplan、UFW、SSH�
     - 扩容前先确认备份可恢复（见 [磁盘健康与备份](../03-storage/04-backup.md)）；每扩一步先看检查命令的输出，容量对不上立刻停下，不要连着往下跑。
     - LVM 概念与完整操作见 [LVM 动态卷管理](../03-storage/01-lvm.md)。
 
-## SSL 证书有效期检查（速查卡）
+## TLS 证书检查与续期计算
+
+把一张证书的 PEM 文本粘贴进来，即可在本地解析出有效期、签发者、SAN、指纹与剩余天数，并按场景生成续期检查命令。解析全程在本机浏览器完成，不上传。
+
+!!! danger "只粘贴证书，绝不要粘贴私钥"
+
+    - 本工具只有证书输入框，**没有也不需要私钥输入**：证书是公开信息，私钥一旦粘贴进任何网页就应视为已泄露。
+    - 若粘贴内容里检出 `PRIVATE KEY` 块，工具会立即拒绝并警告。
+    - 本工具只做**证书解析**（读字段与有效期），**不做证书链验证与吊销检查**；「解析成功」不等于「证书可信」，可信与否以浏览器/系统的链验证为准。
+
+<div>
+  <p>
+    <textarea id="cert-pem" rows="8" style="width: 100%;" placeholder="-----BEGIN CERTIFICATE----- 粘贴证书 PEM（只有 CERTIFICATE 块，不要带私钥）"></textarea>
+  </p>
+  <p>
+    <label>域名（生成命令用，可留空，留空时取证书 SAN 的第一个 DNS 名）
+      <input type="text" id="cert-domain" value="">
+    </label>
+    <label>续期场景
+      <select id="cert-scene">
+        <option value="online" selected>在线检查（openssl / curl 查公网证书）</option>
+        <option value="certbot">Certbot 续期演练</option>
+        <option value="acme">acme.sh 续期</option>
+      </select>
+    </label>
+  </p>
+  <div id="cert-err" style="display: none; border: 1px solid #c62828; background: rgba(198, 40, 40, 0.10); padding: 0.6em 0.9em; margin: 0.6em 0;"></div>
+  <pre id="cert-out" style="white-space: pre; overflow-x: auto;"></pre>
+  <p><button type="button" id="cert-copy">复制结果</button> <span id="cert-msg"></span></p>
+</div>
+
+剩余天数分级与下方速查卡一致：**大于 30 天**正常；**15–30 天**确认自动续期在跑；**小于 15 天**立即手动续期并排查自动续期为何没生效；**已过期**先恢复站点可用再复盘。
+
+### 命令行速查卡（不粘贴证书时）
 
 不用登录服务器，在任意装有 openssl 或 curl 的机器上就能查公网证书的到期时间：
 
@@ -663,6 +696,149 @@ curl -sv https://example.com --output /dev/null 2>&1 | grep -iE 'expire|start da
 - `-servername` 不能省：同一 IP 上托管多个站点（SNI）时，不带它查到的可能是默认站点的证书。
 - 剩余时间阈值建议：**大于 30 天**正常；**15–30 天**确认自动续期在跑；**小于 15 天**立即手动续期并排查自动续期为何没生效；**已过期**先恢复站点可用再复盘。
 - 续期机制与到期监控见 [证书与密钥生命周期](../02-security/08-certificate-lifecycle.md)，certbot / acme.sh 签发与自动续期见 [HTTPS 自动化证书](../09-web-hosting/05-https-certificates.md)。
+
+## Linux 权限计算器
+
+勾选权限位或直接填八进制，两边实时同步；下方同时算出指定 umask 下新建文件与目录的默认权限。
+
+<div>
+  <p>
+    属主：
+    <label><input type="checkbox" id="perm-o-r" checked> 读 r</label>
+    <label><input type="checkbox" id="perm-o-w" checked> 写 w</label>
+    <label><input type="checkbox" id="perm-o-x"> 执行 x</label>
+    属组：
+    <label><input type="checkbox" id="perm-g-r" checked> 读 r</label>
+    <label><input type="checkbox" id="perm-g-w"> 写 w</label>
+    <label><input type="checkbox" id="perm-g-x"> 执行 x</label>
+    其他：
+    <label><input type="checkbox" id="perm-t-r" checked> 读 r</label>
+    <label><input type="checkbox" id="perm-t-w"> 写 w</label>
+    <label><input type="checkbox" id="perm-t-x"> 执行 x</label>
+  </p>
+  <p>
+    特殊位：
+    <label><input type="checkbox" id="perm-suid"> setuid</label>
+    <label><input type="checkbox" id="perm-sgid"> setgid</label>
+    <label><input type="checkbox" id="perm-sticky"> sticky</label>
+  </p>
+  <p>
+    <label>八进制 <input type="text" id="perm-oct" value="644"></label>
+    <label>umask <input type="text" id="perm-umask" value="022"></label>
+  </p>
+  <div id="perm-err" style="display: none; border: 1px solid #c62828; background: rgba(198, 40, 40, 0.10); padding: 0.6em 0.9em; margin: 0.6em 0;"></div>
+  <pre id="perm-out" style="white-space: pre; overflow-x: auto;"></pre>
+  <p><button type="button" id="perm-copy">复制结果</button> <span id="perm-msg"></span></p>
+</div>
+
+!!! note "最常见的两个误解"
+
+    - 目录的 `r` 只够列出文件名；没有 `x` 就不能进入目录、也访问不了其中文件的元数据——给目录只授 `r` 是最常见的权限误配。
+    - 给普通文件 `777` 等于任何人可改可执行，是「图省事」式高危授权；先按属主/属组/其他三段最小授权，再考虑 ACL 做细粒度补充。本工具只算基础权限位，ACL 与能力（capabilities）不在此列。
+
+## Hash 计算器
+
+对文本或本地文件计算 SHA-256 / SHA-512，可与预期哈希比对。文件只在本机浏览器内分块读取，**不上传**。
+
+<div>
+  <p>
+    <textarea id="hash-text" rows="3" style="width: 100%;" placeholder="输入要计算摘要的文本（选了文件时以文件为准）"></textarea>
+  </p>
+  <p>
+    <label>本地文件 <input type="file" id="hash-file"></label>
+    <label>算法
+      <select id="hash-algo">
+        <option value="SHA-256" selected>SHA-256</option>
+        <option value="SHA-512">SHA-512</option>
+      </select>
+    </label>
+  </p>
+  <p>
+    <label>预期哈希（可选，用于比对） <input type="text" id="hash-expect" value="" style="width: 32em;"></label>
+  </p>
+  <div id="hash-err" style="display: none; border: 1px solid #c62828; background: rgba(198, 40, 40, 0.10); padding: 0.6em 0.9em; margin: 0.6em 0;"></div>
+  <pre id="hash-out" style="white-space: pre; overflow-x: auto;"></pre>
+  <p><button type="button" id="hash-copy">复制结果</button> <span id="hash-msg"></span></p>
+</div>
+
+!!! warning "摘要对得上，不等于来源可信"
+
+    哈希相同只证明两份内容逐字节一致；攻击者完全可以连同伪造的哈希一起发布。判断来源可信要配合官方签名（如 GPG 签名）或官网公布的指纹二次核对，不要把「对上了」当成「是官方正版」。
+
+## 版本号比较器
+
+输入两个版本号，判定大小并给出逐段比较过程。SemVer 与 Debian/Ubuntu 包版本是两套不同规则，用模式切换，不要混用结论。
+
+<div>
+  <p>
+    <label>版本号 A <input type="text" id="ver-a" value="1.2.3"></label>
+    <label>版本号 B <input type="text" id="ver-b" value="1.3.0"></label>
+    <label>规则
+      <select id="ver-mode">
+        <option value="semver" selected>SemVer（语义化版本）</option>
+        <option value="debian">Debian / Ubuntu 包版本</option>
+      </select>
+    </label>
+  </p>
+  <div id="ver-err" style="display: none; border: 1px solid #c62828; background: rgba(198, 40, 40, 0.10); padding: 0.6em 0.9em; margin: 0.6em 0;"></div>
+  <pre id="ver-out" style="white-space: pre; overflow-x: auto;"></pre>
+  <p><button type="button" id="ver-copy">复制结果</button> <span id="ver-msg"></span></p>
+</div>
+
+!!! note "两套规则的关键差异"
+
+    - SemVer：`主.次.修订` 全数字逐段比较；带 `-alpha` 等预发布后缀的版本**小于**同号正式版；`+构建元数据` 不参与比较。
+    - Debian：先比 epoch（冒号前数字），再按 dpkg 规则比上游版本与修订号；波浪号 `~` 排在一切字符（包括结尾）之前，所以 `1.0~beta1 < 1.0`。
+    - 无法解析的格式会明确报错，不会用字符串排序糊弄——字符串排序会把 `10.0` 排在 `2.0` 前面，是版本比较最常见的坑。
+
+## Docker 资源换算器
+
+把 `--cpus`、CPU 权重与内存/存储上限换算成字节与各单位，并生成 `docker run` 与 Compose 的可复制片段。
+
+<div>
+  <p>
+    <label>CPU 上限（核数，可小数） <input type="text" id="dres-cpus" value="1.5"></label>
+    <label>CPU 权重 shares <input type="text" id="dres-shares" value="1024"></label>
+  </p>
+  <p>
+    <label>内存上限（如 1.5G / 512M / 2048K） <input type="text" id="dres-mem" value="1.5G"></label>
+    <label>存储配额（GB，可留空） <input type="text" id="dres-storage" value=""></label>
+  </p>
+  <div id="dres-err" style="display: none; border: 1px solid #c62828; background: rgba(198, 40, 40, 0.10); padding: 0.6em 0.9em; margin: 0.6em 0;"></div>
+  <pre id="dres-out" style="white-space: pre; overflow-x: auto;"></pre>
+  <p><button type="button" id="dres-copy">复制结果</button> <span id="dres-msg"></span></p>
+</div>
+
+!!! warning "限制不是保证"
+
+    资源限制（limits）只封顶、不预留：容器不会因为写了 `--memory 2g` 就被保证分到 2G；要预留请另看 reservations 与 `--memory-reservation`。Docker Desktop（Mac/Windows）还有一层虚拟机总配额，语义与 Linux 原生不同；存储配额依赖 overlay2 + XFS pquota，不是所有环境都生效。
+
+## HTTP 状态码查询
+
+输入状态码看含义、常见原因与排查命令；或留空按类别浏览常用状态码。数据与本站排障章节口径一致（502/504 见反向代理章、301/403/404 见网站接入章）。
+
+<div>
+  <p>
+    <label>状态码 <input type="text" id="http-code" value="502"></label>
+    <label>浏览类别
+      <select id="http-class">
+        <option value="all" selected>全部</option>
+        <option value="1">1xx 信息</option>
+        <option value="2">2xx 成功</option>
+        <option value="3">3xx 重定向</option>
+        <option value="4">4xx 客户端错误</option>
+        <option value="5">5xx 服务器错误</option>
+      </select>
+    </label>
+  </p>
+  <div id="http-err" style="display: none; border: 1px solid #c62828; background: rgba(198, 40, 40, 0.10); padding: 0.6em 0.9em; margin: 0.6em 0;"></div>
+  <div id="http-out" style="white-space: pre-wrap; border: 1px solid rgba(128, 128, 128, 0.35); padding: 0.6em 0.9em; overflow-x: auto;"></div>
+  <p><button type="button" id="http-copy">复制结果</button> <span id="http-msg"></span></p>
+</div>
+
+!!! note "状态码只是症状，不是结论"
+
+    同一个 502 可能是后端没启动、端口写错或后端崩溃；先按排查命令定界（代理能不能连上后端、后端本机是否可达），再动配置。
 
 <div id="copy-toast" style="display: none; position: fixed; left: 50%; bottom: 1.4em; transform: translateX(-50%); z-index: 9999; max-width: 92vw; background: #b71c1c; color: #fff; padding: 0.7em 1.1em; border-radius: 4px; box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35); opacity: 0; transition: opacity 0.3s;">粘贴到服务器前请先逐行审阅，并确认已保留回滚通道。</div>
 
@@ -2282,6 +2458,951 @@ function initLvmGen() {
   bindCopy("lvm-copy", "lvm-out", "lvm-msg");
   lvmGenerate();
 }
+function bytesHex(bytes) {
+  var s = "";
+  for (var i = 0; i < bytes.length; i++) {
+    var h = bytes[i].toString(16);
+    s += (h.length < 2 ? "0" : "") + h;
+  }
+  return s;
+}
+function b64DecodeStrict(s) {
+  var clean = s.replace(/\s+/g, "");
+  if (!clean || clean.length % 4 !== 0 || !/^[A-Za-z0-9+/]*={0,2}$/.test(clean)) {
+    throw new Error("Base64 内容不完整或含非法字符");
+  }
+  var table = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
+  var out = [];
+  for (var i = 0; i < clean.length; i += 4) {
+    var c0 = table.indexOf(clean.charAt(i));
+    var c1 = table.indexOf(clean.charAt(i + 1));
+    var p2 = clean.charAt(i + 2), p3 = clean.charAt(i + 3);
+    var c2 = p2 === "=" ? 0 : table.indexOf(p2);
+    var c3 = p3 === "=" ? 0 : table.indexOf(p3);
+    var n = (c0 << 18) | (c1 << 12) | (c2 << 6) | c3;
+    out.push((n >> 16) & 255);
+    if (p2 !== "=") { out.push((n >> 8) & 255); }
+    if (p3 !== "=") { out.push(n & 255); }
+  }
+  return new Uint8Array(out);
+}
+var CERT_RDN_NAMES = { "2.5.4.3": "CN", "2.5.4.5": "serialNumber", "2.5.4.6": "C", "2.5.4.7": "L", "2.5.4.8": "ST", "2.5.4.10": "O", "2.5.4.11": "OU", "1.2.840.113549.1.9.1": "emailAddress" };
+var CERT_SIGALG_NAMES = {
+  "1.2.840.113549.1.1.4": "md5WithRSAEncryption（MD5 已不安全）",
+  "1.2.840.113549.1.1.5": "sha1WithRSAEncryption（SHA-1 已弃用）",
+  "1.2.840.113549.1.1.11": "sha256WithRSAEncryption",
+  "1.2.840.113549.1.1.12": "sha384WithRSAEncryption",
+  "1.2.840.113549.1.1.13": "sha512WithRSAEncryption",
+  "1.2.840.113549.1.1.10": "RSASSA-PSS",
+  "1.2.840.10045.4.1": "ecdsa-with-SHA1（已弃用）",
+  "1.2.840.10045.4.3.2": "ecdsa-with-SHA256",
+  "1.2.840.10045.4.3.3": "ecdsa-with-SHA384",
+  "1.2.840.10045.4.3.4": "ecdsa-with-SHA512",
+  "1.3.101.112": "Ed25519",
+  "1.3.101.113": "Ed448"
+};
+function derTlv(buf, off) {
+  if (off + 2 > buf.length) { throw new Error("DER 数据不完整"); }
+  var tag = buf[off];
+  if ((tag & 0x1f) === 0x1f) { throw new Error("遇到多字节标签，无法解析"); }
+  var lb = buf[off + 1];
+  var len, hdr = 2;
+  if (lb === 0x80) { throw new Error("DER 不定长形式不受支持"); }
+  if (lb > 0x80) {
+    var n = lb - 0x80;
+    if (n > 4 || off + 2 + n > buf.length) { throw new Error("DER 长度字段非法"); }
+    len = 0;
+    for (var i = 0; i < n; i++) { len = len * 256 + buf[off + 2 + i]; }
+    hdr = 2 + n;
+  } else { len = lb; }
+  if (off + hdr + len > buf.length) { throw new Error("DER 长度超出数据范围"); }
+  return { tag: tag, head: off, start: off + hdr, len: len, end: off + hdr + len };
+}
+function derKids(buf, tlv) {
+  var list = [], off = tlv.start;
+  while (off < tlv.end) {
+    var t = derTlv(buf, off);
+    list.push(t);
+    off = t.end;
+  }
+  if (off !== tlv.end) { throw new Error("DER 内部结构长度对不齐"); }
+  return list;
+}
+function derOidStr(buf, tlv) {
+  if (tlv.len < 1) { throw new Error("OID 内容为空"); }
+  var vals = [], idx = tlv.start, end = tlv.end;
+  while (idx < end) {
+    var v = 0, b;
+    do {
+      if (idx >= end) { throw new Error("OID 编码不完整"); }
+      b = buf[idx]; idx++;
+      v = v * 128 + (b & 0x7f);
+    } while (b & 0x80);
+    vals.push(v);
+  }
+  var first = vals[0], head;
+  if (first < 40) { head = [0, first]; } else if (first < 80) { head = [1, first - 40]; } else { head = [2, first - 80]; }
+  return head.concat(vals.slice(1)).join(".");
+}
+function derText(buf, tlv) {
+  var bytes = buf.subarray(tlv.start, tlv.end), s = "", i;
+  if (tlv.tag === 0x1e) {
+    for (i = 0; i + 1 < bytes.length; i += 2) { s += String.fromCharCode(bytes[i] * 256 + bytes[i + 1]); }
+    return s;
+  }
+  if (tlv.tag === 0x14) {
+    for (i = 0; i < bytes.length; i++) { s += String.fromCharCode(bytes[i]); }
+    return s;
+  }
+  return new TextDecoder("utf-8").decode(bytes);
+}
+function derTimeMs(buf, tlv) {
+  var s = "", i;
+  for (i = tlv.start; i < tlv.end; i++) { s += String.fromCharCode(buf[i]); }
+  var m, year, g;
+  if (tlv.tag === 0x17) {
+    m = /^(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})?(Z|[+-]\d{4})$/.exec(s);
+    if (!m) { throw new Error("UTCTime 无法解析：" + s); }
+    var yy = parseInt(m[1], 10);
+    year = yy < 50 ? 2000 + yy : 1900 + yy;
+    g = [m[2], m[3], m[4], m[5], m[6] || "00", m[7]];
+  } else if (tlv.tag === 0x18) {
+    m = /^(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})?(Z|[+-]\d{4})$/.exec(s);
+    if (!m) { throw new Error("GeneralizedTime 无法解析：" + s); }
+    year = parseInt(m[1], 10);
+    g = [m[2], m[3], m[4], m[5], m[6] || "00", m[7]];
+  } else { throw new Error("有效期字段不是时间类型"); }
+  var ms = Date.UTC(year, parseInt(g[0], 10) - 1, parseInt(g[1], 10), parseInt(g[2], 10), parseInt(g[3], 10), parseInt(g[4], 10));
+  var tz = g[5];
+  if (tz !== "Z") {
+    var sign = tz.charAt(0) === "+" ? 1 : -1;
+    var offMin = parseInt(tz.slice(1, 3), 10) * 60 + parseInt(tz.slice(3, 5), 10);
+    ms -= sign * offMin * 60000;
+  }
+  return ms;
+}
+function derAlgName(buf, algTlv) {
+  var kids = derKids(buf, algTlv);
+  var oid = derOidStr(buf, kids[0]);
+  return CERT_SIGALG_NAMES[oid] || ("未知算法（OID " + oid + "）");
+}
+function derNameStr(buf, nameTlv) {
+  var parts = [];
+  derKids(buf, nameTlv).forEach(function (setT) {
+    derKids(buf, setT).forEach(function (ava) {
+      var kv = derKids(buf, ava);
+      if (kv.length < 2) { return; }
+      var oid = derOidStr(buf, kv[0]);
+      var label = CERT_RDN_NAMES[oid] || oid;
+      var val;
+      try { val = derText(buf, kv[1]); } catch (e) { val = "(无法解码)"; }
+      parts.push(label + "=" + val);
+    });
+  });
+  return parts.join(", ");
+}
+function derSerialHex(buf, intTlv) {
+  var bytes = buf.subarray(intTlv.start, intTlv.end);
+  var start = (bytes.length > 1 && bytes[0] === 0) ? 1 : 0;
+  var hex = "";
+  for (var i = start; i < bytes.length; i++) {
+    var h = bytes[i].toString(16);
+    hex += (h.length < 2 ? "0" : "") + h;
+  }
+  return hex.toUpperCase();
+}
+function certParseDer(der) {
+  var top = derTlv(der, 0);
+  if (top.tag !== 0x30) { throw new Error("顶层不是 SEQUENCE，可能不是 X.509 证书"); }
+  var parts = derKids(der, top);
+  if (parts.length !== 3) { throw new Error("证书应由 3 段组成，实际 " + parts.length + " 段"); }
+  var tbs = derKids(der, parts[0]);
+  var i = 0, version = 1;
+  if (tbs.length && tbs[0].tag === 0xa0) {
+    var vt = derTlv(der, tbs[0].start);
+    var vb = der.subarray(vt.start, vt.end), vv = 0, k;
+    for (k = 0; k < vb.length; k++) { vv = vv * 256 + vb[k]; }
+    version = vv + 1;
+    i = 1;
+  }
+  if (tbs.length < i + 6) { throw new Error("TBSCertificate 字段不完整"); }
+  var serial = derSerialHex(der, tbs[i]); i++;
+  i++;
+  var issuerT = tbs[i]; var issuer = derNameStr(der, tbs[i]); i++;
+  var validity = derKids(der, tbs[i]); i++;
+  if (validity.length !== 2) { throw new Error("有效期字段不完整"); }
+  var notBefore = derTimeMs(der, validity[0]);
+  var notAfter = derTimeMs(der, validity[1]);
+  var subjectT = tbs[i]; var subject = derNameStr(der, tbs[i]); i++;
+  i++;
+  var sans = [];
+  for (; i < tbs.length; i++) {
+    if (tbs[i].tag !== 0xa3) { continue; }
+    var extSeq = derTlv(der, tbs[i].start);
+    derKids(der, extSeq).forEach(function (ext) {
+      var f = derKids(der, ext);
+      if (f.length < 2) { return; }
+      var oid = derOidStr(der, f[0]);
+      if (oid !== "2.5.29.17") { return; }
+      var valT = f[f.length - 1];
+      var inner = derTlv(der, valT.start);
+      derKids(der, inner).forEach(function (gn) {
+        var raw = der.subarray(gn.start, gn.end), txt = "", q;
+        if (gn.tag === 0x87) {
+          if (raw.length === 4) { sans.push("IP: " + raw[0] + "." + raw[1] + "." + raw[2] + "." + raw[3]); }
+          else if (raw.length === 16) {
+            var gs = [];
+            for (q = 0; q < 16; q += 2) { gs.push(raw[q] * 256 + raw[q + 1]); }
+            sans.push("IP: " + ipv6Compress(gs));
+          }
+          return;
+        }
+        for (q = 0; q < raw.length; q++) { txt += String.fromCharCode(raw[q]); }
+        if (gn.tag === 0x82) { sans.push("DNS: " + txt); }
+        else if (gn.tag === 0x81) { sans.push("邮箱: " + txt); }
+        else if (gn.tag === 0x86) { sans.push("URI: " + txt); }
+      });
+    });
+  }
+  var selfSigned = bytesHex(der.subarray(issuerT.head, issuerT.end)) === bytesHex(der.subarray(subjectT.head, subjectT.end));
+  return {
+    version: version, serial: serial, sigAlg: derAlgName(der, parts[1]),
+    issuer: issuer, subject: subject, selfSigned: selfSigned,
+    notBefore: notBefore, notAfter: notAfter, sans: sans
+  };
+}
+function certFmtTime(ms) {
+  var d = new Date(ms);
+  function p(n) { return (n < 10 ? "0" : "") + n; }
+  return d.getUTCFullYear() + "-" + p(d.getUTCMonth() + 1) + "-" + p(d.getUTCDate()) + " " + p(d.getUTCHours()) + ":" + p(d.getUTCMinutes()) + ":" + p(d.getUTCSeconds()) + " UTC";
+}
+function certGenerate() {
+  var out = document.getElementById("cert-out");
+  if (!out) { return; }
+  var errBox = document.getElementById("cert-err");
+  function fail(msg) {
+    errBox.style.display = "block";
+    errBox.textContent = "输入有误：" + msg;
+    out.textContent = "# 请先修正上面的输入";
+  }
+  var pem = document.getElementById("cert-pem").value;
+  if (!pem.replace(/\s+/g, "")) {
+    errBox.style.display = "none";
+    out.textContent = "# 把证书 PEM 粘贴到上方文本框，这里会显示解析结果（有效期 / 签发者 / SAN / 指纹 / 剩余天数）";
+    return;
+  }
+  if (/PRIVATE KEY/.test(pem)) {
+    fail("检测到 PRIVATE KEY 内容：私钥绝不能粘贴到任何网页工具里。请只粘贴证书（CERTIFICATE 块）；若这段私钥曾在别处公开，应视为已泄露并立即更换。");
+    return;
+  }
+  var m = /-----BEGIN CERTIFICATE-----([\s\S]*?)-----END CERTIFICATE-----/.exec(pem);
+  if (!m) {
+    fail("没有找到 -----BEGIN CERTIFICATE----- 块，请粘贴完整的 PEM 证书（只含证书，不要私钥）。");
+    return;
+  }
+  var domain = document.getElementById("cert-domain").value.trim();
+  if (domain && !ngxValidDomain(domain)) {
+    fail("域名格式不正确（如 example.com）。");
+    return;
+  }
+  var der;
+  try { der = b64DecodeStrict(m[1]); } catch (e) { fail("证书 Base64 解码失败：" + e.message); return; }
+  var info;
+  try { info = certParseDer(der); } catch (e) { fail("证书解析失败：" + e.message); return; }
+  if (!window.crypto || !crypto.subtle || !crypto.subtle.digest) {
+    fail("当前环境不支持 SubtleCrypto（需要 HTTPS 页面），无法计算指纹。");
+    return;
+  }
+  var scene = document.getElementById("cert-scene").value;
+  crypto.subtle.digest("SHA-256", der).then(function (buf) {
+    var fp = bytesHex(new Uint8Array(buf)).toUpperCase().replace(/(..)(?=.)/g, "$1:");
+    var now = Date.now();
+    var days = Math.floor((info.notAfter - now) / 86400000);
+    var lines = [];
+    lines.push("主体（Subject）：" + (info.subject || "(空)"));
+    lines.push("签发者（Issuer）：" + (info.issuer || "(空)") + (info.selfSigned ? "（与主体相同：自签证书）" : ""));
+    lines.push("序列号：" + info.serial);
+    lines.push("版本：v" + info.version);
+    lines.push("签名算法：" + info.sigAlg);
+    lines.push("生效时间：" + certFmtTime(info.notBefore));
+    lines.push("到期时间：" + certFmtTime(info.notAfter));
+    if (info.notBefore > now) {
+      lines.push("剩余天数：尚未生效（还有 " + Math.ceil((info.notBefore - now) / 86400000) + " 天生效）");
+    } else if (info.notAfter <= now) {
+      lines.push("剩余天数：已过期 " + Math.abs(days) + " 天（⚠ 立即续期，并排查自动续期为何失效）");
+    } else {
+      var grade = days > 30 ? "正常" : (days >= 15 ? "请确认自动续期在跑" : "⚠ 小于 15 天：立即手动续期并排查自动续期");
+      lines.push("剩余天数：" + days + " 天（" + grade + "）");
+    }
+    lines.push("SAN（使用者别名）：");
+    if (info.sans.length) {
+      info.sans.forEach(function (s) { lines.push("  - " + s); });
+    } else {
+      lines.push("  （无 SAN 扩展）");
+    }
+    lines.push("SHA-256 指纹：" + fp);
+    lines.push("");
+    lines.push("# 边界说明：本工具只解析证书字段，不做证书链验证与吊销检查；");
+    lines.push("# 解析成功不等于证书可信，可信与否以浏览器 / 系统的链验证结果为准。");
+    lines.push("");
+    var d = domain, q;
+    if (!d) {
+      for (q = 0; q < info.sans.length; q++) {
+        if (info.sans[q].indexOf("DNS: ") === 0) { d = info.sans[q].slice(5); break; }
+      }
+      if (d) { lines.push("# 续期命令的域名取自证书 SAN 的第一个 DNS 名：" + d); }
+      else { d = "example.com"; lines.push("# 未填域名且证书无 DNS SAN，命令中的 example.com 请替换为你的域名"); }
+    }
+    lines.push("# 续期检查命令（按所选场景生成）：");
+    if (scene === "certbot") {
+      lines.push("sudo certbot certificates");
+      lines.push("sudo certbot renew --dry-run");
+    } else if (scene === "acme") {
+      lines.push("~/.acme.sh/acme.sh --list");
+      lines.push("~/.acme.sh/acme.sh --renew -d " + d + " --ecc");
+    } else {
+      lines.push("echo | openssl s_client -connect " + d + ":443 -servername " + d + " 2>/dev/null | openssl x509 -noout -dates -subject -issuer");
+      lines.push("curl -sv https://" + d + " --output /dev/null 2>&1 | grep -iE 'expire|start date'");
+    }
+    errBox.style.display = "none";
+    out.textContent = lines.join("\n");
+  }, function () { fail("指纹计算失败：SubtleCrypto 调用异常。"); });
+}
+var PERM_BIT_IDS = [["perm-o-r", 256], ["perm-o-w", 128], ["perm-o-x", 64], ["perm-g-r", 32], ["perm-g-w", 16], ["perm-g-x", 8], ["perm-t-r", 4], ["perm-t-w", 2], ["perm-t-x", 1], ["perm-suid", 2048], ["perm-sgid", 1024], ["perm-sticky", 512]];
+var permModeVal = 420;
+function permSymbolic(mode) {
+  var chars = ["---", "--x", "-w-", "-wx", "r--", "r-x", "rw-", "rwx"];
+  var s = chars[(mode >> 6) & 7] + chars[(mode >> 3) & 7] + chars[mode & 7];
+  if (mode & 2048) { s = s.substring(0, 2) + ((mode & 64) ? "s" : "S") + s.substring(3); }
+  if (mode & 1024) { s = s.substring(0, 5) + ((mode & 8) ? "s" : "S") + s.substring(6); }
+  if (mode & 512) { s = s.substring(0, 8) + ((mode & 1) ? "t" : "T"); }
+  return s;
+}
+function permOctStr(mode) {
+  var s = mode.toString(8);
+  var want = mode > 511 ? 4 : 3;
+  while (s.length < want) { s = "0" + s; }
+  return s;
+}
+function permClassText(mode, shift) {
+  var b = (mode >> shift) & 7;
+  var t = ((b & 4) ? "r" : "-") + ((b & 2) ? "w" : "-") + ((b & 1) ? "x" : "-");
+  var words = [(b & 4) ? "可读" : "不可读", (b & 2) ? "可写" : "不可写", (b & 1) ? "可执行" : "不可执行"];
+  return t + "（" + words.join("、") + "）";
+}
+function permFail(msg) {
+  var errBox = document.getElementById("perm-err");
+  var out = document.getElementById("perm-out");
+  errBox.style.display = "block";
+  errBox.textContent = "输入有误：" + msg;
+  out.textContent = "# 请先修正上面的输入";
+}
+function permRender() {
+  var out = document.getElementById("perm-out");
+  if (!out) { return; }
+  var umRaw = document.getElementById("perm-umask").value.trim();
+  if (!/^[0-7]{3,4}$/.test(umRaw)) {
+    permFail("umask 必须是 3–4 位八进制数字（如 022）");
+    return;
+  }
+  var um = parseInt(umRaw, 8);
+  var mode = permModeVal;
+  var fileM = 438 & ~um;
+  var dirM = 511 & ~um;
+  var lines = [];
+  lines.push("八进制：" + permOctStr(mode) + (mode > 511 ? "（最高位是特殊位：setuid/setgid/sticky）" : ""));
+  lines.push("符号表示：" + permSymbolic(mode));
+  lines.push("属主（user）：" + permClassText(mode, 6));
+  lines.push("属组（group）：" + permClassText(mode, 3));
+  lines.push("其他（other）：" + permClassText(mode, 0));
+  if (mode & 2048) { lines.push("特殊位 setuid：执行该文件时以文件属主身份运行——只给极少数系统程序，普通文件不要加"); }
+  if (mode & 1024) { lines.push("特殊位 setgid：文件执行时以属组身份运行；目录上表示目录内新建文件继承目录属组"); }
+  if (mode & 512) { lines.push("特殊位 sticky：主要用在目录上——目录内文件只有属主能删（如 /tmp）"); }
+  lines.push("");
+  lines.push("umask " + umRaw + " 下的新建默认权限：");
+  lines.push("  普通文件：0666 & ~umask = " + permOctStr(fileM) + "（" + permSymbolic(fileM) + "）");
+  lines.push("  目录　　：0777 & ~umask = " + permOctStr(dirM) + "（" + permSymbolic(dirM) + "）");
+  lines.push("");
+  if (mode & 2) {
+    lines.push("⚠ 其他人可写（o+w）：任何本地用户都能修改这个文件/目录——给普通文件 777 是最常见的权限错误，生产环境不要这样设。");
+  }
+  var missing = [];
+  if (!(dirM & 64)) { missing.push("属主"); }
+  if (!(dirM & 8)) { missing.push("属组"); }
+  if (!(dirM & 1)) { missing.push("其他"); }
+  if (missing.length) {
+    lines.push("提示：当前 umask 下新建目录缺少 x 位的类别：" + missing.join("、") + "。目录没有 x 就不能进入（cd 失败）、也无法访问其中文件的元数据；目录的 r 只够列出文件名。");
+  } else {
+    lines.push("提示：目录的 x 位是「进入并访问其中文件」的前提，只给目录 r 不给 x 是常见误解。");
+  }
+  lines.push("说明：本工具只算基础权限位；ACL（getfacl/setfacl）与 capabilities 不在此列。");
+  document.getElementById("perm-err").style.display = "none";
+  out.textContent = lines.join("\n");
+}
+function permFromBoxes() {
+  var v = 0;
+  PERM_BIT_IDS.forEach(function (p) {
+    var el = document.getElementById(p[0]);
+    if (el && el.checked) { v += p[1]; }
+  });
+  permModeVal = v;
+  var octEl = document.getElementById("perm-oct");
+  if (octEl) { octEl.value = permOctStr(v); }
+  permRender();
+}
+function permFromOct() {
+  var raw = document.getElementById("perm-oct").value.trim();
+  if (!/^[0-7]{3,4}$/.test(raw)) {
+    permFail("八进制必须是 3–4 位 0–7 数字（如 644 或 4755）");
+    return;
+  }
+  permModeVal = parseInt(raw, 8);
+  PERM_BIT_IDS.forEach(function (p) {
+    var el = document.getElementById(p[0]);
+    if (el) { el.checked = (permModeVal & p[1]) !== 0; }
+  });
+  permRender();
+}
+function hashNormalizeExpect(raw, algo) {
+  var s = raw.replace(/[\s:]/g, "").toLowerCase();
+  if (!s) { return ""; }
+  var want = algo === "SHA-512" ? 128 : 64;
+  if (!/^[0-9a-f]+$/.test(s) || s.length !== want) { return null; }
+  return s;
+}
+function hashShowResult(algo, hexLower, sourceDesc) {
+  var out = document.getElementById("hash-out");
+  var lines = [];
+  lines.push("算法：" + algo);
+  lines.push("来源：" + sourceDesc);
+  lines.push("摘要：" + hexLower);
+  var expect = hashNormalizeExpect(document.getElementById("hash-expect").value, algo);
+  if (expect) {
+    lines.push(expect === hexLower
+      ? "与预期比对：一致 ✔"
+      : "与预期比对：不一致 ✘ —— 内容可能损坏、被替换，或预期值填错；先停下核对来源，不要直接使用");
+  }
+  lines.push("说明：摘要相同只证明两份内容逐字节一致，不证明来源可信；来源可信要配合官方签名或发布页公布的指纹核对。");
+  out.textContent = lines.join("\n");
+}
+function hashReadAll(file, done, failCb) {
+  var chunks = [], off = 0, CHUNK = 262144;
+  function step() {
+    if (off >= file.size) {
+      var total = 0, i;
+      for (i = 0; i < chunks.length; i++) { total += chunks[i].length; }
+      var all = new Uint8Array(total), pos = 0;
+      for (i = 0; i < chunks.length; i++) { all.set(chunks[i], pos); pos += chunks[i].length; }
+      done(all);
+      return;
+    }
+    var part = file.slice(off, Math.min(off + CHUNK, file.size));
+    part.arrayBuffer().then(function (ab) {
+      chunks.push(new Uint8Array(ab));
+      off += CHUNK;
+      step();
+    }, failCb);
+  }
+  step();
+}
+function hashRun() {
+  var out = document.getElementById("hash-out");
+  if (!out) { return; }
+  var errBox = document.getElementById("hash-err");
+  function fail(msg) {
+    errBox.style.display = "block";
+    errBox.textContent = "输入有误：" + msg;
+    out.textContent = "# 请先修正上面的输入";
+  }
+  var algo = document.getElementById("hash-algo").value;
+  var expectRaw = document.getElementById("hash-expect").value;
+  if (expectRaw.replace(/\s+/g, "") && hashNormalizeExpect(expectRaw, algo) === null) {
+    fail("预期哈希格式不对：应为 " + (algo === "SHA-512" ? 128 : 64) + " 位十六进制（可带空格或冒号分隔）");
+    return;
+  }
+  if (!window.crypto || !crypto.subtle || !crypto.subtle.digest) {
+    fail("当前环境不支持 SubtleCrypto（需要 HTTPS 页面），无法计算摘要。");
+    return;
+  }
+  errBox.style.display = "none";
+  var fileEl = document.getElementById("hash-file");
+  var file = (fileEl && fileEl.files && fileEl.files.length) ? fileEl.files[0] : null;
+  if (file) {
+    out.textContent = "# 正在本地读取文件并计算…";
+    hashReadAll(file, function (bytes) {
+      crypto.subtle.digest(algo, bytes).then(function (buf) {
+        hashShowResult(algo, bytesHex(new Uint8Array(buf)), "文件 " + file.name + "（" + file.size + " 字节，本地分块读取、未上传）");
+      }, function () { fail("摘要计算失败"); });
+    }, function () { fail("文件读取失败"); });
+    return;
+  }
+  var text = document.getElementById("hash-text").value;
+  if (!text) {
+    out.textContent = "# 请输入文本或选择本地文件";
+    return;
+  }
+  var bytes = new TextEncoder().encode(text);
+  crypto.subtle.digest(algo, bytes).then(function (buf) {
+    hashShowResult(algo, bytesHex(new Uint8Array(buf)), "文本输入（UTF-8 共 " + bytes.length + " 字节）");
+  }, function () { fail("摘要计算失败"); });
+}
+function verParseSem(s) {
+  var raw = s;
+  s = s.trim();
+  if (!s) { return { error: "版本号不能为空" }; }
+  if (s.charAt(0) === "v" || s.charAt(0) === "V") { s = s.slice(1); }
+  var build = null, bi = s.indexOf("+");
+  if (bi >= 0) { build = s.slice(bi + 1); s = s.slice(0, bi); }
+  var pre = null, pi = s.indexOf("-");
+  if (pi >= 0) { pre = s.slice(pi + 1); s = s.slice(0, pi); }
+  if (!s) { return { error: "缺少主版本部分" }; }
+  var segs = s.split(".");
+  if (segs.length > 3) { return { error: "主版本段数超过 3（SemVer 只允许 主.次.修订）" }; }
+  var nums = [], warn = [], i;
+  for (i = 0; i < segs.length; i++) {
+    if (!/^\d+$/.test(segs[i])) { return { error: "主版本第 " + (i + 1) + " 段「" + segs[i] + "」不是数字，无法按 SemVer 解析" }; }
+    if (segs[i].length > 1 && segs[i].charAt(0) === "0") { warn.push("第 " + (i + 1) + " 段「" + segs[i] + "」含前导零，非严格 SemVer，按数值比较"); }
+    nums.push(parseInt(segs[i], 10));
+  }
+  var padded = false;
+  while (nums.length < 3) { nums.push(0); padded = true; }
+  var preIds = null;
+  if (pre !== null) {
+    if (pre === "") { return { error: "预发布部分（- 之后）为空" }; }
+    preIds = pre.split(".");
+    for (i = 0; i < preIds.length; i++) {
+      if (!/^[0-9A-Za-z-]+$/.test(preIds[i])) { return { error: "预发布标识「" + preIds[i] + "」含非法字符" }; }
+    }
+  }
+  return { nums: nums, pre: preIds, build: build, warn: warn, padded: padded };
+}
+function verCmpSem(a, b, steps) {
+  var names = ["主版本", "次版本", "修订号"], i;
+  for (i = 0; i < 3; i++) {
+    if (a.nums[i] !== b.nums[i]) {
+      steps.push(names[i] + "：" + a.nums[i] + (a.nums[i] > b.nums[i] ? " > " : " < ") + b.nums[i] + "，胜负已定");
+      return a.nums[i] > b.nums[i] ? 1 : -1;
+    }
+  }
+  steps.push("主版本三段相同（" + a.nums.join(".") + "）");
+  if (a.pre === null && b.pre === null) { steps.push("两边都无预发布后缀"); return 0; }
+  if (a.pre === null) { steps.push("A 无预发布后缀、B 有：正式版大于预发布版"); return 1; }
+  if (b.pre === null) { steps.push("B 无预发布后缀、A 有：正式版大于预发布版"); return -1; }
+  var n = Math.min(a.pre.length, b.pre.length), k;
+  for (k = 0; k < n; k++) {
+    var x = a.pre[k], y = b.pre[k];
+    if (x === y) { continue; }
+    var xn = /^\d+$/.test(x), yn = /^\d+$/.test(y);
+    if (xn && yn) {
+      var xi = parseInt(x, 10), yi = parseInt(y, 10);
+      if (xi !== yi) {
+        steps.push("预发布第 " + (k + 1) + " 段同为数字：" + xi + (xi > yi ? " > " : " < ") + yi);
+        return xi > yi ? 1 : -1;
+      }
+      continue;
+    }
+    if (xn !== yn) {
+      steps.push("预发布第 " + (k + 1) + " 段：数字标识小于字母标识");
+      return xn ? -1 : 1;
+    }
+    steps.push("预发布第 " + (k + 1) + " 段按 ASCII 比较：「" + x + "」" + (x > y ? " > " : " < ") + "「" + y + "」");
+    return x > y ? 1 : -1;
+  }
+  if (a.pre.length !== b.pre.length) {
+    steps.push("预发布前段全同，段数多的一方更大");
+    return a.pre.length > b.pre.length ? 1 : -1;
+  }
+  steps.push("预发布部分完全相同");
+  return 0;
+}
+function debParseVer(s) {
+  var raw = s;
+  s = s.trim();
+  if (!s) { return { error: "版本号不能为空" }; }
+  if (!/^[A-Za-z0-9.+~:-]+$/.test(s)) { return { error: "含 Debian 版本规则之外的字符" }; }
+  var epoch = 0, rest = s, ci = s.indexOf(":");
+  if (ci >= 0) {
+    var e = s.slice(0, ci);
+    if (!/^\d+$/.test(e)) { return { error: "冒号前的 epoch 必须是数字" }; }
+    epoch = parseInt(e, 10);
+    rest = s.slice(ci + 1);
+    if (!rest) { return { error: "epoch 之后不能为空" }; }
+  }
+  var di = rest.lastIndexOf("-");
+  var upstream = di >= 0 ? rest.slice(0, di) : rest;
+  var revision = di >= 0 ? rest.slice(di + 1) : "";
+  if (!upstream) { return { error: "上游版本部分为空" }; }
+  if (!/^\d/.test(upstream)) { return { error: "Debian 上游版本必须以数字开头" }; }
+  return { epoch: epoch, upstream: upstream, revision: revision, text: raw.trim() };
+}
+function debOrder(ch) {
+  if (ch === "~") { return -1; }
+  if (ch === "") { return 0; }
+  var c = ch.charCodeAt(0);
+  if (c >= 48 && c <= 57) { return 0; }
+  if ((c >= 65 && c <= 90) || (c >= 97 && c <= 122)) { return c; }
+  return c + 256;
+}
+function debCmpPart(a, b) {
+  var i = 0, j = 0;
+  function isDig(ch) { return ch >= "0" && ch <= "9"; }
+  while (i < a.length || j < b.length) {
+    var firstDiff = 0;
+    while ((i < a.length && !isDig(a.charAt(i))) || (j < b.length && !isDig(b.charAt(j)))) {
+      var oa = debOrder(i < a.length ? a.charAt(i) : "");
+      var ob = debOrder(j < b.length ? b.charAt(j) : "");
+      if (oa !== ob) { return oa < ob ? -1 : 1; }
+      if (i < a.length) { i++; }
+      if (j < b.length) { j++; }
+    }
+    while (i < a.length && a.charAt(i) === "0") { i++; }
+    while (j < b.length && b.charAt(j) === "0") { j++; }
+    while (i < a.length && j < b.length && isDig(a.charAt(i)) && isDig(b.charAt(j))) {
+      if (!firstDiff) { firstDiff = a.charCodeAt(i) - b.charCodeAt(j); }
+      i++; j++;
+    }
+    if (i < a.length && isDig(a.charAt(i))) { return 1; }
+    if (j < b.length && isDig(b.charAt(j))) { return -1; }
+    if (firstDiff) { return firstDiff < 0 ? -1 : 1; }
+  }
+  return 0;
+}
+function verGenerate() {
+  var out = document.getElementById("ver-out");
+  if (!out) { return; }
+  var errBox = document.getElementById("ver-err");
+  function fail(msg) {
+    errBox.style.display = "block";
+    errBox.textContent = "输入有误：" + msg;
+    out.textContent = "# 请先修正上面的输入";
+  }
+  var aRaw = document.getElementById("ver-a").value;
+  var bRaw = document.getElementById("ver-b").value;
+  var mode = document.getElementById("ver-mode").value;
+  var lines = [];
+  if (mode === "debian") {
+    var da = debParseVer(aRaw), db = debParseVer(bRaw);
+    if (da.error) { fail("版本号 A：" + da.error); return; }
+    if (db.error) { fail("版本号 B：" + db.error); return; }
+    lines.push("规则：Debian / Ubuntu 包版本（dpkg 算法）");
+    lines.push("A = epoch " + da.epoch + "，上游 " + da.upstream + "，修订 " + (da.revision === "" ? "(无)" : da.revision));
+    lines.push("B = epoch " + db.epoch + "，上游 " + db.upstream + "，修订 " + (db.revision === "" ? "(无)" : db.revision));
+    var cmp;
+    if (da.epoch !== db.epoch) {
+      lines.push("比较过程：epoch " + da.epoch + (da.epoch > db.epoch ? " > " : " < ") + db.epoch + "，胜负已定（epoch 优先于一切）");
+      cmp = da.epoch > db.epoch ? 1 : -1;
+    } else {
+      var cu = debCmpPart(da.upstream, db.upstream);
+      if (cu !== 0) {
+        lines.push("比较过程：epoch 相同，上游版本 " + da.upstream + (cu > 0 ? " > " : " < ") + db.upstream + "，胜负已定");
+        cmp = cu;
+      } else {
+        var cr = debCmpPart(da.revision, db.revision);
+        lines.push("比较过程：epoch 与上游版本都相同，比修订号 " + (da.revision || "(无)") + (cr === 0 ? " = " : (cr > 0 ? " > " : " < ")) + (db.revision || "(无)"));
+        cmp = cr;
+      }
+    }
+    lines.push("结论：" + aRaw.trim() + (cmp > 0 ? " > " : (cmp < 0 ? " < " : " = ")) + bRaw.trim() + (cmp === 0 ? "（优先级相同）" : "（" + (cmp > 0 ? "A" : "B") + " 更新，升级时后装）"));
+    lines.push("提醒：Debian 规则里 ~ 排在一切之前（1.0~beta1 < 1.0）；这套结论不能套用到 SemVer 软件上。");
+  } else {
+    var pa = verParseSem(aRaw), pb = verParseSem(bRaw);
+    if (pa.error) { fail("版本号 A：" + pa.error); return; }
+    if (pb.error) { fail("版本号 B：" + pb.error); return; }
+    var steps = [];
+    var cmp2 = verCmpSem(pa, pb, steps);
+    lines.push("规则：SemVer（语义化版本）");
+    lines.push("比较过程：");
+    steps.forEach(function (s) { lines.push("  - " + s); });
+    lines.push("结论：" + aRaw.trim() + (cmp2 > 0 ? " > " : (cmp2 < 0 ? " < " : " = ")) + bRaw.trim() + (cmp2 === 0 ? "（优先级相同）" : "（" + (cmp2 > 0 ? "A" : "B") + " 更新）"));
+    if (pa.padded || pb.padded) { lines.push("注：不足三段的版本号已按 SemVer 惯例补 0（如 1.2 视为 1.2.0）。"); }
+    pa.warn.concat(pb.warn).forEach(function (w) { lines.push("注：" + w); });
+    if (pa.build !== null || pb.build !== null) { lines.push("注：构建元数据（+ 之后的部分）不参与 SemVer 优先级比较。"); }
+    if (cmp2 === 0 && aRaw.trim() !== bRaw.trim()) { lines.push("注：两边优先级相同但写法不同（补零 / 构建元数据 / 前缀 v 的差异），不要当成两个不同版本。"); }
+  }
+  errBox.style.display = "none";
+  out.textContent = lines.join("\n");
+}
+function dresParseMem(raw) {
+  var m = /^(\d+(?:\.\d+)?)\s*([bBkKmMgG])?$/.exec(raw.trim());
+  if (!m) { return null; }
+  var v = parseFloat(m[1]);
+  var unit = (m[2] || "b").toLowerCase();
+  var mult = { b: 1, k: 1024, m: 1048576, g: 1073741824 }[unit];
+  return Math.round(v * mult);
+}
+function dresHuman(bytes) {
+  var units = [["GiB", 1073741824], ["MiB", 1048576], ["KiB", 1024]], i;
+  for (i = 0; i < units.length; i++) {
+    if (bytes >= units[i][1]) {
+      var v = Math.round(bytes / units[i][1] * 100) / 100;
+      return v + " " + units[i][0];
+    }
+  }
+  return bytes + " B";
+}
+function dresComposeMem(bytes) {
+  if (bytes % 1073741824 === 0) { return (bytes / 1073741824) + "g"; }
+  if (bytes % 1048576 === 0) { return (bytes / 1048576) + "m"; }
+  if (bytes % 1024 === 0) { return (bytes / 1024) + "k"; }
+  return String(bytes);
+}
+function dresGenerate() {
+  var out = document.getElementById("dres-out");
+  if (!out) { return; }
+  var errBox = document.getElementById("dres-err");
+  var errs = [];
+  var cpusRaw = document.getElementById("dres-cpus").value.trim();
+  var sharesRaw = document.getElementById("dres-shares").value.trim();
+  var memRaw = document.getElementById("dres-mem").value.trim();
+  var storageRaw = document.getElementById("dres-storage").value.trim();
+  var cpus = null, shares = null, memBytes = null, storageGB = null;
+  if (cpusRaw) {
+    if (!/^\d+(\.\d+)?$/.test(cpusRaw)) { errs.push("CPU 上限必须是数字（如 0.5、1.5、4）"); }
+    else {
+      cpus = parseFloat(cpusRaw);
+      if (cpus <= 0 || cpus > 512) { errs.push("CPU 上限应在 0–512 核之间"); }
+    }
+  }
+  if (sharesRaw) {
+    if (!/^\d+$/.test(sharesRaw)) { errs.push("CPU 权重必须是整数"); }
+    else {
+      shares = parseInt(sharesRaw, 10);
+      if (!(shares === 0 || (shares >= 2 && shares <= 262144))) { errs.push("CPU 权重应为 0（默认）或 2–262144"); }
+    }
+  }
+  if (memRaw) {
+    memBytes = dresParseMem(memRaw);
+    if (memBytes === null || memBytes <= 0) { errs.push("内存上限格式不对，应如 512M、1.5G、2048K（可带小数）"); }
+  }
+  if (storageRaw) {
+    if (!/^\d+$/.test(storageRaw)) { errs.push("存储配额必须是整数 GB"); }
+    else {
+      storageGB = parseInt(storageRaw, 10);
+      if (storageGB < 1 || storageGB > 1048576) { errs.push("存储配额应在 1–1048576 GB 之间"); }
+    }
+  }
+  if (!cpusRaw && !sharesRaw && !memRaw && !storageRaw) { errs.push("至少填写一项"); }
+  if (errs.length) {
+    errBox.style.display = "block";
+    errBox.textContent = "输入有误：" + errs.join("；");
+    out.textContent = "# 请先修正上面的输入";
+    return;
+  }
+  errBox.style.display = "none";
+  var lines = [];
+  lines.push("# 换算结果");
+  if (cpus !== null) {
+    lines.push("CPU 上限：" + cpus + " 核（等价 nano_cpus = " + Math.round(cpus * 1000000000) + "）");
+    lines.push("  说明：--cpus 是硬上限，" + cpus + " 表示最多用满 " + cpus + " 个核的算力");
+  }
+  if (shares !== null) {
+    lines.push("CPU 权重：" + shares + "（相对默认值 1024 约 " + (Math.round(shares / 1024 * 100) / 100) + " 倍）");
+    lines.push("  说明：权重只在多个容器抢 CPU 时按比例分配，不构成上限，也不保证最低算力");
+  }
+  if (memBytes !== null) {
+    lines.push("内存上限：" + memBytes + " 字节 ≈ " + dresHuman(memBytes));
+    lines.push("  说明：超出即触发容器内 OOM（进程被杀），不是宿主机内存预留");
+  }
+  if (storageGB !== null) {
+    lines.push("存储配额：" + storageGB + " GB（--storage-opt size=" + storageGB + "G）");
+    lines.push("  说明：依赖 overlay2 + XFS pquota 挂载，普通 ext4 环境通常不生效，落地前先验证");
+  }
+  lines.push("");
+  var runFlags = [];
+  if (cpus !== null) { runFlags.push("--cpus " + cpus); }
+  if (shares !== null) { runFlags.push("--cpu-shares " + shares); }
+  if (memBytes !== null) { runFlags.push("--memory " + memBytes); }
+  if (storageGB !== null) { runFlags.push("--storage-opt size=" + storageGB + "G"); }
+  lines.push("# docker run 片段：");
+  lines.push("docker run " + runFlags.join(" ") + " <镜像>");
+  lines.push("");
+  lines.push("# docker compose 片段（服务级）：");
+  if (shares !== null) { lines.push("    cpu_shares: " + shares); }
+  if (cpus !== null || memBytes !== null) {
+    lines.push("    deploy:");
+    lines.push("      resources:");
+    lines.push("        limits:");
+    if (cpus !== null) { lines.push("          cpus: \"" + cpus + "\""); }
+    if (memBytes !== null) { lines.push("          memory: " + dresComposeMem(memBytes)); }
+  }
+  lines.push("");
+  lines.push("# 提醒：限制是上限不是保证——要预留资源请另用 reservations / --memory-reservation；");
+  lines.push("# Docker Desktop（Mac / Windows）还有虚拟机总配额一层，语义与 Linux 原生不同。");
+  out.textContent = lines.join("\n");
+}
+var HTTP_CLASS_TEXT = {
+  "1": "1xx 信息类：请求已收到、继续处理，日常很少需要单独处理",
+  "2": "2xx 成功类：请求已被成功处理",
+  "3": "3xx 重定向类：需要按响应头 Location 进一步跳转",
+  "4": "4xx 客户端错误：请求本身有问题（路径、权限、参数、方法、限流）",
+  "5": "5xx 服务器错误：服务器或上游处理失败，先查服务状态与代理日志"
+};
+var HTTP_CODE_DATA = {
+  "100": { name: "Continue", mean: "服务器已收到请求头，通知客户端继续发送请求体", cause: "带 Expect: 100-continue 的大文件上传", check: "一般无需处理；上传卡住时查代理是否吞了 Expect 头", link: null },
+  "101": { name: "Switching Protocols", mean: "协议切换已同意（如 HTTP 升级为 WebSocket）", cause: "WebSocket / HTTP Upgrade 握手", check: "握手失败时查代理是否透传 Upgrade 与 Connection 头", link: null },
+  "200": { name: "OK", mean: "请求成功", cause: "正常响应", check: "无需排查；内容不对时看响应体与缓存", link: null },
+  "201": { name: "Created", mean: "请求成功并新建了资源", cause: "POST 创建成功（REST 接口常见）", check: "无需排查", link: null },
+  "204": { name: "No Content", mean: "请求成功但无响应体", cause: "DELETE 成功、表单提交后无返回内容", check: "前端拿不到数据时先确认接口是否本就返回 204", link: null },
+  "206": { name: "Partial Content", mean: "返回了请求范围内的部分内容", cause: "断点续传、视频拖动（Range 请求）", check: "下载异常时查服务端是否支持 Range", link: null },
+  "301": { name: "Moved Permanently", mean: "资源永久重定向到新地址", cause: "HTTP 跳 HTTPS、域名迁移、路径规范化", check: "curl -I 看 Location 是否为预期目标；注意跳转死循环", link: ["../09-web-hosting/01-dns-resolution.md", "网站接入与 DNS 解析 · 场景三：状态码判读"] },
+  "302": { name: "Found", mean: "资源临时重定向", cause: "临时跳转、登录回跳", check: "curl -I 看 Location；与 301 的区别是临时性，SEO 与缓存语义不同", link: ["../09-web-hosting/01-dns-resolution.md", "网站接入与 DNS 解析 · 场景三：状态码判读"] },
+  "304": { name: "Not Modified", mean: "资源未修改，客户端可用缓存副本", cause: "If-Modified-Since / If-None-Match 条件请求命中", check: "属正常缓存行为；页面不更新时先强刷再查缓存头", link: null },
+  "307": { name: "Temporary Redirect", mean: "临时重定向且保持原请求方法与请求体", cause: "临时迁移但要求 POST 仍为 POST", check: "curl -I 看 Location", link: null },
+  "308": { name: "Permanent Redirect", mean: "永久重定向且保持原请求方法与请求体", cause: "301 的严格版（方法不变）", check: "curl -I 看 Location", link: null },
+  "400": { name: "Bad Request", mean: "请求语法或参数不合法，服务器拒绝处理", cause: "参数缺失/格式错、请求头过大、接口校验不通过", check: "看应用日志的报错字段；用 curl 复现并逐项减参数定位", link: null },
+  "401": { name: "Unauthorized", mean: "需要身份认证或认证已失效", cause: "未登录、token 过期、Basic 认证未带凭证", check: "查 WWW-Authenticate 响应头与认证服务状态", link: null },
+  "403": { name: "Forbidden", mean: "服务器理解请求但拒绝执行", cause: "目录/文件权限不对、Nginx deny 规则、目录列表被禁且无默认页", check: "ls -ld 看目录权限（目录要 x）；查 nginx error.log 与 deny 配置", link: ["../09-web-hosting/01-dns-resolution.md", "网站接入与 DNS 解析 · 场景三：状态码判读"] },
+  "404": { name: "Not Found", mean: "请求的路径不存在", cause: "root 目录写错、文件确实不存在、rewrite 规则把路径改错", check: "对照 nginx root 与请求路径在磁盘上逐段核对", link: ["../09-web-hosting/01-dns-resolution.md", "网站接入与 DNS 解析 · 场景三：状态码判读"] },
+  "405": { name: "Method Not Allowed", mean: "路径存在但不允许该请求方法", cause: "对静态文件发 POST、接口只开了 GET", check: "看 Allow 响应头；查应用路由与代理的 limit_except", link: null },
+  "408": { name: "Request Timeout", mean: "客户端发送请求太慢，服务器等超时", cause: "弱网大上传、客户端卡死、请求头迟迟不发完", check: "查 client_header_timeout / client_body_timeout 与网络质量", link: null },
+  "409": { name: "Conflict", mean: "请求与资源当前状态冲突", cause: "重复创建、版本冲突（并发编辑）", check: "看应用日志的冲突记录，按接口语义重试或合并", link: null },
+  "410": { name: "Gone", mean: "资源已被永久删除（比 404 更明确）", cause: "下线页面被显式标记 410", check: "属预期行为时无需处理", link: null },
+  "413": { name: "Content Too Large", mean: "请求体超过服务器上限", cause: "上传文件超过 client_max_body_size 或应用限制", check: "查 nginx error.log 的 client intended to send too large body", link: null },
+  "429": { name: "Too Many Requests", mean: "请求过于频繁，被限流", cause: "触发 limit_req / 应用限流 / 被爬虫猛刷", check: "看 Retry-After 头与限流配置；本站 Nginx 生成器有限流参数可参考", link: null },
+  "500": { name: "Internal Server Error", mean: "服务器内部错误（应用代码或运行时异常）", cause: "应用抛异常、解释器/运行时崩了、配置错误", check: "先看应用日志与 nginx error.log 的具体堆栈，不要只重启了事", link: ["../08-troubleshooting/02-network-diagnosis.md", "网络排障：分层定位"] },
+  "501": { name: "Not Implemented", mean: "服务器不支持该请求方法或功能", cause: "老旧服务、代理不支持的方法", check: "确认客户端方法是否用错；查服务版本", link: null },
+  "502": { name: "Bad Gateway", mean: "反向代理连不上后端，或后端返回了无效响应", cause: "后端进程没启动/已崩溃、proxy_pass 端口写错、后端只监听了别的地址", check: "ss -tlnp 看后端监听；curl 直连后端验证；nginx error.log 常见 connect() failed (111)", link: ["../04-network/02-web-proxy.md", "Web 与反向代理 · 场景二：代理访问返回 502"] },
+  "503": { name: "Service Unavailable", mean: "服务暂时不可用（过载、维护或后端全挂）", cause: "后端重启中、被限流熔断、upstream 全部不可用", check: "查后端服务状态与健康检查；看是否带 Retry-After", link: ["../08-troubleshooting/02-network-diagnosis.md", "网络排障：分层定位"] },
+  "504": { name: "Gateway Timeout", mean: "代理连上了后端，但后端在超时时间内没响应", cause: "后端慢查询/死锁、proxy_read_timeout 太短、后端线程池打满", check: "直连后端测耗时；查后端慢日志；再对照 proxy_read_timeout 设置", link: ["../04-network/02-web-proxy.md", "Web 与反向代理（超时参数表）"] },
+  "525": { name: "SSL Handshake Error", mean: "Cloudflare 与源站之间的 TLS 握手失败（Cloudflare 专用码）", cause: "源站证书过期/未配好、源站不支持 SNI 或 TLS 版本不符", check: "用 openssl s_client 直连源站 443 验证证书", link: ["../09-web-hosting/05-https-certificates.md", "HTTPS 自动化证书"] },
+  "526": { name: "Invalid SSL Certificate", mean: "Cloudflare 校验源站证书不通过（严格模式）", cause: "源站自签/过期/域名不匹配的证书在 Full (Strict) 下被拒", check: "换受信任证书，或核对 Cloudflare 加密模式与源站证书是否匹配", link: ["../09-web-hosting/05-https-certificates.md", "HTTPS 自动化证书"] }
+};
+function httpEsc(s) {
+  return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+}
+function httpGenerate() {
+  var out = document.getElementById("http-out");
+  if (!out) { return; }
+  var errBox = document.getElementById("http-err");
+  function fail(msg) {
+    errBox.style.display = "block";
+    errBox.textContent = "输入有误：" + msg;
+    out.textContent = "# 请先修正上面的输入";
+  }
+  var code = document.getElementById("http-code").value.trim();
+  var cls = document.getElementById("http-class").value;
+  if (code) {
+    if (!/^\d{3}$/.test(code)) { fail("状态码必须是 3 位数字（如 502）"); return; }
+    var n = parseInt(code, 10);
+    if (n < 100 || n > 599) { fail("状态码范围是 100–599"); return; }
+    var d = HTTP_CODE_DATA[code];
+    var html;
+    if (d) {
+      html = "<strong>" + code + " " + httpEsc(d.name) + "</strong>\n"
+        + "含义：" + httpEsc(d.mean) + "\n"
+        + "常见原因：" + httpEsc(d.cause) + "\n"
+        + "排查命令/方法：" + httpEsc(d.check)
+        + (d.link ? "\n对应教程：<a href=\"" + d.link[0] + "\">" + httpEsc(d.link[1]) + "</a>（" + d.link[0] + "）" : "");
+    } else {
+      html = "<strong>" + code + "（本站未单列）</strong>\n"
+        + httpEsc(HTTP_CLASS_TEXT[code.charAt(0)]) + "\n"
+        + "具体含义以返回该状态码的服务文档为准；先用 curl -I 看响应头与 Location，再按类别缩小范围。";
+    }
+    errBox.style.display = "none";
+    out.innerHTML = html;
+    return;
+  }
+  var keys = Object.keys(HTTP_CODE_DATA).filter(function (k) { return cls === "all" || k.charAt(0) === cls; }).sort();
+  var text = keys.map(function (k) { return k + " " + HTTP_CODE_DATA[k].name + " —— " + HTTP_CODE_DATA[k].mean; }).join("\n");
+  errBox.style.display = "none";
+  out.innerHTML = httpEsc(text);
+}
+function initCertGen() {
+  var out = document.getElementById("cert-out");
+  if (!out || out.getAttribute("data-ready") === "1") { return; }
+  out.setAttribute("data-ready", "1");
+  ["cert-pem", "cert-domain", "cert-scene"].forEach(function (id) {
+    var el = document.getElementById(id);
+    if (el) {
+      el.addEventListener("input", certGenerate);
+      el.addEventListener("change", certGenerate);
+    }
+  });
+  bindCopy("cert-copy", "cert-out", "cert-msg");
+  certGenerate();
+}
+function initPermGen() {
+  var out = document.getElementById("perm-out");
+  if (!out || out.getAttribute("data-ready") === "1") { return; }
+  out.setAttribute("data-ready", "1");
+  PERM_BIT_IDS.forEach(function (p) {
+    var el = document.getElementById(p[0]);
+    if (el) {
+      el.addEventListener("input", permFromBoxes);
+      el.addEventListener("change", permFromBoxes);
+    }
+  });
+  var oct = document.getElementById("perm-oct");
+  if (oct) {
+    oct.addEventListener("input", permFromOct);
+    oct.addEventListener("change", permFromOct);
+  }
+  var um = document.getElementById("perm-umask");
+  if (um) {
+    um.addEventListener("input", permRender);
+    um.addEventListener("change", permRender);
+  }
+  bindCopy("perm-copy", "perm-out", "perm-msg");
+  permFromOct();
+}
+function initHashGen() {
+  var out = document.getElementById("hash-out");
+  if (!out || out.getAttribute("data-ready") === "1") { return; }
+  out.setAttribute("data-ready", "1");
+  ["hash-text", "hash-expect", "hash-algo"].forEach(function (id) {
+    var el = document.getElementById(id);
+    if (el) {
+      el.addEventListener("input", hashRun);
+      el.addEventListener("change", hashRun);
+    }
+  });
+  var f = document.getElementById("hash-file");
+  if (f) { f.addEventListener("change", hashRun); }
+  bindCopy("hash-copy", "hash-out", "hash-msg");
+  hashRun();
+}
+function initVerGen() {
+  var out = document.getElementById("ver-out");
+  if (!out || out.getAttribute("data-ready") === "1") { return; }
+  out.setAttribute("data-ready", "1");
+  ["ver-a", "ver-b", "ver-mode"].forEach(function (id) {
+    var el = document.getElementById(id);
+    if (el) {
+      el.addEventListener("input", verGenerate);
+      el.addEventListener("change", verGenerate);
+    }
+  });
+  bindCopy("ver-copy", "ver-out", "ver-msg");
+  verGenerate();
+}
+function initDresGen() {
+  var out = document.getElementById("dres-out");
+  if (!out || out.getAttribute("data-ready") === "1") { return; }
+  out.setAttribute("data-ready", "1");
+  ["dres-cpus", "dres-shares", "dres-mem", "dres-storage"].forEach(function (id) {
+    var el = document.getElementById(id);
+    if (el) {
+      el.addEventListener("input", dresGenerate);
+      el.addEventListener("change", dresGenerate);
+    }
+  });
+  bindCopy("dres-copy", "dres-out", "dres-msg");
+  dresGenerate();
+}
+function initHttpGen() {
+  var out = document.getElementById("http-out");
+  if (!out || out.getAttribute("data-ready") === "1") { return; }
+  out.setAttribute("data-ready", "1");
+  ["http-code", "http-class"].forEach(function (id) {
+    var el = document.getElementById(id);
+    if (el) {
+      el.addEventListener("input", httpGenerate);
+      el.addEventListener("change", httpGenerate);
+    }
+  });
+  bindCopy("http-copy", "http-out", "http-msg");
+  httpGenerate();
+}
 function showCopyToast() {
   var toast = document.getElementById("copy-toast");
   if (!toast) { return; }
@@ -2349,6 +3470,12 @@ if (window.document$ && typeof document$.subscribe === "function") {
   document$.subscribe(initNginxGen);
   document$.subscribe(initComposeGen);
   document$.subscribe(initLvmGen);
+  document$.subscribe(initCertGen);
+  document$.subscribe(initPermGen);
+  document$.subscribe(initHashGen);
+  document$.subscribe(initVerGen);
+  document$.subscribe(initDresGen);
+  document$.subscribe(initHttpGen);
 }
 document.addEventListener("DOMContentLoaded", initGuideTools);
 document.addEventListener("DOMContentLoaded", initSshGen);
@@ -2359,6 +3486,12 @@ document.addEventListener("DOMContentLoaded", initUnitGen);
 document.addEventListener("DOMContentLoaded", initNginxGen);
 document.addEventListener("DOMContentLoaded", initComposeGen);
 document.addEventListener("DOMContentLoaded", initLvmGen);
+document.addEventListener("DOMContentLoaded", initCertGen);
+document.addEventListener("DOMContentLoaded", initPermGen);
+document.addEventListener("DOMContentLoaded", initHashGen);
+document.addEventListener("DOMContentLoaded", initVerGen);
+document.addEventListener("DOMContentLoaded", initDresGen);
+document.addEventListener("DOMContentLoaded", initHttpGen);
 initGuideTools();
 initSshGen();
 initSshCfgGen();
@@ -2368,4 +3501,10 @@ initUnitGen();
 initNginxGen();
 initComposeGen();
 initLvmGen();
+initCertGen();
+initPermGen();
+initHashGen();
+initVerGen();
+initDresGen();
+initHttpGen();
 </script>
