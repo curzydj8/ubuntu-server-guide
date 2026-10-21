@@ -126,3 +126,4 @@
 ## 五、发布状态
 
 - 发布通道：Git Database API 增量建树推送（main 源码 + gh-pages 构建产物），逐 blob SHA 断言、推后递归 tree 与本地全量比对。本节定稿时推送执行中，最终 commit ID 以仓库历史为准，并由本期交付回报给出（main / gh-pages 双 commit 均已在回报中列明）；Pages 状态以 API 查询 `built` 为准。
+- CI 首跑修复（2026-10-21）：首轮 Actions（run 39569371392）中 Markdown 格式校验（79 项：MD001/012/022/029/031/032）与脚本冒烟（shellcheck SC1091）两 Job 红；未改 ci.yml 与 .markdownlint.json，仅修内容文件——速查三章与 changelog 条目标题 ### → ##（slug 不变、锚点无损）、SSH 章列表缩进修复、全文空行机械修复、两脚本在 `. /etc/os-release` 上方加 `# shellcheck disable=SC1091`。本地复验 markdownlint 0 error、shellcheck exit 0；修复后 Actions run 39572377654 结论 success，五 Job（MkDocs 构建 / 死链扫描 / Markdown 校验 / 脚本冒烟 ×22.04 与 24.04）全绿。
