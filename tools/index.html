@@ -3392,6 +3392,17 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        执行顺序与风险提示
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#netplan" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -3475,6 +3486,17 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        执行顺序与风险提示
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#netplan" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -3536,6 +3558,23 @@
 <ul>
 <li>生成器给的是通用模板，接口名、IP、端口必须换成你机器的真实值。</li>
 <li>改网络配置前先确保有控制台/带外管理通道，远程改 Netplan 有断联风险，先用 <code>netplan try</code> 验证。</li>
+</ul>
+</div>
+<h2 id="_2">执行顺序与风险提示<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
+<p>两个生成器产出的配置与命令，请按同一套顺序使用，不要生成后整段粘贴就执行：</p>
+<ol>
+<li><strong>先检查现状</strong>：先看现有配置文件、服务状态与防火墙规则，确认机器当前是什么状态。</li>
+<li><strong>先备份</strong>：改任何配置之前留一份带日期的副本，确认回滚路径真实存在。</li>
+<li><strong>小步应用</strong>：一次只改一处，先走校验或试运行（如 <code>netplan generate</code>、<code>netplan try</code>），再正式应用。</li>
+<li><strong>复核规则</strong>：应用后重新读取生效的配置与规则列表，与预期逐条对照。</li>
+<li><strong>从预期来源验证</strong>：在另一台机器或本地终端，从实际使用路径验证连通性，不要只在服务器本机自测。</li>
+</ol>
+<div class="admonition danger">
+<p class="admonition-title">三条红线</p>
+<ul>
+<li>改网络或防火墙配置前，先保留控制台或带外管理通道，远程会话断了也要有路可退。</li>
+<li>启用 UFW 前先放行当前 SSH 端口，顺序反了会把自己锁在门外。</li>
+<li>数据库端口（3306 / 5432 / 6379 / 27017 等）不要向公网开放，只允许内网或应用服务器来源。</li>
 </ul>
 </div>
 <h2 id="netplan">Netplan 配置生成器<a class="headerlink" href="#netplan" title="Permanent link">&para;</a></h2>
@@ -3642,6 +3681,8 @@
 <li>云服务器还要同步放行<strong>云厂商安全组</strong>，两层缺一不可，见<a href="../02-security/03-firewall/">防火墙</a>与<a href="../10-game-servers/01-port-opening/">端口三重门</a>。</li>
 </ul>
 </div>
+<div id="copy-toast" style="display: none; position: fixed; left: 50%; bottom: 1.4em; transform: translateX(-50%); z-index: 9999; max-width: 92vw; background: #b71c1c; color: #fff; padding: 0.7em 1.1em; border-radius: 4px; box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35); opacity: 0; transition: opacity 0.3s;">粘贴到服务器前请先逐行审阅，并确认已保留回滚通道。</div>
+
 <script>
 function npGenerate() {
   var ifaceEl = document.getElementById("np-iface");
@@ -3802,6 +3843,21 @@ function ufwGenerate() {
   lines.push("# curl -v http://<服务器IP>:" + verifyPort + "/");
   document.getElementById("ufw-out").textContent = lines.join("\n");
 }
+function showCopyToast() {
+  var toast = document.getElementById("copy-toast");
+  if (!toast) { return; }
+  toast.style.display = "block";
+  toast.style.opacity = "1";
+  if (toast._hideTimer) {
+    clearTimeout(toast._hideTimer);
+  }
+  toast._hideTimer = setTimeout(function () {
+    toast.style.opacity = "0";
+    setTimeout(function () {
+      toast.style.display = "none";
+    }, 300);
+  }, 4500);
+}
 function bindCopy(btnId, outId, msgId) {
   var btn = document.getElementById(btnId);
   if (!btn) { return; }
@@ -3809,6 +3865,7 @@ function bindCopy(btnId, outId, msgId) {
     var text = document.getElementById(outId).textContent;
     navigator.clipboard.writeText(text).then(function () {
       document.getElementById(msgId).textContent = "已复制";
+      showCopyToast();
     });
   });
 }

@@ -775,6 +775,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#ubuntu-2604" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        逐章验证状态（Ubuntu 26.04）
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#2604" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -3508,6 +3519,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#ubuntu-2604" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        逐章验证状态（Ubuntu 26.04）
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#2604" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -3667,6 +3689,566 @@
 <li><strong>ZFS / Btrfs 等未单列主题</strong>：归入存储章节，验证状态为文档核对，未在实机上完整验证。</li>
 <li><strong>26.04 整列待核验的原因</strong>：Ubuntu 26.04 LTS 已于 2026 年发布，站长有一台 Ubuntu 26.04.1 机器，但当前远程连接不通、无法实测。在实机核验完成之前，26.04 一律标注「待核验」，本站不会提前宣称其兼容。</li>
 </ul>
+<h2 id="ubuntu-2604">逐章验证状态（Ubuntu 26.04）<a class="headerlink" href="#ubuntu-2604" title="Permanent link">&para;</a></h2>
+<p>下表按站内导航逐章列出验证状态，是上面主题矩阵的细化：22.04 / 24.04 的状态由主题级结论映射到章——同一主题内，安装、启动、基本配置等核心流程章标「已实测（核心流程）」，调优、复制、故障切换等进阶章标「文档核对」，与矩阵下方的读表说明口径一致。<strong>26.04 一栏全部为「待核验」</strong>：站长的 Ubuntu 26.04.1 实测机器当前远程链路未恢复，没有任何一章在 26.04 上实际运行过，本站不会把「待核验」写成兼容；待链路恢复后逐章实测，本表状态随核验进度同步更新。</p>
+<table>
+<thead>
+<tr>
+<th>部分</th>
+<th>章节</th>
+<th>Ubuntu 22.04</th>
+<th>Ubuntu 24.04</th>
+<th>Ubuntu 26.04</th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>01 基础入门与安装</td>
+<td><a href="../01-basics/">部分导览</a></td>
+<td>已实测（核心流程）</td>
+<td>已实测（核心流程）</td>
+<td>待核验</td>
+<td>待 26.04 机器恢复后实测</td>
+</tr>
+<tr>
+<td>01 基础入门与安装</td>
+<td><a href="../01-basics/01-version-lifecycle/">版本选择与 Lifecycle</a></td>
+<td>已实测（核心流程）</td>
+<td>已实测（核心流程）</td>
+<td>待核验</td>
+<td>待 26.04 机器恢复后实测</td>
+</tr>
+<tr>
+<td>01 基础入门与安装</td>
+<td><a href="../01-basics/02-installation/">系统安装</a></td>
+<td>已实测（核心流程）</td>
+<td>已实测（核心流程）</td>
+<td>待核验</td>
+<td>待 26.04 机器恢复后实测</td>
+</tr>
+<tr>
+<td>01 基础入门与安装</td>
+<td><a href="../01-basics/03-first-login-network/">首次登录与网络初始化</a></td>
+<td>已实测（核心流程）</td>
+<td>已实测（核心流程）</td>
+<td>待核验</td>
+<td>Netplan 核心流程；待 26.04 机器恢复后实测</td>
+</tr>
+<tr>
+<td>01 基础入门与安装</td>
+<td><a href="../01-basics/04-package-management/">软件源与包管理</a></td>
+<td>已实测（核心流程）</td>
+<td>已实测（核心流程）</td>
+<td>待核验</td>
+<td>待 26.04 机器恢复后实测</td>
+</tr>
+<tr>
+<td>02 系统安全与权限管理</td>
+<td><a href="../02-security/">部分导览</a></td>
+<td>已实测（核心流程）</td>
+<td>已实测（核心流程）</td>
+<td>待核验</td>
+<td>以 SSH / UFW 为核心；PAM、入侵检测为文档核对</td>
+</tr>
+<tr>
+<td>02 系统安全与权限管理</td>
+<td><a href="../02-security/01-ssh-hardening/">SSH 安全加固</a></td>
+<td>已实测（核心流程）</td>
+<td>已实测（核心流程）</td>
+<td>待核验</td>
+<td>待 26.04 机器恢复后实测</td>
+</tr>
+<tr>
+<td>02 系统安全与权限管理</td>
+<td><a href="../02-security/02-users-sudo-pam/">用户、Sudo 与 PAM</a></td>
+<td>文档核对</td>
+<td>文档核对</td>
+<td>待核验</td>
+<td>待核验，26.04 亦未实机验证</td>
+</tr>
+<tr>
+<td>02 系统安全与权限管理</td>
+<td><a href="../02-security/03-firewall/">防火墙管理</a></td>
+<td>已实测（核心流程）</td>
+<td>已实测（核心流程）</td>
+<td>待核验</td>
+<td>UFW 核心流程；待 26.04 机器恢复后实测</td>
+</tr>
+<tr>
+<td>02 系统安全与权限管理</td>
+<td><a href="../02-security/04-defense/">系统防御与入侵检测</a></td>
+<td>文档核对</td>
+<td>文档核对</td>
+<td>待核验</td>
+<td>待核验，26.04 亦未实机验证</td>
+</tr>
+<tr>
+<td>03 磁盘、文件系统与存储</td>
+<td><a href="../03-storage/">部分导览</a></td>
+<td>文档核对</td>
+<td>文档核对</td>
+<td>待核验</td>
+<td>待核验，26.04 亦未实机验证</td>
+</tr>
+<tr>
+<td>03 磁盘、文件系统与存储</td>
+<td><a href="../03-storage/01-lvm/">LVM 动态卷管理</a></td>
+<td>文档核对</td>
+<td>文档核对</td>
+<td>待核验</td>
+<td>待核验，26.04 亦未实机验证</td>
+</tr>
+<tr>
+<td>03 磁盘、文件系统与存储</td>
+<td><a href="../03-storage/02-zfs-btrfs/">ZFS 与 Btrfs</a></td>
+<td>文档核对</td>
+<td>文档核对</td>
+<td>待核验</td>
+<td>待核验，26.04 亦未实机验证</td>
+</tr>
+<tr>
+<td>03 磁盘、文件系统与存储</td>
+<td><a href="../03-storage/03-mount-sharing/">挂载与存储共享</a></td>
+<td>文档核对</td>
+<td>文档核对</td>
+<td>待核验</td>
+<td>待核验，26.04 亦未实机验证</td>
+</tr>
+<tr>
+<td>03 磁盘、文件系统与存储</td>
+<td><a href="../03-storage/04-backup/">磁盘健康与备份</a></td>
+<td>文档核对</td>
+<td>文档核对</td>
+<td>待核验</td>
+<td>待核验，26.04 亦未实机验证</td>
+</tr>
+<tr>
+<td>04 网络服务与核心架构</td>
+<td><a href="../04-network/">部分导览</a></td>
+<td>文档核对</td>
+<td>文档核对</td>
+<td>待核验</td>
+<td>待核验，26.04 亦未实机验证</td>
+</tr>
+<tr>
+<td>04 网络服务与核心架构</td>
+<td><a href="../04-network/01-dns/">DNS 服务器搭建</a></td>
+<td>文档核对</td>
+<td>文档核对</td>
+<td>待核验</td>
+<td>待核验，26.04 亦未实机验证</td>
+</tr>
+<tr>
+<td>04 网络服务与核心架构</td>
+<td><a href="../04-network/02-web-proxy/">Web 服务器与反向代理</a></td>
+<td>文档核对</td>
+<td>文档核对</td>
+<td>待核验</td>
+<td>待核验，26.04 亦未实机验证</td>
+</tr>
+<tr>
+<td>04 网络服务与核心架构</td>
+<td><a href="../04-network/03-vpn-tunnel/">网络隧道与 VPN</a></td>
+<td>文档核对</td>
+<td>文档核对</td>
+<td>待核验</td>
+<td>待核验，26.04 亦未实机验证</td>
+</tr>
+<tr>
+<td>04 网络服务与核心架构</td>
+<td><a href="../04-network/04-time-logging/">时间同步与系统日志</a></td>
+<td>文档核对</td>
+<td>文档核对</td>
+<td>待核验</td>
+<td>待核验，26.04 亦未实机验证</td>
+</tr>
+<tr>
+<td>05 容器化与云原生</td>
+<td><a href="../05-containers/">部分导览</a></td>
+<td>已实测（核心流程）</td>
+<td>已实测（核心流程）</td>
+<td>待核验</td>
+<td>以 Docker 为核心；Podman、k3s 为文档核对</td>
+</tr>
+<tr>
+<td>05 容器化与云原生</td>
+<td><a href="../05-containers/01-docker/">Docker 基础与进阶</a></td>
+<td>已实测（核心流程）</td>
+<td>已实测（核心流程）</td>
+<td>待核验</td>
+<td>待 26.04 机器恢复后实测</td>
+</tr>
+<tr>
+<td>05 容器化与云原生</td>
+<td><a href="../05-containers/02-podman/">Podman 无根容器</a></td>
+<td>文档核对</td>
+<td>文档核对</td>
+<td>待核验</td>
+<td>待核验，26.04 亦未实机验证</td>
+</tr>
+<tr>
+<td>05 容器化与云原生</td>
+<td><a href="../05-containers/03-kubernetes-light/">Kubernetes 轻量集群</a></td>
+<td>文档核对</td>
+<td>文档核对</td>
+<td>待核验</td>
+<td>待核验，26.04 亦未实机验证</td>
+</tr>
+<tr>
+<td>06 系统监控、日志与性能调优</td>
+<td><a href="../06-monitoring/">部分导览</a></td>
+<td>文档核对</td>
+<td>文档核对</td>
+<td>待核验</td>
+<td>待核验，26.04 亦未实机验证</td>
+</tr>
+<tr>
+<td>06 系统监控、日志与性能调优</td>
+<td><a href="../06-monitoring/01-cli-tools/">命令行即时监控工具</a></td>
+<td>文档核对</td>
+<td>文档核对</td>
+<td>待核验</td>
+<td>待核验，26.04 亦未实机验证</td>
+</tr>
+<tr>
+<td>06 系统监控、日志与性能调优</td>
+<td><a href="../06-monitoring/02-prometheus-grafana/">Prometheus + Grafana 监控栈</a></td>
+<td>文档核对</td>
+<td>文档核对</td>
+<td>待核验</td>
+<td>待核验，26.04 亦未实机验证</td>
+</tr>
+<tr>
+<td>06 系统监控、日志与性能调优</td>
+<td><a href="../06-monitoring/03-logging-stack/">集中式日志收集</a></td>
+<td>文档核对</td>
+<td>文档核对</td>
+<td>待核验</td>
+<td>待核验，26.04 亦未实机验证</td>
+</tr>
+<tr>
+<td>06 系统监控、日志与性能调优</td>
+<td><a href="../06-monitoring/04-kernel-tuning/">内核与性能调优</a></td>
+<td>文档核对</td>
+<td>文档核对</td>
+<td>待核验</td>
+<td>待核验，26.04 亦未实机验证</td>
+</tr>
+<tr>
+<td>07 自动化运维与脚本</td>
+<td><a href="../07-automation/">部分导览</a></td>
+<td>文档核对</td>
+<td>文档核对</td>
+<td>待核验</td>
+<td>待核验，26.04 亦未实机验证</td>
+</tr>
+<tr>
+<td>07 自动化运维与脚本</td>
+<td><a href="../07-automation/01-shell-scripting/">Shell 脚本规范与范例</a></td>
+<td>文档核对</td>
+<td>文档核对</td>
+<td>待核验</td>
+<td>待核验，26.04 亦未实机验证</td>
+</tr>
+<tr>
+<td>07 自动化运维与脚本</td>
+<td><a href="../07-automation/02-systemd-timers/">Systemd 服务与定时任务</a></td>
+<td>文档核对</td>
+<td>文档核对</td>
+<td>待核验</td>
+<td>待核验，26.04 亦未实机验证</td>
+</tr>
+<tr>
+<td>07 自动化运维与脚本</td>
+<td><a href="../07-automation/03-ansible/">Ansible 自动化配置管理</a></td>
+<td>文档核对</td>
+<td>文档核对</td>
+<td>待核验</td>
+<td>待核验，26.04 亦未实机验证</td>
+</tr>
+<tr>
+<td>08 故障排查与应急响应</td>
+<td><a href="../08-troubleshooting/">部分导览</a></td>
+<td>文档核对</td>
+<td>文档核对</td>
+<td>待核验</td>
+<td>待核验，26.04 亦未实机验证</td>
+</tr>
+<tr>
+<td>08 故障排查与应急响应</td>
+<td><a href="../08-troubleshooting/01-boot-repair/">系统无法启动修复</a></td>
+<td>文档核对</td>
+<td>文档核对</td>
+<td>待核验</td>
+<td>待核验，26.04 亦未实机验证</td>
+</tr>
+<tr>
+<td>08 故障排查与应急响应</td>
+<td><a href="../08-troubleshooting/02-network-diagnosis/">网络故障排查流程</a></td>
+<td>文档核对</td>
+<td>文档核对</td>
+<td>待核验</td>
+<td>待核验，26.04 亦未实机验证</td>
+</tr>
+<tr>
+<td>08 故障排查与应急响应</td>
+<td><a href="../08-troubleshooting/03-disk-full/">磁盘爆满与句柄耗尽</a></td>
+<td>文档核对</td>
+<td>文档核对</td>
+<td>待核验</td>
+<td>待核验，26.04 亦未实机验证</td>
+</tr>
+<tr>
+<td>08 故障排查与应急响应</td>
+<td><a href="../08-troubleshooting/04-cpu-memory/">CPU / 内存异常定位</a></td>
+<td>文档核对</td>
+<td>文档核对</td>
+<td>待核验</td>
+<td>待核验，26.04 亦未实机验证</td>
+</tr>
+<tr>
+<td>08 故障排查与应急响应</td>
+<td><a href="../08-troubleshooting/05-disaster-recovery-migration/">灾难恢复与系统迁移</a></td>
+<td>文档核对</td>
+<td>文档核对</td>
+<td>待核验</td>
+<td>待核验，26.04 亦未实机验证</td>
+</tr>
+<tr>
+<td>09 网站搭建、域名与应用部署</td>
+<td><a href="../09-web-hosting/">部分导览</a></td>
+<td>文档核对</td>
+<td>文档核对</td>
+<td>待核验</td>
+<td>待核验，26.04 亦未实机验证</td>
+</tr>
+<tr>
+<td>09 网站搭建、域名与应用部署</td>
+<td><a href="../09-web-hosting/01-dns-resolution/">域名解析与网络连接</a></td>
+<td>文档核对</td>
+<td>文档核对</td>
+<td>待核验</td>
+<td>待核验，26.04 亦未实机验证</td>
+</tr>
+<tr>
+<td>09 网站搭建、域名与应用部署</td>
+<td><a href="../09-web-hosting/02-baota-panel/">宝塔面板安装与安全加固</a></td>
+<td>文档核对</td>
+<td>文档核对</td>
+<td>待确认官方支持</td>
+<td>待宝塔 / aaPanel 官方确认 26.04 支持</td>
+</tr>
+<tr>
+<td>09 网站搭建、域名与应用部署</td>
+<td><a href="../09-web-hosting/03-lnmp-lamp/">经典 LNMP / LAMP 自建</a></td>
+<td>文档核对</td>
+<td>文档核对</td>
+<td>待核验</td>
+<td>待核验，26.04 亦未实机验证</td>
+</tr>
+<tr>
+<td>09 网站搭建、域名与应用部署</td>
+<td><a href="../09-web-hosting/04-docker-apps/">Docker 部署常用应用</a></td>
+<td>文档核对</td>
+<td>文档核对</td>
+<td>待核验</td>
+<td>Docker 核心流程已实测，应用部署组合为文档核对</td>
+</tr>
+<tr>
+<td>09 网站搭建、域名与应用部署</td>
+<td><a href="../09-web-hosting/05-https-certificates/">HTTPS 自动化证书</a></td>
+<td>文档核对</td>
+<td>文档核对</td>
+<td>待核验</td>
+<td>待核验，26.04 亦未实机验证</td>
+</tr>
+<tr>
+<td>10 游戏服务器部署与端口映射</td>
+<td><a href="../10-game-servers/">部分导览</a></td>
+<td>文档核对</td>
+<td>文档核对</td>
+<td>待核验</td>
+<td>待核验，26.04 亦未实机验证</td>
+</tr>
+<tr>
+<td>10 游戏服务器部署与端口映射</td>
+<td><a href="../10-game-servers/01-port-opening/">端口开放「三重门」</a></td>
+<td>文档核对</td>
+<td>文档核对</td>
+<td>待核验</td>
+<td>待核验，26.04 亦未实机验证</td>
+</tr>
+<tr>
+<td>10 游戏服务器部署与端口映射</td>
+<td><a href="../10-game-servers/02-game-server-setup/">游戏服务端实战</a></td>
+<td>文档核对</td>
+<td>文档核对</td>
+<td>待核验</td>
+<td>待核验，26.04 亦未实机验证</td>
+</tr>
+<tr>
+<td>10 游戏服务器部署与端口映射</td>
+<td><a href="../10-game-servers/03-performance-daemon/">性能调优与守护</a></td>
+<td>文档核对</td>
+<td>文档核对</td>
+<td>待核验</td>
+<td>待核验，26.04 亦未实机验证</td>
+</tr>
+<tr>
+<td>10 游戏服务器部署与端口映射</td>
+<td><a href="../10-game-servers/04-nat-traversal/">内网穿透与公网映射</a></td>
+<td>文档核对</td>
+<td>文档核对</td>
+<td>待核验</td>
+<td>待核验，26.04 亦未实机验证</td>
+</tr>
+<tr>
+<td>11 数据库安装、管理与高可用</td>
+<td><a href="../11-databases/">部分导览</a></td>
+<td>已实测（核心流程）</td>
+<td>已实测（核心流程）</td>
+<td>待核验</td>
+<td>以 MySQL / PostgreSQL 为核心；Redis、MongoDB、主从复制为文档核对</td>
+</tr>
+<tr>
+<td>11 数据库安装、管理与高可用</td>
+<td><a href="../11-databases/01-mysql-install-security/">MySQL 安装与安全初始化</a></td>
+<td>已实测（核心流程）</td>
+<td>已实测（核心流程）</td>
+<td>待核验</td>
+<td>待 26.04 机器恢复后实测</td>
+</tr>
+<tr>
+<td>11 数据库安装、管理与高可用</td>
+<td><a href="../11-databases/02-mysql-users-remote/">MySQL 用户、权限与远程访问</a></td>
+<td>已实测（核心流程）</td>
+<td>已实测（核心流程）</td>
+<td>待核验</td>
+<td>待 26.04 机器恢复后实测</td>
+</tr>
+<tr>
+<td>11 数据库安装、管理与高可用</td>
+<td><a href="../11-databases/03-mysql-tuning/">MySQL 核心参数调优</a></td>
+<td>文档核对</td>
+<td>文档核对</td>
+<td>待核验</td>
+<td>调优参数属进阶内容，为文档核对</td>
+</tr>
+<tr>
+<td>11 数据库安装、管理与高可用</td>
+<td><a href="../11-databases/04-mysql-backup-restore/">MySQL 备份与还原演练</a></td>
+<td>文档核对</td>
+<td>文档核对</td>
+<td>待核验</td>
+<td>mysqldump 基础备份属核心流程，binlog 增量恢复属进阶文档核对</td>
+</tr>
+<tr>
+<td>11 数据库安装、管理与高可用</td>
+<td><a href="../11-databases/05-postgresql-install-auth/">PostgreSQL 安装与认证</a></td>
+<td>已实测（核心流程）</td>
+<td>已实测（核心流程）</td>
+<td>待核验</td>
+<td>待 26.04 机器恢复后实测</td>
+</tr>
+<tr>
+<td>11 数据库安装、管理与高可用</td>
+<td><a href="../11-databases/06-postgresql-extensions-backup/">PostgreSQL 插件、备份与 PITR</a></td>
+<td>文档核对</td>
+<td>文档核对</td>
+<td>待核验</td>
+<td>PITR 属进阶内容，为文档核对</td>
+</tr>
+<tr>
+<td>11 数据库安装、管理与高可用</td>
+<td><a href="../11-databases/07-redis/">Redis 与 Sentinel 高可用</a></td>
+<td>文档核对</td>
+<td>文档核对</td>
+<td>待核验</td>
+<td>待核验，26.04 亦未实机验证</td>
+</tr>
+<tr>
+<td>11 数据库安装、管理与高可用</td>
+<td><a href="../11-databases/08-mongodb/">MongoDB 安装与调优</a></td>
+<td>文档核对</td>
+<td>文档核对</td>
+<td>待核验</td>
+<td>待核验，26.04 亦未实机验证</td>
+</tr>
+<tr>
+<td>11 数据库安装、管理与高可用</td>
+<td><a href="../11-databases/09-ha-containerized/">容器化数据库与主从复制</a></td>
+<td>文档核对</td>
+<td>文档核对</td>
+<td>待核验</td>
+<td>主从复制属进阶内容，为文档核对</td>
+</tr>
+<tr>
+<td>12 硬件、虚拟化与私有云</td>
+<td><a href="../12-virtualization/">部分导览</a></td>
+<td>文档核对</td>
+<td>文档核对</td>
+<td>待核验</td>
+<td>待核验，26.04 亦未实机验证</td>
+</tr>
+<tr>
+<td>12 硬件、虚拟化与私有云</td>
+<td><a href="../12-virtualization/01-gpu-cuda/">GPU 与 CUDA</a></td>
+<td>文档核对</td>
+<td>文档核对</td>
+<td>待核验</td>
+<td>待核验，26.04 亦未实机验证</td>
+</tr>
+<tr>
+<td>12 硬件、虚拟化与私有云</td>
+<td><a href="../12-virtualization/02-kvm-qemu-pve/">KVM/QEMU 与 Proxmox VE</a></td>
+<td>文档核对</td>
+<td>文档核对</td>
+<td>待核验</td>
+<td>待核验，26.04 亦未实机验证</td>
+</tr>
+<tr>
+<td>12 硬件、虚拟化与私有云</td>
+<td><a href="../12-virtualization/03-passthrough-sriov/">PCIe 直通与 SR-IOV</a></td>
+<td>文档核对</td>
+<td>文档核对</td>
+<td>待核验</td>
+<td>待核验，26.04 亦未实机验证</td>
+</tr>
+<tr>
+<td>13 AI 工具与智能化运维</td>
+<td><a href="../13-ai-ops/">部分导览</a></td>
+<td>文档核对</td>
+<td>文档核对</td>
+<td>待核验</td>
+<td>待核验，26.04 亦未实机验证</td>
+</tr>
+<tr>
+<td>13 AI 工具与智能化运维</td>
+<td><a href="../13-ai-ops/01-local-llm/">本地大模型运维助手</a></td>
+<td>文档核对</td>
+<td>文档核对</td>
+<td>待核验</td>
+<td>待核验，26.04 亦未实机验证</td>
+</tr>
+<tr>
+<td>13 AI 工具与智能化运维</td>
+<td><a href="../13-ai-ops/02-ai-cli/">云端 AI CLI 助手</a></td>
+<td>文档核对</td>
+<td>文档核对</td>
+<td>待核验</td>
+<td>待核验，26.04 亦未实机验证</td>
+</tr>
+<tr>
+<td>13 AI 工具与智能化运维</td>
+<td><a href="../13-ai-ops/03-iac-gitops/">IaC 与 GitOps 深化</a></td>
+<td>文档核对</td>
+<td>文档核对</td>
+<td>待核验</td>
+<td>待核验，26.04 亦未实机验证</td>
+</tr>
+</tbody>
+</table>
 <h2 id="2604">26.04 升级规划<a class="headerlink" href="#2604" title="Permanent link">&para;</a></h2>
 <p>本站不会为了「支持新版本」而批量把正文中的 22.04 / 24.04 字样替换成 26.04，原因很实际：</p>
 <ul>
