@@ -1,0 +1,255 @@
+# 云端 AI CLI 助手辅助运维
+
+## 一、概述与使用场景
+
+云端 AI CLI 助手，指在终端里通过命令行调用云端大模型服务的工具形态：把问题、日志片段、脚本需求以文本形式发给云端模型，再把回答带回终端。相比本地模型（见 [01 本地大模型运维助手](01-local-llm.md)），云端模型通常能力更强、上下文更长、更新更快；代价是**数据要离开你的服务器**，且按量付费、依赖网络。
+
+适用场景：
+
+- **命令生成**：知道要做什么但记不清参数组合时，让 AI 给出候选命令，人工核对后执行。例如「找出 /var/log 下 7 天前的大于 100MB 的日志并按大小排序」。
+- **日志解读**：把脱敏后的报错日志发给模型，获取根因假设与排查路径，尤其是陌生中间件的报错。
+- **脚本起草**：批量巡检、备份、清理类脚本先由 AI 出初稿，人工逐行审查、测试机验证后再投入使用。
+- **文档与复盘**：把操作记录整理成变更说明、故障复盘的初稿。
+
+不适合的场景：含未脱敏敏感数据的日志分析（应改用第 01 章的本地模型）、要求毫秒级响应的自动化闭环、把 AI 输出未经审核直接管道给 shell 执行。
+
+不用任何规范就直接把云端 AI 接入运维的风险很具体：API Key 被写进脚本并提交到公开仓库后被爬虫扫走盗刷；生产日志里的客户数据、内网拓扑随提示词外泄；AI 编造的不存在参数、甚至危险命令被直接粘贴执行。**本章的重点不是某个具体产品，而是所有云端 AI CLI 通用的接入规范与安全边界**——不同厂商的 CLI 安装方式各异，请以其官方文档为准，本章只讲通则。
+
+## 二、环境准备与前置条件
+
+| 项目 | 要求 |
+| --- | --- |
+| 操作系统 | Ubuntu 22.04 LTS 或 24.04 LTS |
+| 权限 | 普通用户即可调用；配置系统级服务时需 `sudo` |
+| 网络 | 服务器可访问所选云端服务的 API 域名（出站 HTTPS 443） |
+| 账号 | 已在所选服务商开通 API 并创建 API Key（本章一律以 `<api-key>` 占位表示） |
+| 工具 | `curl`、`jq`（验证 API 连通性用）；目标 AI CLI 本体按其官方文档安装 |
+
+安装验证工具并确认网络连通（以示例域名表示，实际替换为你所用服务商的 API 地址）：
+
+```bash
+sudo apt update
+sudo apt install -y curl jq
+curl -I https://api.example.com
+```
+
+!!! warning "API Key 是凭据，不是配置"
+    API Key 等同于账号密码加支付授权：泄露后他人可盗用你的额度消费。本章所有示例都不会出现真实 Key；你在实际操作中也绝不能把真实 Key 写进任何会被提交、会被分享、会被截图的文件。
+
+## 三、手把手操作步骤
+
+### 3.1 接入方式通则：Key 只走环境变量
+
+**方式一：当前会话临时注入（最适合临时使用）**
+
+```bash
+# 在终端里直接 export，Key 只存在于当前 shell 进程环境中
+export AI_API_KEY="<api-key>"
+export AI_API_BASE="https://api.example.com/v1"
+
+# 验证变量已设置（只看是否存在，不打印完整值）
+if [ -n "$AI_API_KEY" ]; then echo "AI_API_KEY 已设置"; fi
+
+# 会话结束即失效；手动清除：
+unset AI_API_KEY
+```
+
+注意：`export` 写进 `~/.bashrc` 图省事的做法会让 Key 长期落盘且容易被各类脚本读到，不推荐。确需长期使用，用下面的文件方式并收紧权限。
+
+**方式二：独立环境文件 + 严格权限（适合固定工作机）**
+
+先备份（如已有同名文件）：
+
+```bash
+cp ~/.config/ai-cli/env ~/.config/ai-cli/env.bak.$(date +%F) 2>/dev/null || echo "无旧文件，跳过备份"
+mkdir -p ~/.config/ai-cli
+```
+
+创建 `~/.config/ai-cli/env`，完整内容如下（`<api-key>` 替换为你自己的 Key，仅保存在本机此文件）：
+
+```ini
+AI_API_KEY=<api-key>
+AI_API_BASE=https://api.example.com/v1
+AI_MODEL=<model-name>
+```
+
+逐项收紧权限并在需要时加载：
+
+```bash
+chmod 600 ~/.config/ai-cli/env
+set -a; . ~/.config/ai-cli/env; set +a
+```
+
+| 做法 | 说明 |
+| --- | --- |
+| 文件权限 `600` | 只有文件属主可读写，防止同机其他用户读取 |
+| 文件放在 `~/.config/` 而非项目目录 | 项目目录会被 Git 管理，家目录配置不会 |
+| 加载后用完 `unset` | 减少 Key 在环境中的驻留时间 |
+
+**方式三：systemd EnvironmentFile（适合以服务方式运行的巡检任务）**
+
+环境文件放 `/etc/ai-cli/env`，属主 root、权限 `600`：
+
+```bash
+sudo mkdir -p /etc/ai-cli
+sudo cp /etc/ai-cli/env /etc/ai-cli/env.bak.$(date +%F) 2>/dev/null || echo "无旧文件，跳过备份"
+sudo nano /etc/ai-cli/env
+sudo chown root:root /etc/ai-cli/env
+sudo chmod 600 /etc/ai-cli/env
+```
+
+文件内容与方式二相同。然后在 unit 中引用——先备份 unit 再修改：
+
+```bash
+sudo cp /etc/systemd/system/ai-inspect.service /etc/systemd/system/ai-inspect.service.bak.$(date +%F)
+sudo nano /etc/systemd/system/ai-inspect.service
+```
+
+在 `[Service]` 段加入：
+
+```ini
+[Service]
+EnvironmentFile=/etc/ai-cli/env
+ExecStart=/usr/local/bin/ai-inspect.sh
+```
+
+重载生效：
+
+```bash
+sudo systemctl daemon-reload
+sudo systemctl restart ai-inspect.service
+```
+
+!!! warning "三条铁律"
+    1）绝不把 Key 写进脚本正文；2）绝不把含 Key 的文件提交到 Git——仓库里加 `.gitignore` 排除 `env`、`.env` 类文件，并在提交前用 `git status` 复查；3）怀疑泄露立即到服务商控制台吊销并重建 Key，改代码救不了已泄露的 Key。
+
+### 3.2 敏感日志脱敏清单
+
+任何日志、配置、输出在发给云端 AI 之前，逐项对照下表脱敏：
+
+| 类别 | 脱敏前（示例形态） | 脱敏后写法 |
+| --- | --- | --- |
+| 公网/内网 IP | 真实地址 | 替换为文档段：`192.0.2.10`、`198.51.100.23`、`2001:db8::10` |
+| 主机名/域名 | 真实业务域名 | `server-a.example.com`、`app.example.org` |
+| 用户名 | 真实账号名 | `opsadmin`、`ubuntu` 或 `<user>` |
+| API Key/Token/密码 | 真实值 | `<api-key>`、`******`，整段删除更稳妥 |
+| 客户数据 | 手机号、邮箱、订单号、姓名 | `<phone>`、`<email>`、`<order-id>` 占位 |
+| 路径中的敏感信息 | 含客户名的目录 | 改为 `/srv/app/data/` 等通用路径 |
+
+快速脱敏示例（先复制再处理，永远不要改原始日志）：
+
+```bash
+cp /var/log/app/app.log /tmp/app-sanitized.log
+sed -i -E 's/([0-9]{1,3}\.){3}[0-9]{1,3}/192.0.2.10/g' /tmp/app-sanitized.log
+sed -i -E 's/[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+/<email>/g' /tmp/app-sanitized.log
+# 处理完人工再通读一遍，确认无残留敏感信息后再发送
+less /tmp/app-sanitized.log
+```
+
+!!! tip "脱敏后再提问，效果不打折"
+    模型的推理依赖的是报错结构与关键字，不是你的真实 IP。把地址换成文档段示例值、用占位符代替客户数据，回答质量基本不受影响，风险却降为零。含敏感信息的场景直接改用第 01 章的本地模型。
+
+### 3.3 安全边界：命令先审后跑
+
+工作流固定为四步：**AI 给出命令 → 人工逐条阅读 → 测试机或只读方式验证 → 生产执行并记录**。
+
+危险命令清单——AI 建议中出现以下命令或组合时，必须停下人工二次确认，核对目标路径、设备名、参数后再决定：
+
+| 命令/写法 | 风险 | 确认要点 |
+| --- | --- | --- |
+| `rm -rf` | 递归强删不可恢复 | 路径是否为预期目录，是否误含 `/` 或变量为空 |
+| `dd` | 按块写设备，写错盘即毁数据 | `if`/`of` 是否颠倒，目标设备名是否正确 |
+| `mkfs` | 格式化文件系统 | 目标分区是否已备份、是否选错盘 |
+| `chmod 777` / `chmod -R` | 权限全面放开 | 为何不能用更小权限，范围是否过大 |
+| `curl xxx \| sh` / `wget xxx \| bash` | 远程代码直接执行 | 脚本来源是否可信，是否已下载审阅 |
+| `>` 重定向到系统文件 | 覆盖配置 | 是否先备份，原文件是否可恢复 |
+| `systemctl stop/disable` 关键服务 | 业务中断 | 是否维护窗口，影响范围是否明确 |
+| SQL 的 `DROP`/`DELETE` 无 `WHERE` | 数据丢失 | 是否已备份，条件是否完整 |
+
+生产环境只读优先原则：排查阶段默认只用查看类命令（`cat`、`less`、`grep`、`journalctl`、`ss -tlnp`、`df`、`free`、`ps`）；确需写操作时，先说明「改什么、影响什么、如何回滚」，改配置前必先备份：
+
+```bash
+# 改任何配置前的标准动作（以 sshd_config 为例）
+sudo cp /etc/ssh/sshd_config /etc/ssh/sshd_config.bak.$(date +%F-%H%M)
+```
+
+### 3.4 验证习惯：不迷信 AI 输出
+
+- **查手册核对**：AI 给的命令参数，先 `man <command>` 或 `<command> --help` 核对参数真实存在、含义与 AI 说法一致。AI 会编造不存在的参数，这并不罕见。
+- **先测试机，后生产机**：脚本类输出先在测试机完整跑一遍，观察输出与副作用，再上生产。
+- **小步验证**：批量操作先拿 1 台/1 个文件试，确认无误再扩大范围；`find ... -delete` 类命令先去掉 `-delete` 看列表再执行。
+- **交叉验证**：重要结论换一种问法再问一次，或用本地模型对照，答案互相矛盾时以官方文档与实测为准。
+
+```bash
+# 示例：核对 AI 给出的 find 清理命令——先只列出将影响的文件
+find /var/log -type f -name "*.log" -mtime +7 -print
+# 确认列表无误后，才把 -print 换成实际处理动作，并保留操作记录
+```
+
+## 四、效果验证与测试
+
+```bash
+# 1. 环境变量存在性（不输出 Key 本身）
+if [ -n "$AI_API_KEY" ]; then echo "Key 已注入"; else echo "Key 未设置"; fi
+
+# 2. 环境文件权限应为 600
+stat -c '%a %U %n' ~/.config/ai-cli/env /etc/ai-cli/env 2>/dev/null
+
+# 3. 仓库防泄露检查：在项目仓库中应搜不到 Key 特征与 env 文件
+cd ~/your-project
+git status --short
+grep -rn "AI_API_KEY=" --include="*.sh" . || echo "脚本中未发现硬编码 Key"
+
+# 4. 脱敏效果抽查：处理后的日志中不应残留邮箱形态字符串
+grep -E '[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+' /tmp/app-sanitized.log || echo "未发现残留邮箱"
+```
+
+期望输出示例：
+
+```text
+Key 已注入
+600 ubuntu /home/ubuntu/.config/ai-cli/env
+脚本中未发现硬编码 Key
+未发现残留邮箱
+```
+
+## 五、常见错误与排坑指南
+
+**场景 1：调用返回鉴权失败**
+
+```text
+{"error":{"code":401,"message":"invalid api key"}}
+```
+
+原因：Key 未注入当前进程、已吊销，或复制时带入空格/换行。修复：重新按 3.1 节注入，检查变量长度与服务商控制台的 Key 状态：
+
+```bash
+echo -n "$AI_API_KEY" | wc -c
+unset AI_API_KEY
+set -a; . ~/.config/ai-cli/env; set +a
+```
+
+**场景 2：Key 被提交进 Git 仓库**
+
+```text
+（在 git log / 托管平台代码搜索中发现） export AI_API_KEY="sk-......"
+```
+
+原因：把 `export` 写进了脚本或 `.bashrc` 并随仓库提交。修复分三步缺一不可：1）在服务商控制台**立即吊销**该 Key 并新建；2）从脚本中删除硬编码，改走环境变量；3）清理 Git 历史中的记录（用 `git filter-repo` 等工具并强制推送，或直接废弃该仓库重建）。只删最新提交没用，历史里仍可翻出。
+
+**场景 3：AI 给的命令在 Ubuntu 上不存在或参数报错**
+
+```text
+find: unknown predicate `-printf` 前出现乱码参数 / xxx: command not found
+```
+
+原因：AI 混用了其他发行版或其他工具版本的语法。修复：用 `man` 核对本机版本参数，改用等价写法；在提示词中明确写上「Ubuntu 24.04、GNU 工具链」约束，要求命令给出后附参数说明，便于逐条核验。
+
+## 六、生产环境最佳实践与安全建议
+
+- **Key 管理**：一人一 Key 或一服务一 Key，最小权限、定期轮换；团队场景用密钥管理服务统一分发，禁止在聊天工具、工单、截图中传递 Key。
+- **生产只读优先**：生产排查默认只读；AI 参与的写操作必须走变更流程，记录「AI 建议原文、人工修改点、执行人、回滚方式」。
+- **脱敏成习惯**：把 3.2 节清单做成团队检查表；含客户数据的日志一律走本地模型（第 01 章）或不送 AI。
+- **成本与限额**：在服务商控制台设置月度用量上限与告警，避免脚本死循环调用造成账单失控。
+- **留痕审计**：保留 AI 辅助运维的问答与执行记录，故障复盘时能区分「AI 建议」与「人工决策」，责任边界清晰。
+- **工具选型**：具体选哪家云端 AI CLI，请以官方文档确认其数据留存与隐私政策后再接入企业环境；政策不明的工具不用于生产数据。

@@ -3,6 +3,7 @@ site_description: 全面、深度的 Ubuntu Server 安装、安全、存储、�
 site_author: 火星极客
 repo_url: https://github.com/curzydj8/ubuntu-server-guide
 repo_name: curzydj8/ubuntu-server-guide
+edit_uri: edit/main/docs/
 
 theme:
   name: material
@@ -23,6 +24,8 @@ theme:
   features:
     - navigation.tabs
     - navigation.sections
+    - content.action.edit
+    - content.action.view
     - navigation.top
     - navigation.indexes
     - toc.follow
@@ -37,7 +40,11 @@ theme:
 markdown_extensions:
   - admonition
   - pymdownx.details
-  - pymdownx.superfences
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
   - pymdownx.tabbed:
       alternate_style: true
   - pymdownx.highlight:
@@ -120,3 +127,15 @@ nav:
       - 游戏服务端实战: 10-game-servers/02-game-server-setup.md
       - 性能调优与守护: 10-game-servers/03-performance-daemon.md
       - 内网穿透与公网映射: 10-game-servers/04-nat-traversal.md
+  - 11 硬件、虚拟化与私有云:
+      - 11-virtualization/index.md
+      - GPU 与 CUDA: 11-virtualization/01-gpu-cuda.md
+      - KVM/QEMU 与 Proxmox VE: 11-virtualization/02-kvm-qemu-pve.md
+      - PCIe 直通与 SR-IOV: 11-virtualization/03-passthrough-sriov.md
+  - 12 AI 工具与智能化运维:
+      - 12-ai-ops/index.md
+      - 本地大模型运维助手: 12-ai-ops/01-local-llm.md
+      - 云端 AI CLI 助手: 12-ai-ops/02-ai-cli.md
+      - IaC 与 GitOps 深化: 12-ai-ops/03-iac-gitops.md
+  - 互动工具: tools/index.md
+  - 更新日志: changelog.md

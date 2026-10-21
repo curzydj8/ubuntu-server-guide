@@ -1,5 +1,15 @@
 # Docker 基础与进阶
 
+!!! tip "一键脚本（先审后跑）"
+
+    本章安装流程已整理为脚本 [install-docker.sh](../scripts/install-docker.sh)，一行安装（需要 sudo）：
+
+    ```bash
+    curl -sSL https://curzydj8.github.io/ubuntu-server-guide/scripts/install-docker.sh | sudo bash
+    ```
+
+    强烈建议先下载到本地审阅内容再执行，不要对任何远程脚本盲目使用管道执行。
+
 ## 一、概述与使用场景
 
 Docker 是当前应用最广的容器运行时管理工具。它把应用程序、运行库和配置文件打包成镜像，镜像在任何安装了 Docker Engine 的主机上都能以一致的方式运行，从根本上解决了开发环境正常、生产环境报错这类环境不一致问题。

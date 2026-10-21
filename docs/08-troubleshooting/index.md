@@ -45,3 +45,32 @@ echo "$INCIDENT_DIR"
 ## 建议阅读顺序
 
 首次阅读按 8.1 至 8.4 顺序通读。真实故障时按现象直达对应章节：开不了机看 8.1，连不上看 8.2，写不进磁盘看 8.3，机器卡顿看 8.4。处置完成后回到本页做收尾：补证据、补监控、补预案。
+
+## 网络故障决策树（无法上网 / DNS 解析失败）
+
+先按图自上而下定位故障层，再用下面 5 个命令逐项实证，不要跳步猜测。
+
+```mermaid
+flowchart TD
+    A[服务器无法上网或域名打不开] --> B{ip a 网卡有 IP 地址吗}
+    B -->|没有地址| B1[检查 Netplan 配置<br/>generate 校验后重新 apply]
+    B -->|有地址| C{ping 网关通吗}
+    C -->|不通| C1[查链路与网卡状态<br/>ip link 与交换机和安全组]
+    C -->|通| D{ping 外网地址通吗}
+    D -->|不通| D1[ip route 查默认路由<br/>缺失则补 routes 配置]
+    D -->|通| E{dig 域名能解析吗}
+    E -->|SERVFAIL 或超时| E1[resolvectl status 查 DNS<br/>核对上游与 53 端口]
+    E -->|能解析| F{curl 看应用层状态码}
+    F -->|拒绝或超时| F1[ss 查监听与防火墙放行]
+    F -->|正常| G[网络层无故障<br/>转应用日志排查]
+```
+
+### 5 个关键诊断命令逐行判读
+
+1. `ip a` — 看网卡与地址。重点行：网卡状态应为 `state UP` 且带 `LOWER_UP`；`inet 192.0.2.10/24` 一行确认地址与掩码已生效；只有 `127.0.0.1` 说明业务网卡没拿到地址，先查 Netplan。
+2. `ip route` — 看路由表。必须有一行 `default via 192.0.2.1 dev eth0`，没有默认路由就出不了本地网段；再核对直连网段行 `192.0.2.0/24 dev eth0` 的网卡名是否正确。
+3. `resolvectl status` — 看 DNS 归属。重点行：业务网卡段落下的 `Current DNS Server` 与 `DNS Servers` 应是你配置的上游；若为空或指向错误地址，解析必然失败；`Protocols: -LLMNR -mDNS` 等开关行可确认没有多余协议干扰。
+4. `ping -c 3 <目标>` — 分层测连通。先 ping 网关（通=本地链路与二层正常），再 ping 一个外网地址（通=路由与 NAT 正常），最后 ping 域名（前两步通而这步不通=纯 DNS 问题）；看 `packet loss` 与 `time` 两列判读丢包和时延。
+5. `dig example.com` — 看解析细节。重点行：`status: NOERROR` 为正常，`SERVFAIL` 是上游或 DNSSEC 问题，`NXDOMAIN` 是域名不存在或记录没配；`ANSWER SECTION` 应有 A 记录；`Query time` 过大或超时说明 53 端口被拦或上游不可达；末尾 `SERVER: 192.0.2.53#53` 确认实际询问的是哪台 DNS。
+
+完整命令集见 [网络问题系统化诊断](02-network-diagnosis.md)。

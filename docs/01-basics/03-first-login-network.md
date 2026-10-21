@@ -1,5 +1,15 @@
 # 首次登录与网络初始化
 
+!!! tip "一键脚本（先审后跑）"
+
+    新机初始化基线（更新、常用工具、时区、UFW、Fail2ban）已整理为脚本 [init-server.sh](../scripts/init-server.sh)，一行执行（需要 sudo）：
+
+    ```bash
+    curl -sSL https://curzydj8.github.io/ubuntu-server-guide/scripts/init-server.sh | sudo bash
+    ```
+
+    强烈建议先下载到本地审阅内容再执行，不要对任何远程脚本盲目使用管道执行；脚本启用 UFW 前会先放行 SSH 端口。
+
 ## 一、概述与使用场景
 
 系统装好后的第一小时决定这台服务器是否好管。本章完成三件事：首次登录后的基础核查与安全动作、用 Netplan 配置静态地址和 DNS、按需配置网桥与 VLAN。网络是服务器的命脉，地址规划不清、DNS 配错、网桥写错，都会直接表现为连不上、解析不了、虚拟机不通，而且这类故障在远程操作时还会把运维人员自己关在门外，因此本章对每一次改动都给出备份、校验和回退办法。
