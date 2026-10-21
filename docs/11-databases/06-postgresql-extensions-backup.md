@@ -1,3 +1,7 @@
+---
+description: "单机安装完成只是起点。生产 PostgreSQL 迟早遇到三类需求：第一类是能力扩展，如地理位置查询需要 PostGIS、时序数据需要 TimescaleDB；第二类是日常逻辑备份，出错时能快速导回单库或单表；"
+---
+
 # PostgreSQL 插件、备份与 PITR
 
 ## 一、概述与使用场景
