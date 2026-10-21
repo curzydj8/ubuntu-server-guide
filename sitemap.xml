@@ -37,6 +37,14 @@
          <lastmod>2026-10-21</lastmod>
     </url>
     <url>
+         <loc>https://curzydj8.github.io/ubuntu-server-guide/01-basics/06-release-upgrade-lifecycle/</loc>
+         <lastmod>2026-10-21</lastmod>
+    </url>
+    <url>
+         <loc>https://curzydj8.github.io/ubuntu-server-guide/01-basics/07-multiarch/</loc>
+         <lastmod>2026-10-21</lastmod>
+    </url>
+    <url>
          <loc>https://curzydj8.github.io/ubuntu-server-guide/02-security/</loc>
          <lastmod>2026-10-21</lastmod>
     </url>
@@ -69,6 +77,14 @@
          <lastmod>2026-10-21</lastmod>
     </url>
     <url>
+         <loc>https://curzydj8.github.io/ubuntu-server-guide/02-security/08-certificate-lifecycle/</loc>
+         <lastmod>2026-10-21</lastmod>
+    </url>
+    <url>
+         <loc>https://curzydj8.github.io/ubuntu-server-guide/02-security/09-secrets-management/</loc>
+         <lastmod>2026-10-21</lastmod>
+    </url>
+    <url>
          <loc>https://curzydj8.github.io/ubuntu-server-guide/03-storage/</loc>
          <lastmod>2026-10-21</lastmod>
     </url>
@@ -86,6 +102,10 @@
     </url>
     <url>
          <loc>https://curzydj8.github.io/ubuntu-server-guide/03-storage/04-backup/</loc>
+         <lastmod>2026-10-21</lastmod>
+    </url>
+    <url>
+         <loc>https://curzydj8.github.io/ubuntu-server-guide/03-storage/05-hardware-health/</loc>
          <lastmod>2026-10-21</lastmod>
     </url>
     <url>
@@ -113,6 +133,10 @@
          <lastmod>2026-10-21</lastmod>
     </url>
     <url>
+         <loc>https://curzydj8.github.io/ubuntu-server-guide/04-network/06-haproxy/</loc>
+         <lastmod>2026-10-21</lastmod>
+    </url>
+    <url>
          <loc>https://curzydj8.github.io/ubuntu-server-guide/05-containers/</loc>
          <lastmod>2026-10-21</lastmod>
     </url>
@@ -126,6 +150,10 @@
     </url>
     <url>
          <loc>https://curzydj8.github.io/ubuntu-server-guide/05-containers/03-kubernetes-light/</loc>
+         <lastmod>2026-10-21</lastmod>
+    </url>
+    <url>
+         <loc>https://curzydj8.github.io/ubuntu-server-guide/05-containers/04-supply-chain-security/</loc>
          <lastmod>2026-10-21</lastmod>
     </url>
     <url>
@@ -149,6 +177,14 @@
          <lastmod>2026-10-21</lastmod>
     </url>
     <url>
+         <loc>https://curzydj8.github.io/ubuntu-server-guide/06-monitoring/05-observability-alerting/</loc>
+         <lastmod>2026-10-21</lastmod>
+    </url>
+    <url>
+         <loc>https://curzydj8.github.io/ubuntu-server-guide/06-monitoring/06-capacity-log-governance/</loc>
+         <lastmod>2026-10-21</lastmod>
+    </url>
+    <url>
          <loc>https://curzydj8.github.io/ubuntu-server-guide/07-automation/</loc>
          <lastmod>2026-10-21</lastmod>
     </url>
@@ -162,6 +198,10 @@
     </url>
     <url>
          <loc>https://curzydj8.github.io/ubuntu-server-guide/07-automation/03-ansible/</loc>
+         <lastmod>2026-10-21</lastmod>
+    </url>
+    <url>
+         <loc>https://curzydj8.github.io/ubuntu-server-guide/07-automation/04-systemd-engineering-drift/</loc>
          <lastmod>2026-10-21</lastmod>
     </url>
     <url>
@@ -186,6 +226,14 @@
     </url>
     <url>
          <loc>https://curzydj8.github.io/ubuntu-server-guide/08-troubleshooting/05-disaster-recovery-migration/</loc>
+         <lastmod>2026-10-21</lastmod>
+    </url>
+    <url>
+         <loc>https://curzydj8.github.io/ubuntu-server-guide/08-troubleshooting/06-kernel-boot-remote-recovery/</loc>
+         <lastmod>2026-10-21</lastmod>
+    </url>
+    <url>
+         <loc>https://curzydj8.github.io/ubuntu-server-guide/08-troubleshooting/07-incident-response/</loc>
          <lastmod>2026-10-21</lastmod>
     </url>
     <url>
@@ -274,6 +322,10 @@
     </url>
     <url>
          <loc>https://curzydj8.github.io/ubuntu-server-guide/11-databases/09-ha-containerized/</loc>
+         <lastmod>2026-10-21</lastmod>
+    </url>
+    <url>
+         <loc>https://curzydj8.github.io/ubuntu-server-guide/11-databases/10-ha-recovery-drills/</loc>
          <lastmod>2026-10-21</lastmod>
     </url>
     <url>
