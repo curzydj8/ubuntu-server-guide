@@ -193,9 +193,17 @@ description: "互动工具：九个纯前端小工具——Netplan、UFW、SSH�
 
 ## 子网 / CIDR 计算器
 
-输入 IPv4 地址与前缀长度（或子网掩码），立即算出网络地址、广播地址、可用主机范围与主机数。只做本地计算与格式校验，非法输入会直接报错、不给结果。
+输入 IPv4 地址与前缀长度（或子网掩码），立即算出网络地址、广播地址、可用主机范围与主机数。切换到 IPv6 后，输入 IPv6 地址与前缀（0–128），算出展开/压缩写法、网络地址、地址范围与地址总数；IPv6 没有广播地址，地址范围内的地址都可分配。只做本地计算与格式校验，非法输入会直接报错、不给结果。
 
 <div>
+  <p>
+    <label>地址族
+      <select id="sub-family">
+        <option value="v4" selected>IPv4</option>
+        <option value="v6">IPv6</option>
+      </select>
+    </label>
+  </p>
   <p>
     <label>计算方式
       <select id="sub-mode">
@@ -208,6 +216,7 @@ description: "互动工具：九个纯前端小工具——Netplan、UFW、SSH�
     <label>IP 地址 <input type="text" id="sub-ip" value="192.0.2.10"></label>
     <label id="sub-grp-prefix">CIDR 前缀（0–32） <input type="number" id="sub-prefix" min="0" max="32" value="24"></label>
     <label id="sub-grp-mask" style="display: none;">子网掩码 <input type="text" id="sub-mask" value="255.255.255.0"></label>
+    <label id="sub-grp-prefix6" style="display: none;">IPv6 前缀（0–128） <input type="number" id="sub-prefix6" min="0" max="128" value="64"></label>
   </p>
   <div id="sub-err" style="display: none; border: 1px solid #c62828; background: rgba(198, 40, 40, 0.10); padding: 0.6em 0.9em; margin: 0.6em 0;"></div>
   <pre id="sub-out" style="white-space: pre; overflow-x: auto;"></pre>
@@ -218,6 +227,8 @@ description: "互动工具：九个纯前端小工具——Netplan、UFW、SSH�
 
     - `/31` 是点对点链路特例（RFC 3021）：两个地址都可用，不再预留网络地址与广播地址。
     - `/32` 是单个主机地址（主机路由），可用主机数就是 1。
+    - IPv6 没有广播地址：不存在预留的网络/广播地址，子网内全部地址都可分配；`/64` 是最常见的子网大小（无状态地址自动配置 SLAAC 就要求 /64）。
+    - IPv6 特殊地址：`::1/128` 是回环地址（相当于 IPv4 的 127.0.0.1），`::` 是未指定地址，`fe80::/10` 是链路本地地址（只在本地链路有效，一般还要带接口后缀如 `fe80::1%eth0`）；输入命中时工具会在结果里给出提示。
     - 掩码必须是 1 连续、0 连续（如 `255.255.255.128` 合法，`255.255.0.255` 不合法），不连续的掩码会被本工具拒绝。
     - 掩码与 CIDR 的基础概念见 [网络诊断速查](../15-command-reference/03-network-diagnostics.md)，地址落地到 Netplan 见 [首次登录与网络配置](../01-basics/03-first-login-network.md)。
 
@@ -246,7 +257,7 @@ description: "互动工具：九个纯前端小工具——Netplan、UFW、SSH�
         <option value="at">指定</option>
       </select>
     </label>
-    <label id="cron-min-grp-step" style="display: none;">每隔 <input type="number" id="cron-min-step" min="1" max="59" value="5"> 分钟</label>
+    <label id="cron-min-grp-step" style="display: none;">每隔 <input type="number" id="cron-min-step" min="1" max="60" value="5"> 分钟</label>
     <label id="cron-min-grp-at" style="display: none;">指定值（逗号分隔） <input type="text" id="cron-min-at" value="0"></label>
   </p>
   <p>
@@ -257,7 +268,7 @@ description: "互动工具：九个纯前端小工具——Netplan、UFW、SSH�
         <option value="at">指定</option>
       </select>
     </label>
-    <label id="cron-hour-grp-step" style="display: none;">每隔 <input type="number" id="cron-hour-step" min="1" max="23" value="2"> 小时</label>
+    <label id="cron-hour-grp-step" style="display: none;">每隔 <input type="number" id="cron-hour-step" min="1" max="24" value="2"> 小时</label>
     <label id="cron-hour-grp-at" style="display: none;">指定值（逗号分隔） <input type="text" id="cron-hour-at" value="0"></label>
   </p>
   <p>
@@ -279,7 +290,7 @@ description: "互动工具：九个纯前端小工具——Netplan、UFW、SSH�
         <option value="at">指定</option>
       </select>
     </label>
-    <label id="cron-mon-grp-step" style="display: none;">每隔 <input type="number" id="cron-mon-step" min="1" max="11" value="3"> 个月</label>
+    <label id="cron-mon-grp-step" style="display: none;">每隔 <input type="number" id="cron-mon-step" min="1" max="12" value="3"> 个月</label>
     <label id="cron-mon-grp-at" style="display: none;">指定值（逗号分隔） <input type="text" id="cron-mon-at" value="1"></label>
   </p>
   <p>
@@ -290,7 +301,7 @@ description: "互动工具：九个纯前端小工具——Netplan、UFW、SSH�
         <option value="at">指定</option>
       </select>
     </label>
-    <label id="cron-dow-grp-step" style="display: none;">每隔 <input type="number" id="cron-dow-step" min="1" max="6" value="2"> 天</label>
+    <label id="cron-dow-grp-step" style="display: none;">每隔 <input type="number" id="cron-dow-step" min="1" max="8" value="2"> 天</label>
     <label id="cron-dow-grp-at" style="display: none;">指定值（逗号分隔） <input type="text" id="cron-dow-at" value="1"></label>
   </p>
   <div id="cron-err" style="display: none; border: 1px solid #c62828; background: rgba(198, 40, 40, 0.10); padding: 0.6em 0.9em; margin: 0.6em 0;"></div>
@@ -304,6 +315,25 @@ description: "互动工具：九个纯前端小工具——Netplan、UFW、SSH�
     - cron 里「日」与「周」同时受限时是**或**关系（任一满足就触发），systemd 的 OnCalendar 是**且**关系，两边同时受限时不要直接照搬。
     - OnCalendar 与 cron 不完全等价（步进与多值最容易对不上），工具给出的等价写法只是起点，写入 `.timer` 前先在目标机用 `systemd-analyze calendar '值'` 校验。
     - 完整讲解见 [Systemd 服务与定时任务](../07-automation/02-systemd-timers.md) 与 [定时、容器与系统速查](../15-command-reference/06-scheduling-containers-more.md)。
+
+### cron 还是 systemd timer：六维度对比与选型
+
+两种调度方式的机制差异如下，选型时按任务特征对号入座：
+
+| 维度 | cron | systemd timer |
+|---|---|---|
+| 执行环境 | 环境变量极简（只有 HOME、LOGNAME、PATH 等少数几个），不加载登录 shell 的配置，脚本要自备 PATH 与工作目录 | 作为 systemd 服务运行，可用 `Environment=` / `EnvironmentFile=` 明确注入环境变量，与服务管理一体化 |
+| 日志 | 默认不留日志，命令输出靠本机邮件或自己在脚本里重定向到文件 | 输出自动进 journal，用 `journalctl -u 服务名` 查看，天然带时间戳与日志轮转 |
+| 时区 | 跟随系统本地时区，修改时区或夏令时切换时触发时点可能漂移 | `OnCalendar` 按本地时区解释，写入前可用 `systemd-analyze calendar` 校验展开结果 |
+| 补执行 | 没有补执行：关机、休眠期间到点的任务直接错过，不会补跑 | `Persistent=true` 时，开机后会补跑错过的触发 |
+| 依赖关系 | 无依赖概念：任务之间、任务与系统服务之间不能声明先后与联动 | 可用 `After=` / `Requires=` 与其他 unit 编排，能跟目标服务一起启停 |
+| 失败重试 | 无内建机制，重试与告警要靠脚本自己实现 | 服务侧可配 `Restart=` 等策略，失败状态在 `systemctl` 里可见、可联动告警 |
+
+三个问题定选型：
+
+- **错过时间点能接受吗？** 不能（例如夜间关机时段的备份）→ 选 systemd timer 并开启 `Persistent=true`；能接受 → 两者都行，看下一问。
+- **任务要跟某个服务联动吗？** 要等服务就绪、随服务启停 → 选 systemd timer；完全独立的小脚本 → 看下一问。
+- **只是固定周期跑一个独立脚本吗？** 是 → cron 最省事，直接用上方生成器拼表达式；需要查日志、看状态、配失败策略 → systemd timer 更省心。
 
 ## systemd Unit 生成器
 
@@ -959,12 +989,109 @@ function subParseIp(v) {
 function subIntToIp(n) {
   return [Math.floor(n / 16777216) % 256, Math.floor(n / 65536) % 256, Math.floor(n / 256) % 256, Math.floor(n % 256)].join(".");
 }
+function ipv6ExpandGroups(v) {
+  if (!isValidIpv6(v)) { return null; }
+  if (v.indexOf(".") !== -1) {
+    var lc = v.lastIndexOf(":");
+    var ip4 = subParseIp(v.slice(lc + 1));
+    var hi = (ip4[0] * 256 + ip4[1]).toString(16);
+    var lo = (ip4[2] * 256 + ip4[3]).toString(16);
+    v = v.slice(0, lc + 1) + hi + ":" + lo;
+  }
+  var halves = v.split("::");
+  var gs = [];
+  if (halves.length === 2) {
+    var l = halves[0] === "" ? [] : halves[0].split(":");
+    var r = halves[1] === "" ? [] : halves[1].split(":");
+    var miss = 8 - l.length - r.length;
+    gs = l.slice();
+    for (var i = 0; i < miss; i++) { gs.push("0"); }
+    gs = gs.concat(r);
+  } else {
+    gs = v.split(":");
+  }
+  return gs.map(function (g) { return parseInt(g, 16); });
+}
+function ipv6GroupsToBig(gs) {
+  var n = BigInt(0);
+  for (var i = 0; i < 8; i++) { n = n * BigInt(65536) + BigInt(gs[i]); }
+  return n;
+}
+function ipv6BigToGroups(n) {
+  var gs = [];
+  for (var i = 0; i < 8; i++) {
+    gs.unshift(Number(n % BigInt(65536)));
+    n = n / BigInt(65536);
+  }
+  return gs;
+}
+function ipv6Full(gs) {
+  return gs.map(function (g) {
+    var s = g.toString(16);
+    while (s.length < 4) { s = "0" + s; }
+    return s;
+  }).join(":");
+}
+function ipv6Compress(gs) {
+  var bestStart = -1, bestLen = 0, curStart = -1, curLen = 0;
+  for (var i = 0; i < 8; i++) {
+    if (gs[i] === 0) {
+      if (curStart === -1) { curStart = i; curLen = 1; } else { curLen++; }
+      if (curLen > bestLen) { bestLen = curLen; bestStart = curStart; }
+    } else { curStart = -1; curLen = 0; }
+  }
+  var parts = gs.map(function (g) { return g.toString(16); });
+  if (bestLen < 2) { return parts.join(":"); }
+  return parts.slice(0, bestStart).join(":") + "::" + parts.slice(bestStart + bestLen).join(":");
+}
+function subGenerate6(out) {
+  var errs = [];
+  var rawIp = document.getElementById("sub-ip").value.trim();
+  var groups = ipv6ExpandGroups(rawIp);
+  if (!groups) { errs.push("IPv6 地址格式不正确（如 2001:db8::10）"); }
+  var prefix = -1;
+  var rawP = document.getElementById("sub-prefix6").value.trim();
+  if (!/^\d+$/.test(rawP)) { errs.push("IPv6 前缀必须是 0–128 的整数"); }
+  else {
+    prefix = parseInt(rawP, 10);
+    if (prefix > 128) { errs.push("IPv6 前缀必须在 0–128 之间"); }
+  }
+  var errBox = document.getElementById("sub-err");
+  if (errs.length) {
+    errBox.style.display = "block";
+    errBox.textContent = "输入有误：" + errs.join("；");
+    out.textContent = "# 请先修正上面的输入";
+    return;
+  }
+  errBox.style.display = "none";
+  var ipBig = ipv6GroupsToBig(groups);
+  var size = BigInt(1) << BigInt(128 - prefix);
+  var network = ipBig - (ipBig % size);
+  var last = network + size - BigInt(1);
+  var netGroups = ipv6BigToGroups(network);
+  var lastGroups = ipv6BigToGroups(last);
+  var lines = [];
+  lines.push("输入地址（展开）：" + ipv6Full(groups) + "/" + prefix);
+  lines.push("输入地址（压缩）：" + ipv6Compress(groups) + "/" + prefix);
+  lines.push("网络地址：" + ipv6Compress(netGroups));
+  lines.push("地址范围：" + ipv6Compress(netGroups) + " - " + ipv6Compress(lastGroups));
+  lines.push("地址总数：" + size.toString());
+  lines.push("IPv6 没有广播地址：不存在预留的网络地址/广播地址，地址范围内的地址都可分配使用（多播地址段 ff00::/8 除外）。");
+  if (prefix === 128) { lines.push("提示：/128 是单个主机地址（主机路由），整个子网就这一个地址。"); }
+  if (ipBig === BigInt(1)) { lines.push("提示：::1 是回环地址（loopback），相当于 IPv4 的 127.0.0.1，只在本机内部使用。"); }
+  if (ipBig === BigInt(0)) { lines.push("提示：:: 是未指定地址，不能作为通信的目标地址使用。"); }
+  if (groups[0] >= 0xfe80 && groups[0] <= 0xfebf) { lines.push("提示：该地址属于链路本地 fe80::/10，只在同一链路内有效、不会被路由器转发，实际使用时通常还要带网卡接口后缀（如 fe80::1%eth0）。"); }
+  out.textContent = lines.join("\n");
+}
 function subGenerate() {
   var out = document.getElementById("sub-out");
   if (!out) { return; }
+  var family = document.getElementById("sub-family").value;
   var mode = document.getElementById("sub-mode").value;
-  document.getElementById("sub-grp-prefix").style.display = (mode === "cidr") ? "inline" : "none";
-  document.getElementById("sub-grp-mask").style.display = (mode === "mask") ? "inline" : "none";
+  document.getElementById("sub-grp-prefix").style.display = (family === "v4" && mode === "cidr") ? "inline" : "none";
+  document.getElementById("sub-grp-mask").style.display = (family === "v4" && mode === "mask") ? "inline" : "none";
+  document.getElementById("sub-grp-prefix6").style.display = (family === "v6") ? "inline" : "none";
+  if (family === "v6") { subGenerate6(out); return; }
   var errs = [];
   var ipParts = subParseIp(document.getElementById("sub-ip").value.trim());
   if (!ipParts) { errs.push("IP 地址格式不正确（应为四段 0–255 的数字）"); }
@@ -1039,6 +1166,8 @@ function cronFieldVal(def) {
     if (!/^\d+$/.test(raw)) { return { error: def.label + "的间隔必须是正整数" }; }
     var n = parseInt(raw, 10);
     if (n < 1) { return { error: def.label + "的间隔至少为 1" }; }
+    var span = def.hi - def.lo + 1;
+    if (n > span) { return { error: def.label + "的间隔不能超过 " + span + "（该字段一共只有 " + span + " 个取值，*/" + n + " 实际只会命中第一个值，表达式没有意义）" }; }
     return { expr: "*/" + n, mode: "step", n: n };
   }
   var txt = document.getElementById("cron-" + def.key + "-at").value.trim();
@@ -1152,9 +1281,14 @@ function unitGenerate() {
   var mem = document.getElementById("unit-mem").value.trim();
   var cpu = document.getElementById("unit-cpu").value.trim();
   var errs = [];
-  if (!name) { errs.push("服务名不能为空"); }
-  else if (!/^[A-Za-z0-9_.@-]+$/.test(name)) { errs.push("服务名只能含字母、数字、点、下划线、连字符"); }
+  var rawName = name;
   if (name.slice(-8) === ".service") { name = name.slice(0, -8); }
+  if (!name) { errs.push(rawName ? "服务名只填了 .service：去掉后缀后为空，请补上真正的服务名" : "服务名不能为空"); }
+  else if (/[\r\n]/.test(name)) { errs.push("服务名不能包含换行"); }
+  else if (!/^[A-Za-z0-9_.@-]+$/.test(name)) { errs.push("服务名只能含字母、数字、点、下划线、连字符"); }
+  if (/[\r\n]/.test(desc)) { errs.push("服务描述不能包含换行：生成的 Unit 文件里每个字段只占一行，描述中的换行会被当成新的配置行"); }
+  if (/[\r\n]/.test(exec)) { errs.push("ExecStart 不能包含换行：一行只能写一条命令，多条命令请拆成多个服务或写入脚本文件再调用"); }
+  if (/[\r\n]/.test(workdir)) { errs.push("工作目录不能包含换行"); }
   if (!exec) { errs.push("ExecStart 不能为空"); }
   else if (exec.charAt(0) !== "/") { errs.push("ExecStart 必须是绝对路径（以 / 开头），systemd 不认相对路径"); }
   if (workdir && workdir.charAt(0) !== "/") { errs.push("工作目录必须是绝对路径"); }
@@ -1217,6 +1351,18 @@ function unitGenerate() {
   L.push("# journalctl -u " + name + ".service -n 50 --no-pager");
   out.textContent = L.join("\n");
 }
+function ngxValidDomain(d) {
+  if (!d || d.length > 253) { return false; }
+  if (!/^[A-Za-z0-9.-]+$/.test(d)) { return false; }
+  var labels = d.split(".");
+  for (var i = 0; i < labels.length; i++) {
+    var lb = labels[i];
+    if (!lb || lb.length > 63) { return false; }
+    if (!/^[A-Za-z0-9-]+$/.test(lb)) { return false; }
+    if (lb.charAt(0) === "-" || lb.charAt(lb.length - 1) === "-") { return false; }
+  }
+  return true;
+}
 function ngxGenerate() {
   var out = document.getElementById("ngx-out");
   if (!out) { return; }
@@ -1227,7 +1373,7 @@ function ngxGenerate() {
   var ws = document.getElementById("ngx-ws").checked;
   var https = document.getElementById("ngx-https").checked;
   var errs = [];
-  if (!domain || !/^[A-Za-z0-9][A-Za-z0-9.-]*$/.test(domain)) { errs.push("域名格式不正确（如 example.com）"); }
+  if (!ngxValidDomain(domain)) { errs.push("域名格式不正确（如 example.com）"); }
   if (!host || !/^[A-Za-z0-9._-]+$/.test(host)) { errs.push("后端地址格式不正确（IP 或主机名）"); }
   var port = 0;
   if (!/^\d+$/.test(portRaw)) { errs.push("后端端口必须是数字"); }
@@ -1515,7 +1661,7 @@ function initSubnetGen() {
   var out = document.getElementById("sub-out");
   if (!out || out.getAttribute("data-ready") === "1") { return; }
   out.setAttribute("data-ready", "1");
-  ["sub-mode", "sub-ip", "sub-prefix", "sub-mask"].forEach(function (id) {
+  ["sub-family", "sub-mode", "sub-ip", "sub-prefix", "sub-mask", "sub-prefix6"].forEach(function (id) {
     var el = document.getElementById(id);
     if (el) {
       el.addEventListener("input", subGenerate);
