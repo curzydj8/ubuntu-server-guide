@@ -5549,7 +5549,7 @@
 <li><strong>示例</strong>：</li>
 </ul>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>touch<span class="w"> </span>/srv/app/logs/app.log
-<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>touch<span class="w"> </span>-c<span class="w"> </span>-d<span class="w"> </span><span class="s2">&quot;2026-10-21 00:00&quot;</span><span class="w"> </span>/srv/app/data/marker
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>touch<span class="w"> </span>-c<span class="w"> </span>-d<span class="w"> </span><span class="s2">"2026-10-21 00:00"</span><span class="w"> </span>/srv/app/data/marker
 </code></pre></div>
 <p>解读：常用于创建占位或标记文件、触发按时间判断的脚本逻辑，而不是写内容。</p>
 <ul>
@@ -5598,7 +5598,7 @@
 <ul>
 <li><strong>示例</strong>：</li>
 </ul>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>find<span class="w"> </span>/var/log<span class="w"> </span>-name<span class="w"> </span><span class="s2">&quot;*.log&quot;</span><span class="w"> </span>-mtime<span class="w"> </span>+30
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>find<span class="w"> </span>/var/log<span class="w"> </span>-name<span class="w"> </span><span class="s2">"*.log"</span><span class="w"> </span>-mtime<span class="w"> </span>+30
 <a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a>find<span class="w"> </span>/srv<span class="w"> </span>-type<span class="w"> </span>f<span class="w"> </span>-size<span class="w"> </span>+500M
 <a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a>find<span class="w"> </span>/srv/app/tmp<span class="w"> </span>-type<span class="w"> </span>f<span class="w"> </span>-mtime<span class="w"> </span>+7<span class="w"> </span>-print
 </code></pre></div>
@@ -5736,7 +5736,7 @@
 </ul>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a>file<span class="w"> </span>/srv/app/upload.tar.gz<span class="w"> </span>/usr/bin/ls
 </code></pre></div>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a>/srv/app/upload.tar.gz: gzip compressed data, was &quot;upload.tar&quot;
+<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a>/srv/app/upload.tar.gz: gzip compressed data, was "upload.tar"
 <a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a>/usr/bin/ls: ELF 64-bit LSB pie executable, x86-64
 </code></pre></div>
 <p>解读：扩展名是 <code>.tar.gz</code> 但 <code>file</code> 若显示为其他类型，说明文件已损坏或根本不是该格式，不要硬解压。</p>
@@ -5775,7 +5775,7 @@
 <li><strong>示例</strong>：</li>
 </ul>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a>stat<span class="w"> </span>/etc/nginx/nginx.conf
-<a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a>stat<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;%a %U:%G %n&quot;</span><span class="w"> </span>/srv/app<span class="w"> </span>/srv/app/conf
+<a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a>stat<span class="w"> </span>-c<span class="w"> </span><span class="s2">"%a %U:%G %n"</span><span class="w"> </span>/srv/app<span class="w"> </span>/srv/app/conf
 </code></pre></div>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a>755 ubuntu:ubuntu /srv/app
 <a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a>750 ubuntu:ubuntu /srv/app/conf

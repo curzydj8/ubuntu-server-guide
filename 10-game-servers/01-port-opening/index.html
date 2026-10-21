@@ -5127,9 +5127,9 @@
 <h3 id="ufw">第二步：UFW 放行对应端口<a class="headerlink" href="#ufw" title="Permanent link">&para;</a></h3>
 <p>安全组放行后，再处理本机防火墙。先备份当前规则状态以便回退查看，然后逐条放行：</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>sudo<span class="w"> </span>ufw<span class="w"> </span>status<span class="w"> </span>verbose<span class="w"> </span>&gt;<span class="w"> </span>/tmp/ufw-before.txt
-<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>sudo<span class="w"> </span>ufw<span class="w"> </span>allow<span class="w"> </span><span class="m">25565</span>/tcp<span class="w"> </span>comment<span class="w"> </span><span class="s1">&#39;minecraft&#39;</span>
-<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>sudo<span class="w"> </span>ufw<span class="w"> </span>allow<span class="w"> </span><span class="m">8211</span>/udp<span class="w"> </span>comment<span class="w"> </span><span class="s1">&#39;palworld&#39;</span>
-<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>sudo<span class="w"> </span>ufw<span class="w"> </span>allow<span class="w"> </span><span class="m">22</span>/tcp<span class="w"> </span>comment<span class="w"> </span><span class="s1">&#39;ssh&#39;</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>sudo<span class="w"> </span>ufw<span class="w"> </span>allow<span class="w"> </span><span class="m">25565</span>/tcp<span class="w"> </span>comment<span class="w"> </span><span class="s1">'minecraft'</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>sudo<span class="w"> </span>ufw<span class="w"> </span>allow<span class="w"> </span><span class="m">8211</span>/udp<span class="w"> </span>comment<span class="w"> </span><span class="s1">'palworld'</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>sudo<span class="w"> </span>ufw<span class="w"> </span>allow<span class="w"> </span><span class="m">22</span>/tcp<span class="w"> </span>comment<span class="w"> </span><span class="s1">'ssh'</span>
 <a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>sudo<span class="w"> </span>ufw<span class="w"> </span><span class="nb">enable</span>
 </code></pre></div>
 <p>注意顺序：务必先放行 22/TCP 的 SSH 再启用 UFW，否则可能把自己锁在服务器外面。已经启用过 UFW 的机器直接追加规则即可，规则即时生效。用下面的命令判读结果：</p>
@@ -5163,11 +5163,11 @@
 <p>其它游戏同理：凡是配置文件或启动参数里出现 <code>bind</code>、<code>host</code>、<code>listen</code>、<code>server-ip</code> 字样的选项，都不要填 <code>127.0.0.1</code> 或 <code>localhost</code>，要么留空，要么填 <code>0.0.0.0</code>。</p>
 <h2 id="_6">四、效果验证与测试<a class="headerlink" href="#_6" title="Permanent link">&para;</a></h2>
 <p>第一层验证看监听。在服务器上执行：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>ss<span class="w"> </span>-tulnp<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-E<span class="w"> </span><span class="s1">&#39;25565|8211&#39;</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>ss<span class="w"> </span>-tulnp<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-E<span class="w"> </span><span class="s1">'25565|8211'</span>
 </code></pre></div>
 <p>期望输出示例：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>tcp   LISTEN 0  4096   0.0.0.0:25565   0.0.0.0:*   users:((&quot;java&quot;,pid=2143,fd=58))
-<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>udp   UNCONN 0  0      0.0.0.0:8211    0.0.0.0:*   users:((&quot;PalServer-Linux&quot;,pid=2210,fd=27))
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>tcp   LISTEN 0  4096   0.0.0.0:25565   0.0.0.0:*   users:(("java",pid=2143,fd=58))
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>udp   UNCONN 0  0      0.0.0.0:8211    0.0.0.0:*   users:(("PalServer-Linux",pid=2210,fd=27))
 </code></pre></div>
 <p>关键看本地地址列：出现 <code>0.0.0.0:端口</code> 说明第三道门已开；出现 <code>127.0.0.1:端口</code> 说明只监听本机，立即回第三步改绑定；完全没有这一行，说明服务端进程根本没起来或端口配错，先看服务端日志。普通用户看不到进程名时加 <code>sudo</code> 再查。</p>
 <p>第二层验证从外网测连通性。TCP 端口可在任意外网设备上测试：</p>
@@ -5180,16 +5180,16 @@
 <h2 id="_7">五、常见错误与排坑指南<a class="headerlink" href="#_7" title="Permanent link">&para;</a></h2>
 <p><strong>场景 1：本机能连，外网超时，<code>ss</code> 显示 127.0.0.1。</strong> 报错现象是玩家端提示连接超时，服务端日志无任何连接记录。原因是服务端绑定地址被填成了 <code>127.0.0.1</code>，只监听回环。修复：改配置前先备份，再把绑定改为空或 <code>0.0.0.0</code> 并重启服务端：</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>cp<span class="w"> </span>-a<span class="w"> </span>server.properties<span class="w"> </span>server.properties.bak2
-<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a>sed<span class="w"> </span>-i<span class="w"> </span><span class="s1">&#39;s/^server-ip=.*/server-ip=/&#39;</span><span class="w"> </span>server.properties
+<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a>sed<span class="w"> </span>-i<span class="w"> </span><span class="s1">'s/^server-ip=.*/server-ip=/'</span><span class="w"> </span>server.properties
 </code></pre></div>
 <p><strong>场景 2：安全组只开了 TCP，Palworld 搜不到服务器。</strong> 玩家在游戏内输入地址后长时间无响应，<code>tcpdump</code> 抓 UDP 8211 一个包都没有。原因是 Palworld 走 UDP，而安全组与 UFW 只放行了 TCP。修复是把两处都补上 UDP 规则：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>sudo<span class="w"> </span>ufw<span class="w"> </span>allow<span class="w"> </span><span class="m">8211</span>/udp<span class="w"> </span>comment<span class="w"> </span><span class="s1">&#39;palworld&#39;</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>sudo<span class="w"> </span>ufw<span class="w"> </span>allow<span class="w"> </span><span class="m">8211</span>/udp<span class="w"> </span>comment<span class="w"> </span><span class="s1">'palworld'</span>
 <a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a>sudo<span class="w"> </span>ufw<span class="w"> </span>status<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span><span class="m">8211</span>
 </code></pre></div>
 <p>同时回云控制台确认存在 UDP 8211 的入站放行规则，缺失就按第一步补加。</p>
 <p><strong>场景 3：UFW 规则写错协议后缀。</strong> 执行过 <code>sudo ufw allow 8211</code> 后以为已放行，实际该写法默认只放行 TCP。<code>sudo ufw status</code> 中该行显示为 <code>8211 ALLOW IN</code> 而非 <code>8211/udp</code>。修复：删掉错误规则再按正确协议重加：</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a>sudo<span class="w"> </span>ufw<span class="w"> </span>delete<span class="w"> </span>allow<span class="w"> </span><span class="m">8211</span>
-<a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a>sudo<span class="w"> </span>ufw<span class="w"> </span>allow<span class="w"> </span><span class="m">8211</span>/udp<span class="w"> </span>comment<span class="w"> </span><span class="s1">&#39;palworld&#39;</span>
+<a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a>sudo<span class="w"> </span>ufw<span class="w"> </span>allow<span class="w"> </span><span class="m">8211</span>/udp<span class="w"> </span>comment<span class="w"> </span><span class="s1">'palworld'</span>
 </code></pre></div>
 <p>逐层定位表收尾，任何连不上都按此表从上往下查：</p>
 <table>

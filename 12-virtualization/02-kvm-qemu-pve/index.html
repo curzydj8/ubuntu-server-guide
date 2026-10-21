@@ -5292,8 +5292,8 @@
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>sudo<span class="w"> </span>apt<span class="w"> </span>update
 <a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>sudo<span class="w"> </span>apt<span class="w"> </span>install<span class="w"> </span>-y<span class="w"> </span>cpu-checker
 <a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>sudo<span class="w"> </span>kvm-ok
-<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>grep<span class="w"> </span>-E<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;vmx|svm&quot;</span><span class="w"> </span>/proc/cpuinfo
-<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>egrep<span class="w"> </span>-wo<span class="w"> </span><span class="s2">&quot;vmx|svm&quot;</span><span class="w"> </span>/proc/cpuinfo<span class="w"> </span><span class="p">|</span><span class="w"> </span>sort<span class="w"> </span><span class="p">|</span><span class="w"> </span>uniq
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>grep<span class="w"> </span>-E<span class="w"> </span>-c<span class="w"> </span><span class="s2">"vmx|svm"</span><span class="w"> </span>/proc/cpuinfo
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>egrep<span class="w"> </span>-wo<span class="w"> </span><span class="s2">"vmx|svm"</span><span class="w"> </span>/proc/cpuinfo<span class="w"> </span><span class="p">|</span><span class="w"> </span>sort<span class="w"> </span><span class="p">|</span><span class="w"> </span>uniq
 <a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>lsmod<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>kvm
 </code></pre></div>
 <p>逐项判读：<code>kvm-ok</code> 应输出 KVM acceleration can be used 一类肯定结论，并提示 CPU 支持状态；<code>grep -E -c</code> 的结果大于 0 说明每个逻辑核心的标志统计中存在虚拟化标志；标志列表中 Intel 平台应出现 <code>vmx</code>，AMD 平台应出现 <code>svm</code>；<code>lsmod</code> 中应能看到 <code>kvm_intel</code> 或 <code>kvm_amd</code> 模块。若 <code>kvm-ok</code> 提示 CPU 不支持或 BIOS 未开启，先进 BIOS 打开虚拟化选项再重试，软件层无法弥补。</p>
@@ -5426,8 +5426,8 @@
 <div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>sudo<span class="w"> </span>mkdir<span class="w"> </span>-p<span class="w"> </span>/srv/vm-images
 <a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>sudo<span class="w"> </span>cp<span class="w"> </span>/etc/fstab<span class="w"> </span>/etc/fstab.bak-<span class="k">$(</span>date<span class="w"> </span>+%F<span class="k">)</span>
 <a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>df<span class="w"> </span>-h<span class="w"> </span>/srv/vm-images
-<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>cat<span class="w"> </span>&gt;<span class="w"> </span>/tmp/dirpool.xml<span class="w"> </span><span class="s">&lt;&lt;&#39;EOF&#39;</span>
-<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a><span class="s">&lt;pool type=&#39;dir&#39;&gt;</span>
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>cat<span class="w"> </span>&gt;<span class="w"> </span>/tmp/dirpool.xml<span class="w"> </span><span class="s">&lt;&lt;'EOF'</span>
+<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a><span class="s">&lt;pool type='dir'&gt;</span>
 <a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a><span class="s">  &lt;name&gt;vmimages&lt;/name&gt;</span>
 <a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a><span class="s">  &lt;target&gt;</span>
 <a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a><span class="s">    &lt;path&gt;/srv/vm-images&lt;/path&gt;</span>

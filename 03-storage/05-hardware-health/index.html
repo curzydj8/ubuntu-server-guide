@@ -5270,13 +5270,13 @@
 </code></pre></div>
 <h3 id="34-ecc">3.4 内存与 ECC：纠错计数怎么读<a class="headerlink" href="#34-ecc" title="Permanent link">&para;</a></h3>
 <p>ECC 计数分两类：CE（可纠正错误）偶发不致命但趋势重要，UE（不可纠正错误）会导致进程被杀或宕机。先确认 ECC 是否生效，再看计数：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>sudo<span class="w"> </span>dmidecode<span class="w"> </span>-t<span class="w"> </span>memory<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-E<span class="w"> </span><span class="s2">&quot;Error Correction Type|Locator:&quot;</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>sudo<span class="w"> </span>dmidecode<span class="w"> </span>-t<span class="w"> </span>memory<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-E<span class="w"> </span><span class="s2">"Error Correction Type|Locator:"</span>
 <a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>sudo<span class="w"> </span>systemctl<span class="w"> </span><span class="nb">enable</span><span class="w"> </span>--now<span class="w"> </span>rasdaemon.service
 <a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>sudo<span class="w"> </span>ras-mc-ctl<span class="w"> </span>--error-count
 <a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a>sudo<span class="w"> </span>ras-mc-ctl<span class="w"> </span>--summary
 </code></pre></div>
 <p>判读：<code>Error Correction Type</code> 显示 <code>Multi-bit ECC</code> 或 <code>Single-bit ECC</code> 才说明 ECC 在工作，显示 <code>None</code> 则本机没有 ECC；<code>--error-count</code> 按内存条列出 CE 与 UE，健康应全为 0；<code>--summary</code> 汇总 rasdaemon 记录的历史事件。不装 rasdaemon 也可直接读 EDAC 的 sysfs 计数（<code>/sys/devices/system/edac/mc/mc*/ce_count</code> 与 <code>ue_count</code>）并检索内核日志：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>sudo<span class="w"> </span>dmesg<span class="w"> </span>-T<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-E<span class="w"> </span><span class="s2">&quot;EDAC|Hardware Error|Machine Check&quot;</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>sudo<span class="w"> </span>dmesg<span class="w"> </span>-T<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-E<span class="w"> </span><span class="s2">"EDAC|Hardware Error|Machine Check"</span>
 </code></pre></div>
 <table>
 <thead>

@@ -5122,21 +5122,21 @@
 </code></pre></div>
 <p>写入完整配置（清空原内容后粘贴，逐行注释说明每个键的作用）：</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="c1"># frps 监听地址，0.0.0.0 表示接受所有网卡上的隧道连接</span>
-<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="n">bindAddr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;0.0.0.0&quot;</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="n">bindAddr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"0.0.0.0"</span>
 <a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="c1"># frps 监听端口，frpc 靠这个端口与服务端建隧道，需在安全组与 UFW 放行 TCP</span>
 <a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="n">bindPort</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">7000</span>
 <a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="c1"># 鉴权方式使用 token，与 frpc 侧必须完全一致</span>
-<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="n">auth</span><span class="p">.</span><span class="n">method</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;token&quot;</span>
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="n">auth</span><span class="p">.</span><span class="n">method</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"token"</span>
 <a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="c1"># 隧道鉴权密钥，占位符，部署时换成高强度随机字符串，切勿公开</span>
-<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="n">auth</span><span class="p">.</span><span class="n">token</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;&lt;frp-token&gt;&quot;</span>
+<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="n">auth</span><span class="p">.</span><span class="n">token</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"&lt;frp-token&gt;"</span>
 <a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="c1"># 管理面板监听地址，只绑本机，外人无法直连面板</span>
-<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a><span class="n">webServer</span><span class="p">.</span><span class="n">addr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;127.0.0.1&quot;</span>
+<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a><span class="n">webServer</span><span class="p">.</span><span class="n">addr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"127.0.0.1"</span>
 <a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a><span class="c1"># 管理面板端口，通过 SSH 隧道访问，不对公网开放</span>
 <a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a><span class="n">webServer</span><span class="p">.</span><span class="n">port</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">7500</span>
 <a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a><span class="c1"># 管理面板账号，占位符，部署时换成你自己的</span>
-<a id="__codelineno-2-14" name="__codelineno-2-14" href="#__codelineno-2-14"></a><span class="n">webServer</span><span class="p">.</span><span class="n">user</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;opsadmin&quot;</span>
+<a id="__codelineno-2-14" name="__codelineno-2-14" href="#__codelineno-2-14"></a><span class="n">webServer</span><span class="p">.</span><span class="n">user</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"opsadmin"</span>
 <a id="__codelineno-2-15" name="__codelineno-2-15" href="#__codelineno-2-15"></a><span class="c1"># 管理面板密码，占位符，部署时换成强口令</span>
-<a id="__codelineno-2-16" name="__codelineno-2-16" href="#__codelineno-2-16"></a><span class="n">webServer</span><span class="p">.</span><span class="n">password</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;&lt;frp-dashboard-password&gt;&quot;</span>
+<a id="__codelineno-2-16" name="__codelineno-2-16" href="#__codelineno-2-16"></a><span class="n">webServer</span><span class="p">.</span><span class="n">password</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"&lt;frp-dashboard-password&gt;"</span>
 <a id="__codelineno-2-17" name="__codelineno-2-17" href="#__codelineno-2-17"></a><span class="c1"># 允许 frpc 映射的对外端口范围，不在此范围内的代理会被拒绝，锁死暴露面</span>
 <a id="__codelineno-2-18" name="__codelineno-2-18" href="#__codelineno-2-18"></a><span class="n">allowPorts</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span>
 <a id="__codelineno-2-19" name="__codelineno-2-19" href="#__codelineno-2-19"></a><span class="w">  </span><span class="p">{</span><span class="w"> </span><span class="n">start</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="mi">25565</span><span class="p">,</span><span class="w"> </span><span class="n">end</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="mi">25565</span><span class="w"> </span><span class="p">},</span>
@@ -5163,9 +5163,9 @@
 <p>启动并放行 VPS 侧端口（7000 是隧道口，25565 与 8211 是对玩家的游戏口，玩家连的就是这台 VPS）：</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>sudo<span class="w"> </span>systemctl<span class="w"> </span>daemon-reload
 <a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>sudo<span class="w"> </span>systemctl<span class="w"> </span><span class="nb">enable</span><span class="w"> </span>--now<span class="w"> </span>frps.service
-<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>sudo<span class="w"> </span>ufw<span class="w"> </span>allow<span class="w"> </span><span class="m">7000</span>/tcp<span class="w"> </span>comment<span class="w"> </span><span class="s1">&#39;frps&#39;</span>
-<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>sudo<span class="w"> </span>ufw<span class="w"> </span>allow<span class="w"> </span><span class="m">25565</span>/tcp<span class="w"> </span>comment<span class="w"> </span><span class="s1">&#39;minecraft-via-frp&#39;</span>
-<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a>sudo<span class="w"> </span>ufw<span class="w"> </span>allow<span class="w"> </span><span class="m">8211</span>/udp<span class="w"> </span>comment<span class="w"> </span><span class="s1">&#39;palworld-via-frp&#39;</span>
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>sudo<span class="w"> </span>ufw<span class="w"> </span>allow<span class="w"> </span><span class="m">7000</span>/tcp<span class="w"> </span>comment<span class="w"> </span><span class="s1">'frps'</span>
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>sudo<span class="w"> </span>ufw<span class="w"> </span>allow<span class="w"> </span><span class="m">25565</span>/tcp<span class="w"> </span>comment<span class="w"> </span><span class="s1">'minecraft-via-frp'</span>
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a>sudo<span class="w"> </span>ufw<span class="w"> </span>allow<span class="w"> </span><span class="m">8211</span>/udp<span class="w"> </span>comment<span class="w"> </span><span class="s1">'palworld-via-frp'</span>
 </code></pre></div>
 <p>云安全组里同步添加同样三条入站规则（方法见第 01 章），三处缺一不可。</p>
 <h3 id="frpc">第三步：在内网机器安装 frpc 并写配置<a class="headerlink" href="#frpc" title="Permanent link">&para;</a></h3>
@@ -5180,30 +5180,30 @@
 </code></pre></div>
 <p>写入客户端完整配置，逐行注释如下：</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="c1"># frps 所在 VPS 的公网地址，示例为文档段地址，部署时换成你的 VPS 公网 IP 或域名</span>
-<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="n">serverAddr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;198.51.100.10&quot;</span>
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="n">serverAddr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"198.51.100.10"</span>
 <a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="c1"># frps 的隧道监听端口，与服务端 bindPort 一致</span>
 <a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="n">serverPort</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">7000</span>
 <a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a><span class="c1"># 鉴权方式与密钥，必须与 frps 侧逐字一致</span>
-<a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a><span class="n">auth</span><span class="p">.</span><span class="n">method</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;token&quot;</span>
-<a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a><span class="n">auth</span><span class="p">.</span><span class="n">token</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;&lt;frp-token&gt;&quot;</span>
+<a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a><span class="n">auth</span><span class="p">.</span><span class="n">method</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"token"</span>
+<a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a><span class="n">auth</span><span class="p">.</span><span class="n">token</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"&lt;frp-token&gt;"</span>
 <a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a><span class="c1"># 客户端在本机管理接口的监听，仅本机使用可不开放</span>
 <a id="__codelineno-6-9" name="__codelineno-6-9" href="#__codelineno-6-9"></a><span class="c1"># 第一条代理：Minecraft 的 TCP 转发</span>
 <a id="__codelineno-6-10" name="__codelineno-6-10" href="#__codelineno-6-10"></a><span class="k">[[proxies]]</span>
 <a id="__codelineno-6-11" name="__codelineno-6-11" href="#__codelineno-6-11"></a><span class="c1"># 代理名，本机内唯一即可，用于日志与面板识别</span>
-<a id="__codelineno-6-12" name="__codelineno-6-12" href="#__codelineno-6-12"></a><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;minecraft-tcp&quot;</span>
+<a id="__codelineno-6-12" name="__codelineno-6-12" href="#__codelineno-6-12"></a><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"minecraft-tcp"</span>
 <a id="__codelineno-6-13" name="__codelineno-6-13" href="#__codelineno-6-13"></a><span class="c1"># 代理类型，Minecraft 走 TCP</span>
-<a id="__codelineno-6-14" name="__codelineno-6-14" href="#__codelineno-6-14"></a><span class="n">type</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;tcp&quot;</span>
+<a id="__codelineno-6-14" name="__codelineno-6-14" href="#__codelineno-6-14"></a><span class="n">type</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"tcp"</span>
 <a id="__codelineno-6-15" name="__codelineno-6-15" href="#__codelineno-6-15"></a><span class="c1"># 游戏服在本机的监听地址，本机运行填 127.0.0.1</span>
-<a id="__codelineno-6-16" name="__codelineno-6-16" href="#__codelineno-6-16"></a><span class="n">localIP</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;127.0.0.1&quot;</span>
+<a id="__codelineno-6-16" name="__codelineno-6-16" href="#__codelineno-6-16"></a><span class="n">localIP</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"127.0.0.1"</span>
 <a id="__codelineno-6-17" name="__codelineno-6-17" href="#__codelineno-6-17"></a><span class="c1"># 游戏服在本机的监听端口</span>
 <a id="__codelineno-6-18" name="__codelineno-6-18" href="#__codelineno-6-18"></a><span class="n">localPort</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">25565</span>
 <a id="__codelineno-6-19" name="__codelineno-6-19" href="#__codelineno-6-19"></a><span class="c1"># 玩家连接 VPS 时使用的对外端口，与 localPort 相同最不易记错</span>
 <a id="__codelineno-6-20" name="__codelineno-6-20" href="#__codelineno-6-20"></a><span class="n">remotePort</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">25565</span>
 <a id="__codelineno-6-21" name="__codelineno-6-21" href="#__codelineno-6-21"></a><span class="c1"># 第二条代理：Palworld 的 UDP 转发，UDP 游戏必须单独建 udp 类型代理</span>
 <a id="__codelineno-6-22" name="__codelineno-6-22" href="#__codelineno-6-22"></a><span class="k">[[proxies]]</span>
-<a id="__codelineno-6-23" name="__codelineno-6-23" href="#__codelineno-6-23"></a><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;palworld-udp&quot;</span>
-<a id="__codelineno-6-24" name="__codelineno-6-24" href="#__codelineno-6-24"></a><span class="n">type</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;udp&quot;</span>
-<a id="__codelineno-6-25" name="__codelineno-6-25" href="#__codelineno-6-25"></a><span class="n">localIP</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;127.0.0.1&quot;</span>
+<a id="__codelineno-6-23" name="__codelineno-6-23" href="#__codelineno-6-23"></a><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"palworld-udp"</span>
+<a id="__codelineno-6-24" name="__codelineno-6-24" href="#__codelineno-6-24"></a><span class="n">type</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"udp"</span>
+<a id="__codelineno-6-25" name="__codelineno-6-25" href="#__codelineno-6-25"></a><span class="n">localIP</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"127.0.0.1"</span>
 <a id="__codelineno-6-26" name="__codelineno-6-26" href="#__codelineno-6-26"></a><span class="n">localPort</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">8211</span>
 <a id="__codelineno-6-27" name="__codelineno-6-27" href="#__codelineno-6-27"></a><span class="n">remotePort</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">8211</span>
 </code></pre></div>
@@ -5230,7 +5230,7 @@
 <a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a>[palworld-udp] start proxy success
 </code></pre></div>
 <p>再在 VPS 上确认对外端口已经监听：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>ss<span class="w"> </span>-tulnp<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-E<span class="w"> </span><span class="s1">&#39;7000|25565|8211&#39;</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>ss<span class="w"> </span>-tulnp<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-E<span class="w"> </span><span class="s1">'7000|25565|8211'</span>
 </code></pre></div>
 <p>应能看到 7000/TCP、25565/TCP 与 8211/UDP 三行，监听地址为 <code>0.0.0.0</code> 或 <code>::</code>。最终验收必须走真实玩家路径：让外网玩家分别直连 <code>198.51.100.10:25565</code> 与 <code>198.51.100.10:8211</code>，两款游戏都能进服并稳定游玩 10 分钟以上，再在 VPS 上用 <code>sudo tcpdump -ni any port 8211 -c 5</code> 抓包确认 UDP 流量真实经过。管理面板验证走 SSH 隧道，在本地电脑执行 <code>ssh -L 7500:127.0.0.1:7500 ubuntu@198.51.100.10</code> 后浏览器打开本机 7500 端口，能看到代理在线状态即通。</p>
 <p>选型对比表收尾，帮助按场景决策：</p>
@@ -5272,7 +5272,7 @@
 </table>
 <h2 id="_5">五、常见错误与排坑指南<a class="headerlink" href="#_5" title="Permanent link">&para;</a></h2>
 <p><strong>场景 1：frpc 日志报 token 不匹配，连不上服务端。</strong> 报错原文片段：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>login to server failed: token in login doesn&#39;t match token from configuration
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>login to server failed: token in login doesn't match token from configuration
 </code></pre></div>
 <p>原因是两端 <code>auth.token</code> 不逐字一致，常见于复制时多了空格或改了一端忘了另一端。修复：两台机器分别执行 <code>grep 'auth.token' /etc/frp/frps.toml /etc/frp/frpc.toml</code> 核对，统一后重启两端服务。</p>
 <p><strong>场景 2：frpc 显示代理启动失败，端口被占用或不在允许范围。</strong> 报错原文片段：</p>

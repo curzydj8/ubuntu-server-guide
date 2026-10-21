@@ -5235,8 +5235,8 @@
 <a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="w">    </span><span class="na">IN  NS  ns1.example.com.</span>
 <a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="w">    </span><span class="na">IN  NS  ns2.example.com.</span>
 <a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a><span class="w">    </span><span class="na">IN  MX  10 mail.example.com.</span>
-<a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a><span class="w">    </span><span class="na">IN  TXT &quot;v</span><span class="o">=</span><span class="s">spf1 mx -all&quot;</span>
-<a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a><span class="w">    </span><span class="na">IN  CAA 0 issue &quot;letsencrypt.org&quot;</span>
+<a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a><span class="w">    </span><span class="na">IN  TXT "v</span><span class="o">=</span><span class="s">spf1 mx -all"</span>
+<a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a><span class="w">    </span><span class="na">IN  CAA 0 issue "letsencrypt.org"</span>
 <a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a><span class="na">ns1 IN  A   192.0.2.53</span>
 <a id="__codelineno-2-14" name="__codelineno-2-14" href="#__codelineno-2-14"></a><span class="na">www IN  A   192.0.2.80</span>
 <a id="__codelineno-2-15" name="__codelineno-2-15" href="#__codelineno-2-15"></a><span class="na">www IN  AAAA 2001</span><span class="o">:</span><span class="s">db8::80</span>
@@ -5337,17 +5337,17 @@
 <h3 id="34-dnssec">3.4 DNSSEC：给区域加上可验证的签名<a class="headerlink" href="#34-dnssec" title="Permanent link">&para;</a></h3>
 <p>原理是一条链。权威用私钥给每组记录生成签名（RRSIG），公钥以 DNSKEY 发布在区域里，再把公钥摘要（DS 记录）交父域发布。校验方从根信任锚出发：根签顶级域的 DS → 顶级域签你的 DS → DS 对上你的 DNSKEY → DNSKEY 验过每组 RRSIG，任何一环对不上即判 bogus。两把钥匙分工：ZSK（区域签名密钥）签普通记录、轮换频繁；KSK（密钥签名密钥）只签 DNSKEY 本身，轮换要同步更新父域 DS，动作重。</p>
 <p>BIND9 用 <code>dnssec-policy</code> 自动签名，不再手工敲签名命令。在 <code>/etc/bind/named.conf.options</code> 或单独策略文件里定义策略，并在区域声明里引用（改前已在 3.1 备份）：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="na">dnssec-policy &quot;default-policy&quot; {</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="na">dnssec-policy "default-policy" {</span>
 <a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="w">    </span><span class="na">keys {</span>
 <a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="w">        </span><span class="na">ksk lifetime unlimited algorithm 13;</span>
 <a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="w">        </span><span class="na">zsk lifetime 60d algorithm 13;</span>
 <a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="w">    </span><span class="na">};</span>
 <a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="na">};</span>
 <a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a>
-<a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a><span class="na">zone &quot;example.com&quot; {</span>
+<a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a><span class="na">zone "example.com" {</span>
 <a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a><span class="w">    </span><span class="na">type primary;</span>
-<a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a><span class="w">    </span><span class="na">file &quot;/etc/bind/zones/db.example.com&quot;;</span>
-<a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a><span class="w">    </span><span class="na">dnssec-policy &quot;default-policy&quot;;</span>
+<a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a><span class="w">    </span><span class="na">file "/etc/bind/zones/db.example.com";</span>
+<a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a><span class="w">    </span><span class="na">dnssec-policy "default-policy";</span>
 <a id="__codelineno-4-12" name="__codelineno-4-12" href="#__codelineno-4-12"></a><span class="w">    </span><span class="na">inline-signing yes;</span>
 <a id="__codelineno-4-13" name="__codelineno-4-13" href="#__codelineno-4-13"></a><span class="na">};</span>
 </code></pre></div>

@@ -5294,13 +5294,13 @@
 <a id="__codelineno-10-7" name="__codelineno-10-7" href="#__codelineno-10-7"></a><span class="c1"># 转发一份到内网日志服务器，UDP 514</span>
 <a id="__codelineno-10-8" name="__codelineno-10-8" href="#__codelineno-10-8"></a><span class="na">*.* @192.0.2.53</span><span class="o">:</span><span class="s">514</span>
 <a id="__codelineno-10-9" name="__codelineno-10-9" href="#__codelineno-10-9"></a><span class="c1"># 本地程序按名字分文件示例，nginx 访问日志由其自身配置管理，这里只收系统类</span>
-<a id="__codelineno-10-10" name="__codelineno-10-10" href="#__codelineno-10-10"></a><span class="o">:</span><span class="s">programname, isequal, &quot;sshd&quot;  /var/log/sshd-custom.log</span>
+<a id="__codelineno-10-10" name="__codelineno-10-10" href="#__codelineno-10-10"></a><span class="o">:</span><span class="s">programname, isequal, "sshd"  /var/log/sshd-custom.log</span>
 <a id="__codelineno-10-11" name="__codelineno-10-11" href="#__codelineno-10-11"></a><span class="na">&amp; stop</span>
 </code></pre></div>
 <p>规则从上往下匹配，每行左边是选择器，右边是动作。选择器由设施与级别组成，星号表示全部。动作写文件路径就是本地落盘，写单个 @ 加地址是 UDP 转发，写两个 @ 是 TCP 转发，TCP 更可靠但开销更高，内网集中收集推荐优先 TCP。最后一组两行是按程序名分文件并用 stop 结束后续匹配，避免同一条日志被重复写多份。改完检查语法并重启：</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>sudo<span class="w"> </span>rsyslogd<span class="w"> </span>-N1
 <a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a>sudo<span class="w"> </span>systemctl<span class="w"> </span>restart<span class="w"> </span>rsyslog
-<a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a>logger<span class="w"> </span>-t<span class="w"> </span>sshd<span class="w"> </span>-p<span class="w"> </span>auth.info<span class="w"> </span><span class="s2">&quot;rsyslog rule test message&quot;</span>
+<a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a>logger<span class="w"> </span>-t<span class="w"> </span>sshd<span class="w"> </span>-p<span class="w"> </span>auth.info<span class="w"> </span><span class="s2">"rsyslog rule test message"</span>
 <a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a>sudo<span class="w"> </span>tail<span class="w"> </span>-n<span class="w"> </span><span class="m">20</span><span class="w"> </span>/var/log/sshd-custom.log
 </code></pre></div>
 <p>logger 命令用来主动打一条测试日志，验证规则是否命中，这是本节最重要的自测手段。接收端服务器如需收日志，在它的分片文件中启用 imudp 或 imtcp 模块并放行 514 端口，只对内网网段放行，不要对公网开放日志接收。</p>
@@ -5359,10 +5359,10 @@
 <a id="__codelineno-18-4" name="__codelineno-18-4" href="#__codelineno-18-4"></a>Leap status     : Normal
 </code></pre></div>
 <p>日志验证分三路一起查。用 logger 打标后，分别在文件、journal 与转发目标上确认同一条消息存在：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a>logger<span class="w"> </span><span class="s2">&quot;verify-test-20261021 hello from ubuntu host&quot;</span>
-<a id="__codelineno-19-2" name="__codelineno-19-2" href="#__codelineno-19-2"></a>sudo<span class="w"> </span>grep<span class="w"> </span><span class="s2">&quot;verify-test-20261021&quot;</span><span class="w"> </span>/var/log/syslog
-<a id="__codelineno-19-3" name="__codelineno-19-3" href="#__codelineno-19-3"></a>journalctl<span class="w"> </span>-n<span class="w"> </span><span class="m">50</span><span class="w"> </span>--no-pager<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span><span class="s2">&quot;verify-test-20261021&quot;</span>
-<a id="__codelineno-19-4" name="__codelineno-19-4" href="#__codelineno-19-4"></a>journalctl<span class="w"> </span>-u<span class="w"> </span>ssh<span class="w"> </span>--since<span class="w"> </span><span class="s2">&quot;1 hour ago&quot;</span><span class="w"> </span>--no-pager
+<div class="highlight"><pre><span></span><code><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a>logger<span class="w"> </span><span class="s2">"verify-test-20261021 hello from ubuntu host"</span>
+<a id="__codelineno-19-2" name="__codelineno-19-2" href="#__codelineno-19-2"></a>sudo<span class="w"> </span>grep<span class="w"> </span><span class="s2">"verify-test-20261021"</span><span class="w"> </span>/var/log/syslog
+<a id="__codelineno-19-3" name="__codelineno-19-3" href="#__codelineno-19-3"></a>journalctl<span class="w"> </span>-n<span class="w"> </span><span class="m">50</span><span class="w"> </span>--no-pager<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span><span class="s2">"verify-test-20261021"</span>
+<a id="__codelineno-19-4" name="__codelineno-19-4" href="#__codelineno-19-4"></a>journalctl<span class="w"> </span>-u<span class="w"> </span>ssh<span class="w"> </span>--since<span class="w"> </span><span class="s2">"1 hour ago"</span><span class="w"> </span>--no-pager
 <a id="__codelineno-19-5" name="__codelineno-19-5" href="#__codelineno-19-5"></a>journalctl<span class="w"> </span>-p<span class="w"> </span>err<span class="w"> </span>-b<span class="w"> </span>--no-pager
 <a id="__codelineno-19-6" name="__codelineno-19-6" href="#__codelineno-19-6"></a>journalctl<span class="w"> </span>--disk-usage
 <a id="__codelineno-19-7" name="__codelineno-19-7" href="#__codelineno-19-7"></a>df<span class="w"> </span>-h<span class="w"> </span>/var/log

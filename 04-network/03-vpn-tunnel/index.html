@@ -5146,7 +5146,7 @@
 <p>第一条命令生成服务端私钥并保存，第二条由私钥推导出公钥。公钥可以公开，用于填到客户端配置里。私钥内容绝不贴到聊天、工单或代码仓库，本章只给生成命令与占位写法，配置示例中用 <code>&lt;server-private-key&gt;</code> 占位表示把本机生成的值填入该行。</p>
 <p>第三步，开启转发并放行端口：</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>sudo<span class="w"> </span>cp<span class="w"> </span>/etc/sysctl.conf<span class="w"> </span>/etc/sysctl.conf.bak
-<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;net.ipv4.ip_forward=1&quot;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>sudo<span class="w"> </span>tee<span class="w"> </span>/etc/sysctl.d/99-wireguard.conf
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="nb">echo</span><span class="w"> </span><span class="s2">"net.ipv4.ip_forward=1"</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>sudo<span class="w"> </span>tee<span class="w"> </span>/etc/sysctl.d/99-wireguard.conf
 <a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>sudo<span class="w"> </span>sysctl<span class="w"> </span>-p<span class="w"> </span>/etc/sysctl.d/99-wireguard.conf
 <a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>sudo<span class="w"> </span>ufw<span class="w"> </span>allow<span class="w"> </span><span class="m">51820</span>/udp
 <a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>sudo<span class="w"> </span>ufw<span class="w"> </span>allow<span class="w"> </span><span class="m">22</span>/tcp
@@ -5213,7 +5213,7 @@
 <a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a>tailscale<span class="w"> </span>ssh<span class="w"> </span>ubuntu@&lt;peer-hostname&gt;
 </code></pre></div>
 <p>第三步，子网路由。想让一台设备把背后的整个内网带进 tailnet，在该设备上宣告路由并在管理后台批准：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;net.ipv4.ip_forward=1&quot;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>sudo<span class="w"> </span>tee<span class="w"> </span>/etc/sysctl.d/99-tailscale.conf
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="nb">echo</span><span class="w"> </span><span class="s2">"net.ipv4.ip_forward=1"</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>sudo<span class="w"> </span>tee<span class="w"> </span>/etc/sysctl.d/99-tailscale.conf
 <a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a>sudo<span class="w"> </span>sysctl<span class="w"> </span>-p<span class="w"> </span>/etc/sysctl.d/99-tailscale.conf
 <a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a>sudo<span class="w"> </span>tailscale<span class="w"> </span>up<span class="w"> </span>--advertise-routes<span class="o">=</span><span class="m">198</span>.51.100.128/25
 </code></pre></div>

@@ -5181,11 +5181,11 @@
 </code></pre></div>
 <p>期望状态：<code>ss</code> 的每一行监听都能说清归属服务与业务用途，说不清的先查再关；已启用服务清单里没有明确不需要的项。修复方向是 <code>sudo systemctl disable --now 服务名</code>，逐个执行、逐个验证业务，服务清单与 <a href="../04-defense/">第 04 章</a> 的防御基线对照着看。</p>
 <p>第二域是密码与账户策略，分三处核查。PAM 口令强度由 pwquality 管，参数逐行讲解见下表，先看当前值：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>grep<span class="w"> </span>-E<span class="w"> </span><span class="s2">&quot;pam_pwquality&quot;</span><span class="w"> </span>/etc/pam.d/common-password
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>grep<span class="w"> </span>-E<span class="w"> </span><span class="s2">"pam_pwquality"</span><span class="w"> </span>/etc/pam.d/common-password
 <a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>cat<span class="w"> </span>/etc/security/pwquality.conf
-<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>grep<span class="w"> </span>-E<span class="w"> </span><span class="s2">&quot;PASS_MAX_DAYS|PASS_MIN_DAYS|PASS_WARN_AGE&quot;</span><span class="w"> </span>/etc/login.defs
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>grep<span class="w"> </span>-E<span class="w"> </span><span class="s2">"PASS_MAX_DAYS|PASS_MIN_DAYS|PASS_WARN_AGE"</span><span class="w"> </span>/etc/login.defs
 <a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>chage<span class="w"> </span>-l<span class="w"> </span>opsadmin
-<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>sudo<span class="w"> </span>grep<span class="w"> </span>-E<span class="w"> </span><span class="s2">&quot;^\s*root&quot;</span><span class="w"> </span>/etc/shadow
+<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>sudo<span class="w"> </span>grep<span class="w"> </span>-E<span class="w"> </span><span class="s2">"^\s*root"</span><span class="w"> </span>/etc/shadow
 </code></pre></div>
 <table>
 <thead>
@@ -5268,7 +5268,7 @@
 </tbody>
 </table>
 <p>一次性核查并顺带找全盘可疑的可写配置：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>stat<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;%a %n&quot;</span><span class="w"> </span>/etc/passwd<span class="w"> </span>/etc/shadow<span class="w"> </span>/etc/group<span class="w"> </span>/etc/gshadow<span class="w"> </span>/etc/ssh/sshd_config
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>stat<span class="w"> </span>-c<span class="w"> </span><span class="s2">"%a %n"</span><span class="w"> </span>/etc/passwd<span class="w"> </span>/etc/shadow<span class="w"> </span>/etc/group<span class="w"> </span>/etc/gshadow<span class="w"> </span>/etc/ssh/sshd_config
 <a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>sudo<span class="w"> </span>find<span class="w"> </span>/etc<span class="w"> </span>-type<span class="w"> </span>f<span class="w"> </span>-perm<span class="w"> </span>-o+w<span class="w"> </span>-ls
 </code></pre></div>
 <p>第二条期望无输出；有输出逐个判断，确属配置错误才用 <code>chmod</code> 收紧，不要对业务数据目录批量改权限。</p>
@@ -5338,7 +5338,7 @@
 </code></pre></div>
 <p>期望 <code>auditctl -l</code> 能列出刚加的规则，<code>ausearch</code> 在有人改动被监视文件后能查到事件。规则的量要克制：规则过密会让日志暴涨且拖慢高频系统调用，先覆盖身份与权限文件，再按业务逐步加。</p>
 <p>第六域是自动更新：安全更新应开启自动安装，完整配置与排坑见同部分 <a href="../07-unattended-upgrades/">第 07 章</a>，本章只核查是否启用：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>grep<span class="w"> </span>-E<span class="w"> </span><span class="s2">&quot;Update-Package-Lists|Unattended-Upgrade&quot;</span><span class="w"> </span>/etc/apt/apt.conf.d/20auto-upgrades
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>grep<span class="w"> </span>-E<span class="w"> </span><span class="s2">"Update-Package-Lists|Unattended-Upgrade"</span><span class="w"> </span>/etc/apt/apt.conf.d/20auto-upgrades
 <a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a>systemctl<span class="w"> </span>status<span class="w"> </span>apt-daily-upgrade.timer<span class="w"> </span>--no-pager
 </code></pre></div>
 <p>两项期望分别为 <code>1</code> 与 <code>active</code>，不符时到第 07 章按步骤启用，不要在本章临时拼凑配置。</p>

@@ -5276,7 +5276,7 @@
 </code></pre></div>
 <p><code>visudo -c</code> 期望输出包含 <code>parsed OK</code>；<code>getent group</code> 应能列出组成员，列不出来先按第 5.3 节清缓存，不要反复改 sudoers 文件。</p>
 <p>登录范围默认是域内所有用户都能登录这台机器，生产服务器通常要收紧。两种做法取舍如下：<code>realm permit --groups 'ops-admins'</code> 按组放行，粒度细、适合业务服务器；<code>realm permit --all</code> 与默认策略适合通用办公终端。示例：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>sudo<span class="w"> </span>realm<span class="w"> </span>permit<span class="w"> </span>--groups<span class="w"> </span><span class="s1">&#39;ops-admins&#39;</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>sudo<span class="w"> </span>realm<span class="w"> </span>permit<span class="w"> </span>--groups<span class="w"> </span><span class="s1">'ops-admins'</span>
 <a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a>sudo<span class="w"> </span>realm<span class="w"> </span>permit<span class="w"> </span>--deny<span class="w"> </span>--all
 <a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a>realm<span class="w"> </span>list
 </code></pre></div>

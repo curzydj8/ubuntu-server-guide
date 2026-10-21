@@ -5781,7 +5781,7 @@
 <li><strong>示例</strong>：</li>
 </ul>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a>pgrep<span class="w"> </span>-a<span class="w"> </span>nginx
-<a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a>pgrep<span class="w"> </span>-u<span class="w"> </span>ubuntu<span class="w"> </span>-f<span class="w"> </span><span class="s1">&#39;python3 app.py&#39;</span>
+<a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a>pgrep<span class="w"> </span>-u<span class="w"> </span>ubuntu<span class="w"> </span>-f<span class="w"> </span><span class="s1">'python3 app.py'</span>
 </code></pre></div>
 <p>第一条列出 nginx 全部进程及启动参数；动任何进程之前，先用 <code>pgrep -a</code> 预览将要命中的对象，这是本章后续 <code>pkill</code> 的前置动作。</p>
 <ul>
@@ -5822,8 +5822,8 @@
 <ul>
 <li><strong>示例</strong>：</li>
 </ul>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a>pgrep<span class="w"> </span>-a<span class="w"> </span>-f<span class="w"> </span><span class="s1">&#39;python3 worker.py&#39;</span>
-<a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a>pkill<span class="w"> </span>-TERM<span class="w"> </span>-u<span class="w"> </span>ubuntu<span class="w"> </span>-f<span class="w"> </span><span class="s1">&#39;python3 worker.py&#39;</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a>pgrep<span class="w"> </span>-a<span class="w"> </span>-f<span class="w"> </span><span class="s1">'python3 worker.py'</span>
+<a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a>pkill<span class="w"> </span>-TERM<span class="w"> </span>-u<span class="w"> </span>ubuntu<span class="w"> </span>-f<span class="w"> </span><span class="s1">'python3 worker.py'</span>
 </code></pre></div>
 <p>先用完全相同的匹配条件跑一遍 <code>pgrep -a</code> 预览，确认列表里全是目标进程后，再把命令换成 <code>pkill</code> 执行。</p>
 <ul>
@@ -5874,7 +5874,7 @@
 </ul>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a><span class="nb">kill</span><span class="w"> </span><span class="m">12345</span>
 <a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a>sleep<span class="w"> </span><span class="m">3</span>
-<a id="__codelineno-15-3" name="__codelineno-15-3" href="#__codelineno-15-3"></a><span class="nb">kill</span><span class="w"> </span>-0<span class="w"> </span><span class="m">12345</span><span class="w"> </span><span class="m">2</span>&gt;/dev/null<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="s1">&#39;仍在运行&#39;</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="s1">&#39;已退出&#39;</span>
+<a id="__codelineno-15-3" name="__codelineno-15-3" href="#__codelineno-15-3"></a><span class="nb">kill</span><span class="w"> </span>-0<span class="w"> </span><span class="m">12345</span><span class="w"> </span><span class="m">2</span>&gt;/dev/null<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="s1">'仍在运行'</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="s1">'已退出'</span>
 </code></pre></div>
 <p>先发默认的 <code>TERM</code> 并等待数秒，再用 <code>-0</code> 探测是否已退出；多数服务在收到 TERM 后需要一点时间写完日志与释放端口，不要连按强杀。</p>
 <ul>

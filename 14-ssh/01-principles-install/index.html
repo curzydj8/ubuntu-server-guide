@@ -5229,12 +5229,12 @@
 <div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>sudo<span class="w"> </span>ss<span class="w"> </span>-lntp<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>ssh
 </code></pre></div>
 <p>正常输出示例：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>LISTEN 0 4096 0.0.0.0:22    0.0.0.0:* users:((&quot;sshd&quot;,pid=1052,fd=3))
-<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>LISTEN 0 4096 [::]:22       [::]:*    users:((&quot;sshd&quot;,pid=1052,fd=4))
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>LISTEN 0 4096 0.0.0.0:22    0.0.0.0:* users:(("sshd",pid=1052,fd=3))
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>LISTEN 0 4096 [::]:22       [::]:*    users:(("sshd",pid=1052,fd=4))
 </code></pre></div>
 <p>解读：<code>ss -lntp</code> 中 <code>-l</code> 只看监听中的套接字，<code>-n</code> 不做域名解析，<code>-t</code> 只看 TCP，<code>-p</code> 显示占用进程（需要 sudo 才能看全）。两行分别表示在所有 IPv4 地址与所有 IPv6 地址的 22 端口监听，进程正是 sshd。如果只有一行或端口不是 22，先别急着改客户端——很可能配置被改过，以下一条命令的输出为准。</p>
 <p>查看 sshd 实际生效的完整配置：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>sudo<span class="w"> </span>sshd<span class="w"> </span>-T<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-E<span class="w"> </span><span class="s1">&#39;^(port|listenaddress|passwordauthentication|pubkeyauthentication|permitrootlogin)&#39;</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>sudo<span class="w"> </span>sshd<span class="w"> </span>-T<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-E<span class="w"> </span><span class="s1">'^(port|listenaddress|passwordauthentication|pubkeyauthentication|permitrootlogin)'</span>
 </code></pre></div>
 <p>输出示例：</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>port 22

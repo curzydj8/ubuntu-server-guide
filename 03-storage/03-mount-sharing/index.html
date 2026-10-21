@@ -5252,7 +5252,7 @@
 <p>用 UUID 追加一条数据盘记录的完整操作：</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>sudo<span class="w"> </span>mkdir<span class="w"> </span>-p<span class="w"> </span>/data
 <a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>sudo<span class="w"> </span>blkid<span class="w"> </span>/dev/sdX1
-<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="nb">echo</span><span class="w"> </span><span class="s1">&#39;UUID=3f2a1b4c-1111-4222-8333-444455556666 /data ext4 defaults,nofail 0 2&#39;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>sudo<span class="w"> </span>tee<span class="w"> </span>-a<span class="w"> </span>/etc/fstab
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="nb">echo</span><span class="w"> </span><span class="s1">'UUID=3f2a1b4c-1111-4222-8333-444455556666 /data ext4 defaults,nofail 0 2'</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>sudo<span class="w"> </span>tee<span class="w"> </span>-a<span class="w"> </span>/etc/fstab
 <a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>sudo<span class="w"> </span>mount<span class="w"> </span>-a
 <a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>findmnt<span class="w"> </span>/data
 <a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>df<span class="w"> </span>-h<span class="w"> </span>/data
@@ -5290,7 +5290,7 @@
 </code></pre></div>
 <p>验证通过后，备份客户端 fstab 并追加自动挂载行，网络盘务必带齐 <code>nofail</code>、<code>_netdev</code> 与 automount，避免服务端未开机时客户端卡死：</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>sudo<span class="w"> </span>cp<span class="w"> </span>/etc/fstab<span class="w"> </span>/etc/fstab.bak-2026-01-01
-<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="nb">echo</span><span class="w"> </span><span class="s1">&#39;192.0.2.10:/srv/share /mnt/share nfs4 vers=4.2,nofail,_netdev,x-systemd.automount,x-systemd.mount-timeout=10s 0 0&#39;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>sudo<span class="w"> </span>tee<span class="w"> </span>-a<span class="w"> </span>/etc/fstab
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="nb">echo</span><span class="w"> </span><span class="s1">'192.0.2.10:/srv/share /mnt/share nfs4 vers=4.2,nofail,_netdev,x-systemd.automount,x-systemd.mount-timeout=10s 0 0'</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>sudo<span class="w"> </span>tee<span class="w"> </span>-a<span class="w"> </span>/etc/fstab
 <a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a>sudo<span class="w"> </span>systemctl<span class="w"> </span>daemon-reload
 <a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a>sudo<span class="w"> </span>umount<span class="w"> </span>/mnt/share
 <a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a>df<span class="w"> </span>-h<span class="w"> </span>/mnt/share
@@ -5381,7 +5381,7 @@
 <div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a>sudo<span class="w"> </span>nano<span class="w"> </span>/root/.smbcredentials-teamshare
 <a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a>sudo<span class="w"> </span>chmod<span class="w"> </span><span class="m">600</span><span class="w"> </span>/root/.smbcredentials-teamshare
 <a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a>sudo<span class="w"> </span>mount<span class="w"> </span>-t<span class="w"> </span>cifs<span class="w"> </span>//192.0.2.10/teamshare<span class="w"> </span>/mnt/teamshare<span class="w"> </span>-o<span class="w"> </span><span class="nv">credentials</span><span class="o">=</span>/root/.smbcredentials-teamshare,vers<span class="o">=</span><span class="m">3</span>.0,uid<span class="o">=</span>ubuntu,gid<span class="o">=</span>ubuntu
-<a id="__codelineno-14-4" name="__codelineno-14-4" href="#__codelineno-14-4"></a><span class="nb">echo</span><span class="w"> </span><span class="s1">&#39;//192.0.2.10/teamshare /mnt/teamshare cifs credentials=/root/.smbcredentials-teamshare,vers=3.0,nofail,_netdev 0 0&#39;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>sudo<span class="w"> </span>tee<span class="w"> </span>-a<span class="w"> </span>/etc/fstab
+<a id="__codelineno-14-4" name="__codelineno-14-4" href="#__codelineno-14-4"></a><span class="nb">echo</span><span class="w"> </span><span class="s1">'//192.0.2.10/teamshare /mnt/teamshare cifs credentials=/root/.smbcredentials-teamshare,vers=3.0,nofail,_netdev 0 0'</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>sudo<span class="w"> </span>tee<span class="w"> </span>-a<span class="w"> </span>/etc/fstab
 </code></pre></div>
 <p>凭据文件只有三行：<code>username=ubuntu</code>、<code>password=ExamplePass123</code>、<code>domain=WORKGROUP</code>。挂载与 fstab 只引用文件，轮换只改这一处。</p>
 <div class="admonition danger">
@@ -5508,22 +5508,22 @@
 </code></pre></div>
 <p><code>mount -a</code> 无报错、<code>findmnt --verify</code> 无警告，才算合格。再重启一次，<code>df -h</code> 中数据盘与网络盘都在，才证明开机链路完整。</p>
 <p>NFS 验证：两端看到同一文件即成功：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-28-1" name="__codelineno-28-1" href="#__codelineno-28-1"></a><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;nfs-ok&quot;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>sudo<span class="w"> </span>tee<span class="w"> </span>/mnt/share/client-write-test.txt
+<div class="highlight"><pre><span></span><code><a id="__codelineno-28-1" name="__codelineno-28-1" href="#__codelineno-28-1"></a><span class="nb">echo</span><span class="w"> </span><span class="s2">"nfs-ok"</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>sudo<span class="w"> </span>tee<span class="w"> </span>/mnt/share/client-write-test.txt
 <a id="__codelineno-28-2" name="__codelineno-28-2" href="#__codelineno-28-2"></a>cat<span class="w"> </span>/mnt/share/client-write-test.txt
 <a id="__codelineno-28-3" name="__codelineno-28-3" href="#__codelineno-28-3"></a>sudo<span class="w"> </span>exportfs<span class="w"> </span>-v
 <a id="__codelineno-28-4" name="__codelineno-28-4" href="#__codelineno-28-4"></a>showmount<span class="w"> </span>-e<span class="w"> </span><span class="m">192</span>.0.2.10
 </code></pre></div>
 <p>Samba 验证：<code>smbclient //192.0.2.10/teamshare -U ubuntu -c 'ls'</code> 能列目录即通过。iSCSI 验证：<code>sudo iscsiadm -m session</code> 显示会话，<code>lsblk</code> 中新盘容量与 LUN 一致即通过。</p>
 <p>Samba 深化验证：组内能读写、组外被拒绝才证明组控制生效，删掉测试文件后应能在回收目录找回：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-29-1" name="__codelineno-29-1" href="#__codelineno-29-1"></a>smbclient<span class="w"> </span>//192.0.2.10/teamshare<span class="w"> </span>-U<span class="w"> </span>ubuntu<span class="w"> </span>-c<span class="w"> </span><span class="s1">&#39;put /etc/hostname test.txt; ls&#39;</span>
-<a id="__codelineno-29-2" name="__codelineno-29-2" href="#__codelineno-29-2"></a>smbclient<span class="w"> </span>//192.0.2.10/teamshare<span class="w"> </span>-U<span class="w"> </span>guestuser<span class="w"> </span>-c<span class="w"> </span><span class="s1">&#39;ls&#39;</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-29-1" name="__codelineno-29-1" href="#__codelineno-29-1"></a>smbclient<span class="w"> </span>//192.0.2.10/teamshare<span class="w"> </span>-U<span class="w"> </span>ubuntu<span class="w"> </span>-c<span class="w"> </span><span class="s1">'put /etc/hostname test.txt; ls'</span>
+<a id="__codelineno-29-2" name="__codelineno-29-2" href="#__codelineno-29-2"></a>smbclient<span class="w"> </span>//192.0.2.10/teamshare<span class="w"> </span>-U<span class="w"> </span>guestuser<span class="w"> </span>-c<span class="w"> </span><span class="s1">'ls'</span>
 <a id="__codelineno-29-3" name="__codelineno-29-3" href="#__codelineno-29-3"></a>sudo<span class="w"> </span>ls<span class="w"> </span>-l<span class="w"> </span>/srv/samba/team<span class="w"> </span>/srv/samba/team/.recycle/ubuntu/
 <a id="__codelineno-29-4" name="__codelineno-29-4" href="#__codelineno-29-4"></a>sudo<span class="w"> </span>repquota<span class="w"> </span>/srv
 </code></pre></div>
 <p>期望：文件属组为 team、权限合掩码，<code>repquota</code> 列出用量与限额。NFS Kerberos 验证（仅 <code>sec=krb5*</code> 环境）：<code>klist</code> 确认票据后带 <code>sec=krb5i</code> 挂载并写入，<code>mount</code> 能看到该选项且写入成功才通过；票据过期应报权限错误，不得静默降级。</p>
 <h2 id="_6">五、常见错误与排坑指南<a class="headerlink" href="#_6" title="Permanent link">&para;</a></h2>
 <p>场景一：改完 fstab 重启，系统进入 emergency mode。控制台原文片段：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-30-1" name="__codelineno-30-1" href="#__codelineno-30-1"></a>You are in emergency mode. After logging in, type &quot;journalctl -xb&quot; to view system logs.
+<div class="highlight"><pre><span></span><code><a id="__codelineno-30-1" name="__codelineno-30-1" href="#__codelineno-30-1"></a>You are in emergency mode. After logging in, type "journalctl -xb" to view system logs.
 <a id="__codelineno-30-2" name="__codelineno-30-2" href="#__codelineno-30-2"></a>Dependency failed for /data
 </code></pre></div>
 <p>原因几乎都是第 1 列 UUID 写错、第 3 列类型写错，或数据盘故障而条目里没加 <code>nofail</code>。修复：在紧急模式下登录，依次执行：</p>
@@ -5555,7 +5555,7 @@
 <a id="__codelineno-35-2" name="__codelineno-35-2" href="#__codelineno-35-2"></a>sudo<span class="w"> </span>pdbedit<span class="w"> </span>-L
 <a id="__codelineno-35-3" name="__codelineno-35-3" href="#__codelineno-35-3"></a>sudo<span class="w"> </span>testparm<span class="w"> </span>-s
 <a id="__codelineno-35-4" name="__codelineno-35-4" href="#__codelineno-35-4"></a>sudo<span class="w"> </span>systemctl<span class="w"> </span>restart<span class="w"> </span>smbd
-<a id="__codelineno-35-5" name="__codelineno-35-5" href="#__codelineno-35-5"></a>smbclient<span class="w"> </span>//192.0.2.10/teamshare<span class="w"> </span>-U<span class="w"> </span>ubuntu<span class="w"> </span>-c<span class="w"> </span><span class="s1">&#39;ls&#39;</span>
+<a id="__codelineno-35-5" name="__codelineno-35-5" href="#__codelineno-35-5"></a>smbclient<span class="w"> </span>//192.0.2.10/teamshare<span class="w"> </span>-U<span class="w"> </span>ubuntu<span class="w"> </span>-c<span class="w"> </span><span class="s1">'ls'</span>
 </code></pre></div>
 <p>先用 <code>smbclient</code> 验证通过，再让 Windows 重试并删除其缓存的旧凭据。</p>
 <p>场景四：Windows 能进共享、能看但保存报无权限。按两道门模型判读，不要急着放宽：</p>

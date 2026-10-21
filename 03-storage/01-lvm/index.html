@@ -5304,7 +5304,7 @@
 </code></pre></div>
 <p>ext4 用第一条，XFS 用第二条，二选一。以后统一使用 <code>lvextend -r</code> 可避免此问题。</p>
 <p>场景二：创建 LV 时报空间不足。报错原文片段：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a>Volume group &quot;vgdata&quot; has insufficient free space (128 extents): 2560 required.
+<div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a>Volume group "vgdata" has insufficient free space (128 extents): 2560 required.
 </code></pre></div>
 <p>原因是申请大小超过 VG 的 <code>VFree</code>，或误以为多块盘容量可简单相加却有一块未加入 VG。先用 <code>sudo vgs</code> 与 <code>sudo vgdisplay vgdata</code> 核对 <code>Free PE</code>，再用 <code>sudo vgextend vgdata /dev/sdY</code> 补盘，或改小 <code>-L</code> 数值。注意 GiB 与 GB 的换算差异也会造成临界失败，改用 <code>-l 100%FREE</code> 分配全部剩余空间可绕开。</p>
 <p>场景三：缩减后挂载报文件系统损坏。报错原文片段：</p>

@@ -5046,7 +5046,7 @@
 <h2 id="_3">六段式文章模板<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h2>
 <p>正文章节统一六段式：概述与场景 → 前置条件 → 手把手步骤 → 效果验证 → 排坑指南 → 生产最佳实践。新增章节直接复制下面的骨架填写，不要自创结构：</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>---
-<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="gu">description: &quot;一句话说明本章解决什么问题、面向什么版本。&quot;</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="gu">description: "一句话说明本章解决什么问题、面向什么版本。"</span>
 <a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="gu">---</span>
 <a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>
 <a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="gh"># 章节标题</span>
@@ -5106,7 +5106,7 @@
 <p>以下危险命令在正文出现时<strong>必须</strong>配 danger 警示块并给出安全替代写法（清单与<a href="../command-index/">命令索引</a>的高风险等级对应）：<code>rm -rf</code>、递归 <code>chmod -R</code> 与 <code>chown -R</code>、<code>dd</code> 与 <code>mkfs</code> 等写盘命令、<code>fdisk</code> 等分区写操作、<code>ufw reset</code> 与清空防火墙规则集、<code>docker compose down -v</code> 与批量删除容器镜像、<code>crontab -r</code>、在 SSH 会话中改网卡地址或路由。警示块里要写清：错在哪、后果是什么、正确顺序或替代命令是什么。</p>
 <h2 id="_7">过期内容标记规范<a class="headerlink" href="#_7" title="Permanent link">&para;</a></h2>
 <p>内容过期（软件改名、参数废弃、版本停止维护）时不要直接删除，先按下面样式在原位置加弃用提示块，并给出替代方案链接，让从搜索引擎落到旧内容的读者有路可走：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>!!! warning &quot;已弃用&quot;
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>!!! warning "已弃用"
 <a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>    本节介绍的 旧方案名称 已于 年份 停止维护（或自 某版本 起不再适用），
 <a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>    新环境请改用 [<span class="nt">替代方案章节</span>](<span class="na">相对链接</span>)，本节仅供维护存量系统时参考。
 </code></pre></div>

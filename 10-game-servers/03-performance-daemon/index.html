@@ -5175,9 +5175,9 @@
 <a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="na">User</span><span class="o">=</span><span class="s">steam</span>
 <a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="na">Group</span><span class="o">=</span><span class="s">steam</span>
 <a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="na">WorkingDirectory</span><span class="o">=</span><span class="s">/home/steam/minecraft</span>
-<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a><span class="na">ExecStartPre</span><span class="o">=</span><span class="s">/bin/bash -c &#39;mkdir -p /run/minecraft</span><span class="c1">; test -p /run/minecraft/stdin || mkfifo /run/minecraft/stdin; chown steam:steam /run/minecraft/stdin&#39;</span>
-<a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a><span class="na">ExecStart</span><span class="o">=</span><span class="s">/bin/bash -c &#39;exec /usr/bin/java -Xms2G -Xmx2G -jar /home/steam/minecraft/server.jar nogui &lt; /run/minecraft/stdin&#39;</span>
-<a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a><span class="na">ExecStop</span><span class="o">=</span><span class="s">/bin/bash -c &#39;echo stop &gt; /run/minecraft/stdin&#39;</span>
+<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a><span class="na">ExecStartPre</span><span class="o">=</span><span class="s">/bin/bash -c 'mkdir -p /run/minecraft</span><span class="c1">; test -p /run/minecraft/stdin || mkfifo /run/minecraft/stdin; chown steam:steam /run/minecraft/stdin'</span>
+<a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a><span class="na">ExecStart</span><span class="o">=</span><span class="s">/bin/bash -c 'exec /usr/bin/java -Xms2G -Xmx2G -jar /home/steam/minecraft/server.jar nogui &lt; /run/minecraft/stdin'</span>
+<a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a><span class="na">ExecStop</span><span class="o">=</span><span class="s">/bin/bash -c 'echo stop &gt; /run/minecraft/stdin'</span>
 <a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a><span class="na">TimeoutStopSec</span><span class="o">=</span><span class="s">60</span>
 <a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a><span class="na">StandardOutput</span><span class="o">=</span><span class="s">journal</span>
 <a id="__codelineno-1-16" name="__codelineno-1-16" href="#__codelineno-1-16"></a><span class="na">StandardError</span><span class="o">=</span><span class="s">journal</span>
@@ -5207,10 +5207,10 @@
 </code></pre></div>
 <p>改开机挂载前先备份 <code>fstab</code>，再追加一行让重启后 SWAP 自动生效：</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>sudo<span class="w"> </span>cp<span class="w"> </span>-a<span class="w"> </span>/etc/fstab<span class="w"> </span>/etc/fstab.bak
-<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="nb">echo</span><span class="w"> </span><span class="s1">&#39;/swapfile none swap sw 0 0&#39;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>sudo<span class="w"> </span>tee<span class="w"> </span>-a<span class="w"> </span>/etc/fstab
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="nb">echo</span><span class="w"> </span><span class="s1">'/swapfile none swap sw 0 0'</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>sudo<span class="w"> </span>tee<span class="w"> </span>-a<span class="w"> </span>/etc/fstab
 </code></pre></div>
 <p>再调低 <code>swappiness</code>：该值表示系统使用 SWAP 的积极程度，默认 60 对游戏服偏高，会把不活跃的游戏数据过早换出导致卡顿；改成 10 表示优先用物理内存，只在内存真的吃紧时才动 SWAP：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="nb">echo</span><span class="w"> </span><span class="s1">&#39;vm.swappiness=10&#39;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>sudo<span class="w"> </span>tee<span class="w"> </span>/etc/sysctl.d/99-game-server.conf
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="nb">echo</span><span class="w"> </span><span class="s1">'vm.swappiness=10'</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>sudo<span class="w"> </span>tee<span class="w"> </span>/etc/sysctl.d/99-game-server.conf
 <a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>sudo<span class="w"> </span>sysctl<span class="w"> </span>-p<span class="w"> </span>/etc/sysctl.d/99-game-server.conf
 </code></pre></div>
 <div class="admonition warning">
@@ -5262,7 +5262,7 @@
 <h2 id="_7">五、常见错误与排坑指南<a class="headerlink" href="#_7" title="Permanent link">&para;</a></h2>
 <p><strong>场景 1：服务反复重启，状态在 activating 与 failed 间跳。</strong> <code>journalctl -u minecraft.service</code> 里反复出现：</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a>minecraft.service: Main process exited, code=exited, status=203/EXEC
-<a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a>Failed with result &#39;exit-code&#39;.
+<a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a>Failed with result 'exit-code'.
 </code></pre></div>
 <p><code>203/EXEC</code> 表示 ExecStart 的程序路径不存在或无执行权限，常见于 Java 路径写错或 PalServer.sh 未加执行位。修复：用 <code>which java</code> 核对真实路径，脚本补执行权限后重启：</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a>which<span class="w"> </span>java

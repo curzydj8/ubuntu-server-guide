@@ -5186,7 +5186,7 @@
 </code></pre></div>
 <p>说明：路径按本机实际服务目录调整。<code>cp -a</code> 保留权限与属主；备份里含明文秘密，敏感程度与源文件相同，不得放进普通网盘同步目录或代码仓库。回滚时从这份备份恢复对应文件，恢复后立刻用第 4 节的 <code>stat</code> 复查权限。处置泄露时先不要急着删旧备份：它可能是判断泄露范围的证据，是否保留按第 3.6 节的应急顺序决定。</p>
 <p>开始前先盘点本机秘密散落在哪些文件里，做到心中有数：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>sudo<span class="w"> </span>grep<span class="w"> </span>-R<span class="w"> </span>-l<span class="w"> </span>-i<span class="w"> </span>-E<span class="w"> </span><span class="s2">&quot;password|api_key|secret|token&quot;</span><span class="w"> </span>/etc/myapp<span class="w"> </span>/etc/systemd/system<span class="w"> </span><span class="m">2</span>&gt;/dev/null
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>sudo<span class="w"> </span>grep<span class="w"> </span>-R<span class="w"> </span>-l<span class="w"> </span>-i<span class="w"> </span>-E<span class="w"> </span><span class="s2">"password|api_key|secret|token"</span><span class="w"> </span>/etc/myapp<span class="w"> </span>/etc/systemd/system<span class="w"> </span><span class="m">2</span>&gt;/dev/null
 <a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>systemctl<span class="w"> </span>list-units<span class="w"> </span>--type<span class="o">=</span>service<span class="w"> </span>--state<span class="o">=</span>running<span class="w"> </span>--no-pager
 </code></pre></div>
 <p>第一条只列文件名不打印内容，避免把秘密再复制进终端滚动记录与日志。清单里每个文件在第 3 节都要有一个明确落位结论，没有结论的视为待整改项。</p>
@@ -5212,7 +5212,7 @@
 <a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>sudo<span class="w"> </span>nano<span class="w"> </span>/etc/myapp/secrets.conf
 <a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>sudo<span class="w"> </span>chown<span class="w"> </span>root:myapp<span class="w"> </span>/etc/myapp/secrets.conf
 <a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>sudo<span class="w"> </span>chmod<span class="w"> </span><span class="m">600</span><span class="w"> </span>/etc/myapp/secrets.conf
-<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>stat<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;%a %U %G %n&quot;</span><span class="w"> </span>/etc/myapp/secrets.conf
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>stat<span class="w"> </span>-c<span class="w"> </span><span class="s2">"%a %U %G %n"</span><span class="w"> </span>/etc/myapp/secrets.conf
 </code></pre></div>
 <p>文件内容只放键值对，不写注释里的真实旧密码，不把新旧两套值同时留着：</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="c1"># /etc/myapp/secrets.conf 仅为格式示例，值均为占位符</span>
@@ -5375,9 +5375,9 @@
 </div>
 <h2 id="_5">四、效果验证与测试<a class="headerlink" href="#_5" title="Permanent link">&para;</a></h2>
 <p>验证只看三件事：权限对不对、服务拿秘密的方式对不对、加固后有没有明显短板。第一，查落位文件权限与属主：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>stat<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;%a %U %G %n&quot;</span><span class="w"> </span>/etc/myapp/secrets.conf
-<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>stat<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;%a %U %G %n&quot;</span><span class="w"> </span>/etc/credstore/myapp-db-password
-<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>sudo<span class="w"> </span>grep<span class="w"> </span>-R<span class="w"> </span>-i<span class="w"> </span>-E<span class="w"> </span><span class="s2">&quot;password|api_key&quot;</span><span class="w"> </span>/opt/myapp<span class="w"> </span>--include<span class="o">=</span><span class="s2">&quot;*.py&quot;</span><span class="w"> </span>--include<span class="o">=</span><span class="s2">&quot;*.js&quot;</span><span class="w"> </span>--include<span class="o">=</span><span class="s2">&quot;*.yaml&quot;</span><span class="w"> </span><span class="m">2</span>&gt;/dev/null
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>stat<span class="w"> </span>-c<span class="w"> </span><span class="s2">"%a %U %G %n"</span><span class="w"> </span>/etc/myapp/secrets.conf
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>stat<span class="w"> </span>-c<span class="w"> </span><span class="s2">"%a %U %G %n"</span><span class="w"> </span>/etc/credstore/myapp-db-password
+<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>sudo<span class="w"> </span>grep<span class="w"> </span>-R<span class="w"> </span>-i<span class="w"> </span>-E<span class="w"> </span><span class="s2">"password|api_key"</span><span class="w"> </span>/opt/myapp<span class="w"> </span>--include<span class="o">=</span><span class="s2">"*.py"</span><span class="w"> </span>--include<span class="o">=</span><span class="s2">"*.js"</span><span class="w"> </span>--include<span class="o">=</span><span class="s2">"*.yaml"</span><span class="w"> </span><span class="m">2</span>&gt;/dev/null
 </code></pre></div>
 <p>期望：两个秘密文件都是 600 且属主符合 3.2 与 3.3 节的设计；第三条在应用代码目录里期望无明文秘密命中，命中变量名与读取逻辑是正常的，命中真实值则回 3.1 节按已扩散处理。路径按本机实际应用目录调整。</p>
 <p>第二，确认服务状态与凭据递送生效：</p>
@@ -5393,7 +5393,7 @@
 <p>期望用法：它按一组加固项逐项评估 unit 并给出汇总，重点看与秘密相关的项，例如服务是否以专用用户运行、文件系统保护是否开启、私有临时目录是否启用。输出是改进清单而不是合格证书：逐项评估与业务的兼容性，能开的补进 unit 并重启验证，不能开的记录原因。本章不预设具体得分与单项结果，不同版本与 unit 写法的输出差异很大。</p>
 <h2 id="_6">五、常见错误与排坑指南<a class="headerlink" href="#_6" title="Permanent link">&para;</a></h2>
 <p>场景一：改完权限 600 后服务起不来，报读不到配置文件。根因是文件属主与服务运行账号不一致：权限收紧本身没错，错在没有同步把属主或属组给到服务账号。修复按落位方式二选一，不要改回 644：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>stat<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;%a %U %G %n&quot;</span><span class="w"> </span>/etc/myapp/secrets.conf
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>stat<span class="w"> </span>-c<span class="w"> </span><span class="s2">"%a %U %G %n"</span><span class="w"> </span>/etc/myapp/secrets.conf
 <a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a>systemctl<span class="w"> </span>show<span class="w"> </span>myapp.service<span class="w"> </span>-p<span class="w"> </span>User<span class="w"> </span>-p<span class="w"> </span>Group
 <a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a>sudo<span class="w"> </span>chown<span class="w"> </span>root:myapp<span class="w"> </span>/etc/myapp/secrets.conf
 <a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a>sudo<span class="w"> </span>chmod<span class="w"> </span><span class="m">600</span><span class="w"> </span>/etc/myapp/secrets.conf
@@ -5401,11 +5401,11 @@
 </code></pre></div>
 <p>先对照服务实际的 <code>User</code> 与 <code>Group</code> 再改属主；用 <code>LoadCredential=</code> 的服务则检查源文件是否可被 root 读取以及凭据名是否写错，这一级不需要源文件对服务账号可读。</p>
 <p>场景二：以为用了 <code>EnvironmentFile=</code> 就万无一失，审计时被指出同账号可读。根因是忽略了环境变量的可见边界：同用户的进程与子进程能继承，<code>/proc/&lt;pid&gt;/environ</code> 对属主与 root 可读。处置不是给环境变量再套一层文件权限，而是升级落位：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>sudo<span class="w"> </span>cat<span class="w"> </span>/proc/1/environ<span class="w"> </span><span class="p">|</span><span class="w"> </span>tr<span class="w"> </span><span class="s2">&quot;\0&quot;</span><span class="w"> </span><span class="s2">&quot;\n&quot;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>cut<span class="w"> </span>-d<span class="o">=</span><span class="w"> </span>-f1
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>sudo<span class="w"> </span>cat<span class="w"> </span>/proc/1/environ<span class="w"> </span><span class="p">|</span><span class="w"> </span>tr<span class="w"> </span><span class="s2">"\0"</span><span class="w"> </span><span class="s2">"\n"</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>cut<span class="w"> </span>-d<span class="o">=</span><span class="w"> </span>-f1
 </code></pre></div>
 <p>这条只列变量名不打印值，用来直观确认环境里确实带着秘密键。确认风险后按 3.3 节迁移到 <code>LoadCredential=</code>，并把「该账号下只跑可信进程」写进该机的运维约束；迁移完成前不要新增往环境里放秘密的服务。</p>
 <p>场景三：轮换后部分调用方报错，误以为新凭据有问题又换了一套。根因多半是调用方不止一处：某台旧机器、某个定时任务或某个同事本地脚本还在用旧值，而旧值已被提前吊销。排查先看签发方或服务端的认证失败日志，按来源定位还在用旧值的调用方：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a>sudo<span class="w"> </span>journalctl<span class="w"> </span>-u<span class="w"> </span>myapp.service<span class="w"> </span>--since<span class="w"> </span><span class="s2">&quot;1 hour ago&quot;</span><span class="w"> </span>--no-pager<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-i<span class="w"> </span>-E<span class="w"> </span><span class="s2">&quot;auth|denied|invalid&quot;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>tail<span class="w"> </span>-n<span class="w"> </span><span class="m">50</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a>sudo<span class="w"> </span>journalctl<span class="w"> </span>-u<span class="w"> </span>myapp.service<span class="w"> </span>--since<span class="w"> </span><span class="s2">"1 hour ago"</span><span class="w"> </span>--no-pager<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-i<span class="w"> </span>-E<span class="w"> </span><span class="s2">"auth|denied|invalid"</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>tail<span class="w"> </span>-n<span class="w"> </span><span class="m">50</span>
 </code></pre></div>
 <p>修复是把遗漏的调用方更新到新值，而不是再生成第三套值让局面更乱。今后轮换严格按 3.5 节顺序执行：观察期结束、确认无旧值调用记录后，才吊销旧值。</p>
 <h2 id="_7">六、生产环境最佳实践与安全建议<a class="headerlink" href="#_7" title="Permanent link">&para;</a></h2>

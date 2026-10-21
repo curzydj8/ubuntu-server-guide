@@ -5419,7 +5419,7 @@
 <h2 id="_9">五、常见错误与排坑指南<a class="headerlink" href="#_9" title="Permanent link">&para;</a></h2>
 <h3 id="apt-update">错误一：换源后 apt update 报签名错误<a class="headerlink" href="#apt-update" title="Permanent link">&para;</a></h3>
 <p>报错原文片段如下。</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a>W: GPG error: https://example.com/ubuntu noble InRelease: The following signatures couldn&#39;t be verified because the public key is not available
+<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a>W: GPG error: https://example.com/ubuntu noble InRelease: The following signatures couldn't be verified because the public key is not available
 </code></pre></div>
 <p>原因：deb822 文件中的 Signed-By 指向的密钥文件被误改或被删除，或者把源地址换成镜像站时连签名段一起抄错。修复方法：从备份还原源文件，只重新修改 URIs 一行，不要动 Signed-By 和其他字段。</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a>sudo<span class="w"> </span>cp<span class="w"> </span>/etc/apt/sources.list.d/ubuntu.sources.bak-20261021<span class="w"> </span>/etc/apt/sources.list.d/ubuntu.sources
@@ -5441,7 +5441,7 @@
 <p>期望修复后该包状态为 ii 且 apt update 恢复正常。此后本地包一律改用步骤五的 apt 本地路径方式安装，从源头避免复发。</p>
 <h3 id="apt-update-404-suites">错误三：apt update 出现 404 找不到某个 Suites<a class="headerlink" href="#apt-update-404-suites" title="Permanent link">&para;</a></h3>
 <p>报错原文片段如下。</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a>E: The repository &#39;https://example.com/ubuntu noble-backports Release&#39; does not have a Release file.
+<div class="highlight"><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a>E: The repository 'https://example.com/ubuntu noble-backports Release' does not have a Release file.
 </code></pre></div>
 <p>原因：所选镜像站没有同步某个更新类型或某个架构的目录，常见于把桌面版镜像地址误用于服务器架构，或镜像同步不完整。修复方法：先确认版本代号与源文件写法无误，再换一个同步完整的正规镜像站，换之前备份当前文件，换之后重新刷新索引并复查。</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a>sudo<span class="w"> </span>cp<span class="w"> </span>/etc/apt/sources.list.d/ubuntu.sources<span class="w"> </span>/etc/apt/sources.list.d/ubuntu.sources.bad-mirror

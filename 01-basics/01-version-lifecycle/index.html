@@ -5323,7 +5323,7 @@
 </code></pre></div>
 <p><code>ubuntu-security-status</code> 在 22.04 和 24.04 上均可使用，输出会说明当前有多少软件包获得安全维护、维护来源是标准源还是 Ubuntu Pro。第三条命令用于检查 HWE 硬件支持栈的状态，老机器从桌面版或带 HWE 内核的安装介质装出时可能出现，服务器纯净安装通常显示无 HWE 栈或栈受支持。</p>
 <p>再执行下面命令确认系统代号和版本号的机器可读字段，方便写入脚本和台账。</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>grep<span class="w"> </span>-E<span class="w"> </span><span class="s2">&quot;VERSION_ID|VERSION_CODENAME&quot;</span><span class="w"> </span>/etc/os-release
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>grep<span class="w"> </span>-E<span class="w"> </span><span class="s2">"VERSION_ID|VERSION_CODENAME"</span><span class="w"> </span>/etc/os-release
 <a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>dpkg<span class="w"> </span>--print-architecture
 </code></pre></div>
 <p>期望输出中 <code>VERSION_ID</code> 为 22.04 或 24.04，架构为 amd64 或 arm64。把结果与步骤一的表格对照，即可得出这台机器还剩多少标准支持时间。</p>
@@ -5402,7 +5402,7 @@
 <p>确认通道为 lts 后，用检查模式预演升级，不会真正执行升级。</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>sudo<span class="w"> </span>apt<span class="w"> </span>update
 <a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>sudo<span class="w"> </span>apt<span class="w"> </span>upgrade<span class="w"> </span>-y
-<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>sudo<span class="w"> </span><span class="k">do</span>-release-upgrade<span class="w"> </span>--check-dist-upgrade-only
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>sudo<span class="w"> </span>do-release-upgrade<span class="w"> </span>--check-dist-upgrade-only
 </code></pre></div>
 <div class="admonition tip">
 <p class="admonition-title">升级窗口的选择方法</p>
@@ -5413,7 +5413,7 @@
 <div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>lsb_release<span class="w"> </span>-a
 <a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>uname<span class="w"> </span>-r
 <a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>ubuntu-security-status
-<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>grep<span class="w"> </span><span class="s2">&quot;^Prompt&quot;</span><span class="w"> </span>/etc/update-manager/release-upgrades
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>grep<span class="w"> </span><span class="s2">"^Prompt"</span><span class="w"> </span>/etc/update-manager/release-upgrades
 </code></pre></div>
 <p>期望输出示例（以 24.04 LTS 机器为例）如下。</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>Distributor ID: Ubuntu
@@ -5428,11 +5428,11 @@
 <h2 id="_9">五、常见错误与排坑指南<a class="headerlink" href="#_9" title="Permanent link">&para;</a></h2>
 <h3 id="_10">错误一：给生产服务器安装了普通版，到期后无法更新<a class="headerlink" href="#_10" title="Permanent link">&para;</a></h3>
 <p>报错原文片段如下，在执行更新时出现。</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>E: The repository &#39;http://archive.ubuntu.com/ubuntu mantic Release&#39; no longer has a Release file.
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>E: The repository 'http://archive.ubuntu.com/ubuntu mantic Release' no longer has a Release file.
 </code></pre></div>
 <p>原因：普通版支持期结束后，官方把它的软件源从主镜像移走，本地索引指向的 Release 文件不复存在，<code>apt update</code> 直接失败，同时系统再也收不到安全更新。修复方法不是改源地址硬撑，而是尽快升级到受支持的 LTS。先备份数据和配置，再执行跨版本升级命令并按提示完成到下一个版本，若当前普通版与目标 LTS 之间隔着已结束支持的版本，则采用备份数据后全新安装 LTS 并恢复数据的办法处理。</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>sudo<span class="w"> </span>cp<span class="w"> </span>-a<span class="w"> </span>/etc<span class="w"> </span>/root/etc-backup-before-upgrade
-<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>sudo<span class="w"> </span><span class="k">do</span>-release-upgrade
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>sudo<span class="w"> </span>do-release-upgrade
 <a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a>lsb_release<span class="w"> </span>-a
 </code></pre></div>
 <h3 id="_11">错误二：把小版本更新误当成跨版本升级<a class="headerlink" href="#_11" title="Permanent link">&para;</a></h3>
@@ -5446,9 +5446,9 @@
 </code></pre></div>
 <p>原因：<code>/etc/update-manager/release-upgrades</code> 中的 Prompt 被人为改为 never，升级工具被禁止提示任何版本。修复命令如下，先备份再修改，最后重新检查。</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>sudo<span class="w"> </span>cp<span class="w"> </span>/etc/update-manager/release-upgrades<span class="w"> </span>/etc/update-manager/release-upgrades.bak-20261021
-<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a>sudo<span class="w"> </span>sed<span class="w"> </span>-i<span class="w"> </span><span class="s1">&#39;s/^Prompt=never/Prompt=lts/&#39;</span><span class="w"> </span>/etc/update-manager/release-upgrades
-<a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a>grep<span class="w"> </span><span class="s2">&quot;^Prompt&quot;</span><span class="w"> </span>/etc/update-manager/release-upgrades
-<a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a>sudo<span class="w"> </span><span class="k">do</span>-release-upgrade<span class="w"> </span>--check-dist-upgrade-only
+<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a>sudo<span class="w"> </span>sed<span class="w"> </span>-i<span class="w"> </span><span class="s1">'s/^Prompt=never/Prompt=lts/'</span><span class="w"> </span>/etc/update-manager/release-upgrades
+<a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a>grep<span class="w"> </span><span class="s2">"^Prompt"</span><span class="w"> </span>/etc/update-manager/release-upgrades
+<a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a>sudo<span class="w"> </span>do-release-upgrade<span class="w"> </span>--check-dist-upgrade-only
 </code></pre></div>
 <p>期望修复后第二条命令输出 <code>Prompt=lts</code>，检查命令能正确报告是否有可用升级。</p>
 <h2 id="_12">六、生产环境最佳实践与安全建议<a class="headerlink" href="#_12" title="Permanent link">&para;</a></h2>

@@ -5146,11 +5146,11 @@
 <h3 id="31-key">3.1 接入方式通则：Key 只走环境变量<a class="headerlink" href="#31-key" title="Permanent link">&para;</a></h3>
 <p><strong>方式一：当前会话临时注入（最适合临时使用）</strong></p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="c1"># 在终端里直接 export，Key 只存在于当前 shell 进程环境中</span>
-<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="nb">export</span><span class="w"> </span><span class="nv">AI_API_KEY</span><span class="o">=</span><span class="s2">&quot;&lt;api-key&gt;&quot;</span>
-<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="nb">export</span><span class="w"> </span><span class="nv">AI_API_BASE</span><span class="o">=</span><span class="s2">&quot;https://api.example.com/v1&quot;</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="nb">export</span><span class="w"> </span><span class="nv">AI_API_KEY</span><span class="o">=</span><span class="s2">"&lt;api-key&gt;"</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="nb">export</span><span class="w"> </span><span class="nv">AI_API_BASE</span><span class="o">=</span><span class="s2">"https://api.example.com/v1"</span>
 <a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>
 <a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="c1"># 验证变量已设置（只看是否存在，不打印完整值）</span>
-<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="k">if</span><span class="w"> </span><span class="o">[</span><span class="w"> </span>-n<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$AI_API_KEY</span><span class="s2">&quot;</span><span class="w"> </span><span class="o">]</span><span class="p">;</span><span class="w"> </span><span class="k">then</span><span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;AI_API_KEY 已设置&quot;</span><span class="p">;</span><span class="w"> </span><span class="k">fi</span>
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="k">if</span><span class="w"> </span><span class="o">[</span><span class="w"> </span>-n<span class="w"> </span><span class="s2">"</span><span class="nv">$AI_API_KEY</span><span class="s2">"</span><span class="w"> </span><span class="o">]</span><span class="p">;</span><span class="w"> </span><span class="k">then</span><span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="s2">"AI_API_KEY 已设置"</span><span class="p">;</span><span class="w"> </span><span class="k">fi</span>
 <a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>
 <a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="c1"># 会话结束即失效；手动清除：</span>
 <a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="nb">unset</span><span class="w"> </span>AI_API_KEY
@@ -5158,7 +5158,7 @@
 <p>注意：<code>export</code> 写进 <code>~/.bashrc</code> 图省事的做法会让 Key 长期落盘且容易被各类脚本读到，不推荐。确需长期使用，用下面的文件方式并收紧权限。</p>
 <p><strong>方式二：独立环境文件 + 严格权限（适合固定工作机）</strong></p>
 <p>先备份（如已有同名文件）：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>cp<span class="w"> </span>~/.config/ai-cli/env<span class="w"> </span>~/.config/ai-cli/env.bak.<span class="k">$(</span>date<span class="w"> </span>+%F<span class="k">)</span><span class="w"> </span><span class="m">2</span>&gt;/dev/null<span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;无旧文件，跳过备份&quot;</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>cp<span class="w"> </span>~/.config/ai-cli/env<span class="w"> </span>~/.config/ai-cli/env.bak.<span class="k">$(</span>date<span class="w"> </span>+%F<span class="k">)</span><span class="w"> </span><span class="m">2</span>&gt;/dev/null<span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="s2">"无旧文件，跳过备份"</span>
 <a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>mkdir<span class="w"> </span>-p<span class="w"> </span>~/.config/ai-cli
 </code></pre></div>
 <p>创建 <code>~/.config/ai-cli/env</code>，完整内容如下（<code>&lt;api-key&gt;</code> 替换为你自己的 Key，仅保存在本机此文件）：</p>
@@ -5195,7 +5195,7 @@
 <p><strong>方式三：systemd EnvironmentFile（适合以服务方式运行的巡检任务）</strong></p>
 <p>环境文件放 <code>/etc/ai-cli/env</code>，属主 root、权限 <code>600</code>：</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>sudo<span class="w"> </span>mkdir<span class="w"> </span>-p<span class="w"> </span>/etc/ai-cli
-<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>sudo<span class="w"> </span>cp<span class="w"> </span>/etc/ai-cli/env<span class="w"> </span>/etc/ai-cli/env.bak.<span class="k">$(</span>date<span class="w"> </span>+%F<span class="k">)</span><span class="w"> </span><span class="m">2</span>&gt;/dev/null<span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;无旧文件，跳过备份&quot;</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>sudo<span class="w"> </span>cp<span class="w"> </span>/etc/ai-cli/env<span class="w"> </span>/etc/ai-cli/env.bak.<span class="k">$(</span>date<span class="w"> </span>+%F<span class="k">)</span><span class="w"> </span><span class="m">2</span>&gt;/dev/null<span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="s2">"无旧文件，跳过备份"</span>
 <a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>sudo<span class="w"> </span>nano<span class="w"> </span>/etc/ai-cli/env
 <a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>sudo<span class="w"> </span>chown<span class="w"> </span>root:root<span class="w"> </span>/etc/ai-cli/env
 <a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>sudo<span class="w"> </span>chmod<span class="w"> </span><span class="m">600</span><span class="w"> </span>/etc/ai-cli/env
@@ -5262,8 +5262,8 @@
 </table>
 <p>快速脱敏示例（先复制再处理，永远不要改原始日志）：</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>cp<span class="w"> </span>/var/log/app/app.log<span class="w"> </span>/tmp/app-sanitized.log
-<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a>sed<span class="w"> </span>-i<span class="w"> </span>-E<span class="w"> </span><span class="s1">&#39;s/([0-9]{1,3}\.){3}[0-9]{1,3}/192.0.2.10/g&#39;</span><span class="w"> </span>/tmp/app-sanitized.log
-<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a>sed<span class="w"> </span>-i<span class="w"> </span>-E<span class="w"> </span><span class="s1">&#39;s/[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+/&lt;email&gt;/g&#39;</span><span class="w"> </span>/tmp/app-sanitized.log
+<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a>sed<span class="w"> </span>-i<span class="w"> </span>-E<span class="w"> </span><span class="s1">'s/([0-9]{1,3}\.){3}[0-9]{1,3}/192.0.2.10/g'</span><span class="w"> </span>/tmp/app-sanitized.log
+<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a>sed<span class="w"> </span>-i<span class="w"> </span>-E<span class="w"> </span><span class="s1">'s/[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+/&lt;email&gt;/g'</span><span class="w"> </span>/tmp/app-sanitized.log
 <a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a><span class="c1"># 处理完人工再通读一遍，确认无残留敏感信息后再发送</span>
 <a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a>less<span class="w"> </span>/tmp/app-sanitized.log
 </code></pre></div>
@@ -5391,7 +5391,7 @@
 <li><strong>命令级落盘</strong>：把 AI 实际执行过的命令单独记成清单文件，与会话日志分开保存，便于复盘时快速检索，也便于把同一批命令拿到测试机重放：</li>
 </ul>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="c1"># 每执行完一组经审批的命令，把最终实际执行的版本追加记录（记人工改定后的版本，不是 AI 原稿）</span>
-<a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a>cat<span class="w"> </span>&gt;&gt;<span class="w"> </span>~/ai-ops-logs/commands-<span class="k">$(</span>date<span class="w"> </span>+%F<span class="k">)</span>.log<span class="w"> </span><span class="s">&lt;&lt;&#39;EOF&#39;</span>
+<a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a>cat<span class="w"> </span>&gt;&gt;<span class="w"> </span>~/ai-ops-logs/commands-<span class="k">$(</span>date<span class="w"> </span>+%F<span class="k">)</span>.log<span class="w"> </span><span class="s">&lt;&lt;'EOF'</span>
 <a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a><span class="s"># 2026-01-01 10:30 执行人: opsadmin 目的: 重启 nginx 应用新配置</span>
 <a id="__codelineno-13-4" name="__codelineno-13-4" href="#__codelineno-13-4"></a><span class="s">/usr/bin/systemctl restart nginx</span>
 <a id="__codelineno-13-5" name="__codelineno-13-5" href="#__codelineno-13-5"></a><span class="s">EOF</span>
@@ -5417,23 +5417,23 @@
 <li><strong>交叉验证</strong>：重要结论换一种问法再问一次，或用本地模型对照，答案互相矛盾时以官方文档与实测为准。</li>
 </ul>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="c1"># 示例：核对 AI 给出的 find 清理命令——先只列出将影响的文件</span>
-<a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a>find<span class="w"> </span>/var/log<span class="w"> </span>-type<span class="w"> </span>f<span class="w"> </span>-name<span class="w"> </span><span class="s2">&quot;*.log&quot;</span><span class="w"> </span>-mtime<span class="w"> </span>+7<span class="w"> </span>-print
+<a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a>find<span class="w"> </span>/var/log<span class="w"> </span>-type<span class="w"> </span>f<span class="w"> </span>-name<span class="w"> </span><span class="s2">"*.log"</span><span class="w"> </span>-mtime<span class="w"> </span>+7<span class="w"> </span>-print
 <a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a><span class="c1"># 确认列表无误后，才把 -print 换成实际处理动作，并保留操作记录</span>
 </code></pre></div>
 <h2 id="_4">四、效果验证与测试<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h2>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a><span class="c1"># 1. 环境变量存在性（不输出 Key 本身）</span>
-<a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a><span class="k">if</span><span class="w"> </span><span class="o">[</span><span class="w"> </span>-n<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$AI_API_KEY</span><span class="s2">&quot;</span><span class="w"> </span><span class="o">]</span><span class="p">;</span><span class="w"> </span><span class="k">then</span><span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;Key 已注入&quot;</span><span class="p">;</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;Key 未设置&quot;</span><span class="p">;</span><span class="w"> </span><span class="k">fi</span>
+<a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a><span class="k">if</span><span class="w"> </span><span class="o">[</span><span class="w"> </span>-n<span class="w"> </span><span class="s2">"</span><span class="nv">$AI_API_KEY</span><span class="s2">"</span><span class="w"> </span><span class="o">]</span><span class="p">;</span><span class="w"> </span><span class="k">then</span><span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="s2">"Key 已注入"</span><span class="p">;</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="s2">"Key 未设置"</span><span class="p">;</span><span class="w"> </span><span class="k">fi</span>
 <a id="__codelineno-15-3" name="__codelineno-15-3" href="#__codelineno-15-3"></a>
 <a id="__codelineno-15-4" name="__codelineno-15-4" href="#__codelineno-15-4"></a><span class="c1"># 2. 环境文件权限应为 600</span>
-<a id="__codelineno-15-5" name="__codelineno-15-5" href="#__codelineno-15-5"></a>stat<span class="w"> </span>-c<span class="w"> </span><span class="s1">&#39;%a %U %n&#39;</span><span class="w"> </span>~/.config/ai-cli/env<span class="w"> </span>/etc/ai-cli/env<span class="w"> </span><span class="m">2</span>&gt;/dev/null
+<a id="__codelineno-15-5" name="__codelineno-15-5" href="#__codelineno-15-5"></a>stat<span class="w"> </span>-c<span class="w"> </span><span class="s1">'%a %U %n'</span><span class="w"> </span>~/.config/ai-cli/env<span class="w"> </span>/etc/ai-cli/env<span class="w"> </span><span class="m">2</span>&gt;/dev/null
 <a id="__codelineno-15-6" name="__codelineno-15-6" href="#__codelineno-15-6"></a>
 <a id="__codelineno-15-7" name="__codelineno-15-7" href="#__codelineno-15-7"></a><span class="c1"># 3. 仓库防泄露检查：在项目仓库中应搜不到 Key 特征与 env 文件</span>
 <a id="__codelineno-15-8" name="__codelineno-15-8" href="#__codelineno-15-8"></a><span class="nb">cd</span><span class="w"> </span>~/your-project
 <a id="__codelineno-15-9" name="__codelineno-15-9" href="#__codelineno-15-9"></a>git<span class="w"> </span>status<span class="w"> </span>--short
-<a id="__codelineno-15-10" name="__codelineno-15-10" href="#__codelineno-15-10"></a>grep<span class="w"> </span>-rn<span class="w"> </span><span class="s2">&quot;AI_API_KEY=&quot;</span><span class="w"> </span>--include<span class="o">=</span><span class="s2">&quot;*.sh&quot;</span><span class="w"> </span>.<span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;脚本中未发现硬编码 Key&quot;</span>
+<a id="__codelineno-15-10" name="__codelineno-15-10" href="#__codelineno-15-10"></a>grep<span class="w"> </span>-rn<span class="w"> </span><span class="s2">"AI_API_KEY="</span><span class="w"> </span>--include<span class="o">=</span><span class="s2">"*.sh"</span><span class="w"> </span>.<span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="s2">"脚本中未发现硬编码 Key"</span>
 <a id="__codelineno-15-11" name="__codelineno-15-11" href="#__codelineno-15-11"></a>
 <a id="__codelineno-15-12" name="__codelineno-15-12" href="#__codelineno-15-12"></a><span class="c1"># 4. 脱敏效果抽查：处理后的日志中不应残留邮箱形态字符串</span>
-<a id="__codelineno-15-13" name="__codelineno-15-13" href="#__codelineno-15-13"></a>grep<span class="w"> </span>-E<span class="w"> </span><span class="s1">&#39;[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+&#39;</span><span class="w"> </span>/tmp/app-sanitized.log<span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;未发现残留邮箱&quot;</span>
+<a id="__codelineno-15-13" name="__codelineno-15-13" href="#__codelineno-15-13"></a>grep<span class="w"> </span>-E<span class="w"> </span><span class="s1">'[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+'</span><span class="w"> </span>/tmp/app-sanitized.log<span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="s2">"未发现残留邮箱"</span>
 </code></pre></div>
 <p>期望输出示例：</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a>Key 已注入
@@ -5443,15 +5443,15 @@
 </code></pre></div>
 <h2 id="_5">五、常见错误与排坑指南<a class="headerlink" href="#_5" title="Permanent link">&para;</a></h2>
 <p><strong>场景 1：调用返回鉴权失败</strong></p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a>{&quot;error&quot;:{&quot;code&quot;:401,&quot;message&quot;:&quot;invalid api key&quot;}}
+<div class="highlight"><pre><span></span><code><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a>{"error":{"code":401,"message":"invalid api key"}}
 </code></pre></div>
 <p>原因：Key 未注入当前进程、已吊销，或复制时带入空格/换行。修复：重新按 3.1 节注入，检查变量长度与服务商控制台的 Key 状态：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a><span class="nb">echo</span><span class="w"> </span>-n<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$AI_API_KEY</span><span class="s2">&quot;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>wc<span class="w"> </span>-c
+<div class="highlight"><pre><span></span><code><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a><span class="nb">echo</span><span class="w"> </span>-n<span class="w"> </span><span class="s2">"</span><span class="nv">$AI_API_KEY</span><span class="s2">"</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>wc<span class="w"> </span>-c
 <a id="__codelineno-18-2" name="__codelineno-18-2" href="#__codelineno-18-2"></a><span class="nb">unset</span><span class="w"> </span>AI_API_KEY
 <a id="__codelineno-18-3" name="__codelineno-18-3" href="#__codelineno-18-3"></a><span class="nb">set</span><span class="w"> </span>-a<span class="p">;</span><span class="w"> </span>.<span class="w"> </span>~/.config/ai-cli/env<span class="p">;</span><span class="w"> </span><span class="nb">set</span><span class="w"> </span>+a
 </code></pre></div>
 <p><strong>场景 2：Key 被提交进 Git 仓库</strong></p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a>（在 git log / 托管平台代码搜索中发现） export AI_API_KEY=&quot;sk-......&quot;
+<div class="highlight"><pre><span></span><code><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a>（在 git log / 托管平台代码搜索中发现） export AI_API_KEY="sk-......"
 </code></pre></div>
 <p>原因：把 <code>export</code> 写进了脚本或 <code>.bashrc</code> 并随仓库提交。修复分三步缺一不可：1）在服务商控制台<strong>立即吊销</strong>该 Key 并新建；2）从脚本中删除硬编码，改走环境变量；3）清理 Git 历史中的记录（用 <code>git filter-repo</code> 等工具并强制推送，或直接废弃该仓库重建）。只删最新提交没用，历史里仍可翻出。</p>
 <p><strong>场景 3：AI 给的命令在 Ubuntu 上不存在或参数报错</strong></p>

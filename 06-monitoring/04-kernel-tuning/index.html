@@ -5474,7 +5474,7 @@
 <h3 id="37-oom-killer-oom_score_adj">3.7 OOM Killer 机制与 oom_score_adj<a class="headerlink" href="#37-oom-killer-oom_score_adj" title="Permanent link">&para;</a></h3>
 <p>内存真正耗尽时，内核的 OOM Killer 会按 oom_score 选一个进程结束以释放内存，分数越高越先被选中。分数由内核按内存占用等因子动态计算，管理员可通过 oom_score_adj 在负 1000 到 1000 之间做偏移：正值更容易被选中，负值更受保护，负 1000 表示完全豁免。</p>
 <p>排障入口：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a>journalctl<span class="w"> </span>-k<span class="w"> </span>-g<span class="w"> </span><span class="s2">&quot;Out of memory&quot;</span><span class="w"> </span>--no-pager
+<div class="highlight"><pre><span></span><code><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a>journalctl<span class="w"> </span>-k<span class="w"> </span>-g<span class="w"> </span><span class="s2">"Out of memory"</span><span class="w"> </span>--no-pager
 </code></pre></div>
 <p>日志中 Killed process 一行会给出进程名与分数，据此判断是真不足还是进程泄漏。给关键服务加保护用 systemd 覆盖配置：</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a>sudo<span class="w"> </span>systemctl<span class="w"> </span>edit<span class="w"> </span>nginx
