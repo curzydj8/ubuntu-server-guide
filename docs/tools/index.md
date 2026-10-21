@@ -82,7 +82,7 @@ description: "互动工具：九个纯前端小工具——Netplan、UFW、SSH�
 
 ## UFW 规则生成器
 
-勾选常用服务、按需加自定义端口，实时生成分步的 `ufw` 命令组。SSH 端口单独填写，生成结果的第一条业务规则永远是放行该 SSH 端口。
+勾选常用服务、按需加自定义端口，实时生成分步的 `ufw` 命令组。SSH 端口单独填写，生成结果的第一条业务规则永远是放行该 SSH 端口。页面下半的「按服务规划」可成组勾选服务并附端口清单，适合先规划再逐项放行。
 
 !!! danger "先放行 SSH 再启用 UFW"
 
@@ -115,11 +115,45 @@ description: "互动工具：九个纯前端小工具——Netplan、UFW、SSH�
     </label>
     <label>来源 IP（可选，留空=任意） <input type="text" id="ufw-src" placeholder="192.0.2.100"></label>
   </p>
+  <p><strong>按服务规划</strong>（成组勾选需要的服务：同步生成对应规则，结果末尾附「服务端口清单」逐项标注用途与风险；端口数据与[端口与协议目录](../reference/ports.md)同源维护）</p>
+  <p>远程与网络：
+    <label><input type="checkbox" class="ufw-plan" data-name="SSH" data-port="22" data-proto="tcp" data-use="远程登录与管理、SFTP / SCP 文件传输" data-risk="可暴露——前提是密钥登录、禁用口令与 root 直登，最好再限源 IP 或走跳板机"> SSH（22/tcp）</label>
+    <label><input type="checkbox" class="ufw-plan" data-name="DNS" data-port="53" data-proto="both" data-use="域名解析（大响应与区域传送走 TCP）" data-risk="分情况——权威解析可暴露；递归解析仅内网，对公网开放递归会被滥用为攻击反射源"> DNS（53/udp+tcp）</label>
+  </p>
+  <p>Web 与邮件：
+    <label><input type="checkbox" class="ufw-plan" data-name="HTTP" data-port="80" data-proto="tcp" data-use="网站明文入口，一般只做跳转 HTTPS 与证书签发校验" data-risk="可暴露——业务内容必须 301 跳转到 443，不要在 80 上承载登录与业务"> HTTP（80/tcp）</label>
+    <label><input type="checkbox" class="ufw-plan" data-name="HTTPS" data-port="443" data-proto="tcp" data-use="网站加密入口，反向代理与站点对外服务的主端口" data-risk="可暴露——Web 服务的标准对外端口，确保 TLS 配置与证书续期正常"> HTTPS（443/tcp）</label>
+    <label><input type="checkbox" class="ufw-plan" data-name="SMTP" data-port="25" data-proto="tcp" data-use="服务器之间投递邮件（收信入口）" data-risk="可暴露——不开放就收不到外部邮件，但须做好防开放中继与发信信誉维护"> SMTP（25/tcp）</label>
+    <label><input type="checkbox" class="ufw-plan" data-name="Submission" data-port="587" data-proto="tcp" data-use="客户端提交发信（带认证与 STARTTLS）" data-risk="可暴露——必须启用认证与加密"> 邮件提交 Submission（587/tcp）</label>
+    <label><input type="checkbox" class="ufw-plan" data-name="IMAPS" data-port="993" data-proto="tcp" data-use="加密版 IMAP 邮件收取" data-risk="可暴露——对外提供邮箱同步的标准做法"> IMAPS（993/tcp）</label>
+  </p>
+  <p>数据库与缓存（默认只对内网，勾选后务必在上方限定来源 IP）：
+    <label><input type="checkbox" class="ufw-plan" data-name="MySQL" data-port="3306" data-proto="tcp" data-use="关系型数据库连接" data-risk="仅内网——只放行应用服务器来源，裸奔公网是数据泄露高发入口"> MySQL（3306/tcp）</label>
+    <label><input type="checkbox" class="ufw-plan" data-name="PostgreSQL" data-port="5432" data-proto="tcp" data-use="关系型数据库连接" data-risk="仅内网——同上，并配合 pg_hba.conf 的来源限制"> PostgreSQL（5432/tcp）</label>
+    <label><input type="checkbox" class="ufw-plan" data-name="Redis" data-port="6379" data-proto="tcp" data-use="缓存与会话存储连接" data-risk="仅内网——未授权访问事件频发，至少绑定内网地址、设密码并改默认配置"> Redis（6379/tcp）</label>
+    <label><input type="checkbox" class="ufw-plan" data-name="MongoDB" data-port="27017" data-proto="tcp" data-use="文档数据库连接" data-risk="仅内网——必须开启认证并限定来源"> MongoDB（27017/tcp）</label>
+  </p>
+  <p>文件共享：
+    <label><input type="checkbox" class="ufw-plan" data-name="Samba" data-port="445" data-proto="tcp" data-use="Windows 兼容的文件与打印共享" data-risk="仅内网——SMB 裸奔公网是勒索病毒的主要入口之一，跨网访问走 VPN"> Samba（445/tcp）</label>
+    <label><input type="checkbox" class="ufw-plan" data-name="NFS" data-port="2049" data-proto="both" data-use="Linux 之间网络文件系统共享" data-risk="仅内网——权限模型基本只认 IP 与 UID，只在可信内网使用并配 /etc/exports 白名单"> NFS（2049/udp+tcp）</label>
+  </p>
+  <p>监控：
+    <label><input type="checkbox" class="ufw-plan" data-name="Prometheus" data-port="9090" data-proto="tcp" data-use="指标采集与 PromQL 查询界面" data-risk="经隧道或反代后暴露——自带界面无登录认证，外网查看请套反向代理加认证或只走内网"> Prometheus（9090/tcp）</label>
+    <label><input type="checkbox" class="ufw-plan" data-name="Grafana" data-port="3000" data-proto="tcp" data-use="监控仪表盘 Web 界面" data-risk="经隧道或反代后暴露——启用账号登录后可经反向代理对外，不要用默认口令直接开放"> Grafana（3000/tcp）</label>
+    <label><input type="checkbox" class="ufw-plan" data-name="Node Exporter" data-port="9100" data-proto="tcp" data-use="向 Prometheus 暴露主机指标的采集端点" data-risk="仅内网——它没有任何认证，只应允许 Prometheus 服务器来抓取"> Node Exporter（9100/tcp）</label>
+  </p>
+  <p>组网与游戏：
+    <label><input type="checkbox" class="ufw-plan" data-name="WireGuard" data-port="51820" data-proto="udp" data-use="现代 VPN 组网监听端口" data-risk="可暴露——协议对未认证数据包不作回应，暴露面小"> WireGuard（51820/udp）</label>
+    <label><input type="checkbox" class="ufw-plan" data-name="Minecraft" data-port="25565" data-proto="tcp" data-use="游戏客户端连接入口" data-risk="可暴露——联机游戏必须对外，但请开白名单与正版验证"> Minecraft（25565/tcp）</label>
+  </p>
   <div id="ufw-warn-db" style="display: none; border: 1px solid #c62828; background: rgba(198, 40, 40, 0.10); padding: 0.6em 0.9em; margin: 0.6em 0;">
     <strong>最小权限警告：</strong>数据库端口不应直接向公网开放，建议在来源 IP 处限定为内网/应用服务器地址。
   </div>
   <div id="ufw-warn-admin" style="display: none; border: 1px solid #e65100; background: rgba(255, 145, 0, 0.12); padding: 0.6em 0.9em; margin: 0.6em 0;">
     <strong>最小权限警告：</strong>管理后台建议限定来源 IP，不要直接向公网任意来源开放（涉及端口 888、8888、8443、9090 等）。
+  </div>
+  <div id="ufw-warn-lock" style="display: none; border: 1px solid #c62828; background: rgba(198, 40, 40, 0.10); padding: 0.6em 0.9em; margin: 0.6em 0;">
+    <strong>SSH 自锁检查：</strong>本次按服务规划没有勾选 SSH。若这台服务器还没有放行过 SSH 就启用 UFW，远程管理通道会被锁死。上方步骤 2 会先放行你填写的 SSH 端口——务必确认该端口与真实 SSH 端口一致、并保持当前会话不断开，再执行启用。
   </div>
   <div id="ufw-err" style="display: none; border: 1px solid #c62828; background: rgba(198, 40, 40, 0.10); padding: 0.6em 0.9em; margin: 0.6em 0;"></div>
   <pre id="ufw-out" style="white-space: pre; overflow-x: auto;"></pre>
@@ -186,9 +220,64 @@ description: "互动工具：九个纯前端小工具——Netplan、UFW、SSH�
   <p><button type="button" id="ssh-copy">复制命令</button> <span id="ssh-msg"></span></p>
 </div>
 
+### 多服务器别名配置：生成 ~/.ssh/config
+
+服务器多了之后，每次拼地址、端口和跳板参数既累又易错：把每台服务器在 `~/.ssh/config` 里存成一个 Host 别名块，之后 `ssh 别名` 就能直连。下面按行填服务器（最多 3 台，用几台填几台），每条配置的简注会直接写进生成结果。本生成器只拼配置文本，**不收集密码，也没有粘贴私钥内容的地方**——私钥永远只填路径。
+
+<div>
+  <p><strong>服务器 1</strong></p>
+  <p>
+    <label>别名 Host <input type="text" id="cfg1-alias" value="web1"></label>
+    <label>主机地址 HostName <input type="text" id="cfg1-host" value="192.0.2.10"></label>
+    <label>用户名 User <input type="text" id="cfg1-user" value="ubuntu"></label>
+  </p>
+  <p>
+    <label>端口 Port（可空，空或 22 不写） <input type="text" id="cfg1-port" inputmode="numeric" placeholder="2222"></label>
+    <label>私钥路径 IdentityFile（可空） <input type="text" id="cfg1-key" placeholder="~/.ssh/id_ed25519"></label>
+    <label>跳板机 ProxyJump（可空） <input type="text" id="cfg1-jump" placeholder="别名或 ubuntu@192.0.2.1"></label>
+  </p>
+  <p><strong>服务器 2</strong></p>
+  <p>
+    <label>别名 Host <input type="text" id="cfg2-alias" placeholder="db1"></label>
+    <label>主机地址 HostName <input type="text" id="cfg2-host" placeholder="10.0.0.5"></label>
+    <label>用户名 User <input type="text" id="cfg2-user" placeholder="ubuntu"></label>
+  </p>
+  <p>
+    <label>端口 Port（可空） <input type="text" id="cfg2-port" inputmode="numeric" placeholder="2222"></label>
+    <label>私钥路径 IdentityFile（可空） <input type="text" id="cfg2-key" placeholder="~/.ssh/id_db"></label>
+    <label>跳板机 ProxyJump（可空） <input type="text" id="cfg2-jump" placeholder="填服务器 1 的别名即经它中转"></label>
+  </p>
+  <p><strong>服务器 3</strong></p>
+  <p>
+    <label>别名 Host <input type="text" id="cfg3-alias" placeholder="backup1"></label>
+    <label>主机地址 HostName <input type="text" id="cfg3-host" placeholder="192.0.2.30"></label>
+    <label>用户名 User <input type="text" id="cfg3-user" placeholder="ubuntu"></label>
+  </p>
+  <p>
+    <label>端口 Port（可空） <input type="text" id="cfg3-port" inputmode="numeric" placeholder="2222"></label>
+    <label>私钥路径 IdentityFile（可空） <input type="text" id="cfg3-key" placeholder="~/.ssh/id_ed25519"></label>
+    <label>跳板机 ProxyJump（可空） <input type="text" id="cfg3-jump" placeholder="别名或 ubuntu@192.0.2.1"></label>
+  </p>
+  <p><strong>连接保活与超时（写入每个 Host 块，可空=不写该行）</strong></p>
+  <p>
+    <label>保活间隔 ServerAliveInterval（秒） <input type="text" id="cfg-alive" inputmode="numeric" value="60"></label>
+    <label>保活次数 ServerAliveCountMax <input type="text" id="cfg-alivemax" inputmode="numeric" value="3"></label>
+    <label>连接超时 ConnectTimeout（秒） <input type="text" id="cfg-timeout" inputmode="numeric" value="10"></label>
+  </p>
+  <div id="cfg-err" style="display: none; border: 1px solid #c62828; background: rgba(198, 40, 40, 0.10); padding: 0.6em 0.9em; margin: 0.6em 0;"></div>
+  <pre id="cfg-out" style="white-space: pre; overflow-x: auto;"></pre>
+  <p><button type="button" id="cfg-copy">复制 config</button> <span id="cfg-msg"></span></p>
+</div>
+
+!!! warning "密钥与文件权限"
+
+    - 配置落盘后先收紧权限：`chmod 600 ~/.ssh/config`；私钥文件同样必须是 600，权限过宽时 ssh 会拒绝使用该私钥。
+    - 别名不要重复：config 里同名 Host 只会命中第一个块，后面的同名块会被静默忽略（本生成器会直接拦下重名）。
+    - 生成后先用 `ssh -G 别名` 离线核对最终生效配置，确认无误再实际连接（生成结果末尾已附这两条验证命令）。
+
 !!! note "生成器覆盖不到的用法"
 
-    - 多台服务器的别名、连接复用与跳板机长期配置，写进 `~/.ssh/config` 比每次拼命令更可靠，见 [连接与客户端配置](../14-ssh/02-connect-config.md)。
+    - 连接复用（ControlMaster）、匹配规则（Match 块）等更进阶的 config 写法仍建议手写，见 [连接与客户端配置](../14-ssh/02-connect-config.md)。
     - 大文件、增量同步与断点续传用 `rsync`，见 [文件传输与远程执行](../14-ssh/04-transfer-remote-exec.md)；三种转发与跳板机的原理和排坑见 [隧道与跳板机](../14-ssh/05-tunnels-jump.md)。
 
 ## 子网 / CIDR 计算器
@@ -358,6 +447,9 @@ description: "互动工具：九个纯前端小工具——Netplan、UFW、SSH�
         <option value="on-failure" selected>on-failure（异常退出才重启）</option>
         <option value="always">always（总是重启）</option>
         <option value="on-success">on-success（正常退出才重启）</option>
+        <option value="on-abnormal">on-abnormal（被信号杀死/超时才重启）</option>
+        <option value="on-watchdog">on-watchdog（看门狗超时才重启）</option>
+        <option value="on-abort">on-abort（收到未捕获信号才重启）</option>
       </select>
     </label>
     <label>重启间隔 RestartSec（秒，可空） <input type="number" id="unit-restartsec" min="0" max="3600" placeholder="5"></label>
@@ -365,6 +457,46 @@ description: "互动工具：九个纯前端小工具——Netplan、UFW、SSH�
   <p>
     <label>内存上限 MemoryMax（可空，如 512M） <input type="text" id="unit-mem" placeholder="512M"></label>
     <label>CPU 配额 CPUQuota（可空，如 50%） <input type="text" id="unit-cpu" placeholder="50%"></label>
+  </p>
+  <p>
+    <label>环境文件 EnvironmentFile（可空） <input type="text" id="unit-envfile" placeholder="/etc/myapp/env"></label>
+    <label><input type="checkbox" id="unit-envfile-opt"> 文件不存在时忽略（生成时给路径加 - 前缀）</label>
+  </p>
+  <p>
+    <label>环境变量 Environment（可空，每行一个 KEY=VALUE，值里的引号与 % 会自动转义）<br>
+    <textarea id="unit-env" rows="2" cols="48" placeholder="APP_ENV=production"></textarea></label>
+  </p>
+  <p>
+    <label>额外 After（可空，空格分隔） <input type="text" id="unit-after" placeholder="postgresql.service"></label>
+    <label>Wants 弱依赖（可空） <input type="text" id="unit-wants" placeholder="redis-server.service"></label>
+    <label>Requires 强依赖（可空） <input type="text" id="unit-requires" placeholder="mysql.service"></label>
+  </p>
+  <p>
+    <label>标准输出 StandardOutput
+      <select id="unit-stdout">
+        <option value="" selected>不设置（systemd 默认）</option>
+        <option value="journal">journal（进 journald）</option>
+        <option value="syslog">syslog</option>
+        <option value="null">null（丢弃）</option>
+      </select>
+    </label>
+    <label>标准错误 StandardError
+      <select id="unit-stderr">
+        <option value="" selected>不设置（默认）</option>
+        <option value="journal">journal（进 journald）</option>
+        <option value="syslog">syslog</option>
+        <option value="null">null（丢弃）</option>
+        <option value="inherit">inherit（与标准输出一致）</option>
+      </select>
+    </label>
+  </p>
+  <p>安全加固选项（按需勾选，生成结果里逐项附影响说明；加固过头会让应用读写失败，先在测试机验证再上生产）：
+    <label><input type="checkbox" id="unit-h-nnp"> NoNewPrivileges</label>
+    <label><input type="checkbox" id="unit-h-ptmp"> PrivateTmp</label>
+    <label><input type="checkbox" id="unit-h-psys"> ProtectSystem=strict</label>
+    <label><input type="checkbox" id="unit-h-phome"> ProtectHome</label>
+    <label><input type="checkbox" id="unit-h-pdev"> PrivateDevices</label>
+    <label><input type="checkbox" id="unit-h-pkt"> ProtectKernelTunables</label>
   </p>
   <div id="unit-err" style="display: none; border: 1px solid #c62828; background: rgba(198, 40, 40, 0.10); padding: 0.6em 0.9em; margin: 0.6em 0;"></div>
   <pre id="unit-out" style="white-space: pre; overflow-x: auto;"></pre>
@@ -375,11 +507,12 @@ description: "互动工具：九个纯前端小工具——Netplan、UFW、SSH�
 
     - 以 root 运行的服务等于把应用漏洞放大成系统级风险：能用普通用户就填普通用户，并确认该用户对工作目录与日志路径有权限。
     - 改完 unit 必须 `systemctl daemon-reload` 才生效；`enable --now` 是「设为开机自启 + 立即启动」两件事一起做。
+    - 勾选 ProtectSystem=strict 后，应用对文件系统的写入会全面只读（包括 /var、/home）：应用需要写数据目录时，必须再手动加一行 `ReadWritePaths=/你的数据目录` 并先在测试机验证，否则服务会以「看起来启动了、实际写不进去」的方式失败。
     - unit 的依赖、资源限制与看门狗等工程化要点见 [Systemd 服务与定时任务](../07-automation/02-systemd-timers.md) 与 [服务工程化与配置漂移](../07-automation/04-systemd-engineering-drift.md)。
 
 ## Nginx 反向代理生成器
 
-生成把域名流量转发到后端服务的 `server` 块，`proxy_set_header` 真实 IP 头全套（Host、X-Real-IP、X-Forwarded-For、X-Forwarded-Proto）默认带齐；勾选 WebSocket 时自动带上协议升级头，勾选强制 HTTPS 时额外生成 80 跳转块与 Let's Encrypt 证书路径（证书要先用 certbot 签出来，见下方链接）。
+生成把域名流量转发到后端服务的 `server` 块，`proxy_set_header` 真实 IP 头全套（Host、X-Real-IP、X-Forwarded-For、X-Forwarded-Proto）默认带齐；勾选 WebSocket 时自动带上协议升级头，勾选强制 HTTPS 时额外生成 80 跳转块与 Let's Encrypt 证书路径（证书要先用 certbot 签出来，见下方链接）。进阶选项在下方：多后端 upstream 负载均衡、三项 proxy 超时、limit_req 限流、以及前面挂了 CDN 时用的 set_real_ip_from 真实 IP 还原——都不勾时生成结果与原来完全一致。
 
 <div>
   <p>
@@ -399,6 +532,33 @@ description: "互动工具：九个纯前端小工具——Netplan、UFW、SSH�
     <label><input type="checkbox" id="ngx-ws"> 后端是 WebSocket 服务（带 Upgrade 头）</label>
     <label><input type="checkbox" id="ngx-https"> 强制 HTTPS（生成 443 块 + 80 跳转，证书路径按 Let's Encrypt 默认位置）</label>
   </p>
+  <p>
+    <label><input type="checkbox" id="ngx-multi"> 多后端负载均衡（生成 upstream 块，下方逐行填后端，启用后上方「后端地址/端口」不再使用）</label>
+  </p>
+  <div id="ngx-grp-multi" style="display: none;">
+    <p>
+      <label>upstream 名称 <input type="text" id="ngx-upname" value="backend_pool"></label>
+    </p>
+    <p>
+      <label>后端列表（每行一个：地址:端口，可跟空格 + 权重，权重越大分到的请求越多，不写即 1）<br>
+      <textarea id="ngx-upstreams" rows="3" cols="48">127.0.0.1:3000
+127.0.0.1:3001</textarea></label>
+    </p>
+  </div>
+  <p>
+    <label>连接超时 proxy_connect_timeout（秒，可空） <input type="text" id="ngx-t-conn" inputmode="numeric" placeholder="60" size="4"></label>
+    <label>发送超时 proxy_send_timeout（秒，可空） <input type="text" id="ngx-t-send" inputmode="numeric" placeholder="60" size="4"></label>
+    <label>读取超时 proxy_read_timeout（秒，可空） <input type="text" id="ngx-t-read" inputmode="numeric" placeholder="60" size="4"></label>
+  </p>
+  <p>
+    <label><input type="checkbox" id="ngx-limit"> 启用限流 limit_req（按来源 IP 限速，生成结果会说明 zone 定义该写在哪）</label>
+    <label>速率（次/秒） <input type="text" id="ngx-limit-rate" inputmode="numeric" value="10" size="4"></label>
+    <label>突发 burst <input type="text" id="ngx-limit-burst" inputmode="numeric" value="20" size="4"></label>
+  </p>
+  <p>
+    <label><input type="checkbox" id="ngx-realip"> 前面有 CDN / 可信代理（启用 set_real_ip_from 还原真实 IP）</label>
+    <label>可信代理地址段 <input type="text" id="ngx-realip-from" placeholder="如 10.0.0.0/8 或 CDN 公布的地址段"></label>
+  </p>
   <div id="ngx-err" style="display: none; border: 1px solid #c62828; background: rgba(198, 40, 40, 0.10); padding: 0.6em 0.9em; margin: 0.6em 0;"></div>
   <pre id="ngx-out" style="white-space: pre; overflow-x: auto;"></pre>
   <p><button type="button" id="ngx-copy">复制配置</button> <span id="ngx-msg"></span></p>
@@ -409,7 +569,8 @@ description: "互动工具：九个纯前端小工具——Netplan、UFW、SSH�
     1. 先备份现有配置：`sudo cp -a /etc/nginx /etc/nginx.bak-$(date +%F)`。
     2. 落盘后先测语法：`sudo nginx -t`，通过才 `sudo systemctl reload nginx`；语法不过不要 reload，更不要 restart 硬顶。
     3. reload 后从外部网络验证域名与证书，再看 `sudo tail -n 50 /var/log/nginx/error.log` 有没有新错误。
-    4. 完整讲解见 [Web 服务器与反向代理](../04-network/02-web-proxy.md)，证书签发与自动续期见 [HTTPS 自动化证书](../09-web-hosting/05-https-certificates.md)。
+    4. 多后端模式生成的是开源版**被动**健康检查（max_fails / fail_timeout)：定时主动探活是 NGINX Plus 商业版功能，开源版没有，不要照抄 Plus 文档里的 health_check 指令。
+    5. 完整讲解见 [Web 服务器与反向代理](../04-network/02-web-proxy.md)，证书签发与自动续期见 [HTTPS 自动化证书](../09-web-hosting/05-https-certificates.md)。
 
 ## Docker Compose 模板生成器
 
@@ -785,6 +946,24 @@ function ufwGenerate() {
   }
   var dbPorts = ["3306", "5432", "6379", "27017"];
   var adminPorts = ["888", "8888", "8443", "9090"];
+  var planBoxes = document.querySelectorAll(".ufw-plan");
+  var planSel = [];
+  var pi;
+  for (pi = 0; pi < planBoxes.length; pi++) {
+    if (planBoxes[pi].checked) {
+      planSel.push({
+        port: planBoxes[pi].getAttribute("data-port"),
+        proto: planBoxes[pi].getAttribute("data-proto"),
+        name: planBoxes[pi].getAttribute("data-name"),
+        use: planBoxes[pi].getAttribute("data-use"),
+        risk: planBoxes[pi].getAttribute("data-risk")
+      });
+    }
+  }
+  var planHasSsh = false;
+  for (pi = 0; pi < planSel.length; pi++) {
+    if (planSel[pi].port === "22") { planHasSsh = true; }
+  }
   var seenPorts = [];
   var boxes = document.querySelectorAll(".ufw-preset");
   var i;
@@ -792,6 +971,9 @@ function ufwGenerate() {
     if (boxes[i].checked) {
       seenPorts.push(boxes[i].getAttribute("data-port"));
     }
+  }
+  for (pi = 0; pi < planSel.length; pi++) {
+    seenPorts.push(planSel[pi].port);
   }
   if (customPort) {
     seenPorts.push(customPort);
@@ -818,6 +1000,10 @@ function ufwGenerate() {
   if (warnAdmin) {
     warnAdmin.style.display = hitsList(adminPorts) ? "block" : "none";
   }
+  var warnLock = document.getElementById("ufw-warn-lock");
+  if (warnLock) {
+    warnLock.style.display = (planSel.length && !planHasSsh) ? "block" : "none";
+  }
   if (errs.length) {
     if (errBox) { errBox.style.display = "block"; errBox.textContent = "输入有误：" + errs.join("；"); }
     out.textContent = "# 请先修正上面的输入，不要执行当前命令";
@@ -830,6 +1016,8 @@ function ufwGenerate() {
   lines.push("");
   lines.push("# 步骤2：放行 SSH 端口（务必最先执行，不要断开当前 SSH 会话）");
   lines.push(ufwRule(sshPort, "tcp", "SSH", src));
+  var emitted = {};
+  emitted[sshPort + "/tcp"] = true;
   lines.push("");
   lines.push("# 步骤3：放行业务端口");
   var bizCount = 0;
@@ -840,17 +1028,36 @@ function ufwGenerate() {
         continue;
       }
       lines.push(ufwRule(bp, boxes[i].getAttribute("data-proto"), boxes[i].getAttribute("data-name"), src));
+      emitted[bp + "/" + boxes[i].getAttribute("data-proto")] = true;
       bizCount++;
     }
   }
   if (customPort) {
     if (!(customPort === sshPort && customProto === "tcp")) {
       lines.push(ufwRule(customPort, customProto, "custom", src));
+      emitted[customPort + "/" + customProto] = true;
       bizCount++;
     }
   }
   if (bizCount === 0) {
     lines.push("# （未勾选或填写其他业务端口，如需放行请在上方勾选/填写）");
+  }
+  if (planSel.length) {
+    lines.push("");
+    lines.push("# 步骤3b：按服务规划放行（与结果末尾的服务端口清单一一对应；与上方已放行的重复项已自动跳过）");
+    for (pi = 0; pi < planSel.length; pi++) {
+      var psvc = planSel[pi];
+      var pprotos = (psvc.proto === "both") ? ["udp", "tcp"] : [psvc.proto];
+      for (var pj = 0; pj < pprotos.length; pj++) {
+        var pkey = psvc.port + "/" + pprotos[pj];
+        if (emitted[pkey]) { continue; }
+        emitted[pkey] = true;
+        lines.push(ufwRule(psvc.port, pprotos[pj], psvc.name, src));
+      }
+    }
+    if (!planHasSsh) {
+      lines.push("# 警告：本次规划未勾选 SSH 服务——启用 UFW 前必须确认 SSH 已放行（上方步骤2 放行的是你填写的 SSH 端口），端口填错或从未放行就 enable 会把自己锁在门外");
+    }
   }
   lines.push("");
   lines.push("# 步骤4：复核规则");
@@ -864,6 +1071,15 @@ function ufwGenerate() {
   var verifyPort = customPort ? (customRange ? String(customRange.lo) : customPort) : sshPort;
   lines.push("# nc -vz <服务器IP> " + verifyPort);
   lines.push("# curl -v http://<服务器IP>:" + verifyPort + "/");
+  if (planSel.length) {
+    lines.push("");
+    lines.push("# ===== 服务端口清单（核对用，与站内「端口与协议目录」同源维护；先看风险列，再决定上方规则是否照抄执行） =====");
+    for (pi = 0; pi < planSel.length; pi++) {
+      var csvc = planSel[pi];
+      var cprotos = (csvc.proto === "both") ? "udp+tcp" : csvc.proto;
+      lines.push("# " + csvc.port + "/" + cprotos + " " + csvc.name + "：用途：" + csvc.use + "；风险：" + csvc.risk);
+    }
+  }
   out.textContent = lines.join("\n");
 }
 function sshQuote(v) {
@@ -973,6 +1189,101 @@ function sshGenerate() {
     notes.push("# -J 后面是跳板机（用户@跳板机[:端口] 或 ~/.ssh/config 别名）；目标机地址从跳板机视角解析");
   }
   out.textContent = [cmd].concat(notes).join("\n");
+}
+function sshConfigGenerate() {
+  var out = document.getElementById("cfg-out");
+  if (!out) { return; }
+  var errs = [];
+  function numOpt(id, label, lo, hi) {
+    var el = document.getElementById(id);
+    var raw = el ? el.value.trim() : "";
+    if (!raw) { return null; }
+    if (!/^\d+$/.test(raw)) { errs.push(label + "必须是整数"); return null; }
+    var n = parseInt(raw, 10);
+    if (n < lo || n > hi) { errs.push(label + "必须在 " + lo + "–" + hi + " 之间"); return null; }
+    return n;
+  }
+  var alive = numOpt("cfg-alive", "保活间隔 ServerAliveInterval", 0, 3600);
+  var aliveMax = numOpt("cfg-alivemax", "保活次数 ServerAliveCountMax", 0, 100);
+  var timeout = numOpt("cfg-timeout", "连接超时 ConnectTimeout", 1, 300);
+  var entries = [];
+  var seenAlias = {};
+  for (var i = 1; i <= 3; i++) {
+    var tag = "服务器 " + i;
+    var alias = document.getElementById("cfg" + i + "-alias").value.trim();
+    var host = document.getElementById("cfg" + i + "-host").value.trim();
+    var user = document.getElementById("cfg" + i + "-user").value.trim();
+    var portRaw = document.getElementById("cfg" + i + "-port").value.trim();
+    var key = document.getElementById("cfg" + i + "-key").value.trim();
+    var jump = document.getElementById("cfg" + i + "-jump").value.trim();
+    if (!alias && !host && !user && !portRaw && !key && !jump) { continue; }
+    if (!alias) { errs.push(tag + "：已经填了内容，别名 Host 不能为空（每台服务器靠别名区分）"); }
+    else if (!/^[A-Za-z0-9._-]+$/.test(alias)) { errs.push(tag + "：别名只能含字母、数字、点、下划线、连字符（如 web1、db-01），不能带空格或通配符"); }
+    else if (seenAlias[alias]) { errs.push("别名重复：「" + alias + "」出现了两次，config 里同名 Host 只会生效第一个"); }
+    else { seenAlias[alias] = true; }
+    if (!host) { errs.push(tag + "：主机地址 HostName 不能为空"); }
+    else if (!/^[A-Za-z0-9._:\[\]-]+$/.test(host)) { errs.push(tag + "：主机地址含非法字符（只接受 IP 或域名）"); }
+    if (user && !/^[A-Za-z0-9._-]+$/.test(user)) { errs.push(tag + "：用户名含非法字符"); }
+    var port = null;
+    if (portRaw) {
+      port = parsePortStrict(portRaw);
+      if (port === null) { errs.push(tag + "：端口必须是 1–65535 的整数"); }
+    }
+    if (key && /[\s;'"`$|&\\]/.test(key)) { errs.push(tag + "：私钥路径不能含空格、引号或 shell 元字符（只填路径本身）"); }
+    if (jump && !/^[A-Za-z0-9._@:\[\]-]+$/.test(jump)) { errs.push(tag + "：跳板机格式不正确（填已定义的别名，或 用户@跳板机地址[:端口]）"); }
+    entries.push({ alias: alias, host: host, user: user, port: port, key: key, jump: jump });
+  }
+  if (!entries.length && !errs.length) { errs.push("至少填写一台服务器（别名与主机地址必填）"); }
+  var errBox = document.getElementById("cfg-err");
+  if (errs.length) {
+    if (errBox) { errBox.style.display = "block"; errBox.textContent = "输入有误：" + errs.join("；"); }
+    out.textContent = "# 请先修正上面的输入，再复制配置";
+    return;
+  }
+  if (errBox) { errBox.style.display = "none"; }
+  var L = [];
+  L.push("# 文件：~/.ssh/config（每台服务器一个 Host 块，之后 ssh <别名> 即可直连，不必再拼地址与参数）");
+  L.push("# 落盘后先收紧权限：chmod 600 ~/.ssh/config；私钥文件同样必须是 600，权限过宽 ssh 会拒绝使用");
+  entries.forEach(function (en) {
+    L.push("");
+    L.push("Host " + en.alias);
+    L.push("    # 主机地址（IP 或域名）");
+    L.push("    HostName " + en.host);
+    if (en.user) {
+      L.push("    # 登录用户名");
+      L.push("    User " + en.user);
+    }
+    if (en.port && en.port !== 22) {
+      L.push("    # 非标准 SSH 端口（22 不必写，用默认即可）");
+      L.push("    Port " + en.port);
+    }
+    if (en.key) {
+      L.push("    # 私钥文件路径（只写路径，任何情况下都不要把私钥内容贴到网页、聊天或仓库）");
+      L.push("    IdentityFile " + en.key);
+    }
+    if (en.jump) {
+      L.push("    # 先经跳板机中转再连接本机（填跳板机的别名或 用户@跳板机地址）");
+      L.push("    ProxyJump " + en.jump);
+    }
+    if (alive !== null) {
+      L.push("    # 每 " + alive + " 秒向服务器发一次保活包，弱网与 NAT 环境下防止空闲连接被掐断（0 表示关闭保活）");
+      L.push("    ServerAliveInterval " + alive);
+    }
+    if (aliveMax !== null) {
+      L.push("    # 保活包连续 " + aliveMax + " 次无回应才判定断线并退出");
+      L.push("    ServerAliveCountMax " + aliveMax);
+    }
+    if (timeout !== null) {
+      L.push("    # 建连超时 " + timeout + " 秒，超时直接报错而不是长时间挂起");
+      L.push("    ConnectTimeout " + timeout);
+    }
+  });
+  L.push("");
+  L.push("# 验证（逐条执行）：");
+  L.push("# ssh -G " + entries[0].alias + "        # 离线展开该别名的最终生效配置，逐项核对（不会真正连接）");
+  L.push("# ssh -T " + entries[0].alias + "        # 实际连接测试（-T 不分配伪终端，连通并完成认证即返回，适合快速验证）");
+  L.push("# ssh " + entries[0].alias + "           # 日常使用：直接用别名登录");
+  out.textContent = L.join("\n");
 }
 function subParseIp(v) {
   var parts = v.split(".");
@@ -1296,6 +1607,51 @@ function unitGenerate() {
   if (rsec && !/^\d+$/.test(rsec)) { errs.push("RestartSec 必须是整数秒"); }
   if (mem && !/^\d+(\.\d+)?[KMGT]$/i.test(mem)) { errs.push("MemoryMax 格式应如 512M、1G、2048K"); }
   if (cpu && !/^\d+(\.\d+)?%$/.test(cpu)) { errs.push("CPUQuota 格式应如 50%、150%"); }
+  var envfileEl = document.getElementById("unit-envfile");
+  var envfile = envfileEl ? envfileEl.value.trim() : "";
+  var envfileOptEl = document.getElementById("unit-envfile-opt");
+  var envfileOpt = envfileOptEl ? envfileOptEl.checked : false;
+  var envfilePath = envfile;
+  if (envfilePath.charAt(0) === "-") { envfileOpt = true; envfilePath = envfilePath.slice(1); }
+  if (envfile) {
+    if (!/^\/[A-Za-z0-9_\/.\-+]+$/.test(envfilePath)) { errs.push("EnvironmentFile 必须是绝对路径且不能含空格或特殊字符（如 /etc/myapp/env）"); }
+  }
+  var envEl = document.getElementById("unit-env");
+  var envRaw = envEl ? envEl.value : "";
+  var envPairs = [];
+  if (envRaw.trim()) {
+    var envLines = envRaw.split("\n");
+    for (var ei = 0; ei < envLines.length; ei++) {
+      var eline = envLines[ei].trim();
+      if (!eline) { continue; }
+      var em = eline.match(/^([A-Za-z_][A-Za-z0-9_]*)=([\s\S]*)$/);
+      if (!em) { errs.push("环境变量第 " + (ei + 1) + " 行格式不正确（应为 KEY=VALUE，KEY 只能以字母或下划线开头、含字母数字下划线）"); }
+      else { envPairs.push({ k: em[1], v: em[2] }); }
+    }
+  }
+  function unitDepList(id, label) {
+    var el = document.getElementById(id);
+    var raw = el ? el.value.trim() : "";
+    if (!raw) { return []; }
+    var toks = raw.split(/[\s,]+/).filter(function (t) { return t; });
+    for (var ti = 0; ti < toks.length; ti++) {
+      if (!/^[A-Za-z0-9_.@:-]+$/.test(toks[ti])) { errs.push(label + " 中的「" + toks[ti] + "」含非法字符（单元名只接受字母、数字与 _ . - @ :）"); return null; }
+    }
+    return toks;
+  }
+  var afterList = unitDepList("unit-after", "额外 After") || [];
+  var wantsList = unitDepList("unit-wants", "Wants") || [];
+  var requiresList = unitDepList("unit-requires", "Requires") || [];
+  var stdoutEl = document.getElementById("unit-stdout");
+  var stdout = stdoutEl ? stdoutEl.value : "";
+  if (["", "journal", "syslog", "null"].indexOf(stdout) === -1) { errs.push("StandardOutput 取值不合法"); }
+  var stderrEl = document.getElementById("unit-stderr");
+  var stderr = stderrEl ? stderrEl.value : "";
+  if (["", "journal", "syslog", "null", "inherit"].indexOf(stderr) === -1) { errs.push("StandardError 取值不合法"); }
+  function unitHard(id) {
+    var el = document.getElementById(id);
+    return el ? el.checked : false;
+  }
   var errBox = document.getElementById("unit-err");
   if (errs.length) {
     errBox.style.display = "block";
@@ -1310,7 +1666,15 @@ function unitGenerate() {
   L.push("# 服务描述（systemctl status 中显示）");
   L.push("Description=" + (desc || name));
   L.push("# 在网络目标就绪后再启动（不需要网络可删此行）");
-  L.push("After=network.target");
+  L.push("After=network.target" + (afterList.length ? " " + afterList.join(" ") : ""));
+  if (wantsList.length) {
+    L.push("# 弱依赖：希望这些单元一同启动，但对方启动失败不影响本服务");
+    L.push("Wants=" + wantsList.join(" "));
+  }
+  if (requiresList.length) {
+    L.push("# 强依赖：这些单元启动失败时本服务不会启动，它们停止时本服务也会被停");
+    L.push("Requires=" + requiresList.join(" "));
+  }
   L.push("");
   L.push("[Service]");
   L.push("# 前台进程型服务：程序不要自带 daemon 化或后台化");
@@ -1325,6 +1689,18 @@ function unitGenerate() {
     L.push("# 运行用户（避免用 root 跑业务进程）");
     L.push("User=" + user);
   }
+  if (envfile) {
+    L.push("# 从文件读取环境变量（KEY=VALUE 每行一个，文件权限建议 600，里面可能有密钥）");
+    if (envfileOpt) { L.push("# 路径前的 - 表示文件不存在时不报错、直接跳过"); }
+    L.push("EnvironmentFile=" + (envfileOpt ? "-" : "") + envfilePath);
+  }
+  if (envPairs.length) {
+    L.push("# 环境变量（值已按 systemd 规则加引号并转义；含密钥的变量请改用上面的 EnvironmentFile，不要写死在这里）");
+    envPairs.forEach(function (p) {
+      var esc = p.v.replace(/\\/g, "\\\\").replace(/"/g, '\\"').replace(/%/g, "%%");
+      L.push("Environment=\"" + p.k + "=" + esc + "\"");
+    });
+  }
   L.push("# 退出后的重启策略");
   L.push("Restart=" + restart);
   if (rsec) {
@@ -1338,6 +1714,38 @@ function unitGenerate() {
   if (cpu) {
     L.push("# CPU 配额（100% 约等于占满一个核心）");
     L.push("CPUQuota=" + cpu);
+  }
+  if (stdout) {
+    L.push("# 标准输出去向（journal 进 journald，用 journalctl -u 查看）");
+    L.push("StandardOutput=" + stdout);
+  }
+  if (stderr) {
+    L.push("# 标准错误去向（inherit 表示与标准输出一致）");
+    L.push("StandardError=" + stderr);
+  }
+  if (unitHard("unit-h-nnp")) {
+    L.push("# 禁止本进程及其子进程通过 setuid 等方式获得新权限（应用若要调用 sudo / setuid 程序会被挡，不要勾）");
+    L.push("NoNewPrivileges=true");
+  }
+  if (unitHard("unit-h-ptmp")) {
+    L.push("# 使用独立的 /tmp 与 /var/tmp：进程看不到别人的临时文件，别人也看不到它的");
+    L.push("PrivateTmp=true");
+  }
+  if (unitHard("unit-h-psys")) {
+    L.push("# 整个文件系统只读（含 /var、/home）：应用要写数据目录必须再加一行 ReadWritePaths=/数据目录 并先验证");
+    L.push("ProtectSystem=strict");
+  }
+  if (unitHard("unit-h-phome")) {
+    L.push("# /home、/root、/run/user 对进程不可见：应用需要读用户目录文件时不要勾");
+    L.push("ProtectHome=true");
+  }
+  if (unitHard("unit-h-pdev")) {
+    L.push("# 设备隔离：只保留伪设备节点，无法访问真实硬件设备");
+    L.push("PrivateDevices=true");
+  }
+  if (unitHard("unit-h-pkt")) {
+    L.push("# /proc 与 /sys 下的内核可调参数只读：进程无法改内核参数");
+    L.push("ProtectKernelTunables=true");
   }
   L.push("");
   L.push("[Install]");
@@ -1372,14 +1780,86 @@ function ngxGenerate() {
   var portRaw = document.getElementById("ngx-port").value.trim();
   var ws = document.getElementById("ngx-ws").checked;
   var https = document.getElementById("ngx-https").checked;
+  var multiEl = document.getElementById("ngx-multi");
+  var multi = multiEl ? multiEl.checked : false;
+  var grpMulti = document.getElementById("ngx-grp-multi");
+  if (grpMulti) { grpMulti.style.display = multi ? "block" : "none"; }
   var errs = [];
   if (!ngxValidDomain(domain)) { errs.push("域名格式不正确（如 example.com）"); }
-  if (!host || !/^[A-Za-z0-9._-]+$/.test(host)) { errs.push("后端地址格式不正确（IP 或主机名）"); }
+  if (!multi) {
+    if (!host || !/^[A-Za-z0-9._-]+$/.test(host)) { errs.push("后端地址格式不正确（IP 或主机名）"); }
+  }
   var port = 0;
-  if (!/^\d+$/.test(portRaw)) { errs.push("后端端口必须是数字"); }
-  else {
-    port = parseInt(portRaw, 10);
-    if (port < 1 || port > 65535) { errs.push("后端端口必须在 1–65535 之间"); }
+  if (!multi) {
+    if (!/^\d+$/.test(portRaw)) { errs.push("后端端口必须是数字"); }
+    else {
+      port = parseInt(portRaw, 10);
+      if (port < 1 || port > 65535) { errs.push("后端端口必须在 1–65535 之间"); }
+    }
+  }
+  var upnameEl = document.getElementById("ngx-upname");
+  var upname = upnameEl ? upnameEl.value.trim() : "";
+  var upsEl = document.getElementById("ngx-upstreams");
+  var upsRaw = upsEl ? upsEl.value : "";
+  var servers = [];
+  if (multi) {
+    if (!/^[A-Za-z0-9_]+$/.test(upname)) { errs.push("upstream 名称只能含字母、数字、下划线（如 backend_pool）"); }
+    var ulines = upsRaw.split("\n");
+    var sawLine = false;
+    for (var ui = 0; ui < ulines.length; ui++) {
+      var uline = ulines[ui].trim();
+      if (!uline) { continue; }
+      sawLine = true;
+      var uparts = uline.split(/\s+/);
+      var um = uparts[0].match(/^([A-Za-z0-9._-]+):(\d+)$/);
+      if (!um) { errs.push("后端列表第 " + (ui + 1) + " 行格式不正确（应为 地址:端口，可跟空格加权重，如 127.0.0.1:3000 2）"); continue; }
+      var uport = parsePortStrict(um[2]);
+      if (uport === null) { errs.push("后端列表第 " + (ui + 1) + " 行端口必须在 1–65535 之间"); continue; }
+      var uweight = null;
+      if (uparts.length === 2) {
+        if (!/^\d+$/.test(uparts[1])) { errs.push("后端列表第 " + (ui + 1) + " 行权重必须是整数"); continue; }
+        uweight = parseInt(uparts[1], 10);
+        if (uweight < 1 || uweight > 1000) { errs.push("后端列表第 " + (ui + 1) + " 行权重必须在 1–1000 之间"); continue; }
+      } else if (uparts.length > 2) {
+        errs.push("后端列表第 " + (ui + 1) + " 行内容过多（应为 地址:端口 加可选权重）"); continue;
+      }
+      servers.push({ host: um[1], port: uport, weight: uweight });
+    }
+    if (!sawLine) { errs.push("多后端模式下后端列表不能为空（每行一个 地址:端口）"); }
+    else if (servers.length === 1 && errs.length === 0) { errs.push("多后端模式至少要填 2 个后端；只有一个后端时请关掉多后端模式用单后端生成"); }
+  }
+  function ngxTimeout(id, label) {
+    var el = document.getElementById(id);
+    var raw = el ? el.value.trim() : "";
+    if (!raw) { return null; }
+    if (!/^\d+$/.test(raw)) { errs.push(label + "必须是整数秒"); return null; }
+    var n = parseInt(raw, 10);
+    if (n < 1 || n > 3600) { errs.push(label + "必须在 1–3600 秒之间"); return null; }
+    return n;
+  }
+  var tConn = ngxTimeout("ngx-t-conn", "proxy_connect_timeout");
+  var tSend = ngxTimeout("ngx-t-send", "proxy_send_timeout");
+  var tRead = ngxTimeout("ngx-t-read", "proxy_read_timeout");
+  var anyTimeout = (tConn !== null || tSend !== null || tRead !== null);
+  var limitEl = document.getElementById("ngx-limit");
+  var limit = limitEl ? limitEl.checked : false;
+  var limitRate = null, limitBurst = null;
+  if (limit) {
+    var lrRaw = document.getElementById("ngx-limit-rate").value.trim();
+    if (!/^\d+$/.test(lrRaw) || parseInt(lrRaw, 10) < 1 || parseInt(lrRaw, 10) > 10000) { errs.push("限流速率必须是 1–10000 的整数（次/秒）"); }
+    else { limitRate = parseInt(lrRaw, 10); }
+    var lbRaw = document.getElementById("ngx-limit-burst").value.trim();
+    if (!/^\d+$/.test(lbRaw) || parseInt(lbRaw, 10) > 10000) { errs.push("限流突发 burst 必须是 0–10000 的整数"); }
+    else { limitBurst = parseInt(lbRaw, 10); }
+  }
+  var zone = "limit_" + domain.replace(/[^A-Za-z0-9]+/g, "_");
+  var realipEl = document.getElementById("ngx-realip");
+  var realip = realipEl ? realipEl.checked : false;
+  var rifEl = document.getElementById("ngx-realip-from");
+  var rif = rifEl ? rifEl.value.trim() : "";
+  if (realip) {
+    if (!rif) { errs.push("启用真实 IP 还原后必须填写可信代理地址段（CDN / 代理的 IP 或 CIDR）"); }
+    else if (!(subParseIp(rif) || parseCidr4(rif) || isValidIpv6(rif) || parseCidr6(rif))) { errs.push("可信代理地址段格式不正确（填单个 IP 或 CIDR，如 10.0.0.0/8）"); }
   }
   var errBox = document.getElementById("ngx-err");
   if (errs.length) {
@@ -1389,10 +1869,22 @@ function ngxGenerate() {
     return;
   }
   errBox.style.display = "none";
+  function realipLines() {
+    if (!realip) { return []; }
+    return [
+      "    # 只信任来自该地址段的 X-Forwarded-For 来还原真实 IP（前面确实有 CDN / 代理才启用；地址段填错等于允许任何人伪造来源 IP）",
+      "    set_real_ip_from " + rif + ";",
+      "    real_ip_header X-Forwarded-For;",
+      ""
+    ];
+  }
   function locationBlock() {
     var b = [];
     b.push("    location / {");
-    b.push("        proxy_pass " + proto + "://" + host + ":" + port + ";");
+    if (limit) {
+      b.push("        limit_req zone=" + zone + " burst=" + limitBurst + " nodelay;");
+    }
+    b.push("        proxy_pass " + proto + "://" + (multi ? upname : host + ":" + port) + ";");
     b.push("        proxy_http_version 1.1;");
     b.push("        proxy_set_header Host $host;");
     b.push("        proxy_set_header X-Real-IP $remote_addr;");
@@ -1402,13 +1894,35 @@ function ngxGenerate() {
       b.push("        proxy_set_header Upgrade $http_upgrade;");
       b.push("        proxy_set_header Connection \"upgrade\";");
     }
-    b.push("        proxy_read_timeout 60s;");
+    if (anyTimeout) {
+      b.push("        proxy_connect_timeout " + (tConn || 60) + "s;");
+      b.push("        proxy_send_timeout " + (tSend || 60) + "s;");
+      b.push("        proxy_read_timeout " + (tRead || 60) + "s;");
+    } else {
+      b.push("        proxy_read_timeout 60s;");
+    }
     b.push("    }");
     return b;
   }
   var L = [];
   L.push("# 文件：/etc/nginx/sites-available/" + domain + ".conf");
   L.push("# 启用：sudo ln -s /etc/nginx/sites-available/" + domain + ".conf /etc/nginx/sites-enabled/");
+  if (limit) {
+    L.push("# 限流区定义只能放在 http {} 顶层：把下一行写进 /etc/nginx/nginx.conf 的 http 段（或被 http 段 include 的文件），放进 server 块会让 nginx -t 直接报错");
+    L.push("limit_req_zone $binary_remote_addr zone=" + zone + ":10m rate=" + limitRate + "r/s;");
+    L.push("");
+  }
+  if (multi) {
+    L.push("# 多后端负载均衡：请求按权重轮询分发（weight 越大分得越多，不写即 1）");
+    L.push("upstream " + upname + " {");
+    servers.forEach(function (s) {
+      L.push("    server " + s.host + ":" + s.port + (s.weight ? " weight=" + s.weight : "") + " max_fails=3 fail_timeout=30s;");
+    });
+    L.push("    # 健康检查（被动）：某后端连续失败累计 3 次（max_fails）后，30 秒（fail_timeout）内暂时摘除，期满再放回试探");
+    L.push("    # 注意：定时主动探活是 NGINX Plus 商业版功能（或需第三方模块），开源版默认没有，不要照抄 Plus 文档的 health_check 指令");
+    L.push("}");
+    L.push("");
+  }
   if (https) {
     L.push("server {");
     L.push("    listen 80;");
@@ -1422,6 +1936,7 @@ function ngxGenerate() {
     L.push("    ssl_certificate /etc/letsencrypt/live/" + domain + "/fullchain.pem;");
     L.push("    ssl_certificate_key /etc/letsencrypt/live/" + domain + "/privkey.pem;");
     L.push("");
+    L = L.concat(realipLines());
     L = L.concat(locationBlock());
     L.push("}");
     L.push("");
@@ -1431,6 +1946,7 @@ function ngxGenerate() {
     L.push("    listen 80;");
     L.push("    server_name " + domain + ";");
     L.push("");
+    L = L.concat(realipLines());
     L = L.concat(locationBlock());
     L.push("}");
   }
@@ -1657,6 +2173,24 @@ function initSshGen() {
   bindCopy("ssh-copy", "ssh-out", "ssh-msg");
   sshGenerate();
 }
+function initSshCfgGen() {
+  var out = document.getElementById("cfg-out");
+  if (!out || out.getAttribute("data-ready") === "1") { return; }
+  out.setAttribute("data-ready", "1");
+  var ids = ["cfg-alive", "cfg-alivemax", "cfg-timeout"];
+  for (var i = 1; i <= 3; i++) {
+    ["alias", "host", "user", "port", "key", "jump"].forEach(function (k) { ids.push("cfg" + i + "-" + k); });
+  }
+  ids.forEach(function (id) {
+    var el = document.getElementById(id);
+    if (el) {
+      el.addEventListener("input", sshConfigGenerate);
+      el.addEventListener("change", sshConfigGenerate);
+    }
+  });
+  bindCopy("cfg-copy", "cfg-out", "cfg-msg");
+  sshConfigGenerate();
+}
 function initSubnetGen() {
   var out = document.getElementById("sub-out");
   if (!out || out.getAttribute("data-ready") === "1") { return; }
@@ -1698,7 +2232,7 @@ function initUnitGen() {
   var out = document.getElementById("unit-out");
   if (!out || out.getAttribute("data-ready") === "1") { return; }
   out.setAttribute("data-ready", "1");
-  ["unit-name", "unit-desc", "unit-exec", "unit-workdir", "unit-user", "unit-restart", "unit-restartsec", "unit-mem", "unit-cpu"].forEach(function (id) {
+  ["unit-name", "unit-desc", "unit-exec", "unit-workdir", "unit-user", "unit-restart", "unit-restartsec", "unit-mem", "unit-cpu", "unit-envfile", "unit-envfile-opt", "unit-env", "unit-after", "unit-wants", "unit-requires", "unit-stdout", "unit-stderr", "unit-h-nnp", "unit-h-ptmp", "unit-h-psys", "unit-h-phome", "unit-h-pdev", "unit-h-pkt"].forEach(function (id) {
     var el = document.getElementById(id);
     if (el) {
       el.addEventListener("input", unitGenerate);
@@ -1712,7 +2246,7 @@ function initNginxGen() {
   var out = document.getElementById("ngx-out");
   if (!out || out.getAttribute("data-ready") === "1") { return; }
   out.setAttribute("data-ready", "1");
-  ["ngx-domain", "ngx-proto", "ngx-host", "ngx-port", "ngx-ws", "ngx-https"].forEach(function (id) {
+  ["ngx-domain", "ngx-proto", "ngx-host", "ngx-port", "ngx-ws", "ngx-https", "ngx-multi", "ngx-upname", "ngx-upstreams", "ngx-t-conn", "ngx-t-send", "ngx-t-read", "ngx-limit", "ngx-limit-rate", "ngx-limit-burst", "ngx-realip", "ngx-realip-from"].forEach(function (id) {
     var el = document.getElementById(id);
     if (el) {
       el.addEventListener("input", ngxGenerate);
@@ -1790,6 +2324,9 @@ function initGuideTools() {
   document.querySelectorAll(".ufw-preset").forEach(function (el) {
     el.addEventListener("change", ufwGenerate);
   });
+  document.querySelectorAll(".ufw-plan").forEach(function (el) {
+    el.addEventListener("change", ufwGenerate);
+  });
   ["ufw-ssh-port", "ufw-port", "ufw-proto", "ufw-src"].forEach(function (id) {
     var el = document.getElementById(id);
     if (el) {
@@ -1805,6 +2342,7 @@ function initGuideTools() {
 if (window.document$ && typeof document$.subscribe === "function") {
   document$.subscribe(initGuideTools);
   document$.subscribe(initSshGen);
+  document$.subscribe(initSshCfgGen);
   document$.subscribe(initSubnetGen);
   document$.subscribe(initCronGen);
   document$.subscribe(initUnitGen);
@@ -1814,6 +2352,7 @@ if (window.document$ && typeof document$.subscribe === "function") {
 }
 document.addEventListener("DOMContentLoaded", initGuideTools);
 document.addEventListener("DOMContentLoaded", initSshGen);
+document.addEventListener("DOMContentLoaded", initSshCfgGen);
 document.addEventListener("DOMContentLoaded", initSubnetGen);
 document.addEventListener("DOMContentLoaded", initCronGen);
 document.addEventListener("DOMContentLoaded", initUnitGen);
@@ -1822,6 +2361,7 @@ document.addEventListener("DOMContentLoaded", initComposeGen);
 document.addEventListener("DOMContentLoaded", initLvmGen);
 initGuideTools();
 initSshGen();
+initSshCfgGen();
 initSubnetGen();
 initCronGen();
 initUnitGen();
