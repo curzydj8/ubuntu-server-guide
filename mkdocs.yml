@@ -72,6 +72,7 @@ extra:
 
 nav:
   - 首页: index.md
+  - 版本兼容与验证状态: compatibility.md
   - 01 基础入门与安装:
       - 01-basics/index.md
       - 版本选择与 Lifecycle: 01-basics/01-version-lifecycle.md
@@ -118,6 +119,7 @@ nav:
       - 网络故障排查流程: 08-troubleshooting/02-network-diagnosis.md
       - 磁盘爆满与句柄耗尽: 08-troubleshooting/03-disk-full.md
       - CPU / 内存异常定位: 08-troubleshooting/04-cpu-memory.md
+      - 灾难恢复与系统迁移: 08-troubleshooting/05-disaster-recovery-migration.md
   - 09 网站搭建、域名与应用部署:
       - 09-web-hosting/index.md
       - 域名解析与网络连接: 09-web-hosting/01-dns-resolution.md
