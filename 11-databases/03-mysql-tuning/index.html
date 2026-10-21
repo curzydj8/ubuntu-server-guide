@@ -6,11 +6,13 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="全面、深度的 Ubuntu Server 安装、安全、存储、网络、容器、监控、自动化与故障排查实战指南（适配 Ubuntu 22.04 / 24.04 LTS）">
+        <meta name="description" content="默认参数的目标是「小机器也能装起来」，不是「在你的生产机上跑得好」。用默认值上线，常见结果是内存有 8 GB、缓冲池却只用一小块，热点数据反复读盘；或连接数顶不住连接池，高峰直接报耗尽。">
       
       
         <meta name="author" content="火星极客">
       
+      
+        <link rel="canonical" href="https://curzydj8.github.io/ubuntu-server-guide/11-databases/03-mysql-tuning/">
       
       
         <link rel="prev" href="../02-mysql-users-remote/">
@@ -59,6 +61,30 @@
 
     
     
+  
+  
+    
+  
+  
+  
+    
+  
+  
+  
+    
+  
+  
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Ubuntu Server 终极指南与实战教程">
+  <meta property="og:title" content="MySQL 核心参数调优 - Ubuntu Server 终极指南与实战教程">
+  <meta property="og:description" content="默认参数的目标是「小机器也能装起来」，不是「在你的生产机上跑得好」。用默认值上线，常见结果是内存有 8 GB、缓冲池却只用一小块，热点数据反复读盘；或连接数顶不住连接池，高峰直接报耗尽。">
+  <meta property="og:url" content="https://curzydj8.github.io/ubuntu-server-guide/11-databases/03-mysql-tuning/">
+  <meta property="og:image" content="https://curzydj8.github.io/ubuntu-server-guide/assets/og-image.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="MySQL 核心参数调优 - Ubuntu Server 终极指南与实战教程">
+  <meta name="twitter:description" content="默认参数的目标是「小机器也能装起来」，不是「在你的生产机上跑得好」。用默认值上线，常见结果是内存有 8 GB、缓冲池却只用一小块，热点数据反复读盘；或连接数顶不住连接池，高峰直接报耗尽。">
+  <meta name="twitter:image" content="https://curzydj8.github.io/ubuntu-server-guide/assets/og-image.png">
+
   </head>
   
   
@@ -4051,6 +4077,9 @@
 
 
 
+
+  
+  
 
 
 

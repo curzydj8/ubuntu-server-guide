@@ -6,11 +6,13 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="全面、深度的 Ubuntu Server 安装、安全、存储、网络、容器、监控、自动化与故障排查实战指南（适配 Ubuntu 22.04 / 24.04 LTS）">
+        <meta name="description" content="内核调优是用 sysctl 等机制调整默认行为的手段，不是必修课：绝大多数服务器用默认参数就能稳定运行。需要调优的信号来自前三章的观测数据，例如连接被丢弃、句柄耗尽、延迟毛刺。没有数据指认瓶颈时，不要动内核参数。">
       
       
         <meta name="author" content="火星极客">
       
+      
+        <link rel="canonical" href="https://curzydj8.github.io/ubuntu-server-guide/06-monitoring/04-kernel-tuning/">
       
       
         <link rel="prev" href="../03-logging-stack/">
@@ -59,6 +61,30 @@
 
     
     
+  
+  
+    
+  
+  
+  
+    
+  
+  
+  
+    
+  
+  
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Ubuntu Server 终极指南与实战教程">
+  <meta property="og:title" content="内核与性能调优 - Ubuntu Server 终极指南与实战教程">
+  <meta property="og:description" content="内核调优是用 sysctl 等机制调整默认行为的手段，不是必修课：绝大多数服务器用默认参数就能稳定运行。需要调优的信号来自前三章的观测数据，例如连接被丢弃、句柄耗尽、延迟毛刺。没有数据指认瓶颈时，不要动内核参数。">
+  <meta property="og:url" content="https://curzydj8.github.io/ubuntu-server-guide/06-monitoring/04-kernel-tuning/">
+  <meta property="og:image" content="https://curzydj8.github.io/ubuntu-server-guide/assets/og-image.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="内核与性能调优 - Ubuntu Server 终极指南与实战教程">
+  <meta name="twitter:description" content="内核调优是用 sysctl 等机制调整默认行为的手段，不是必修课：绝大多数服务器用默认参数就能稳定运行。需要调优的信号来自前三章的观测数据，例如连接被丢弃、句柄耗尽、延迟毛刺。没有数据指认瓶颈时，不要动内核参数。">
+  <meta name="twitter:image" content="https://curzydj8.github.io/ubuntu-server-guide/assets/og-image.png">
+
   </head>
   
   
@@ -4072,6 +4098,9 @@
 
 
 
+
+  
+  
 
 
 

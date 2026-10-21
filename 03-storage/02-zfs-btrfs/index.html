@@ -6,11 +6,13 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="全面、深度的 Ubuntu Server 安装、安全、存储、网络、容器、监控、自动化与故障排查实战指南（适配 Ubuntu 22.04 / 24.04 LTS）">
+        <meta name="description" content="普通文件系统如 ext4、XFS 假定底层磁盘是诚实的：写入什么，读回就是什么。但真实硬件会发生静默损坏（bit rot）——数据在盘上悄悄翻转一位，文件系统毫无察觉，直到备份也被坏数据覆盖。">
       
       
         <meta name="author" content="火星极客">
       
+      
+        <link rel="canonical" href="https://curzydj8.github.io/ubuntu-server-guide/03-storage/02-zfs-btrfs/">
       
       
         <link rel="prev" href="../01-lvm/">
@@ -59,6 +61,30 @@
 
     
     
+  
+  
+    
+  
+  
+  
+    
+  
+  
+  
+    
+  
+  
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Ubuntu Server 终极指南与实战教程">
+  <meta property="og:title" content="ZFS 与 Btrfs - Ubuntu Server 终极指南与实战教程">
+  <meta property="og:description" content="普通文件系统如 ext4、XFS 假定底层磁盘是诚实的：写入什么，读回就是什么。但真实硬件会发生静默损坏（bit rot）——数据在盘上悄悄翻转一位，文件系统毫无察觉，直到备份也被坏数据覆盖。">
+  <meta property="og:url" content="https://curzydj8.github.io/ubuntu-server-guide/03-storage/02-zfs-btrfs/">
+  <meta property="og:image" content="https://curzydj8.github.io/ubuntu-server-guide/assets/og-image.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="ZFS 与 Btrfs - Ubuntu Server 终极指南与实战教程">
+  <meta name="twitter:description" content="普通文件系统如 ext4、XFS 假定底层磁盘是诚实的：写入什么，读回就是什么。但真实硬件会发生静默损坏（bit rot）——数据在盘上悄悄翻转一位，文件系统毫无察觉，直到备份也被坏数据覆盖。">
+  <meta name="twitter:image" content="https://curzydj8.github.io/ubuntu-server-guide/assets/og-image.png">
+
   </head>
   
   
@@ -3978,6 +4004,9 @@
 
 
 
+
+  
+  
 
 
 

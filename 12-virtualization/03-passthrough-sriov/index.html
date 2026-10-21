@@ -6,11 +6,13 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="全面、深度的 Ubuntu Server 安装、安全、存储、网络、容器、监控、自动化与故障排查实战指南（适配 Ubuntu 22.04 / 24.04 LTS）">
+        <meta name="description" content="模拟设备解决能不能用，直通解决够不够快。普通虚拟网卡与虚拟磁盘要经过宿主机软件栈中转，延迟与 CPU 开销随负载放大；PCIe 直通借助 IOMMU 把整块物理设备交给虚拟机，虚拟机用原生驱动直接操作硬件，性能接近裸机。">
       
       
         <meta name="author" content="火星极客">
       
+      
+        <link rel="canonical" href="https://curzydj8.github.io/ubuntu-server-guide/12-virtualization/03-passthrough-sriov/">
       
       
         <link rel="prev" href="../02-kvm-qemu-pve/">
@@ -59,6 +61,30 @@
 
     
     
+  
+  
+    
+  
+  
+  
+    
+  
+  
+  
+    
+  
+  
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Ubuntu Server 终极指南与实战教程">
+  <meta property="og:title" content="PCIe 直通与 SR-IOV - Ubuntu Server 终极指南与实战教程">
+  <meta property="og:description" content="模拟设备解决能不能用，直通解决够不够快。普通虚拟网卡与虚拟磁盘要经过宿主机软件栈中转，延迟与 CPU 开销随负载放大；PCIe 直通借助 IOMMU 把整块物理设备交给虚拟机，虚拟机用原生驱动直接操作硬件，性能接近裸机。">
+  <meta property="og:url" content="https://curzydj8.github.io/ubuntu-server-guide/12-virtualization/03-passthrough-sriov/">
+  <meta property="og:image" content="https://curzydj8.github.io/ubuntu-server-guide/assets/og-image.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="PCIe 直通与 SR-IOV - Ubuntu Server 终极指南与实战教程">
+  <meta name="twitter:description" content="模拟设备解决能不能用，直通解决够不够快。普通虚拟网卡与虚拟磁盘要经过宿主机软件栈中转，延迟与 CPU 开销随负载放大；PCIe 直通借助 IOMMU 把整块物理设备交给虚拟机，虚拟机用原生驱动直接操作硬件，性能接近裸机。">
+  <meta name="twitter:image" content="https://curzydj8.github.io/ubuntu-server-guide/assets/og-image.png">
+
   </head>
   
   
@@ -4083,6 +4109,9 @@
 
 
 
+
+  
+  
 
 
 

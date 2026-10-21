@@ -6,11 +6,13 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="全面、深度的 Ubuntu Server 安装、安全、存储、网络、容器、监控、自动化与故障排查实战指南（适配 Ubuntu 22.04 / 24.04 LTS）">
+        <meta name="description" content="单机安装完成只是起点。生产 PostgreSQL 迟早遇到三类需求：第一类是能力扩展，如地理位置查询需要 PostGIS、时序数据需要 TimescaleDB；第二类是日常逻辑备份，出错时能快速导回单库或单表；">
       
       
         <meta name="author" content="火星极客">
       
+      
+        <link rel="canonical" href="https://curzydj8.github.io/ubuntu-server-guide/11-databases/06-postgresql-extensions-backup/">
       
       
         <link rel="prev" href="../05-postgresql-install-auth/">
@@ -59,6 +61,30 @@
 
     
     
+  
+  
+    
+  
+  
+  
+    
+  
+  
+  
+    
+  
+  
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Ubuntu Server 终极指南与实战教程">
+  <meta property="og:title" content="PostgreSQL 插件、备份与 PITR - Ubuntu Server 终极指南与实战教程">
+  <meta property="og:description" content="单机安装完成只是起点。生产 PostgreSQL 迟早遇到三类需求：第一类是能力扩展，如地理位置查询需要 PostGIS、时序数据需要 TimescaleDB；第二类是日常逻辑备份，出错时能快速导回单库或单表；">
+  <meta property="og:url" content="https://curzydj8.github.io/ubuntu-server-guide/11-databases/06-postgresql-extensions-backup/">
+  <meta property="og:image" content="https://curzydj8.github.io/ubuntu-server-guide/assets/og-image.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="PostgreSQL 插件、备份与 PITR - Ubuntu Server 终极指南与实战教程">
+  <meta name="twitter:description" content="单机安装完成只是起点。生产 PostgreSQL 迟早遇到三类需求：第一类是能力扩展，如地理位置查询需要 PostGIS、时序数据需要 TimescaleDB；第二类是日常逻辑备份，出错时能快速导回单库或单表；">
+  <meta name="twitter:image" content="https://curzydj8.github.io/ubuntu-server-guide/assets/og-image.png">
+
   </head>
   
   
@@ -3877,6 +3903,9 @@
 
 
 
+
+  
+  
 
 
 
