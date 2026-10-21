@@ -1,4 +1,5 @@
 site_name: Ubuntu Server 终极指南与实战教程
+site_url: https://curzydj8.github.io/ubuntu-server-guide/
 site_description: 全面、深度的 Ubuntu Server 安装、安全、存储、网络、容器、监控、自动化与故障排查实战指南（适配 Ubuntu 22.04 / 24.04 LTS）
 site_author: 火星极客
 repo_url: https://github.com/curzydj8/ubuntu-server-guide
@@ -7,6 +8,7 @@ edit_uri: edit/main/docs/
 
 theme:
   name: material
+  custom_dir: overrides
   language: zh
   palette:
     - scheme: default
