@@ -66,6 +66,7 @@ description: "互动工具：九个纯前端小工具——Netplan、UFW、SSH�
   <div id="np-cloud-tip" style="display: none; border: 1px solid #e65100; background: rgba(255, 145, 0, 0.12); padding: 0.6em 0.9em; margin: 0.6em 0;">
     <strong>云服务器提示：</strong>cloud-init 托管时优先改 cloud-init 配置（如 <code>/etc/cloud/cloud.cfg.d/</code> 中的网络配置），或确认 <code>99-custom.yaml</code> 的合并顺序：Netplan 按文件名顺序合并，数字越大越后合并、可覆盖同名键，所以 <code>99-custom.yaml</code> 会覆盖 <code>50-cloud-init.yaml</code> 的同名键；若云厂商在重启时重写 cloud-init 配置，仍可能再次覆盖，请改完后重启验证一次。
   </div>
+  <div id="np-err" style="display: none; border: 1px solid #c62828; background: rgba(198, 40, 40, 0.10); padding: 0.6em 0.9em; margin: 0.6em 0;"></div>
   <pre id="np-out" style="white-space: pre; overflow-x: auto;"></pre>
   <p><button type="button" id="np-copy">复制 YAML</button> <span id="np-msg"></span></p>
 </div>
@@ -89,7 +90,7 @@ description: "互动工具：九个纯前端小工具——Netplan、UFW、SSH�
 
 <div>
   <p>
-    <label>SSH 端口 <input type="number" id="ufw-ssh-port" min="1" max="65535" value="22"></label>
+    <label>SSH 端口 <input type="text" id="ufw-ssh-port" inputmode="numeric" value="22"></label>
   </p>
   <p>
     <label><input type="checkbox" class="ufw-preset" data-port="80" data-proto="tcp" data-name="HTTP"> HTTP（80/tcp）</label>
@@ -105,7 +106,7 @@ description: "互动工具：九个纯前端小工具——Netplan、UFW、SSH�
     <label><input type="checkbox" class="ufw-preset" data-port="8888" data-proto="tcp" data-name="管理后台示例"> 管理后台示例（8888/tcp）</label>
   </p>
   <p>
-    <label>自定义端口 <input type="number" id="ufw-port" min="1" max="65535" placeholder="例如 8080"></label>
+    <label>自定义端口 <input type="text" id="ufw-port" inputmode="numeric" placeholder="例如 8080，或范围 8000:8010"></label>
     <label>协议
       <select id="ufw-proto">
         <option value="tcp">tcp</option>
@@ -120,6 +121,7 @@ description: "互动工具：九个纯前端小工具——Netplan、UFW、SSH�
   <div id="ufw-warn-admin" style="display: none; border: 1px solid #e65100; background: rgba(255, 145, 0, 0.12); padding: 0.6em 0.9em; margin: 0.6em 0;">
     <strong>最小权限警告：</strong>管理后台建议限定来源 IP，不要直接向公网任意来源开放（涉及端口 888、8888、8443、9090 等）。
   </div>
+  <div id="ufw-err" style="display: none; border: 1px solid #c62828; background: rgba(198, 40, 40, 0.10); padding: 0.6em 0.9em; margin: 0.6em 0;"></div>
   <pre id="ufw-out" style="white-space: pre; overflow-x: auto;"></pre>
   <p><button type="button" id="ufw-copy">复制命令</button> <span id="ufw-msg"></span></p>
 </div>
@@ -474,10 +476,69 @@ curl -sv https://example.com --output /dev/null 2>&1 | grep -iE 'expire|start da
 <div id="copy-toast" style="display: none; position: fixed; left: 50%; bottom: 1.4em; transform: translateX(-50%); z-index: 9999; max-width: 92vw; background: #b71c1c; color: #fff; padding: 0.7em 1.1em; border-radius: 4px; box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35); opacity: 0; transition: opacity 0.3s;">粘贴到服务器前请先逐行审阅，并确认已保留回滚通道。</div>
 
 <script>
+function parseCidr4(v) {
+  var halves = v.split("/");
+  if (halves.length !== 2) { return null; }
+  var ip = subParseIp(halves[0]);
+  if (!ip) { return null; }
+  if (!/^\d+$/.test(halves[1])) { return null; }
+  var p = parseInt(halves[1], 10);
+  if (p > 32) { return null; }
+  return { ip: ip, prefix: p };
+}
+function isValidIpv6(v) {
+  if (!v || /[^0-9A-Fa-f:.]/.test(v)) { return false; }
+  var extra = 0;
+  if (v.indexOf(".") !== -1) {
+    var lc = v.lastIndexOf(":");
+    if (lc === -1) { return false; }
+    if (!subParseIp(v.slice(lc + 1))) { return false; }
+    var head = v.slice(0, lc);
+    if (v.charAt(lc - 1) === ":") { head += ":"; }
+    v = head;
+    if (!v) { return false; }
+    extra = 2;
+  }
+  function groups(s) {
+    if (s === "") { return []; }
+    var ps = s.split(":");
+    for (var i = 0; i < ps.length; i++) {
+      if (!/^[0-9A-Fa-f]{1,4}$/.test(ps[i])) { return null; }
+    }
+    return ps;
+  }
+  var halves = v.split("::");
+  if (halves.length > 2) { return false; }
+  if (halves.length === 2) {
+    var l = groups(halves[0]);
+    var r = groups(halves[1]);
+    if (l === null || r === null) { return false; }
+    return (l.length + r.length + extra) <= 7;
+  }
+  var g = groups(halves[0]);
+  if (g === null) { return false; }
+  return (g.length + extra) === 8;
+}
+function parseCidr6(v) {
+  var halves = v.split("/");
+  if (halves.length !== 2) { return null; }
+  if (!isValidIpv6(halves[0])) { return null; }
+  if (!/^\d+$/.test(halves[1])) { return null; }
+  var p = parseInt(halves[1], 10);
+  if (p > 128) { return null; }
+  return { prefix: p };
+}
+function parsePortStrict(raw) {
+  if (!/^\d+$/.test(raw)) { return null; }
+  var n = parseInt(raw, 10);
+  if (n < 1 || n > 65535) { return null; }
+  return n;
+}
 function npGenerate() {
   var ifaceEl = document.getElementById("np-iface");
   if (!ifaceEl) { return; }
-  var iface = ifaceEl.value.trim() || "eth0";
+  var out = document.getElementById("np-out");
+  var errBox = document.getElementById("np-err");
   var modeEl = document.getElementById("np-mode");
   var mode = modeEl ? modeEl.value : "normal";
   var dhcpEl = document.getElementById("np-dhcp");
@@ -494,6 +555,88 @@ function npGenerate() {
   if (tip) {
     tip.style.display = (mode === "cloud") ? "block" : "none";
   }
+  var iface = ifaceEl.value.trim();
+  var errs = [];
+  if (!iface) { errs.push("接口名不能为空"); }
+  else if (!/^[A-Za-z][A-Za-z0-9_.-]*$/.test(iface)) { errs.push("接口名格式不正确（须以字母开头，只能含字母、数字与 _ . -，如 eth0、ens3）"); }
+  var ip = "", gw = "", dns = "", ip6 = "", gw6 = "";
+  var dnsEntries = [];
+  var warns = [];
+  if (!useDhcp) {
+    ip = document.getElementById("np-ip").value.trim();
+    gw = document.getElementById("np-gw").value.trim();
+    dns = document.getElementById("np-dns").value.trim();
+    if (mode === "dual") {
+      var ip6El = document.getElementById("np-ip6");
+      var gw6El = document.getElementById("np-gw6");
+      ip6 = ip6El ? ip6El.value.trim() : "";
+      gw6 = gw6El ? gw6El.value.trim() : "";
+    }
+    var cidr4 = null;
+    if (!ip) {
+      errs.push("静态模式必须填写 IP 地址 / CIDR（如 192.0.2.10/24）");
+    } else if (ip.indexOf(":") !== -1) {
+      errs.push("IP 地址 / CIDR 填的是 IPv6 地址：本字段请填 IPv4 CIDR（如 192.0.2.10/24），IPv6 请填到双栈模式的 IPv6 地址字段");
+    } else {
+      cidr4 = parseCidr4(ip);
+      if (!cidr4) { errs.push("IP 地址 / CIDR 格式不正确（应为四段 0–255 的 IPv4 地址加 / 前缀，前缀 0–32，如 192.0.2.10/24）"); }
+    }
+    if (gw) {
+      if (gw.indexOf(":") !== -1) {
+        errs.push("网关填的是 IPv6 地址，与 IPv4 地址不同族：双栈模式请把 IPv6 网关填到 IPv6 网关字段");
+      } else if (!subParseIp(gw)) {
+        errs.push("网关不是合法的 IPv4 地址（如 192.0.2.1，不要带 / 前缀）");
+      } else if (cidr4) {
+        var gwParts = subParseIp(gw);
+        var gwInt = ((gwParts[0] * 256 + gwParts[1]) * 256 + gwParts[2]) * 256 + gwParts[3];
+        var ipInt = ((cidr4.ip[0] * 256 + cidr4.ip[1]) * 256 + cidr4.ip[2]) * 256 + cidr4.ip[3];
+        var block = Math.pow(2, 32 - cidr4.prefix);
+        if (Math.floor(ipInt / block) !== Math.floor(gwInt / block)) {
+          warns.push("网关 " + gw + " 不在 " + ip + " 所在子网内：点对点链路、云厂商 /32 路由等场景可能合法，确认无误后再 apply");
+        }
+      }
+    }
+    if (dns) {
+      var rawParts = dns.split(",");
+      for (var di = 0; di < rawParts.length; di++) {
+        var entry = rawParts[di].trim();
+        if (entry) { dnsEntries.push(entry); }
+      }
+      if (!dnsEntries.length) {
+        errs.push("DNS 至少要填一个合法 IP 地址（逗号分隔）");
+      }
+      for (var dj = 0; dj < dnsEntries.length; dj++) {
+        var de = dnsEntries[dj];
+        if (de.indexOf(":") !== -1) {
+          if (!isValidIpv6(de)) { errs.push("DNS 条目「" + de + "」不是合法的 IPv6 地址"); }
+        } else if (!subParseIp(de)) {
+          errs.push("DNS 条目「" + de + "」不是合法的 IP 地址");
+        }
+      }
+    }
+    if (mode === "dual") {
+      if (!ip6) {
+        errs.push("双栈模式必须填写 IPv6 地址 / CIDR（如 2001:db8::10/64）");
+      } else if (ip6.indexOf(":") === -1) {
+        errs.push("IPv6 地址 / CIDR 填的是 IPv4 地址，请填 IPv6 CIDR（如 2001:db8::10/64，前缀 0–128）");
+      } else if (!parseCidr6(ip6)) {
+        errs.push("IPv6 地址 / CIDR 格式不正确（IPv6 地址加 / 前缀，前缀 0–128，如 2001:db8::10/64）");
+      }
+      if (gw6) {
+        if (gw6.indexOf(":") === -1) {
+          errs.push("IPv6 网关填的是 IPv4 地址，与 IPv6 地址不同族");
+        } else if (!isValidIpv6(gw6)) {
+          errs.push("IPv6 网关不是合法的 IPv6 地址（如 2001:db8::1，不要带 / 前缀）");
+        }
+      }
+    }
+  }
+  if (errs.length) {
+    if (errBox) { errBox.style.display = "block"; errBox.textContent = "输入有误：" + errs.join("；"); }
+    out.textContent = "# 请先修正上面的输入，不要把当前内容写入配置文件";
+    return;
+  }
+  if (errBox) { errBox.style.display = "none"; }
   var lines = [];
   lines.push("# /etc/netplan/99-custom.yaml");
   lines.push("network:");
@@ -503,23 +646,11 @@ function npGenerate() {
   if (useDhcp) {
     lines.push("      dhcp4: true");
   } else {
-    var ip = document.getElementById("np-ip").value.trim();
-    var gw = document.getElementById("np-gw").value.trim();
-    var dns = document.getElementById("np-dns").value.trim();
     lines.push("      dhcp4: false");
     lines.push("      addresses:");
-    if (ip) {
-      lines.push("        - " + ip);
-    }
-    var gw6 = "";
+    lines.push("        - " + ip);
     if (mode === "dual") {
-      var ip6El = document.getElementById("np-ip6");
-      var gw6El = document.getElementById("np-gw6");
-      var ip6 = ip6El ? ip6El.value.trim() : "";
-      gw6 = gw6El ? gw6El.value.trim() : "";
-      if (ip6) {
-        lines.push("        - " + ip6);
-      }
+      lines.push("        - " + ip6);
     }
     if (gw || gw6) {
       lines.push("      routes:");
@@ -533,18 +664,30 @@ function npGenerate() {
       }
     }
     if (dns) {
-      var parts = dns.split(",");
       lines.push("      nameservers:");
       lines.push("        addresses:");
-      for (var i = 0; i < parts.length; i++) {
-        var p = parts[i].trim();
-        if (p) {
-          lines.push("          - " + p);
-        }
+      for (var i = 0; i < dnsEntries.length; i++) {
+        lines.push("          - " + dnsEntries[i]);
       }
     }
   }
-  document.getElementById("np-out").textContent = lines.join("\n");
+  var text = lines.join("\n");
+  var badStruct = /null|undefined|NaN/.test(text);
+  for (var li = 0; li < lines.length; li++) {
+    if (/^\s*addresses:$/.test(lines[li])) {
+      var next = lines[li + 1];
+      if (!next || !/^\s*- /.test(next)) { badStruct = true; }
+    }
+  }
+  if (badStruct) {
+    if (errBox) { errBox.style.display = "block"; errBox.textContent = "输入有误：生成的配置未通过结构自检，请检查各字段后重试"; }
+    out.textContent = "# 请先修正上面的输入，不要把当前内容写入配置文件";
+    return;
+  }
+  if (warns.length) {
+    text += "\n" + warns.map(function (w) { return "# 提示：" + w; }).join("\n");
+  }
+  out.textContent = text;
 }
 function ufwRule(port, proto, name, src) {
   if (src) {
@@ -555,13 +698,61 @@ function ufwRule(port, proto, name, src) {
 function ufwGenerate() {
   var sshEl = document.getElementById("ufw-ssh-port");
   if (!sshEl) { return; }
-  var sshPort = sshEl.value.trim() || "22";
+  var out = document.getElementById("ufw-out");
+  var errBox = document.getElementById("ufw-err");
+  var errs = [];
+  var sshRaw = sshEl.value.trim();
+  var sshPort = "22";
+  if (sshRaw) {
+    var sshNum = parsePortStrict(sshRaw);
+    if (sshNum === null) {
+      errs.push(/^\d+$/.test(sshRaw) ? "SSH 端口必须在 1–65535 之间" : "SSH 端口必须是数字（1–65535）");
+    } else {
+      sshPort = String(sshNum);
+    }
+  }
   var srcEl = document.getElementById("ufw-src");
   var src = srcEl ? srcEl.value.trim() : "";
+  if (src) {
+    if (src.indexOf(":") !== -1 && /^[0-9A-Fa-f:.]+$/.test(src)) {
+      errs.push("来源暂只支持 IPv4 地址 / CIDR，IPv6 来源待后续支持");
+    } else if (!/^[0-9./]+$/.test(src)) {
+      errs.push("来源 IP 含非法字符（只接受 IPv4 地址或 CIDR，如 192.0.2.100 或 10.0.0.0/8；分号、空格、引号等一律不接受）");
+    } else if (src.indexOf("/") !== -1) {
+      if (!parseCidr4(src)) { errs.push("来源 CIDR 格式不正确（IPv4 四段 0–255，前缀 0–32，如 10.0.0.0/8）"); }
+    } else if (!subParseIp(src)) {
+      errs.push("来源 IP 不是合法的 IPv4 地址（四段 0–255，如 192.0.2.100）");
+    }
+  }
   var customPortEl = document.getElementById("ufw-port");
-  var customPort = customPortEl ? customPortEl.value.trim() : "";
+  var customRaw = customPortEl ? customPortEl.value.trim() : "";
   var customProtoEl = document.getElementById("ufw-proto");
   var customProto = customProtoEl ? customProtoEl.value : "tcp";
+  if (customProto !== "tcp" && customProto !== "udp") { errs.push("协议只能是 tcp 或 udp"); }
+  var customPort = "";
+  var customRange = null;
+  if (customRaw) {
+    if (customRaw.indexOf(":") !== -1) {
+      var seg = customRaw.split(":");
+      var lo = (seg.length === 2) ? parsePortStrict(seg[0]) : null;
+      var hi = (seg.length === 2) ? parsePortStrict(seg[1]) : null;
+      if (lo === null || hi === null) {
+        errs.push("自定义端口范围格式不正确（应为 起始:结束，两端都是 1–65535 的数字，如 8000:8010）");
+      } else if (lo > hi) {
+        errs.push("自定义端口范围起始必须小于或等于结束（如 8000:8010）");
+      } else {
+        customRange = { lo: lo, hi: hi };
+        customPort = lo + ":" + hi;
+      }
+    } else {
+      var cp = parsePortStrict(customRaw);
+      if (cp === null) {
+        errs.push(/^\d+$/.test(customRaw) ? "自定义端口必须在 1–65535 之间" : "自定义端口必须是数字（1–65535），或 起始:结束 的范围（如 8000:8010）");
+      } else {
+        customPort = String(cp);
+      }
+    }
+  }
   var dbPorts = ["3306", "5432", "6379", "27017"];
   var adminPorts = ["888", "8888", "8443", "9090"];
   var seenPorts = [];
@@ -575,22 +766,34 @@ function ufwGenerate() {
   if (customPort) {
     seenPorts.push(customPort);
   }
+  function hitsList(list) {
+    for (var k = 0; k < seenPorts.length; k++) {
+      var sp = seenPorts[k];
+      if (sp.indexOf(":") !== -1) {
+        var b = sp.split(":");
+        var lo2 = parseInt(b[0], 10), hi2 = parseInt(b[1], 10);
+        for (var m = 0; m < list.length; m++) {
+          var pv = parseInt(list[m], 10);
+          if (pv >= lo2 && pv <= hi2) { return true; }
+        }
+      } else if (list.indexOf(sp) !== -1) { return true; }
+    }
+    return false;
+  }
   var warnDb = document.getElementById("ufw-warn-db");
   var warnAdmin = document.getElementById("ufw-warn-admin");
   if (warnDb) {
-    var hasDb = false;
-    for (i = 0; i < seenPorts.length; i++) {
-      if (dbPorts.indexOf(seenPorts[i]) !== -1) { hasDb = true; }
-    }
-    warnDb.style.display = hasDb ? "block" : "none";
+    warnDb.style.display = hitsList(dbPorts) ? "block" : "none";
   }
   if (warnAdmin) {
-    var hasAdmin = false;
-    for (i = 0; i < seenPorts.length; i++) {
-      if (adminPorts.indexOf(seenPorts[i]) !== -1) { hasAdmin = true; }
-    }
-    warnAdmin.style.display = hasAdmin ? "block" : "none";
+    warnAdmin.style.display = hitsList(adminPorts) ? "block" : "none";
   }
+  if (errs.length) {
+    if (errBox) { errBox.style.display = "block"; errBox.textContent = "输入有误：" + errs.join("；"); }
+    out.textContent = "# 请先修正上面的输入，不要执行当前命令";
+    return;
+  }
+  if (errBox) { errBox.style.display = "none"; }
   var lines = [];
   lines.push("# 步骤1：查看现有状态（未启用时会显示 Status: inactive）");
   lines.push("sudo ufw status verbose");
@@ -628,10 +831,10 @@ function ufwGenerate() {
   lines.push("# 已启用时改用： sudo ufw reload");
   lines.push("");
   lines.push("# 步骤6：从预期来源机器上验证（把 <服务器IP> 和端口换成真实值，在另一台机器/本地终端执行，不要在服务器本机测）");
-  var verifyPort = customPort ? customPort : sshPort;
+  var verifyPort = customPort ? (customRange ? String(customRange.lo) : customPort) : sshPort;
   lines.push("# nc -vz <服务器IP> " + verifyPort);
   lines.push("# curl -v http://<服务器IP>:" + verifyPort + "/");
-  document.getElementById("ufw-out").textContent = lines.join("\n");
+  out.textContent = lines.join("\n");
 }
 function sshQuote(v) {
   if (/^[A-Za-z0-9_@%+=:,.\/~-]+$/.test(v)) { return v; }
