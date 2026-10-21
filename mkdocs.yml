@@ -1,0 +1,122 @@
+site_name: Ubuntu Server 终极指南与实战教程
+site_description: 全面、深度的 Ubuntu Server 安装、安全、存储、网络、容器、监控、自动化与故障排查实战指南（适配 Ubuntu 22.04 / 24.04 LTS）
+site_author: 火星极客
+repo_url: https://github.com/curzydj8/ubuntu-server-guide
+repo_name: curzydj8/ubuntu-server-guide
+
+theme:
+  name: material
+  language: zh
+  palette:
+    - scheme: default
+      primary: deep orange
+      accent: deep orange
+      toggle:
+        icon: material/weather-night
+        name: 切换到深色模式
+    - scheme: slate
+      primary: deep orange
+      accent: deep orange
+      toggle:
+        icon: material/weather-sunny
+        name: 切换到浅色模式
+  features:
+    - navigation.tabs
+    - navigation.sections
+    - navigation.top
+    - navigation.indexes
+    - toc.follow
+    - content.code.copy
+    - content.code.annotate
+    - search.suggest
+    - search.highlight
+    - search.share
+  icon:
+    repo: fontawesome/brands/github
+
+markdown_extensions:
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - attr_list
+  - md_in_html
+  - toc:
+      permalink: true
+      toc_depth: 3
+
+plugins:
+  - search:
+      lang: zh
+
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/curzydj8/ubuntu-server-guide
+
+nav:
+  - 首页: index.md
+  - 01 基础入门与安装:
+      - 01-basics/index.md
+      - 版本选择与 Lifecycle: 01-basics/01-version-lifecycle.md
+      - 系统安装: 01-basics/02-installation.md
+      - 首次登录与网络初始化: 01-basics/03-first-login-network.md
+      - 软件源与包管理: 01-basics/04-package-management.md
+  - 02 系统安全与权限管理:
+      - 02-security/index.md
+      - SSH 安全加固: 02-security/01-ssh-hardening.md
+      - 用户、Sudo 与 PAM: 02-security/02-users-sudo-pam.md
+      - 防火墙管理: 02-security/03-firewall.md
+      - 系统防御与入侵检测: 02-security/04-defense.md
+  - 03 磁盘、文件系统与存储:
+      - 03-storage/index.md
+      - LVM 动态卷管理: 03-storage/01-lvm.md
+      - ZFS 与 Btrfs: 03-storage/02-zfs-btrfs.md
+      - 挂载与存储共享: 03-storage/03-mount-sharing.md
+      - 磁盘健康与备份: 03-storage/04-backup.md
+  - 04 网络服务与核心架构:
+      - 04-network/index.md
+      - DNS 服务器搭建: 04-network/01-dns.md
+      - Web 服务器与反向代理: 04-network/02-web-proxy.md
+      - 网络隧道与 VPN: 04-network/03-vpn-tunnel.md
+      - 时间同步与系统日志: 04-network/04-time-logging.md
+  - 05 容器化与云原生:
+      - 05-containers/index.md
+      - Docker 基础与进阶: 05-containers/01-docker.md
+      - Podman 无根容器: 05-containers/02-podman.md
+      - Kubernetes 轻量集群: 05-containers/03-kubernetes-light.md
+  - 06 系统监控、日志与性能调优:
+      - 06-monitoring/index.md
+      - 命令行即时监控工具: 06-monitoring/01-cli-tools.md
+      - Prometheus + Grafana 监控栈: 06-monitoring/02-prometheus-grafana.md
+      - 集中式日志收集: 06-monitoring/03-logging-stack.md
+      - 内核与性能调优: 06-monitoring/04-kernel-tuning.md
+  - 07 自动化运维与脚本:
+      - 07-automation/index.md
+      - Shell 脚本规范与范例: 07-automation/01-shell-scripting.md
+      - Systemd 服务与定时任务: 07-automation/02-systemd-timers.md
+      - Ansible 自动化配置管理: 07-automation/03-ansible.md
+  - 08 故障排查与应急响应:
+      - 08-troubleshooting/index.md
+      - 系统无法启动修复: 08-troubleshooting/01-boot-repair.md
+      - 网络故障排查流程: 08-troubleshooting/02-network-diagnosis.md
+      - 磁盘爆满与句柄耗尽: 08-troubleshooting/03-disk-full.md
+      - CPU / 内存异常定位: 08-troubleshooting/04-cpu-memory.md
+  - 09 网站搭建、域名与应用部署:
+      - 09-web-hosting/index.md
+      - 域名解析与网络连接: 09-web-hosting/01-dns-resolution.md
+      - 宝塔面板安装与安全加固: 09-web-hosting/02-baota-panel.md
+      - 经典 LNMP / LAMP 自建: 09-web-hosting/03-lnmp-lamp.md
+      - Docker 部署常用应用: 09-web-hosting/04-docker-apps.md
+      - HTTPS 自动化证书: 09-web-hosting/05-https-certificates.md
+  - 10 游戏服务器部署与端口映射:
+      - 10-game-servers/index.md
+      - 端口开放「三重门」: 10-game-servers/01-port-opening.md
+      - 游戏服务端实战: 10-game-servers/02-game-server-setup.md
+      - 性能调优与守护: 10-game-servers/03-performance-daemon.md
+      - 内网穿透与公网映射: 10-game-servers/04-nat-traversal.md
