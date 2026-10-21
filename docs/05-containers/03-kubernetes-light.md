@@ -1,3 +1,7 @@
+---
+description: "标准 Kubernetes 功能强大，但组件多、资源占用高，对中小规模场景明显过重。轻量发行版把控制面打包成单个进程或少量组件，在保留 Kubernetes 核心 API 和用法的前提下，大幅降低安装和运维门槛。"
+---
+
 # Kubernetes 轻量集群
 
 ## 一、概述与使用场景
@@ -7,7 +11,6 @@
 适合轻量集群的场景包括：边缘网点、小型业务系统需要多节点冗余，但规模撑不起标准集群的运维成本；开发测试团队需要一套与生产用法一致、又能快速重建的练习环境；单机 Docker 已经满足不了需求，需要服务自愈、滚动更新和声明式配置，但节点数在十台以内。
 
 不用集群、继续靠单机加手工运维的瓶颈也很清楚：宿主机宕机等于全部服务中断，没有自动重新调度；发布靠逐台登录替换，出错了回滚靠人工翻记录；配置散落在各台机器上，时间一长没人说得清哪台是准的。声明式集群把期望状态写进 YAML，系统持续把实际状态向期望状态靠拢，这正是容器数量和节点数量上来之后必须补的一课。
-
 
 ## 二、环境准备与前置条件
 
@@ -37,7 +40,6 @@ cat /etc/fstab
 free -h
 ```
 
-
 !!! warning "先审脚本再执行"
 
     本章 k3s 使用官方提供的安装脚本一键安装。任何从网络下载后直接用 root 执行的脚本都有供应链风险，正确做法是先把脚本下载到本地、打开看完内容、确认来源域名无误后再执行。本章给出的命令已经按先下载、后审查、再执行的顺序写好，请不要图省事把两步合并成一条管道命令在生产机上直接跑。
@@ -58,7 +60,6 @@ free -h
 | 与 Ubuntu 集成 | 一般发行版通用 | 与 Ubuntu 和 snap 生态结合紧密 |
 | 上手难度 | 低，一条命令完成单节点 | 低，命令封装得更友好 |
 
-
 ### 3.2 路线 A：k3s 单节点与多节点搭建
 
 第一步下载安装脚本并审查内容：
@@ -76,8 +77,6 @@ INSTALL_K3S_EXEC="server --write-kubeconfig-mode 644" sh /tmp/install-k3s.sh
 sudo systemctl status k3s --no-pager
 ```
 
-
-
 第二步在控制面节点查看加入令牌，并把集群配置复制给普通用户使用：
 
 ```bash
@@ -88,7 +87,6 @@ sudo chown ubuntu:ubuntu ~/.kube/config
 sed -i "s/127.0.0.1/192.0.2.11/" ~/.kube/config
 ```
 
-
 第三步在两个工作节点上执行加入命令。先在工作节点上同样下载并审查脚本，然后执行：
 
 ```bash
@@ -97,7 +95,6 @@ less /tmp/install-k3s.sh
 K3S_URL=https://192.0.2.11:6443 K3S_TOKEN=替换为上一步查到的令牌值 sh /tmp/install-k3s.sh
 sudo systemctl status k3s-agent --no-pager
 ```
-
 
 ### 3.3 路线 B：microk8s 单节点与多节点搭建
 
@@ -121,7 +118,6 @@ microk8s enable dashboard
 microk8s status
 ```
 
-
 导出集群配置到标准位置，方便直接使用 kubectl 命令：
 
 ```bash
@@ -137,7 +133,6 @@ microk8s add-node
 ```
 
 把输出的 join 命令原样复制到工作节点执行，加入完成后回到控制面用 microk8s kubectl get nodes 检查，全部节点状态为 Ready 即组建完成。
-
 
 !!! note "两条路线的 kubectl 一致性"
 
@@ -161,7 +156,6 @@ kubectl delete deployment hello
 kubectl apply -f app.yaml
 kubectl delete -f app.yaml
 ```
-
 
 ### 3.5 部署一个示例应用
 
@@ -220,7 +214,6 @@ spec:
       nodePort: 30080
 ```
 
-
 部署并验证访问：
 
 ```bash
@@ -230,7 +223,6 @@ kubectl get pods -o wide
 kubectl get service webdemo-svc
 curl -s http://192.0.2.11:30080/
 ```
-
 
 ```bash
 kubectl get pods
@@ -285,7 +277,6 @@ kubectl delete -f storage.yaml
 
 pvc 状态变为 Bound 才说明存储供应成功；如果长时间停在 Pending，多半是集群里没有可用的默认存储类，用 kubectl get storageclass 检查并按对应发行版开启存储组件。
 
-
 ```yaml
 apiVersion: networking.k8s.io/v1
 kind: Ingress
@@ -313,7 +304,6 @@ kubectl get ingress
 curl -s -H "Host: app.example.com" http://192.0.2.11/
 ```
 
-
 ### 3.7 卸载与清理
 
 实验结束后按路线选择对应卸载方法，卸载会删除集群内的全部应用和数据，先确认没有需要保留的内容。
@@ -337,13 +327,11 @@ microk8s reset --destroy-storage
 sudo snap remove microk8s
 ```
 
-
 ```bash
 ls -la ~/.kube/
 rm -f ~/.kube/config
 sudo ss -tlnp | grep 6443
 ```
-
 
 ## 四、效果验证与测试
 
