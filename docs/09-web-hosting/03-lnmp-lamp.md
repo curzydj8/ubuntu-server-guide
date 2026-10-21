@@ -1,3 +1,7 @@
+---
+description: "LNMP 指 Linux、Nginx、MySQL、PHP 四件套，LAMP 把其中的 Nginx 换成 Apache。这一章带你在 Ubuntu 上用系统官方软件源把整套环境手工装起来，"
+---
+
 # 经典 LNMP/LAMP 自建
 
 ## 一、概述与使用场景
