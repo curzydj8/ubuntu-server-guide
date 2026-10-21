@@ -1,3 +1,7 @@
+---
+description: "Podman 是由 Red Hat 主导开发的容器引擎，命令行用法与 Docker 高度兼容，但架构上有两个根本区别：一是没有常驻守护进程，命令直接通过 fork 和 exec 拉起容器；"
+---
+
 # Podman 无根容器
 
 ## 一、概述与使用场景
@@ -7,7 +11,6 @@ Podman 是由 Red Hat 主导开发的容器引擎，命令行用法与 Docker �
 适合使用 Podman 的场景包括：多用户共用一台服务器、不能给每个人 root 级权限时，让每人用自己的账号跑自己的容器；安全要求高的环境，希望容器逃逸后攻击者也只拿到普通用户权限；需要让容器服务跟随 systemd 管理、开机自启并统一看日志的场景；已经熟悉 Docker 命令、想平滑迁移的团队。
 
 如果不用无根容器，而是给所有人开放 Docker 守护进程访问权，风险非常直接：docker 组的成员等同于拥有 root 权限，可以挂载宿主机任意目录读写，任何一个账号失守都等于整台服务器失守。另外传统有根容器一旦发生逃逸，容器内的 root 就是宿主机的 root。Rootless 模式通过用户命名空间把容器内 root 映射为宿主机上的普通用户，把逃逸后的损失控制在一个普通账号范围内，这是本章要重点讲清的机制。
-
 
 ## 二、环境准备与前置条件
 
@@ -108,7 +111,6 @@ Podman 的常用命令与 Docker 几乎一一对应，多数情况下把命令�
 | 网络管理 | docker network ls | podman network ls |
 | 系统清理 | docker system prune | podman system prune |
 | Compose 编排 | docker compose up -d | podman compose up -d 或 podman-compose up -d |
-
 
 ```bash
 podman pull docker.io/library/nginx:alpine
