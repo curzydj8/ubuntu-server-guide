@@ -1,10 +1,10 @@
 ---
-description: "互动工具：Netplan 配置生成器、UFW 防火墙规则生成器与 SSH 命令生成器，填表实时生成可直接复制的配置与命令，纯前端运行、不上传任何数据。"
+description: "互动工具：九个纯前端小工具——Netplan、UFW、SSH、子网计算、Cron、systemd unit、Nginx 反代、Docker Compose 与 LVM 扩容，填表实时生成可直接复制的配置与命令，纯前端运行、不上传任何数据。"
 ---
 
 # 互动工具
 
-三个纯前端小工具：在浏览器里填表，实时生成可复制的配置与命令，**不上传任何数据**。生成结果请先核对再落到服务器上执行。
+九个纯前端小工具：在浏览器里填表，实时生成可复制的配置与命令，**不上传任何数据**。本站工具只在浏览器本地生成文本，**不连接任何服务器、也不执行任何命令**；生成结果请先在目标机上核对、审阅、验证后再使用，不要把「生成成功」当成「已在真实服务器验证」。
 
 !!! warning "使用前必读"
 
@@ -188,6 +188,288 @@ description: "互动工具：Netplan 配置生成器、UFW 防火墙规则生成
 
     - 多台服务器的别名、连接复用与跳板机长期配置，写进 `~/.ssh/config` 比每次拼命令更可靠，见 [连接与客户端配置](../14-ssh/02-connect-config.md)。
     - 大文件、增量同步与断点续传用 `rsync`，见 [文件传输与远程执行](../14-ssh/04-transfer-remote-exec.md)；三种转发与跳板机的原理和排坑见 [隧道与跳板机](../14-ssh/05-tunnels-jump.md)。
+
+## 子网 / CIDR 计算器
+
+输入 IPv4 地址与前缀长度（或子网掩码），立即算出网络地址、广播地址、可用主机范围与主机数。只做本地计算与格式校验，非法输入会直接报错、不给结果。
+
+<div>
+  <p>
+    <label>计算方式
+      <select id="sub-mode">
+        <option value="cidr" selected>按 CIDR 前缀</option>
+        <option value="mask">按子网掩码</option>
+      </select>
+    </label>
+  </p>
+  <p>
+    <label>IP 地址 <input type="text" id="sub-ip" value="192.0.2.10"></label>
+    <label id="sub-grp-prefix">CIDR 前缀（0–32） <input type="number" id="sub-prefix" min="0" max="32" value="24"></label>
+    <label id="sub-grp-mask" style="display: none;">子网掩码 <input type="text" id="sub-mask" value="255.255.255.0"></label>
+  </p>
+  <div id="sub-err" style="display: none; border: 1px solid #c62828; background: rgba(198, 40, 40, 0.10); padding: 0.6em 0.9em; margin: 0.6em 0;"></div>
+  <pre id="sub-out" style="white-space: pre; overflow-x: auto;"></pre>
+  <p><button type="button" id="sub-copy">复制结果</button> <span id="sub-msg"></span></p>
+</div>
+
+!!! note "结果判读"
+
+    - `/31` 是点对点链路特例（RFC 3021）：两个地址都可用，不再预留网络地址与广播地址。
+    - `/32` 是单个主机地址（主机路由），可用主机数就是 1。
+    - 掩码必须是 1 连续、0 连续（如 `255.255.255.128` 合法，`255.255.0.255` 不合法），不连续的掩码会被本工具拒绝。
+    - 掩码与 CIDR 的基础概念见 [网络诊断速查](../15-command-reference/03-network-diagnostics.md)，地址落地到 Netplan 见 [首次登录与网络配置](../01-basics/03-first-login-network.md)。
+
+## Cron 表达式生成器
+
+按字段拼出 cron 表达式，并同步给出人话解读与等价的 systemd timer 写法。cron 与 systemd timer 二选一即可，同一个任务不要两边都排，会重复执行。
+
+<div>
+  <p>
+    <label>常用预设
+      <select id="cron-preset">
+        <option value="custom" selected>自定义（手动拼字段）</option>
+        <option value="m5">每 5 分钟</option>
+        <option value="hourly">每小时（第 0 分）</option>
+        <option value="daily">每天凌晨 0 点</option>
+        <option value="weekly">每周一凌晨 0 点</option>
+        <option value="monthly">每月 1 号凌晨 0 点</option>
+      </select>
+    </label>
+  </p>
+  <p>
+    <label>分钟（0–59）
+      <select id="cron-min-mode">
+        <option value="any" selected>每分钟</option>
+        <option value="step">每隔</option>
+        <option value="at">指定</option>
+      </select>
+    </label>
+    <label id="cron-min-grp-step" style="display: none;">每隔 <input type="number" id="cron-min-step" min="1" max="59" value="5"> 分钟</label>
+    <label id="cron-min-grp-at" style="display: none;">指定值（逗号分隔） <input type="text" id="cron-min-at" value="0"></label>
+  </p>
+  <p>
+    <label>小时（0–23）
+      <select id="cron-hour-mode">
+        <option value="any" selected>每小时</option>
+        <option value="step">每隔</option>
+        <option value="at">指定</option>
+      </select>
+    </label>
+    <label id="cron-hour-grp-step" style="display: none;">每隔 <input type="number" id="cron-hour-step" min="1" max="23" value="2"> 小时</label>
+    <label id="cron-hour-grp-at" style="display: none;">指定值（逗号分隔） <input type="text" id="cron-hour-at" value="0"></label>
+  </p>
+  <p>
+    <label>日（1–31）
+      <select id="cron-dom-mode">
+        <option value="any" selected>每天</option>
+        <option value="step">每隔</option>
+        <option value="at">指定</option>
+      </select>
+    </label>
+    <label id="cron-dom-grp-step" style="display: none;">每隔 <input type="number" id="cron-dom-step" min="1" max="31" value="2"> 天</label>
+    <label id="cron-dom-grp-at" style="display: none;">指定值（逗号分隔） <input type="text" id="cron-dom-at" value="1"></label>
+  </p>
+  <p>
+    <label>月（1–12）
+      <select id="cron-mon-mode">
+        <option value="any" selected>每月</option>
+        <option value="step">每隔</option>
+        <option value="at">指定</option>
+      </select>
+    </label>
+    <label id="cron-mon-grp-step" style="display: none;">每隔 <input type="number" id="cron-mon-step" min="1" max="11" value="3"> 个月</label>
+    <label id="cron-mon-grp-at" style="display: none;">指定值（逗号分隔） <input type="text" id="cron-mon-at" value="1"></label>
+  </p>
+  <p>
+    <label>周（0–7，0 与 7 都是周日）
+      <select id="cron-dow-mode">
+        <option value="any" selected>每天</option>
+        <option value="step">每隔</option>
+        <option value="at">指定</option>
+      </select>
+    </label>
+    <label id="cron-dow-grp-step" style="display: none;">每隔 <input type="number" id="cron-dow-step" min="1" max="6" value="2"> 天</label>
+    <label id="cron-dow-grp-at" style="display: none;">指定值（逗号分隔） <input type="text" id="cron-dow-at" value="1"></label>
+  </p>
+  <div id="cron-err" style="display: none; border: 1px solid #c62828; background: rgba(198, 40, 40, 0.10); padding: 0.6em 0.9em; margin: 0.6em 0;"></div>
+  <pre id="cron-out" style="white-space: pre; overflow-x: auto;"></pre>
+  <p><button type="button" id="cron-copy">复制结果</button> <span id="cron-msg"></span></p>
+</div>
+
+!!! note "读法与落地"
+
+    - 表达式五段依次是：分、时、日、月、周。写进 crontab 后用 `crontab -l` 复核；timer 侧用 `systemctl list-timers` 查看下一次触发时间。
+    - cron 里「日」与「周」同时受限时是**或**关系（任一满足就触发），systemd 的 OnCalendar 是**且**关系，两边同时受限时不要直接照搬。
+    - OnCalendar 与 cron 不完全等价（步进与多值最容易对不上），工具给出的等价写法只是起点，写入 `.timer` 前先在目标机用 `systemd-analyze calendar '值'` 校验。
+    - 完整讲解见 [Systemd 服务与定时任务](../07-automation/02-systemd-timers.md) 与 [定时、容器与系统速查](../15-command-reference/06-scheduling-containers-more.md)。
+
+## systemd Unit 生成器
+
+填服务信息，生成完整的 `.service` 文件（注释一律独占一行）与落地命令。unit 文件的注释**不能跟在配置行行尾**——行尾的 `#` 会被当成参数的一部分，ExecStart 尤其容易中招，所以本工具把每条简注都放在对应配置行的上一行。
+
+<div>
+  <p>
+    <label>服务名 <input type="text" id="unit-name" value="myapp"></label>
+    <label>描述 <input type="text" id="unit-desc" value="我的应用服务"></label>
+  </p>
+  <p>
+    <label>启动命令 ExecStart（绝对路径） <input type="text" id="unit-exec" value="/usr/local/bin/myapp --serve" size="42"></label>
+  </p>
+  <p>
+    <label>工作目录（可空） <input type="text" id="unit-workdir" value="/srv/myapp"></label>
+    <label>运行用户（可空，空= root） <input type="text" id="unit-user" placeholder="www-data"></label>
+  </p>
+  <p>
+    <label>重启策略
+      <select id="unit-restart">
+        <option value="no">no（不重启）</option>
+        <option value="on-failure" selected>on-failure（异常退出才重启）</option>
+        <option value="always">always（总是重启）</option>
+        <option value="on-success">on-success（正常退出才重启）</option>
+      </select>
+    </label>
+    <label>重启间隔 RestartSec（秒，可空） <input type="number" id="unit-restartsec" min="0" max="3600" placeholder="5"></label>
+  </p>
+  <p>
+    <label>内存上限 MemoryMax（可空，如 512M） <input type="text" id="unit-mem" placeholder="512M"></label>
+    <label>CPU 配额 CPUQuota（可空，如 50%） <input type="text" id="unit-cpu" placeholder="50%"></label>
+  </p>
+  <div id="unit-err" style="display: none; border: 1px solid #c62828; background: rgba(198, 40, 40, 0.10); padding: 0.6em 0.9em; margin: 0.6em 0;"></div>
+  <pre id="unit-out" style="white-space: pre; overflow-x: auto;"></pre>
+  <p><button type="button" id="unit-copy">复制 Unit 与命令</button> <span id="unit-msg"></span></p>
+</div>
+
+!!! warning "落地注意"
+
+    - 以 root 运行的服务等于把应用漏洞放大成系统级风险：能用普通用户就填普通用户，并确认该用户对工作目录与日志路径有权限。
+    - 改完 unit 必须 `systemctl daemon-reload` 才生效；`enable --now` 是「设为开机自启 + 立即启动」两件事一起做。
+    - unit 的依赖、资源限制与看门狗等工程化要点见 [Systemd 服务与定时任务](../07-automation/02-systemd-timers.md) 与 [服务工程化与配置漂移](../07-automation/04-systemd-engineering-drift.md)。
+
+## Nginx 反向代理生成器
+
+生成把域名流量转发到后端服务的 `server` 块，`proxy_set_header` 真实 IP 头全套（Host、X-Real-IP、X-Forwarded-For、X-Forwarded-Proto）默认带齐；勾选 WebSocket 时自动带上协议升级头，勾选强制 HTTPS 时额外生成 80 跳转块与 Let's Encrypt 证书路径（证书要先用 certbot 签出来，见下方链接）。
+
+<div>
+  <p>
+    <label>域名（server_name） <input type="text" id="ngx-domain" value="example.com"></label>
+  </p>
+  <p>
+    <label>后端协议
+      <select id="ngx-proto">
+        <option value="http" selected>http</option>
+        <option value="https">https</option>
+      </select>
+    </label>
+    <label>后端地址 <input type="text" id="ngx-host" value="127.0.0.1"></label>
+    <label>后端端口 <input type="number" id="ngx-port" min="1" max="65535" value="3000"></label>
+  </p>
+  <p>
+    <label><input type="checkbox" id="ngx-ws"> 后端是 WebSocket 服务（带 Upgrade 头）</label>
+    <label><input type="checkbox" id="ngx-https"> 强制 HTTPS（生成 443 块 + 80 跳转，证书路径按 Let's Encrypt 默认位置）</label>
+  </p>
+  <div id="ngx-err" style="display: none; border: 1px solid #c62828; background: rgba(198, 40, 40, 0.10); padding: 0.6em 0.9em; margin: 0.6em 0;"></div>
+  <pre id="ngx-out" style="white-space: pre; overflow-x: auto;"></pre>
+  <p><button type="button" id="ngx-copy">复制配置</button> <span id="ngx-msg"></span></p>
+</div>
+
+!!! warning "改 Nginx 配置的固定顺序"
+
+    1. 先备份现有配置：`sudo cp -a /etc/nginx /etc/nginx.bak-$(date +%F)`。
+    2. 落盘后先测语法：`sudo nginx -t`，通过才 `sudo systemctl reload nginx`；语法不过不要 reload，更不要 restart 硬顶。
+    3. reload 后从外部网络验证域名与证书，再看 `sudo tail -n 50 /var/log/nginx/error.log` 有没有新错误。
+    4. 完整讲解见 [Web 服务器与反向代理](../04-network/02-web-proxy.md)，证书签发与自动续期见 [HTTPS 自动化证书](../09-web-hosting/05-https-certificates.md)。
+
+## Docker Compose 模板生成器
+
+勾选要跑的服务，生成 `docker-compose.yml`：命名卷持久化、统一桥接网络、数据库带健康检查。所有密码都是 `CHANGE_ME_*` 占位符，**落盘前必须全部替换为强密码**，且真实密码不要提交进 Git。
+
+<div>
+  <p>
+    <label><input type="checkbox" class="dc-svc" data-key="nginx"> Nginx（反向代理 / 静态站）</label>
+    <label><input type="checkbox" class="dc-svc" data-key="mysql" checked> MySQL</label>
+    <label><input type="checkbox" class="dc-svc" data-key="postgres"> PostgreSQL</label>
+    <label><input type="checkbox" class="dc-svc" data-key="redis"> Redis</label>
+    <label><input type="checkbox" class="dc-svc" data-key="wordpress"> WordPress（自动带 MySQL）</label>
+  </p>
+  <p>
+    <label><input type="checkbox" id="dc-local"> 端口只绑定 127.0.0.1（只给本机或反向代理访问，数据库强烈建议勾上）</label>
+  </p>
+  <div id="dc-err" style="display: none; border: 1px solid #c62828; background: rgba(198, 40, 40, 0.10); padding: 0.6em 0.9em; margin: 0.6em 0;"></div>
+  <pre id="dc-out" style="white-space: pre; overflow-x: auto;"></pre>
+  <p><button type="button" id="dc-copy">复制 Compose 文件</button> <span id="dc-msg"></span></p>
+</div>
+
+!!! warning "Compose 落地注意"
+
+    - 数据库端口直接映射到宿主机等于绕过一部分防火墙直觉：只给本机/反代用就勾「仅本地绑定」，必须远程连库时再配合 UFW 限定来源（见上方 UFW 生成器）。
+    - `depends_on` 只保证启动顺序，不保证数据库已经能接受连接；模板里给数据库配了 healthcheck 并让 WordPress 等它 healthy 再起，就是为了避开这个坑。
+    - 镜像版本标签请按 Docker Hub 当前发布核对后锁定，不要长期跟 `latest`。完整的应用编排讲解见 [Docker 部署常用应用](../09-web-hosting/04-docker-apps.md)。
+
+## LVM 扩容步骤生成器
+
+按你的 PV / VG / LV 信息生成**有序的扩容步骤**（含每步的检查命令）。本工具只生成步骤文本，不会自动执行任何命令；请人工逐条执行、逐条核对输出后再走下一步。
+
+<div>
+  <p>
+    <label>PV 设备 <input type="text" id="lvm-dev" value="/dev/sdb"></label>
+    <label><input type="checkbox" id="lvm-newpv" checked> 这是新设备，需要先 pvcreate 初始化</label>
+  </p>
+  <p>
+    <label>VG 名 <input type="text" id="lvm-vg" value="vg0"></label>
+    <label>LV 名 <input type="text" id="lvm-lv" value="data"></label>
+    <label>挂载点 <input type="text" id="lvm-mount" value="/data"></label>
+  </p>
+  <p>
+    <label>扩容方式
+      <select id="lvm-mode">
+        <option value="add" selected>增加指定大小</option>
+        <option value="full">扩到 100%FREE（吃掉 VG 全部空闲）</option>
+      </select>
+    </label>
+    <label id="lvm-grp-size">增加 <input type="number" id="lvm-size" min="1" value="10">
+      <select id="lvm-unit">
+        <option value="G" selected>G</option>
+        <option value="M">M</option>
+        <option value="T">T</option>
+      </select>
+    </label>
+    <label>文件系统
+      <select id="lvm-fs">
+        <option value="ext4" selected>ext4（resize2fs）</option>
+        <option value="xfs">XFS（xfs_growfs）</option>
+      </select>
+    </label>
+  </p>
+  <div id="lvm-err" style="display: none; border: 1px solid #c62828; background: rgba(198, 40, 40, 0.10); padding: 0.6em 0.9em; margin: 0.6em 0;"></div>
+  <pre id="lvm-out" style="white-space: pre; overflow-x: auto;"></pre>
+  <p><button type="button" id="lvm-copy">复制步骤</button> <span id="lvm-msg"></span></p>
+</div>
+
+!!! danger "扩容是单向门：只扩不缩"
+
+    - **缩容不在本工具范围内**：LV 缩容要先缩文件系统再缩 LV，ext4 操作繁琐、XFS 根本不支持缩容，误操作直接丢数据，必须人工评估、单独规划，本工具不生成任何缩容命令。
+    - `pvcreate` 会抹掉目标设备上的原有签名与数据：执行前用 `lsblk` 与 `sudo pvs` 逐字核对设备名，选错盘的后果不可逆。
+    - 扩容前先确认备份可恢复（见 [磁盘健康与备份](../03-storage/04-backup.md)）；每扩一步先看检查命令的输出，容量对不上立刻停下，不要连着往下跑。
+    - LVM 概念与完整操作见 [LVM 动态卷管理](../03-storage/01-lvm.md)。
+
+## SSL 证书有效期检查（速查卡）
+
+不用登录服务器，在任意装有 openssl 或 curl 的机器上就能查公网证书的到期时间：
+
+```bash
+# 方法一：openssl（信息最全）
+echo | openssl s_client -connect example.com:443 -servername example.com 2>/dev/null | openssl x509 -noout -subject -issuer -dates
+
+# 方法二：curl（只看关键行）
+curl -sv https://example.com --output /dev/null 2>&1 | grep -iE 'expire|start date'
+```
+
+输出判读：
+
+- `notBefore` 是生效时间，`notAfter` 是到期时间；curl 输出里对应 `start date` 与 `expire date`。
+- `-servername` 不能省：同一 IP 上托管多个站点（SNI）时，不带它查到的可能是默认站点的证书。
+- 剩余时间阈值建议：**大于 30 天**正常；**15–30 天**确认自动续期在跑；**小于 15 天**立即手动续期并排查自动续期为何没生效；**已过期**先恢复站点可用再复盘。
+- 续期机制与到期监控见 [证书与密钥生命周期](../02-security/08-certificate-lifecycle.md)，certbot / acme.sh 签发与自动续期见 [HTTPS 自动化证书](../09-web-hosting/05-https-certificates.md)。
 
 <div id="copy-toast" style="display: none; position: fixed; left: 50%; bottom: 1.4em; transform: translateX(-50%); z-index: 9999; max-width: 92vw; background: #b71c1c; color: #fff; padding: 0.7em 1.1em; border-radius: 4px; box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35); opacity: 0; transition: opacity 0.3s;">粘贴到服务器前请先逐行审阅，并确认已保留回滚通道。</div>
 
@@ -459,6 +741,559 @@ function sshGenerate() {
   }
   out.textContent = [cmd].concat(notes).join("\n");
 }
+function subParseIp(v) {
+  var parts = v.split(".");
+  if (parts.length !== 4) { return null; }
+  var nums = [];
+  for (var i = 0; i < 4; i++) {
+    if (!/^\d{1,3}$/.test(parts[i])) { return null; }
+    var n = parseInt(parts[i], 10);
+    if (n > 255) { return null; }
+    nums.push(n);
+  }
+  return nums;
+}
+function subIntToIp(n) {
+  return [Math.floor(n / 16777216) % 256, Math.floor(n / 65536) % 256, Math.floor(n / 256) % 256, Math.floor(n % 256)].join(".");
+}
+function subGenerate() {
+  var out = document.getElementById("sub-out");
+  if (!out) { return; }
+  var mode = document.getElementById("sub-mode").value;
+  document.getElementById("sub-grp-prefix").style.display = (mode === "cidr") ? "inline" : "none";
+  document.getElementById("sub-grp-mask").style.display = (mode === "mask") ? "inline" : "none";
+  var errs = [];
+  var ipParts = subParseIp(document.getElementById("sub-ip").value.trim());
+  if (!ipParts) { errs.push("IP 地址格式不正确（应为四段 0–255 的数字）"); }
+  var prefix = -1;
+  if (mode === "cidr") {
+    var raw = document.getElementById("sub-prefix").value.trim();
+    if (!/^\d+$/.test(raw)) { errs.push("CIDR 前缀必须是 0–32 的整数"); }
+    else {
+      prefix = parseInt(raw, 10);
+      if (prefix > 32) { errs.push("CIDR 前缀必须在 0–32 之间"); }
+    }
+  } else {
+    var mParts = subParseIp(document.getElementById("sub-mask").value.trim());
+    if (!mParts) { errs.push("子网掩码格式不正确（应为四段 0–255 的数字）"); }
+    else {
+      var bits = "";
+      for (var i = 0; i < 4; i++) {
+        var b = mParts[i].toString(2);
+        while (b.length < 8) { b = "0" + b; }
+        bits += b;
+      }
+      if (!/^1*0*$/.test(bits)) { errs.push("子网掩码不连续（必须是 1 连续、0 连续），不是合法掩码"); }
+      else { prefix = bits.replace(/0/g, "").length; }
+    }
+  }
+  var errBox = document.getElementById("sub-err");
+  if (errs.length) {
+    errBox.style.display = "block";
+    errBox.textContent = "输入有误：" + errs.join("；");
+    out.textContent = "# 请先修正上面的输入";
+    return;
+  }
+  errBox.style.display = "none";
+  var ipInt = ((ipParts[0] * 256 + ipParts[1]) * 256 + ipParts[2]) * 256 + ipParts[3];
+  var size = Math.pow(2, 32 - prefix);
+  var network = ipInt - (ipInt % size);
+  var broadcast = network + size - 1;
+  var maskInt = 4294967296 - size;
+  var lines = [];
+  lines.push("输入地址：" + subIntToIp(ipInt) + "/" + prefix);
+  lines.push("子网掩码：" + subIntToIp(maskInt) + "（/" + prefix + "）");
+  lines.push("网络地址：" + subIntToIp(network));
+  lines.push("广播地址：" + subIntToIp(broadcast));
+  if (prefix === 32) {
+    lines.push("可用主机范围：" + subIntToIp(network) + "（单个主机地址）");
+    lines.push("地址总数：1，可用主机数：1");
+  } else if (prefix === 31) {
+    lines.push("可用主机范围：" + subIntToIp(network) + " - " + subIntToIp(broadcast) + "（点对点链路，两个地址都可用）");
+    lines.push("地址总数：2，可用主机数：2");
+  } else {
+    lines.push("可用主机范围：" + subIntToIp(network + 1) + " - " + subIntToIp(broadcast - 1));
+    lines.push("地址总数：" + size + "，可用主机数：" + (size - 2));
+  }
+  out.textContent = lines.join("\n");
+}
+var CRON_DEFS = [
+  { key: "min", label: "分钟", lo: 0, hi: 59 },
+  { key: "hour", label: "小时", lo: 0, hi: 23 },
+  { key: "dom", label: "日", lo: 1, hi: 31 },
+  { key: "mon", label: "月", lo: 1, hi: 12 },
+  { key: "dow", label: "周", lo: 0, hi: 7 }
+];
+var CRON_DOW_CN = ["周日", "周一", "周二", "周三", "周四", "周五", "周六"];
+var CRON_DOW_EN = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+function cronFieldVal(def) {
+  var mode = document.getElementById("cron-" + def.key + "-mode").value;
+  document.getElementById("cron-" + def.key + "-grp-step").style.display = (mode === "step") ? "inline" : "none";
+  document.getElementById("cron-" + def.key + "-grp-at").style.display = (mode === "at") ? "inline" : "none";
+  if (mode === "any") { return { expr: "*", mode: "any" }; }
+  if (mode === "step") {
+    var raw = document.getElementById("cron-" + def.key + "-step").value.trim();
+    if (!/^\d+$/.test(raw)) { return { error: def.label + "的间隔必须是正整数" }; }
+    var n = parseInt(raw, 10);
+    if (n < 1) { return { error: def.label + "的间隔至少为 1" }; }
+    return { expr: "*/" + n, mode: "step", n: n };
+  }
+  var txt = document.getElementById("cron-" + def.key + "-at").value.trim();
+  if (!txt) { return { error: def.label + "的指定值不能为空" }; }
+  var parts = txt.split(",");
+  var vals = [];
+  for (var i = 0; i < parts.length; i++) {
+    var p = parts[i].trim();
+    if (!/^\d+$/.test(p)) { return { error: def.label + "的指定值必须是数字（逗号分隔）" }; }
+    var v = parseInt(p, 10);
+    if (v < def.lo || v > def.hi) { return { error: def.label + "的指定值必须在 " + def.lo + "–" + def.hi + " 之间" }; }
+    vals.push(v);
+  }
+  return { expr: vals.join(","), mode: "at", vals: vals };
+}
+function cronDesc(key, f) {
+  if (f.mode === "any") {
+    return { min: "每分钟", hour: "每小时", dom: "每天", mon: "每月", dow: "每天（周一至周日）" }[key];
+  }
+  if (f.mode === "step") {
+    return { min: "每隔 " + f.n + " 分钟", hour: "每隔 " + f.n + " 小时", dom: "每隔 " + f.n + " 天", mon: "每隔 " + f.n + " 个月", dow: "每隔 " + f.n + " 天（按周字段计）" }[key];
+  }
+  if (key === "dow") {
+    return "在" + f.vals.map(function (v) { return CRON_DOW_CN[v % 7]; }).join("、");
+  }
+  if (key === "min") { return "在第 " + f.vals.join("、") + " 分钟"; }
+  if (key === "hour") { return "在 " + f.vals.join("、") + " 点"; }
+  if (key === "dom") { return "在 " + f.vals.join("、") + " 号"; }
+  return "在 " + f.vals.join("、") + " 月";
+}
+function cronPad(n) { return (n < 10 ? "0" : "") + n; }
+function cronOnCalendar(f) {
+  if (f.dom.mode === "step" || f.mon.mode === "step" || f.dow.mode === "step") { return null; }
+  function comp(field) {
+    if (field.mode === "any") { return "*"; }
+    if (field.mode === "step") { return "0/" + field.n; }
+    return field.vals.map(cronPad).join(",");
+  }
+  var dowPart = "";
+  if (f.dow.mode === "at") {
+    dowPart = f.dow.vals.map(function (v) { return CRON_DOW_EN[v % 7]; }).join(",") + " ";
+  }
+  var mon = (f.mon.mode === "any") ? "*" : f.mon.vals.map(cronPad).join(",");
+  var day = (f.dom.mode === "any") ? "*" : f.dom.vals.map(cronPad).join(",");
+  return dowPart + "*-" + mon + "-" + day + " " + comp(f.hour) + ":" + comp(f.min) + ":00";
+}
+function cronGenerate() {
+  var out = document.getElementById("cron-out");
+  if (!out) { return; }
+  var f = {};
+  var errs = [];
+  for (var i = 0; i < CRON_DEFS.length; i++) {
+    var r = cronFieldVal(CRON_DEFS[i]);
+    if (r.error) { errs.push(r.error); }
+    else { f[CRON_DEFS[i].key] = r; }
+  }
+  var errBox = document.getElementById("cron-err");
+  if (errs.length) {
+    errBox.style.display = "block";
+    errBox.textContent = "输入有误：" + errs.join("；");
+    out.textContent = "# 请先修正上面的输入";
+    return;
+  }
+  errBox.style.display = "none";
+  var expr = [f.min.expr, f.hour.expr, f.dom.expr, f.mon.expr, f.dow.expr].join(" ");
+  var lines = [];
+  lines.push(expr);
+  lines.push("# 人话解读：" + CRON_DEFS.map(function (d) { return cronDesc(d.key, f[d.key]); }).join("，") + " 触发");
+  if (f.dom.mode !== "any" && f.dow.mode !== "any") {
+    lines.push("# 注意：cron 中「日」与「周」同时受限是或关系（任一满足即触发）；下面的 OnCalendar 是且关系，语义不同，不要直接照搬");
+  }
+  lines.push("# crontab -e 写法：" + expr + " /path/to/your-script.sh   （换成你的脚本绝对路径）");
+  var cal = cronOnCalendar(f);
+  lines.push("# systemd timer 等价写法（.timer 的 [Timer] 段，与 cron 二选一）：");
+  if (cal) {
+    lines.push("# OnCalendar=" + cal);
+    lines.push("# Persistent=true");
+    lines.push("# 落地前先在目标机校验：systemd-analyze calendar '" + cal + "'");
+  } else {
+    lines.push("# 该步进组合（日/月/周字段的步进）没有直接等价的 OnCalendar，请在目标机用 systemd-analyze calendar 试写校验；纯固定间隔的任务也可改用 OnUnitActiveSec 相对计时");
+  }
+  out.textContent = lines.join("\n");
+}
+function cronSetField(key, mode, step, at) {
+  document.getElementById("cron-" + key + "-mode").value = mode;
+  if (step !== null) { document.getElementById("cron-" + key + "-step").value = step; }
+  if (at !== null) { document.getElementById("cron-" + key + "-at").value = at; }
+}
+function cronApplyPreset() {
+  var p = document.getElementById("cron-preset").value;
+  if (p === "custom") { cronGenerate(); return; }
+  var keys = ["min", "hour", "dom", "mon", "dow"];
+  for (var i = 0; i < keys.length; i++) { cronSetField(keys[i], "any", null, null); }
+  if (p === "m5") { cronSetField("min", "step", "5", null); }
+  if (p === "hourly") { cronSetField("min", "at", null, "0"); }
+  if (p === "daily") { cronSetField("min", "at", null, "0"); cronSetField("hour", "at", null, "0"); }
+  if (p === "weekly") { cronSetField("min", "at", null, "0"); cronSetField("hour", "at", null, "0"); cronSetField("dow", "at", null, "1"); }
+  if (p === "monthly") { cronSetField("min", "at", null, "0"); cronSetField("hour", "at", null, "0"); cronSetField("dom", "at", null, "1"); }
+  cronGenerate();
+}
+function unitGenerate() {
+  var out = document.getElementById("unit-out");
+  if (!out) { return; }
+  var name = document.getElementById("unit-name").value.trim();
+  var desc = document.getElementById("unit-desc").value.trim();
+  var exec = document.getElementById("unit-exec").value.trim();
+  var workdir = document.getElementById("unit-workdir").value.trim();
+  var user = document.getElementById("unit-user").value.trim();
+  var restart = document.getElementById("unit-restart").value;
+  var rsec = document.getElementById("unit-restartsec").value.trim();
+  var mem = document.getElementById("unit-mem").value.trim();
+  var cpu = document.getElementById("unit-cpu").value.trim();
+  var errs = [];
+  if (!name) { errs.push("服务名不能为空"); }
+  else if (!/^[A-Za-z0-9_.@-]+$/.test(name)) { errs.push("服务名只能含字母、数字、点、下划线、连字符"); }
+  if (name.slice(-8) === ".service") { name = name.slice(0, -8); }
+  if (!exec) { errs.push("ExecStart 不能为空"); }
+  else if (exec.charAt(0) !== "/") { errs.push("ExecStart 必须是绝对路径（以 / 开头），systemd 不认相对路径"); }
+  if (workdir && workdir.charAt(0) !== "/") { errs.push("工作目录必须是绝对路径"); }
+  if (user && !/^[A-Za-z0-9_.-]+$/.test(user)) { errs.push("运行用户名含非法字符"); }
+  if (rsec && !/^\d+$/.test(rsec)) { errs.push("RestartSec 必须是整数秒"); }
+  if (mem && !/^\d+(\.\d+)?[KMGT]$/i.test(mem)) { errs.push("MemoryMax 格式应如 512M、1G、2048K"); }
+  if (cpu && !/^\d+(\.\d+)?%$/.test(cpu)) { errs.push("CPUQuota 格式应如 50%、150%"); }
+  var errBox = document.getElementById("unit-err");
+  if (errs.length) {
+    errBox.style.display = "block";
+    errBox.textContent = "输入有误：" + errs.join("；");
+    out.textContent = "# 请先修正上面的输入";
+    return;
+  }
+  errBox.style.display = "none";
+  var L = [];
+  L.push("# 文件：/etc/systemd/system/" + name + ".service");
+  L.push("[Unit]");
+  L.push("# 服务描述（systemctl status 中显示）");
+  L.push("Description=" + (desc || name));
+  L.push("# 在网络目标就绪后再启动（不需要网络可删此行）");
+  L.push("After=network.target");
+  L.push("");
+  L.push("[Service]");
+  L.push("# 前台进程型服务：程序不要自带 daemon 化或后台化");
+  L.push("Type=simple");
+  L.push("# 启动命令（绝对路径，参数直接跟在后面）");
+  L.push("ExecStart=" + exec);
+  if (workdir) {
+    L.push("# 进程的工作目录");
+    L.push("WorkingDirectory=" + workdir);
+  }
+  if (user) {
+    L.push("# 运行用户（避免用 root 跑业务进程）");
+    L.push("User=" + user);
+  }
+  L.push("# 退出后的重启策略");
+  L.push("Restart=" + restart);
+  if (rsec) {
+    L.push("# 重启前等待秒数");
+    L.push("RestartSec=" + rsec);
+  }
+  if (mem) {
+    L.push("# 内存上限（超限时该服务会被 OOM 处理）");
+    L.push("MemoryMax=" + mem);
+  }
+  if (cpu) {
+    L.push("# CPU 配额（100% 约等于占满一个核心）");
+    L.push("CPUQuota=" + cpu);
+  }
+  L.push("");
+  L.push("[Install]");
+  L.push("# enable 时挂到多用户目标，即开机自启");
+  L.push("WantedBy=multi-user.target");
+  L.push("");
+  L.push("# 落地与验证（逐条执行）：");
+  L.push("# sudo systemctl daemon-reload");
+  L.push("# sudo systemctl enable --now " + name + ".service");
+  L.push("# systemctl status " + name + ".service");
+  L.push("# journalctl -u " + name + ".service -n 50 --no-pager");
+  out.textContent = L.join("\n");
+}
+function ngxGenerate() {
+  var out = document.getElementById("ngx-out");
+  if (!out) { return; }
+  var domain = document.getElementById("ngx-domain").value.trim();
+  var proto = document.getElementById("ngx-proto").value;
+  var host = document.getElementById("ngx-host").value.trim();
+  var portRaw = document.getElementById("ngx-port").value.trim();
+  var ws = document.getElementById("ngx-ws").checked;
+  var https = document.getElementById("ngx-https").checked;
+  var errs = [];
+  if (!domain || !/^[A-Za-z0-9][A-Za-z0-9.-]*$/.test(domain)) { errs.push("域名格式不正确（如 example.com）"); }
+  if (!host || !/^[A-Za-z0-9._-]+$/.test(host)) { errs.push("后端地址格式不正确（IP 或主机名）"); }
+  var port = 0;
+  if (!/^\d+$/.test(portRaw)) { errs.push("后端端口必须是数字"); }
+  else {
+    port = parseInt(portRaw, 10);
+    if (port < 1 || port > 65535) { errs.push("后端端口必须在 1–65535 之间"); }
+  }
+  var errBox = document.getElementById("ngx-err");
+  if (errs.length) {
+    errBox.style.display = "block";
+    errBox.textContent = "输入有误：" + errs.join("；");
+    out.textContent = "# 请先修正上面的输入";
+    return;
+  }
+  errBox.style.display = "none";
+  function locationBlock() {
+    var b = [];
+    b.push("    location / {");
+    b.push("        proxy_pass " + proto + "://" + host + ":" + port + ";");
+    b.push("        proxy_http_version 1.1;");
+    b.push("        proxy_set_header Host $host;");
+    b.push("        proxy_set_header X-Real-IP $remote_addr;");
+    b.push("        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;");
+    b.push("        proxy_set_header X-Forwarded-Proto $scheme;");
+    if (ws) {
+      b.push("        proxy_set_header Upgrade $http_upgrade;");
+      b.push("        proxy_set_header Connection \"upgrade\";");
+    }
+    b.push("        proxy_read_timeout 60s;");
+    b.push("    }");
+    return b;
+  }
+  var L = [];
+  L.push("# 文件：/etc/nginx/sites-available/" + domain + ".conf");
+  L.push("# 启用：sudo ln -s /etc/nginx/sites-available/" + domain + ".conf /etc/nginx/sites-enabled/");
+  if (https) {
+    L.push("server {");
+    L.push("    listen 80;");
+    L.push("    server_name " + domain + ";");
+    L.push("    return 301 https://$host$request_uri;");
+    L.push("}");
+    L.push("");
+    L.push("server {");
+    L.push("    listen 443 ssl;");
+    L.push("    server_name " + domain + ";");
+    L.push("    ssl_certificate /etc/letsencrypt/live/" + domain + "/fullchain.pem;");
+    L.push("    ssl_certificate_key /etc/letsencrypt/live/" + domain + "/privkey.pem;");
+    L.push("");
+    L = L.concat(locationBlock());
+    L.push("}");
+    L.push("");
+    L.push("# 证书还没签出来之前先不要 reload：先按 09 部分 HTTPS 证书章用 certbot 签发，或临时去掉本 443 块");
+  } else {
+    L.push("server {");
+    L.push("    listen 80;");
+    L.push("    server_name " + domain + ";");
+    L.push("");
+    L = L.concat(locationBlock());
+    L.push("}");
+  }
+  L.push("");
+  L.push("# 落地与验证（逐条执行）：");
+  L.push("# sudo nginx -t");
+  L.push("# sudo systemctl reload nginx");
+  L.push("# curl -I http" + (https ? "s" : "") + "://" + domain + "/");
+  out.textContent = L.join("\n");
+}
+function dcGenerate() {
+  var out = document.getElementById("dc-out");
+  if (!out) { return; }
+  var local = document.getElementById("dc-local").checked;
+  var sel = {};
+  var any = false;
+  document.querySelectorAll(".dc-svc").forEach(function (b) {
+    sel[b.getAttribute("data-key")] = b.checked;
+    if (b.checked) { any = true; }
+  });
+  var errBox = document.getElementById("dc-err");
+  if (!any) {
+    errBox.style.display = "block";
+    errBox.textContent = "请至少勾选一个服务";
+    out.textContent = "# 先勾选要运行的服务";
+    return;
+  }
+  errBox.style.display = "none";
+  var autoMysql = sel.wordpress && !sel.mysql;
+  if (autoMysql) { sel.mysql = true; }
+  function portMap(p) { return local ? ("127.0.0.1:" + p) : p; }
+  var L = [];
+  L.push("# docker-compose.yml —— 落盘前逐行审阅；启动：docker compose up -d；状态：docker compose ps");
+  L.push("# 所有 CHANGE_ME_* 占位符必须替换为强密码，且真实密码不要提交进 Git");
+  if (autoMysql) { L.push("# 已自动带上 WordPress 依赖的 MySQL 服务"); }
+  L.push("services:");
+  var vols = [];
+  if (sel.nginx) {
+    L.push("  nginx:");
+    L.push("    image: nginx:stable");
+    L.push("    restart: unless-stopped");
+    L.push("    ports:");
+    L.push("      - \"" + portMap("80:80") + "\"");
+    L.push("    networks:");
+    L.push("      - appnet");
+    L.push("");
+  }
+  if (sel.mysql) {
+    vols.push("mysql_data");
+    L.push("  mysql:");
+    L.push("    image: mysql:8.0");
+    L.push("    restart: unless-stopped");
+    L.push("    environment:");
+    L.push("      MYSQL_ROOT_PASSWORD: \"CHANGE_ME_mysql_root_pw\"");
+    L.push("      MYSQL_DATABASE: appdb");
+    L.push("    ports:");
+    L.push("      - \"" + portMap("3306:3306") + "\"");
+    L.push("    volumes:");
+    L.push("      - mysql_data:/var/lib/mysql");
+    L.push("    healthcheck:");
+    L.push("      test: [\"CMD\", \"mysqladmin\", \"ping\", \"-h\", \"localhost\", \"-pCHANGE_ME_mysql_root_pw\"]");
+    L.push("      interval: 10s");
+    L.push("      timeout: 5s");
+    L.push("      retries: 5");
+    L.push("    networks:");
+    L.push("      - appnet");
+    L.push("");
+  }
+  if (sel.postgres) {
+    vols.push("postgres_data");
+    L.push("  postgres:");
+    L.push("    image: postgres:16");
+    L.push("    restart: unless-stopped");
+    L.push("    environment:");
+    L.push("      POSTGRES_PASSWORD: \"CHANGE_ME_pg_pw\"");
+    L.push("      POSTGRES_DB: appdb");
+    L.push("    ports:");
+    L.push("      - \"" + portMap("5432:5432") + "\"");
+    L.push("    volumes:");
+    L.push("      - postgres_data:/var/lib/postgresql/data");
+    L.push("    healthcheck:");
+    L.push("      test: [\"CMD-SHELL\", \"pg_isready -U postgres\"]");
+    L.push("      interval: 10s");
+    L.push("      timeout: 5s");
+    L.push("      retries: 5");
+    L.push("    networks:");
+    L.push("      - appnet");
+    L.push("");
+  }
+  if (sel.redis) {
+    vols.push("redis_data");
+    L.push("  redis:");
+    L.push("    image: redis:7");
+    L.push("    restart: unless-stopped");
+    L.push("    command: redis-server --appendonly yes");
+    L.push("    ports:");
+    L.push("      - \"" + portMap("6379:6379") + "\"");
+    L.push("    volumes:");
+    L.push("      - redis_data:/data");
+    L.push("    healthcheck:");
+    L.push("      test: [\"CMD\", \"redis-cli\", \"ping\"]");
+    L.push("      interval: 10s");
+    L.push("      timeout: 5s");
+    L.push("      retries: 5");
+    L.push("    networks:");
+    L.push("      - appnet");
+    L.push("");
+  }
+  if (sel.wordpress) {
+    vols.push("wp_data");
+    L.push("  wordpress:");
+    L.push("    image: wordpress:6-apache");
+    L.push("    restart: unless-stopped");
+    L.push("    environment:");
+    L.push("      WORDPRESS_DB_HOST: mysql:3306");
+    L.push("      WORDPRESS_DB_NAME: appdb");
+    L.push("      WORDPRESS_DB_USER: root");
+    L.push("      WORDPRESS_DB_PASSWORD: \"CHANGE_ME_mysql_root_pw\"   # 与 mysql 的 root 密码占位符保持一致，教学示例用 root，生产建议建专用账号");
+    L.push("    ports:");
+    L.push("      - \"" + portMap("8080:80") + "\"");
+    L.push("    volumes:");
+    L.push("      - wp_data:/var/www/html");
+    L.push("    depends_on:");
+    L.push("      mysql:");
+    L.push("        condition: service_healthy");
+    L.push("    networks:");
+    L.push("      - appnet");
+    L.push("");
+  }
+  if (vols.length) {
+    L.push("volumes:");
+    for (var i = 0; i < vols.length; i++) { L.push("  " + vols[i] + ":"); }
+    L.push("");
+  }
+  L.push("networks:");
+  L.push("  appnet:");
+  L.push("    driver: bridge");
+  out.textContent = L.join("\n");
+}
+function lvmGenerate() {
+  var out = document.getElementById("lvm-out");
+  if (!out) { return; }
+  var dev = document.getElementById("lvm-dev").value.trim();
+  var isNew = document.getElementById("lvm-newpv").checked;
+  var vg = document.getElementById("lvm-vg").value.trim();
+  var lv = document.getElementById("lvm-lv").value.trim();
+  var mount = document.getElementById("lvm-mount").value.trim();
+  var mode = document.getElementById("lvm-mode").value;
+  var sizeRaw = document.getElementById("lvm-size").value.trim();
+  var unit = document.getElementById("lvm-unit").value;
+  var fs = document.getElementById("lvm-fs").value;
+  document.getElementById("lvm-grp-size").style.display = (mode === "add") ? "inline" : "none";
+  var errs = [];
+  if (!/^\/dev\/[A-Za-z0-9/_.-]+$/.test(dev)) { errs.push("PV 设备应为 /dev/ 开头的设备路径（如 /dev/sdb、/dev/nvme0n1p3）"); }
+  if (!/^[A-Za-z0-9_+.-]+$/.test(vg)) { errs.push("VG 名不能为空，且只能含字母、数字与 _ + . -"); }
+  if (!/^[A-Za-z0-9_+.-]+$/.test(lv)) { errs.push("LV 名不能为空，且只能含字母、数字与 _ + . -"); }
+  if (!mount || mount.charAt(0) !== "/") { errs.push("挂载点必须是绝对路径（如 /data）"); }
+  if (mode === "add") {
+    if (!/^\d+(\.\d+)?$/.test(sizeRaw)) { errs.push("扩容量必须是正数"); }
+    else if (parseFloat(sizeRaw) <= 0) { errs.push("扩容量必须大于 0"); }
+  }
+  var errBox = document.getElementById("lvm-err");
+  if (errs.length) {
+    errBox.style.display = "block";
+    errBox.textContent = "输入有误：" + errs.join("；");
+    out.textContent = "# 请先修正上面的输入，不要执行任何步骤";
+    return;
+  }
+  errBox.style.display = "none";
+  var lvPath = "/dev/" + vg + "/" + lv;
+  var step = 1;
+  var L = [];
+  L.push("# LVM 扩容步骤（只生成步骤，人工逐条执行并核对每步输出；本页不会替你执行）");
+  L.push("# 扩容前先确认备份可恢复；缩容不在本工具范围内，不要反着套用这些步骤");
+  L.push("");
+  L.push("# 步骤 0：看清现状（设备、VG 空闲、LV 与挂载点逐项对上再动手）");
+  L.push("lsblk");
+  L.push("sudo pvs; sudo vgs; sudo lvs");
+  L.push("df -h " + mount);
+  if (isNew) {
+    L.push("");
+    L.push("# 步骤 " + step + "：把新设备初始化为 PV（会抹掉该设备原有签名与数据，再次逐字核对设备名）");
+    L.push("sudo pvcreate " + dev);
+    step++;
+  }
+  L.push("");
+  L.push("# 步骤 " + step + "：把 PV 加入 VG");
+  L.push("sudo vgextend " + vg + " " + dev);
+  L.push("sudo vgs   # 确认 VFree 已按预期变大");
+  step++;
+  L.push("");
+  L.push("# 步骤 " + step + "：扩展 LV");
+  if (mode === "add") {
+    L.push("sudo lvextend -L +" + sizeRaw + unit + " " + lvPath);
+  } else {
+    L.push("sudo lvextend -l +100%FREE " + lvPath);
+  }
+  L.push("sudo lvs   # 确认 LV 大小已变");
+  step++;
+  L.push("");
+  L.push("# 步骤 " + step + "：扩展文件系统（在线操作，不要先卸载）");
+  if (fs === "ext4") {
+    L.push("sudo resize2fs " + lvPath);
+  } else {
+    L.push("sudo xfs_growfs " + mount + "   # XFS 按挂载点扩；XFS 不支持缩容");
+  }
+  step++;
+  L.push("");
+  L.push("# 步骤 " + step + "：验证（容量与预期对上才算完成）");
+  L.push("df -h " + mount);
+  out.textContent = L.join("\n");
+}
 function initSshGen() {
   var out = document.getElementById("ssh-out");
   if (!out || out.getAttribute("data-ready") === "1") { return; }
@@ -472,6 +1307,97 @@ function initSshGen() {
   });
   bindCopy("ssh-copy", "ssh-out", "ssh-msg");
   sshGenerate();
+}
+function initSubnetGen() {
+  var out = document.getElementById("sub-out");
+  if (!out || out.getAttribute("data-ready") === "1") { return; }
+  out.setAttribute("data-ready", "1");
+  ["sub-mode", "sub-ip", "sub-prefix", "sub-mask"].forEach(function (id) {
+    var el = document.getElementById(id);
+    if (el) {
+      el.addEventListener("input", subGenerate);
+      el.addEventListener("change", subGenerate);
+    }
+  });
+  bindCopy("sub-copy", "sub-out", "sub-msg");
+  subGenerate();
+}
+function initCronGen() {
+  var out = document.getElementById("cron-out");
+  if (!out || out.getAttribute("data-ready") === "1") { return; }
+  out.setAttribute("data-ready", "1");
+  var preset = document.getElementById("cron-preset");
+  if (preset) { preset.addEventListener("change", cronApplyPreset); }
+  var fieldChanged = function () {
+    var p = document.getElementById("cron-preset");
+    if (p) { p.value = "custom"; }
+    cronGenerate();
+  };
+  CRON_DEFS.forEach(function (d) {
+    ["mode", "step", "at"].forEach(function (part) {
+      var el = document.getElementById("cron-" + d.key + "-" + part);
+      if (el) {
+        el.addEventListener("input", fieldChanged);
+        el.addEventListener("change", fieldChanged);
+      }
+    });
+  });
+  bindCopy("cron-copy", "cron-out", "cron-msg");
+  cronGenerate();
+}
+function initUnitGen() {
+  var out = document.getElementById("unit-out");
+  if (!out || out.getAttribute("data-ready") === "1") { return; }
+  out.setAttribute("data-ready", "1");
+  ["unit-name", "unit-desc", "unit-exec", "unit-workdir", "unit-user", "unit-restart", "unit-restartsec", "unit-mem", "unit-cpu"].forEach(function (id) {
+    var el = document.getElementById(id);
+    if (el) {
+      el.addEventListener("input", unitGenerate);
+      el.addEventListener("change", unitGenerate);
+    }
+  });
+  bindCopy("unit-copy", "unit-out", "unit-msg");
+  unitGenerate();
+}
+function initNginxGen() {
+  var out = document.getElementById("ngx-out");
+  if (!out || out.getAttribute("data-ready") === "1") { return; }
+  out.setAttribute("data-ready", "1");
+  ["ngx-domain", "ngx-proto", "ngx-host", "ngx-port", "ngx-ws", "ngx-https"].forEach(function (id) {
+    var el = document.getElementById(id);
+    if (el) {
+      el.addEventListener("input", ngxGenerate);
+      el.addEventListener("change", ngxGenerate);
+    }
+  });
+  bindCopy("ngx-copy", "ngx-out", "ngx-msg");
+  ngxGenerate();
+}
+function initComposeGen() {
+  var out = document.getElementById("dc-out");
+  if (!out || out.getAttribute("data-ready") === "1") { return; }
+  out.setAttribute("data-ready", "1");
+  document.querySelectorAll(".dc-svc").forEach(function (el) {
+    el.addEventListener("change", dcGenerate);
+  });
+  var local = document.getElementById("dc-local");
+  if (local) { local.addEventListener("change", dcGenerate); }
+  bindCopy("dc-copy", "dc-out", "dc-msg");
+  dcGenerate();
+}
+function initLvmGen() {
+  var out = document.getElementById("lvm-out");
+  if (!out || out.getAttribute("data-ready") === "1") { return; }
+  out.setAttribute("data-ready", "1");
+  ["lvm-dev", "lvm-newpv", "lvm-vg", "lvm-lv", "lvm-mount", "lvm-mode", "lvm-size", "lvm-unit", "lvm-fs"].forEach(function (id) {
+    var el = document.getElementById(id);
+    if (el) {
+      el.addEventListener("input", lvmGenerate);
+      el.addEventListener("change", lvmGenerate);
+    }
+  });
+  bindCopy("lvm-copy", "lvm-out", "lvm-msg");
+  lvmGenerate();
 }
 function showCopyToast() {
   var toast = document.getElementById("copy-toast");
@@ -530,9 +1456,27 @@ function initGuideTools() {
 if (window.document$ && typeof document$.subscribe === "function") {
   document$.subscribe(initGuideTools);
   document$.subscribe(initSshGen);
+  document$.subscribe(initSubnetGen);
+  document$.subscribe(initCronGen);
+  document$.subscribe(initUnitGen);
+  document$.subscribe(initNginxGen);
+  document$.subscribe(initComposeGen);
+  document$.subscribe(initLvmGen);
 }
 document.addEventListener("DOMContentLoaded", initGuideTools);
 document.addEventListener("DOMContentLoaded", initSshGen);
+document.addEventListener("DOMContentLoaded", initSubnetGen);
+document.addEventListener("DOMContentLoaded", initCronGen);
+document.addEventListener("DOMContentLoaded", initUnitGen);
+document.addEventListener("DOMContentLoaded", initNginxGen);
+document.addEventListener("DOMContentLoaded", initComposeGen);
+document.addEventListener("DOMContentLoaded", initLvmGen);
 initGuideTools();
 initSshGen();
+initSubnetGen();
+initCronGen();
+initUnitGen();
+initNginxGen();
+initComposeGen();
+initLvmGen();
 </script>

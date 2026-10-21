@@ -78,7 +78,7 @@ description: "Ubuntu Server 终极指南与实战教程：从安装、安全加�
 | 14 | SSH 专题：连接、密钥与隧道 | 原理与安装、连接与配置、密钥与 Agent、传输与远程执行、隧道与跳板机、排错与加固 |
 | 15 | Linux 命令速查手册 | 文件权限、软件包服务、网络诊断、磁盘进程、文本归档、定时容器系统 |
 
-另有：[参考索引](reference/index.md)（术语表、命令索引、端口与协议目录、配置文件索引、内容贡献规范）、[互动工具](tools/index.md)（Netplan / UFW / SSH 在线生成器）与[更新日志](changelog.md)。
+另有：[参考索引](reference/index.md)（术语表、命令索引、端口与协议目录、配置文件索引、内容贡献规范）、[互动工具](tools/index.md)（九个在线工具：Netplan、UFW、SSH、子网计算、Cron、systemd、Nginx 反代、Compose、LVM 扩容）与[更新日志](changelog.md)。
 
 ## 与旧教程的关系
 

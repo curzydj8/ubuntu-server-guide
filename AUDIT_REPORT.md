@@ -178,3 +178,44 @@
 - 发布通道：Git Database API 增量建树推送（main 源码 + gh-pages 构建产物），逐文件 SHA 比对。
 - main 新提交 `77929ee34bcba9efd55f607bb26b4c37efe4e534`（125 文件，VERIFY PASS）；gh-pages 新提交 `5cdace42abffdb6fb1945d59c8c0ba61365f377b`（161 文件，VERIFY PASS）；Pages API 状态 built。
 - CI：main 77929ee3 触发的 Actions run 39575166218 结论 success（五 Job 全绿）；pages 部署 run 39575718811 结论 success。本报告补推后以最新一轮 CI 结论为终验。
+
+## 第三期扩展报告（v8.0，2026-10-21）
+
+### 一、审计基线与范围
+
+- 动手前远程 HEAD：main `f272ad135e035a5630b4cda118ea57fb084e196c`、gh-pages `5cdace42abffdb6fb1945d59c8c0ba61365f377b`。
+- 范围：扩展清单第三期「运维工具箱」——工具页新增 6 个生成器 + SSL 速查卡 + 页首边界声明；不新增部分、nav 不变；已有 Netplan / UFW / SSH 三工具的实现与文案未动（仅页首工具计数与说明更新）。
+
+### 二、新增工具（全部位于 `docs/tools/index.md`）
+
+- 子网 / CIDR 计算器：IPv4 + 前缀/掩码双模式，输出网络地址、广播地址、可用主机范围与主机数；`/31`、`/32` 特例单列；非法 IP 与不连续掩码拦截报错、不给结果。
+- Cron 表达式生成器：五字段三模式（每 / 每隔 / 指定）+ 6 个常用预设；人话解读；OnCalendar 等价映射（分/时步进用 `0/n` 形式，日/月/周步进明确提示无直接等价、改相对计时）；「日」与「周」同时受限时提示 cron 或关系与 systemd 且关系的语义差异。
+- systemd Unit 生成器：服务名、描述、ExecStart、工作目录、运行用户、重启策略、RestartSec、MemoryMax、CPUQuota；注释一律独占一行（行尾注释会被当成参数一部分的坑点已在页内说明）；附 daemon-reload、enable --now、status、journalctl 落地命令；ExecStart 非绝对路径拦截。
+- Nginx 反向代理生成器：域名、后端协议/地址/端口，WebSocket 升级头与强制 HTTPS（443 块 + 80 跳转 + Let's Encrypt 路径）可选；`proxy_set_header` 真实 IP 头全套；附备份、`nginx -t` 后再 reload 的固定顺序提示。
+- Docker Compose 模板生成器：5 服务勾选（Nginx、MySQL、PostgreSQL、Redis、WordPress），`CHANGE_ME_*` 占位密码、命名卷、统一 appnet 网络、数据库 healthcheck、WordPress 自动带 MySQL 并等 `service_healthy`、端口仅本地绑定选项；与 09 部分 Docker 应用章互链不重复长文。
+- LVM 扩容步骤生成器：PV 设备、VG、LV、挂载点、扩容量或扩到 100%FREE、ext4/XFS；步骤含 pvcreate（可选）、vgextend、lvextend、resize2fs 或 xfs_growfs 与每步检查命令；强警告区：只给步骤不自动执行、扩容前备份、缩容不在本工具范围；工具不生成任何缩容命令（回归用例已断言）。
+- 附带内容：SSL 证书有效期检查速查卡（openssl s_client 与 curl 两查法、输出判读、30/15 天阈值建议，链接 02 证书生命周期章与 09 HTTPS 证书章）；工具页顶部统一标准补边界声明（只在浏览器本地生成文本、不连接服务器、不执行命令、生成结果需在目标机审阅验证后使用）。
+
+### 三、集成改动
+
+- `docs/tools/index.md`：页首 description 与工具计数更新（三 → 九），新增 6 个工具分节与 SSL 速查卡；脚本新增 6 组生成/初始化函数，沿用既有 document$ 双通道初始化 + 防重复绑定与统一复制 toast。
+- `docs/index.md`：内容地图后的互动工具入口文案更新为九个工具清单。
+- `docs/changelog.md`：新增 v8.0 条目段与版本表行，注明工具适用 22.04 / 24.04、26.04「待核验」口径不变。兼容页未加行（工具非章节）。
+
+### 四、自动化检查结果
+
+- 前端回归：vm 沙盒 + DOM 桩（从页面 HTML 解析真实元素与默认值）共 **78 项用例全过**——新工具 68 项（正常生成、模式切换、边界/非法输入拦截）、旧三工具回归 5 项、复制与 toast 5 项。首轮曾抓出 Cron 生成器一处不可达分支（分钟步进的 OnCalendar 映射与相对计时建议优先级冲突），已删死分支并复跑全过。
+- `npx markdownlint-cli2 "docs/**/*.md"`：111 个文件 **0 issues**（未改 ci.yml、未放宽 .markdownlint.json）。
+- `mkdocs build`：成功，零 WARNING/ERROR 日志行（构建输出中一行横幅为 Material 主题自身提示，非构建警告）。
+- 搜索索引：1431 条；新词命中工具页——CIDR → `tools/#cidr`、OnCalendar → `tools/#cron`、`proxy_set_header` → `tools/#nginx`（该词原只存在于生成器脚本字符串中，为使其可检索已在 Nginx 分节正文显式写出）。
+- 内链：新工具分节链接指向的 01/02/03/04/07/09/15 章节均真实存在，构建零链接警告。
+
+### 五、如实项
+
+- 全部工具为纯前端字符串生成与格式/逻辑校验，**未在任何真实服务器上执行验证**；页面文案已明确此边界，不声称已验证。
+- OnCalendar 等价写法为规则映射结果，复杂步进组合已在工具输出与页内提示先用 `systemd-analyze calendar` 在目标机校验。
+- Compose 镜像版本标签（mysql:8.0、postgres:16、redis:7、wordpress:6-apache、nginx:stable）为生成时的主流稳定标签，页内已提示按 Docker Hub 当前发布核对后锁定。
+
+### 六、发布状态
+
+- 发布通道同前：Git Database API 增量建树推送（main 源码 + gh-pages 构建产物），逐文件 SHA 比对；本节定稿时推送待执行，最终 commit ID、Pages 状态与推送后 CI 结论以本期交付回报为准。
