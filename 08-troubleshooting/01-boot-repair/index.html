@@ -5236,7 +5236,7 @@
 <div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>sudo<span class="w"> </span>chroot<span class="w"> </span>/mnt
 <a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>cat<span class="w"> </span>/etc/os-release
 <a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>ls<span class="w"> </span>/boot
-<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>mount<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-E<span class="w"> </span><span class="s2">"efi|boot"</span>
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>mount<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-E<span class="w"> </span><span class="s2">&quot;efi|boot&quot;</span>
 </code></pre></div>
 <p><code>cat /etc/os-release</code> 应显示目标系统的版本而不是 Live 版本，确认无误后再执行修复命令。需要联网修复软件包时，先在退出 chroot 前把 Live 环境的域名解析配置复制进来：</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="nb">exit</span>

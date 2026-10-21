@@ -5191,7 +5191,7 @@
 </div>
 <h3 id="32">3.2 首次连接：指纹提示的判读与正确核对<a class="headerlink" href="#32" title="Permanent link">&para;</a></h3>
 <p>第一次连接一台服务器时会出现类似提示：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>The authenticity of host '192.0.2.10 (192.0.2.10)' can't be established.
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>The authenticity of host &#39;192.0.2.10 (192.0.2.10)&#39; can&#39;t be established.
 <a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>ED25519 key fingerprint is SHA256:uNiVztksCsDhcc0u9CHoGiyV/ZL+vnLkYe/hQoIo9M.
 <a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>This key was not known by any other names.
 <a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>Are you sure you want to continue connecting (yes/no/[fingerprint])?
@@ -5302,8 +5302,8 @@
 </ul>
 <h2 id="_4">四、效果验证与测试<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h2>
 <p>逐项验证配置是否真的生效，而不是「文件写了就算数」：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a>ssh<span class="w"> </span>-G<span class="w"> </span>prod-web<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-E<span class="w"> </span><span class="s1">'^(hostname|user|port|identityfile|proxyjump)'</span>
-<a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a>ssh<span class="w"> </span>prod-web<span class="w"> </span><span class="s1">'echo connected; hostname'</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a>ssh<span class="w"> </span>-G<span class="w"> </span>prod-web<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-E<span class="w"> </span><span class="s1">&#39;^(hostname|user|port|identityfile|proxyjump)&#39;</span>
+<a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a>ssh<span class="w"> </span>prod-web<span class="w"> </span><span class="s1">&#39;echo connected; hostname&#39;</span>
 <a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a>ssh<span class="w"> </span>-O<span class="w"> </span>check<span class="w"> </span>lab
 </code></pre></div>
 <p><code>ssh -G 别名</code> 打印客户端解析出的完整生效配置（默认值与 config 叠加结果），不真正连接；hostname、user、port 与 config 不符，多半是 <code>Host *</code> 位置或拼写问题，按「先读到者优先」检查顺序。第二条应在一条命令里完成经跳板机连接、执行并返回主机名；第三条检查复用主连接，正常输出 <code>Master running</code> 及 PID。保活可把连接闲置十分钟再操作验证不掉线；指纹流程在测试机上删一次记录重连，应重新出现 3.2 节提示。</p>

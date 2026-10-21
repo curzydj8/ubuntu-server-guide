@@ -5475,7 +5475,7 @@
 <a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a>sudo<span class="w"> </span>doveconf<span class="w"> </span>-n
 <a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a>sudo<span class="w"> </span>systemctl<span class="w"> </span><span class="nb">enable</span><span class="w"> </span>--now<span class="w"> </span>postfix<span class="w"> </span>dovecot<span class="w"> </span>opendkim
 <a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a>sudo<span class="w"> </span>systemctl<span class="w"> </span>restart<span class="w"> </span>postfix<span class="w"> </span>dovecot
-<a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a>ss<span class="w"> </span>-tlnp<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-E<span class="w"> </span><span class="s1">':(25|587|993|8891)'</span>
+<a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a>ss<span class="w"> </span>-tlnp<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-E<span class="w"> </span><span class="s1">&#39;:(25|587|993|8891)&#39;</span>
 </code></pre></div>
 <p>期望结果：<code>postfix check</code> 无输出即无错误；<code>doveconf -n</code> 不报错；25、587、993 均在监听。再放行防火墙：</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>sudo<span class="w"> </span>ufw<span class="w"> </span>allow<span class="w"> </span><span class="m">25</span>/tcp
@@ -5485,14 +5485,14 @@
 <p>验证 SMTP AUTH 是否真的可用，用 swaks 一条命令完成「连接 587 → STARTTLS → 认证 → 投一封测试信」：</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a>swaks<span class="w"> </span>--to<span class="w"> </span>zhang@example.com<span class="w"> </span>--from<span class="w"> </span>zhang@example.com<span class="w"> </span><span class="se">\</span>
 <a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a><span class="w">  </span>--server<span class="w"> </span>mail.example.com<span class="w"> </span>--port<span class="w"> </span><span class="m">587</span><span class="w"> </span>--tls<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a><span class="w">  </span>--auth-user<span class="w"> </span>zhang<span class="w"> </span>--auth-password<span class="w"> </span><span class="s1">'示例密码请替换'</span><span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-12-4" name="__codelineno-12-4" href="#__codelineno-12-4"></a><span class="w">  </span>--header<span class="w"> </span><span class="s2">"Subject: auth test"</span><span class="w"> </span>--body<span class="w"> </span><span class="s2">"smtp auth ok"</span>
+<a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a><span class="w">  </span>--auth-user<span class="w"> </span>zhang<span class="w"> </span>--auth-password<span class="w"> </span><span class="s1">&#39;示例密码请替换&#39;</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-12-4" name="__codelineno-12-4" href="#__codelineno-12-4"></a><span class="w">  </span>--header<span class="w"> </span><span class="s2">&quot;Subject: auth test&quot;</span><span class="w"> </span>--body<span class="w"> </span><span class="s2">&quot;smtp auth ok&quot;</span>
 </code></pre></div>
 <p>期望输出包含 <code>Authentication successful</code> 与 <code>250 OK</code>。也可用 <code>openssl s_client -connect mail.example.com:993</code> 验证 IMAPS，看到 <code>Verification: OK</code> 即通过。测试密码只临时使用，不要写进脚本长期保存。</p>
 <h3 id="37-spf-dkim-dmarc-ptr">3.7 送达四件套：SPF / DKIM / DMARC / PTR<a class="headerlink" href="#37-spf-dkim-dmarc-ptr" title="Permanent link">&para;</a></h3>
 <p>四件套是 DNS 与发信配置的配合，缺得越多越容易进垃圾箱。逐个配、逐个用 dig 验证。</p>
 <p><strong>① SPF：声明「谁有权用我的域名发信」。</strong> 在域名 DNS 里加一条 TXT 记录：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a>example.com.  TXT  "v=spf1 mx ip4:198.51.100.25 -all"
+<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a>example.com.  TXT  &quot;v=spf1 mx ip4:198.51.100.25 -all&quot;
 </code></pre></div>
 <p>含义：允许本域 MX 主机与指定 IP 发信。结尾 <code>-all</code> 是名单外硬拒（HardFail），<code>~all</code> 是软失败（SoftFail，多半仍接收但标记可疑）。初期先用 <code>~all</code> 观察一两周，确认没漏合法发信源后再切 <code>-all</code>；直接上 <code>-all</code> 又漏写发信源，等于亲手拒掉自己的信。</p>
 <p><strong>② DKIM：给每封外发信加数字签名。</strong> 用 OpenDKIM 生成密钥并发布公钥：</p>
@@ -5503,7 +5503,7 @@
 </code></pre></div>
 <p>把 <code>mail.txt</code> 内容发布为 DNS 记录 <code>mail._domainkey.example.com</code> 的 TXT。在 <code>/etc/opendkim.conf</code> 中确认：<code>Mode sv</code>（既签名又验签）、<code>Canonicalization relaxed/simple</code>、<code>Socket inet:8891@127.0.0.1</code>，并用 KeyTable / SigningTable 把域名映射到生成的密钥（按发行版示例文件替换域名与选择器即可）。该 socket 正是 main.cf 里 milter 指向的 8891 端口。改完 <code>sudo systemctl restart opendkim postfix</code>。</p>
 <p><strong>③ DMARC：告诉收信方「验不过时怎么处理我域名的信」。</strong> 在 DNS 加 TXT 记录（主机名 <code>_dmarc.example.com</code>）：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a>_dmarc.example.com.  TXT  "v=DMARC1; p=none; rua=mailto:dmarc@example.com; adkim=s; aspf=s"
+<div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a>_dmarc.example.com.  TXT  &quot;v=DMARC1; p=none; rua=mailto:dmarc@example.com; adkim=s; aspf=s&quot;
 </code></pre></div>
 <p>策略渐进：先 <code>p=none</code>（只收报告、不处置）观察一两周，看 rua 聚合报告里有没有漏配的合法发信源；再升 <code>p=quarantine</code>（进垃圾箱）；确认无误后升 <code>p=reject</code>（直接拒收）。一上来就 reject，漏配的发信会被直接拒掉且很难察觉。</p>
 <p><strong>④ PTR：发信 IP 的反向解析。</strong> PTR 不在域名 DNS 面板里配，而在<strong>云厂商控制台的 IP 管理 / 反向解析</strong>处设置（有的需提工单）：把 198.51.100.25 的 PTR 设为 <code>mail.example.com</code>，与 A 记录、myhostname 三者对齐。大邮箱对 PTR 缺失或不匹配的 IP 常直接降权甚至拒收，无替代方案。</p>
@@ -5581,7 +5581,7 @@
 <h2 id="_4">四、效果验证与测试<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h2>
 <p>验证分四层，从本机到跨域逐层推进：</p>
 <p>第一层，本机投递（不经网络，验 MDA 与邮箱目录）：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-21-1" name="__codelineno-21-1" href="#__codelineno-21-1"></a><span class="nb">echo</span><span class="w"> </span><span class="s2">"local delivery test"</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>mail<span class="w"> </span>-s<span class="w"> </span><span class="s2">"local-test"</span><span class="w"> </span>zhang@example.com
+<div class="highlight"><pre><span></span><code><a id="__codelineno-21-1" name="__codelineno-21-1" href="#__codelineno-21-1"></a><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;local delivery test&quot;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>mail<span class="w"> </span>-s<span class="w"> </span><span class="s2">&quot;local-test&quot;</span><span class="w"> </span>zhang@example.com
 <a id="__codelineno-21-2" name="__codelineno-21-2" href="#__codelineno-21-2"></a>sudo<span class="w"> </span>ls<span class="w"> </span>/home/zhang/Maildir/new/
 </code></pre></div>
 <p>期望结果：new 目录出现新文件，即信已投进邮箱；再用客户端读出来确认内容完整。</p>

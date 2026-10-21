@@ -5436,8 +5436,8 @@
 <a id="__codelineno-8-17" name="__codelineno-8-17" href="#__codelineno-8-17"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">app_file</span>
 <a id="__codelineno-8-18" name="__codelineno-8-18" href="#__codelineno-8-18"></a><span class="w">    </span><span class="nt">source</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
 <a id="__codelineno-8-19" name="__codelineno-8-19" href="#__codelineno-8-19"></a><span class="w">      </span><span class="no">.host = get_hostname()</span>
-<a id="__codelineno-8-20" name="__codelineno-8-20" href="#__codelineno-8-20"></a><span class="w">      </span><span class="no">.service = "app"</span>
-<a id="__codelineno-8-21" name="__codelineno-8-21" href="#__codelineno-8-21"></a><span class="w">      </span><span class="no">.level = "info"</span>
+<a id="__codelineno-8-20" name="__codelineno-8-20" href="#__codelineno-8-20"></a><span class="w">      </span><span class="no">.service = &quot;app&quot;</span>
+<a id="__codelineno-8-21" name="__codelineno-8-21" href="#__codelineno-8-21"></a><span class="w">      </span><span class="no">.level = &quot;info&quot;</span>
 <a id="__codelineno-8-22" name="__codelineno-8-22" href="#__codelineno-8-22"></a>
 <a id="__codelineno-8-23" name="__codelineno-8-23" href="#__codelineno-8-23"></a><span class="nt">sinks</span><span class="p">:</span>
 <a id="__codelineno-8-24" name="__codelineno-8-24" href="#__codelineno-8-24"></a><span class="w">  </span><span class="nt">loki_out</span><span class="p">:</span>
@@ -5449,8 +5449,8 @@
 <a id="__codelineno-8-30" name="__codelineno-8-30" href="#__codelineno-8-30"></a><span class="w">    </span><span class="nt">encoding</span><span class="p">:</span>
 <a id="__codelineno-8-31" name="__codelineno-8-31" href="#__codelineno-8-31"></a><span class="w">      </span><span class="nt">codec</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">json</span>
 <a id="__codelineno-8-32" name="__codelineno-8-32" href="#__codelineno-8-32"></a><span class="w">    </span><span class="nt">labels</span><span class="p">:</span>
-<a id="__codelineno-8-33" name="__codelineno-8-33" href="#__codelineno-8-33"></a><span class="w">      </span><span class="nt">host</span><span class="p">:</span><span class="w"> </span><span class="s">"{{</span><span class="nv"> </span><span class="s">host</span><span class="nv"> </span><span class="s">}}"</span>
-<a id="__codelineno-8-34" name="__codelineno-8-34" href="#__codelineno-8-34"></a><span class="w">      </span><span class="nt">job</span><span class="p">:</span><span class="w"> </span><span class="s">"server-logs"</span>
+<a id="__codelineno-8-33" name="__codelineno-8-33" href="#__codelineno-8-33"></a><span class="w">      </span><span class="nt">host</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;{{</span><span class="nv"> </span><span class="s">host</span><span class="nv"> </span><span class="s">}}&quot;</span>
+<a id="__codelineno-8-34" name="__codelineno-8-34" href="#__codelineno-8-34"></a><span class="w">      </span><span class="nt">job</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;server-logs&quot;</span>
 <a id="__codelineno-8-35" name="__codelineno-8-35" href="#__codelineno-8-35"></a><span class="w">    </span><span class="nt">healthcheck</span><span class="p">:</span>
 <a id="__codelineno-8-36" name="__codelineno-8-36" href="#__codelineno-8-36"></a><span class="w">      </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
 </code></pre></div>
@@ -5494,13 +5494,13 @@
 </div>
 <h3 id="36-grafana-loki">3.6 在 Grafana 中接入 Loki 并查询<a class="headerlink" href="#36-grafana-loki" title="Permanent link">&para;</a></h3>
 <p>操作顺序：进入 Connections 下的 Data sources，点击 Add data source 选择 Loki，URL 填 http://192.0.2.30:3100（与 Grafana 同机时填 http://localhost:3100），点击 Save and test 出现成功提示。进入 Explore 页面，数据源选 Loki，输入下面的 LogQL 查询验证：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a>{job="server-logs", host="app-01"}
+<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a>{job=&quot;server-logs&quot;, host=&quot;app-01&quot;}
 </code></pre></div>
 <p>带关键字过滤的写法是在表达式后加管道过滤，下面的示例查包含 ERROR 的行：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a>{job="server-logs"} |= "ERROR"
+<div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a>{job=&quot;server-logs&quot;} |= &quot;ERROR&quot;
 </code></pre></div>
 <p>统计每分钟错误数的写法：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a>sum(count_over_time({job="server-logs"} |= "ERROR" [1m]))
+<div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a>sum(count_over_time({job=&quot;server-logs&quot;} |= &quot;ERROR&quot; [1m]))
 </code></pre></div>
 <p>把常用查询保存为仪表盘面板，与第 2 章的指标面板放在同一个仪表盘中，故障时上下对照时间轴，效率最高。</p>
 <h2 id="_5">四、效果验证与测试<a class="headerlink" href="#_5" title="Permanent link">&para;</a></h2>
@@ -5511,9 +5511,9 @@
 </code></pre></div>
 <p>期望 ready 返回 ready，metrics 能返回以 loki_ 开头的指标行。</p>
 <p>第二步做端到端写入测试。在来源机写入一条带唯一标记的日志：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a><span class="nb">echo</span><span class="w"> </span><span class="s2">"LOKI-TEST-20260101-001 end to end check"</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>sudo<span class="w"> </span>tee<span class="w"> </span>-a<span class="w"> </span>/var/log/app/test.log
+<div class="highlight"><pre><span></span><code><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;LOKI-TEST-20260101-001 end to end check&quot;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>sudo<span class="w"> </span>tee<span class="w"> </span>-a<span class="w"> </span>/var/log/app/test.log
 <a id="__codelineno-17-2" name="__codelineno-17-2" href="#__codelineno-17-2"></a>sleep<span class="w"> </span><span class="m">10</span>
-<a id="__codelineno-17-3" name="__codelineno-17-3" href="#__codelineno-17-3"></a>curl<span class="w"> </span>-s<span class="w"> </span><span class="s2">"http://192.0.2.30:3100/loki/api/v1/query_range"</span><span class="w"> </span>--data-urlencode<span class="w"> </span><span class="s1">'query={job="server-logs"} |= "LOKI-TEST-20260101-001"'</span><span class="w"> </span>--data-urlencode<span class="w"> </span><span class="s1">'limit=5'</span><span class="w"> </span>-G
+<a id="__codelineno-17-3" name="__codelineno-17-3" href="#__codelineno-17-3"></a>curl<span class="w"> </span>-s<span class="w"> </span><span class="s2">&quot;http://192.0.2.30:3100/loki/api/v1/query_range&quot;</span><span class="w"> </span>--data-urlencode<span class="w"> </span><span class="s1">&#39;query={job=&quot;server-logs&quot;} |= &quot;LOKI-TEST-20260101-001&quot;&#39;</span><span class="w"> </span>--data-urlencode<span class="w"> </span><span class="s1">&#39;limit=5&#39;</span><span class="w"> </span>-G
 </code></pre></div>
 <p>期望返回的 JSON 中 result 不为空且能看到该标记行。Grafana Explore 中用同样的 LogQL 也应查到同一条记录，三处一致才算链路打通。</p>
 <p>第三步验证保留生效。把测试环境的 retention_period 临时改为较小值并观察旧数据被 compactor 删除的现象，确认机制有效后再改回 336h，改前同样先 cp 备份配置文件。</p>

@@ -5389,7 +5389,7 @@
 <a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a>sudo<span class="w"> </span>zpool<span class="w"> </span>list<span class="w"> </span>tank
 <a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a>sudo<span class="w"> </span>zfs<span class="w"> </span>list<span class="w"> </span>-t<span class="w"> </span>all
 <a id="__codelineno-14-4" name="__codelineno-14-4" href="#__codelineno-14-4"></a>sudo<span class="w"> </span>zpool<span class="w"> </span>get<span class="w"> </span>health<span class="w"> </span>tank
-<a id="__codelineno-14-5" name="__codelineno-14-5" href="#__codelineno-14-5"></a><span class="nb">echo</span><span class="w"> </span><span class="s2">"zfs-test-</span><span class="k">$(</span>date<span class="w"> </span>+%F<span class="k">)</span><span class="s2">"</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>sudo<span class="w"> </span>tee<span class="w"> </span>/tank/data/verify.txt
+<a id="__codelineno-14-5" name="__codelineno-14-5" href="#__codelineno-14-5"></a><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;zfs-test-</span><span class="k">$(</span>date<span class="w"> </span>+%F<span class="k">)</span><span class="s2">&quot;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>sudo<span class="w"> </span>tee<span class="w"> </span>/tank/data/verify.txt
 <a id="__codelineno-14-6" name="__codelineno-14-6" href="#__codelineno-14-6"></a>cat<span class="w"> </span>/tank/data/verify.txt
 </code></pre></div>
 <p>期望输出示例：</p>
@@ -5422,8 +5422,8 @@
 <a id="__codelineno-18-4" name="__codelineno-18-4" href="#__codelineno-18-4"></a>sudo<span class="w"> </span>systemctl<span class="w"> </span>status<span class="w"> </span>zfs-import-cache.service
 </code></pre></div>
 <p>场景二：创建池时报设备忙。报错原文片段：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a>cannot open '/dev/sdX': Device busy
-<a id="__codelineno-19-2" name="__codelineno-19-2" href="#__codelineno-19-2"></a>invalid vdev specification: use '-f' to override the following errors
+<div class="highlight"><pre><span></span><code><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a>cannot open &#39;/dev/sdX&#39;: Device busy
+<a id="__codelineno-19-2" name="__codelineno-19-2" href="#__codelineno-19-2"></a>invalid vdev specification: use &#39;-f&#39; to override the following errors
 </code></pre></div>
 <p>原因是目标盘上残留旧文件系统签名、旧 RAID 元数据或正被挂载。先用 <code>lsblk -f</code> 与 <code>sudo wipefs -n /dev/sdX</code> 看清签名来源，确认无用后清除签名再建池：</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-20-1" name="__codelineno-20-1" href="#__codelineno-20-1"></a>sudo<span class="w"> </span>umount<span class="w"> </span>/dev/sdX

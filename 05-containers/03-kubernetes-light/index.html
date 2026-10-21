@@ -5238,7 +5238,7 @@
 <a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>ls<span class="w"> </span>-l<span class="w"> </span>/tmp/install-k3s.sh
 </code></pre></div>
 <p>用 less 打开后重点确认脚本来源标识和主要动作是下载二进制并注册 systemd 服务，没有可疑的外连地址和额外命令，确认无误后退出 less 再执行安装。下面命令在控制面节点 k8s-master 上执行：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="nv">INSTALL_K3S_EXEC</span><span class="o">=</span><span class="s2">"server --write-kubeconfig-mode 644"</span><span class="w"> </span>sh<span class="w"> </span>/tmp/install-k3s.sh
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="nv">INSTALL_K3S_EXEC</span><span class="o">=</span><span class="s2">&quot;server --write-kubeconfig-mode 644&quot;</span><span class="w"> </span>sh<span class="w"> </span>/tmp/install-k3s.sh
 <a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>sudo<span class="w"> </span>systemctl<span class="w"> </span>status<span class="w"> </span>k3s<span class="w"> </span>--no-pager
 </code></pre></div>
 <p>第二步在控制面节点查看加入令牌，并把集群配置复制给普通用户使用：</p>
@@ -5246,7 +5246,7 @@
 <a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>mkdir<span class="w"> </span>-p<span class="w"> </span>~/.kube
 <a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>sudo<span class="w"> </span>cp<span class="w"> </span>/etc/rancher/k3s/k3s.yaml<span class="w"> </span>~/.kube/config
 <a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>sudo<span class="w"> </span>chown<span class="w"> </span>ubuntu:ubuntu<span class="w"> </span>~/.kube/config
-<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>sed<span class="w"> </span>-i<span class="w"> </span><span class="s2">"s/127.0.0.1/192.0.2.11/"</span><span class="w"> </span>~/.kube/config
+<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>sed<span class="w"> </span>-i<span class="w"> </span><span class="s2">&quot;s/127.0.0.1/192.0.2.11/&quot;</span><span class="w"> </span>~/.kube/config
 </code></pre></div>
 <p>第三步在两个工作节点上执行加入命令。先在工作节点上同样下载并审查脚本，然后执行：</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>curl<span class="w"> </span>-sfL<span class="w"> </span>https://get.k3s.io<span class="w"> </span>-o<span class="w"> </span>/tmp/install-k3s.sh
@@ -5301,7 +5301,7 @@
 <p>下面用声明式方式部署一个完整的示例应用，包含 Deployment 和 Service 两份定义。先创建工作目录并写入文件。修改或新建配置前，如目录里已有同名文件，先备份：</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a>mkdir<span class="w"> </span>-p<span class="w"> </span>~/k8sdemo
 <a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a><span class="nb">cd</span><span class="w"> </span>~/k8sdemo
-<a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a>cp<span class="w"> </span>app.yaml<span class="w"> </span>app.yaml.bak<span class="w"> </span><span class="m">2</span>&gt;/dev/null<span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="s2">"无旧文件，跳过备份"</span>
+<a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a>cp<span class="w"> </span>app.yaml<span class="w"> </span>app.yaml.bak<span class="w"> </span><span class="m">2</span>&gt;/dev/null<span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;无旧文件，跳过备份&quot;</span>
 <a id="__codelineno-12-4" name="__codelineno-12-4" href="#__codelineno-12-4"></a>nano<span class="w"> </span>app.yaml
 </code></pre></div>
 <p>app.yaml 完整内容如下：</p>
@@ -5328,11 +5328,11 @@
 <a id="__codelineno-13-21" name="__codelineno-13-21" href="#__codelineno-13-21"></a><span class="w">            </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">containerPort</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">80</span>
 <a id="__codelineno-13-22" name="__codelineno-13-22" href="#__codelineno-13-22"></a><span class="w">          </span><span class="nt">resources</span><span class="p">:</span>
 <a id="__codelineno-13-23" name="__codelineno-13-23" href="#__codelineno-13-23"></a><span class="w">            </span><span class="nt">requests</span><span class="p">:</span>
-<a id="__codelineno-13-24" name="__codelineno-13-24" href="#__codelineno-13-24"></a><span class="w">              </span><span class="nt">cpu</span><span class="p">:</span><span class="w"> </span><span class="s">"100m"</span>
-<a id="__codelineno-13-25" name="__codelineno-13-25" href="#__codelineno-13-25"></a><span class="w">              </span><span class="nt">memory</span><span class="p">:</span><span class="w"> </span><span class="s">"128Mi"</span>
+<a id="__codelineno-13-24" name="__codelineno-13-24" href="#__codelineno-13-24"></a><span class="w">              </span><span class="nt">cpu</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;100m&quot;</span>
+<a id="__codelineno-13-25" name="__codelineno-13-25" href="#__codelineno-13-25"></a><span class="w">              </span><span class="nt">memory</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;128Mi&quot;</span>
 <a id="__codelineno-13-26" name="__codelineno-13-26" href="#__codelineno-13-26"></a><span class="w">            </span><span class="nt">limits</span><span class="p">:</span>
-<a id="__codelineno-13-27" name="__codelineno-13-27" href="#__codelineno-13-27"></a><span class="w">              </span><span class="nt">cpu</span><span class="p">:</span><span class="w"> </span><span class="s">"500m"</span>
-<a id="__codelineno-13-28" name="__codelineno-13-28" href="#__codelineno-13-28"></a><span class="w">              </span><span class="nt">memory</span><span class="p">:</span><span class="w"> </span><span class="s">"256Mi"</span>
+<a id="__codelineno-13-27" name="__codelineno-13-27" href="#__codelineno-13-27"></a><span class="w">              </span><span class="nt">cpu</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;500m&quot;</span>
+<a id="__codelineno-13-28" name="__codelineno-13-28" href="#__codelineno-13-28"></a><span class="w">              </span><span class="nt">memory</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;256Mi&quot;</span>
 <a id="__codelineno-13-29" name="__codelineno-13-29" href="#__codelineno-13-29"></a><span class="nn">---</span>
 <a id="__codelineno-13-30" name="__codelineno-13-30" href="#__codelineno-13-30"></a><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">v1</span>
 <a id="__codelineno-13-31" name="__codelineno-13-31" href="#__codelineno-13-31"></a><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Service</span>
@@ -5379,7 +5379,7 @@
 <a id="__codelineno-16-17" name="__codelineno-16-17" href="#__codelineno-16-17"></a><span class="w">  </span><span class="nt">containers</span><span class="p">:</span>
 <a id="__codelineno-16-18" name="__codelineno-16-18" href="#__codelineno-16-18"></a><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">busybox</span>
 <a id="__codelineno-16-19" name="__codelineno-16-19" href="#__codelineno-16-19"></a><span class="w">      </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">busybox:latest</span>
-<a id="__codelineno-16-20" name="__codelineno-16-20" href="#__codelineno-16-20"></a><span class="w">      </span><span class="nt">command</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">"sh"</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">"-c"</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">"echo</span><span class="nv"> </span><span class="s">hello-pvc</span><span class="nv"> </span><span class="s">&gt;</span><span class="nv"> </span><span class="s">/data/hello.txt</span><span class="nv"> </span><span class="s">&amp;&amp;</span><span class="nv"> </span><span class="s">sleep</span><span class="nv"> </span><span class="s">3600"</span><span class="p p-Indicator">]</span>
+<a id="__codelineno-16-20" name="__codelineno-16-20" href="#__codelineno-16-20"></a><span class="w">      </span><span class="nt">command</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&quot;sh&quot;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&quot;-c&quot;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&quot;echo</span><span class="nv"> </span><span class="s">hello-pvc</span><span class="nv"> </span><span class="s">&gt;</span><span class="nv"> </span><span class="s">/data/hello.txt</span><span class="nv"> </span><span class="s">&amp;&amp;</span><span class="nv"> </span><span class="s">sleep</span><span class="nv"> </span><span class="s">3600&quot;</span><span class="p p-Indicator">]</span>
 <a id="__codelineno-16-21" name="__codelineno-16-21" href="#__codelineno-16-21"></a><span class="w">      </span><span class="nt">volumeMounts</span><span class="p">:</span>
 <a id="__codelineno-16-22" name="__codelineno-16-22" href="#__codelineno-16-22"></a><span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">data</span>
 <a id="__codelineno-16-23" name="__codelineno-16-23" href="#__codelineno-16-23"></a><span class="w">          </span><span class="nt">mountPath</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/data</span>
@@ -5416,7 +5416,7 @@
 <p>应用并测试。测试机上需要把 app.example.com 解析到节点地址，实验环境可在测试机的 hosts 文件里加一行 192.0.2.11 app.example.com，改 hosts 前先备份该文件：</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a>kubectl<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>ingress.yaml
 <a id="__codelineno-19-2" name="__codelineno-19-2" href="#__codelineno-19-2"></a>kubectl<span class="w"> </span>get<span class="w"> </span>ingress
-<a id="__codelineno-19-3" name="__codelineno-19-3" href="#__codelineno-19-3"></a>curl<span class="w"> </span>-s<span class="w"> </span>-H<span class="w"> </span><span class="s2">"Host: app.example.com"</span><span class="w"> </span>http://192.0.2.11/
+<a id="__codelineno-19-3" name="__codelineno-19-3" href="#__codelineno-19-3"></a>curl<span class="w"> </span>-s<span class="w"> </span>-H<span class="w"> </span><span class="s2">&quot;Host: app.example.com&quot;</span><span class="w"> </span>http://192.0.2.11/
 </code></pre></div>
 <h3 id="37">3.7 卸载与清理<a class="headerlink" href="#37" title="Permanent link">&para;</a></h3>
 <p>实验结束后按路线选择对应卸载方法，卸载会删除集群内的全部应用和数据，先确认没有需要保留的内容。</p>

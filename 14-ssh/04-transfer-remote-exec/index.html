@@ -5333,7 +5333,7 @@
 <p>会话内常用命令分两组：<strong>不带 l 的操作远程，带 l 的操作本地</strong>——<code>ls</code>/<code>cd</code>/<code>pwd</code> 是远程，<code>lls</code>/<code>lcd</code>/<code>lpwd</code> 是本地；<code>put</code> 上传、<code>get</code> 下载，方向与 scp 一致。</p>
 <p>断点续传：下载中断后用 <code>reget 文件</code> 接着传未完的部分，上传对应 <code>reput 文件</code>。注意续传要求本地已有的半截文件与远程文件前半部分一致，文件被改过就不要续，老老实实重传。</p>
 <p>批处理模式 <code>-b</code>：把命令写进文件批量执行，适合固定动作脚本化：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>cat<span class="w"> </span>&gt;<span class="w"> </span>/tmp/sftp-batch.txt<span class="w"> </span><span class="s">&lt;&lt;'EOF'</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>cat<span class="w"> </span>&gt;<span class="w"> </span>/tmp/sftp-batch.txt<span class="w"> </span><span class="s">&lt;&lt;&#39;EOF&#39;</span>
 <a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="s">cd /data/incoming</span>
 <a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="s">put./app.tar.gz</span>
 <a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="s">ls -l</span>
@@ -5344,7 +5344,7 @@
 <h3 id="33-rsync">3.3 rsync：增量同步（重点）<a class="headerlink" href="#33-rsync" title="Permanent link">&para;</a></h3>
 <p>rsync 先对比两端文件的大小与修改时间（或校验和），<strong>只传有差异的部分</strong>，重复执行同一条命令的成本极低，这是它碾压 scp 的核心能力。</p>
 <p>最常用组合逐参数拆解：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>rsync<span class="w"> </span>-avP<span class="w"> </span>-e<span class="w"> </span><span class="s1">'ssh -p 2222'</span>./site/<span class="w"> </span>ubuntu@192.0.2.10:/var/www/site/
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>rsync<span class="w"> </span>-avP<span class="w"> </span>-e<span class="w"> </span><span class="s1">&#39;ssh -p 2222&#39;</span>./site/<span class="w"> </span>ubuntu@192.0.2.10:/var/www/site/
 </code></pre></div>
 <ul>
 <li><code>-a</code>：归档模式，一揽子包含递归、保留权限/时间/属主/软链接等，是传目录的默认选择；</li>
@@ -5378,29 +5378,29 @@
 <p>断点续传原理：<code>-P</code> 中的 <code>--partial</code> 让中断时已传的部分<strong>保留在目标端</strong>（默认正式文件名，部分场景下是隐藏的临时名），下次执行同一命令时 rsync 的增量算法会跳过已一致的数据块、只补剩余部分，所以命令不用改、直接重跑即可。</p>
 <h3 id="34">3.4 远程执行命令<a class="headerlink" href="#34" title="Permanent link">&para;</a></h3>
 <p>单条命令直接跟在主机后面，输出回显到本地：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>ssh<span class="w"> </span>ubuntu@192.0.2.10<span class="w"> </span><span class="s1">'systemctl status ssh --no-pager | head -5'</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>ssh<span class="w"> </span>ubuntu@192.0.2.10<span class="w"> </span><span class="s1">&#39;systemctl status ssh --no-pager | head -5&#39;</span>
 </code></pre></div>
 <p>多条命令用分号或 <code>&amp;&amp;</code> 串在同一对引号里，或写成多行字符串：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>ssh<span class="w"> </span>ubuntu@192.0.2.10<span class="w"> </span><span class="s1">'cd /var/www &amp;&amp; git pull &amp;&amp; systemctl reload nginx'</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>ssh<span class="w"> </span>ubuntu@192.0.2.10<span class="w"> </span><span class="s1">&#39;cd /var/www &amp;&amp; git pull &amp;&amp; systemctl reload nginx&#39;</span>
 </code></pre></div>
 <p><strong>引号陷阱</strong>：命令里的 <code>$变量</code> 由<strong>哪一端 shell 展开</strong>，取决于引号种类——</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="c1"># 双引号：$HOME 先被shell 展开，远程收到的是本地的家目录路径</span>
-<a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a>ssh<span class="w"> </span>ubuntu@192.0.2.10<span class="w"> </span><span class="s2">"echo </span><span class="nv">$HOME</span><span class="s2">"</span>
+<a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a>ssh<span class="w"> </span>ubuntu@192.0.2.10<span class="w"> </span><span class="s2">&quot;echo </span><span class="nv">$HOME</span><span class="s2">&quot;</span>
 <a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a><span class="c1"># 输出：/home/你本地的用户名 ← 多半不是你想要的</span>
 <a id="__codelineno-12-4" name="__codelineno-12-4" href="#__codelineno-12-4"></a>
 <a id="__codelineno-12-5" name="__codelineno-12-5" href="#__codelineno-12-5"></a><span class="c1"># 单引号：整串原样发到远程，$HOME 由shell 展开</span>
-<a id="__codelineno-12-6" name="__codelineno-12-6" href="#__codelineno-12-6"></a>ssh<span class="w"> </span>ubuntu@192.0.2.10<span class="w"> </span><span class="s1">'echo $HOME'</span>
+<a id="__codelineno-12-6" name="__codelineno-12-6" href="#__codelineno-12-6"></a>ssh<span class="w"> </span>ubuntu@192.0.2.10<span class="w"> </span><span class="s1">&#39;echo $HOME&#39;</span>
 <a id="__codelineno-12-7" name="__codelineno-12-7" href="#__codelineno-12-7"></a><span class="c1"># 输出：/home/ubuntu ← 通常想要这个</span>
 </code></pre></div>
 <p>规律：远程命令<strong>默认用单引号</strong>；确实需要把本地变量的值传进远程命令时才用双引号，且要清楚每个 <code>$</code> 是在哪端展开的。</p>
 <p><strong>需要 sudo 时加 -t</strong>：远程命令默认不分配终端，<code>sudo</code> 没地方输密码会直接失败：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a>ssh<span class="w"> </span>-t<span class="w"> </span>ubuntu@192.0.2.10<span class="w"> </span><span class="s1">'sudo systemctl restart nginx'</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a>ssh<span class="w"> </span>-t<span class="w"> </span>ubuntu@192.0.2.10<span class="w"> </span><span class="s1">&#39;sudo systemctl restart nginx&#39;</span>
 </code></pre></div>
 <p><code>-t</code> 强制分配伪终端，sudo 才能提示输密码。脚本里则应优先用免密 sudo 的受限配置或密钥化方案，而不是在脚本里塞密码。</p>
 <p><strong>批量多主机</strong>：主机不多时 for 循环足够：</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="k">for</span><span class="w"> </span>h<span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="m">192</span>.0.2.10<span class="w"> </span><span class="m">192</span>.0.2.11<span class="w"> </span><span class="m">192</span>.0.2.12<span class="p">;</span><span class="w"> </span><span class="k">do</span>
-<a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a><span class="nb">echo</span><span class="w"> </span><span class="s2">"== </span><span class="nv">$h</span><span class="s2"> =="</span>
-<a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a>ssh<span class="w"> </span>-o<span class="w"> </span><span class="nv">ConnectTimeout</span><span class="o">=</span><span class="m">5</span><span class="w"> </span>ubuntu@<span class="nv">$h</span><span class="w"> </span><span class="s1">'uptime'</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="s2">"连接失败: </span><span class="nv">$h</span><span class="s2">"</span>
+<a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;== </span><span class="nv">$h</span><span class="s2"> ==&quot;</span>
+<a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a>ssh<span class="w"> </span>-o<span class="w"> </span><span class="nv">ConnectTimeout</span><span class="o">=</span><span class="m">5</span><span class="w"> </span>ubuntu@<span class="nv">$h</span><span class="w"> </span><span class="s1">&#39;uptime&#39;</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;连接失败: </span><span class="nv">$h</span><span class="s2">&quot;</span>
 <a id="__codelineno-14-4" name="__codelineno-14-4" href="#__codelineno-14-4"></a><span class="k">done</span>
 </code></pre></div>
 <div class="admonition warning">
@@ -5412,27 +5412,27 @@
 <p><strong>完整性校验</strong>：rsync 默认传输后有整体校验，但重要文件发布后应再做一次独立对照：</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a><span class="c1"># 两端分别计算，哈希一致即内容一致</span>
 <a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a>sha256sum./app.tar.gz
-<a id="__codelineno-15-3" name="__codelineno-15-3" href="#__codelineno-15-3"></a>ssh<span class="w"> </span>ubuntu@192.0.2.10<span class="w"> </span><span class="s1">'sha256sum /data/incoming/app.tar.gz'</span>
+<a id="__codelineno-15-3" name="__codelineno-15-3" href="#__codelineno-15-3"></a>ssh<span class="w"> </span>ubuntu@192.0.2.10<span class="w"> </span><span class="s1">&#39;sha256sum /data/incoming/app.tar.gz&#39;</span>
 </code></pre></div>
 <p>怀疑时间戳判断漏传（文件改了但大小、时间碰巧相同）时，用 <code>rsync -avP --checksum</code> 强制按内容比对，代价是两端都要读全文件计算哈希，大目录会明显变慢，只在必要时用。</p>
 <h3 id="36-tmux-screen-nohup">3.6 断线续跑：tmux / screen / nohup<a class="headerlink" href="#36-tmux-screen-nohup" title="Permanent link">&para;</a></h3>
 <p>网络一断，远程命令默认跟着 SSH 会话一起被终止。长任务（编译、批量处理、跨网同步）要跑在<strong>与会话解耦</strong>的环境里：</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a><span class="c1"># 在远程主机上新建一个名为 job 的会话，在里面启动长任务</span>
-<a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a>ssh<span class="w"> </span>-t<span class="w"> </span>ubuntu@192.0.2.10<span class="w"> </span><span class="s1">'tmux new -s job'</span>
+<a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a>ssh<span class="w"> </span>-t<span class="w"> </span>ubuntu@192.0.2.10<span class="w"> </span><span class="s1">&#39;tmux new -s job&#39;</span>
 <a id="__codelineno-16-3" name="__codelineno-16-3" href="#__codelineno-16-3"></a><span class="c1"># 会话内按 Ctrl-b 再按 d 脱离（detach），任务继续跑；也可以直接关掉终端</span>
 <a id="__codelineno-16-4" name="__codelineno-16-4" href="#__codelineno-16-4"></a>
 <a id="__codelineno-16-5" name="__codelineno-16-5" href="#__codelineno-16-5"></a><span class="c1"># 之后任意时间重新连上，回到现场看进度</span>
-<a id="__codelineno-16-6" name="__codelineno-16-6" href="#__codelineno-16-6"></a>ssh<span class="w"> </span>-t<span class="w"> </span>ubuntu@192.0.2.10<span class="w"> </span><span class="s1">'tmux attach -t job'</span>
+<a id="__codelineno-16-6" name="__codelineno-16-6" href="#__codelineno-16-6"></a>ssh<span class="w"> </span>-t<span class="w"> </span>ubuntu@192.0.2.10<span class="w"> </span><span class="s1">&#39;tmux attach -t job&#39;</span>
 </code></pre></div>
 <p><code>screen</code> 是同类老牌工具，基本用法 <code>screen -S job</code> 新建、<code>screen -r job</code> 恢复，功能够用但新系统优先 tmux。<code>nohup 命令 &gt;日志 2&gt;&amp;1 &amp;</code> 的定位是"让单个命令忽略挂断信号继续跑"，局限是没有交互界面、断线后看不到实时输出（只能看日志文件）、也无法重新接管，出问题时不如 tmux 灵活——适合无人值守的一次性命令，不适合需要盯着调的任务。</p>
 <h2 id="_5">四、效果验证与测试<a class="headerlink" href="#_5" title="Permanent link">&para;</a></h2>
 <p>传输是否成功，不看命令的退出动画，看两端文件本身：</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a><span class="c1"># 1. 两端大小与时间对照</span>
 <a id="__codelineno-17-2" name="__codelineno-17-2" href="#__codelineno-17-2"></a>ls<span class="w"> </span>-l./app.tar.gz
-<a id="__codelineno-17-3" name="__codelineno-17-3" href="#__codelineno-17-3"></a>ssh<span class="w"> </span>ubuntu@192.0.2.10<span class="w"> </span><span class="s1">'ls -l /data/incoming/app.tar.gz'</span>
+<a id="__codelineno-17-3" name="__codelineno-17-3" href="#__codelineno-17-3"></a>ssh<span class="w"> </span>ubuntu@192.0.2.10<span class="w"> </span><span class="s1">&#39;ls -l /data/incoming/app.tar.gz&#39;</span>
 <a id="__codelineno-17-4" name="__codelineno-17-4" href="#__codelineno-17-4"></a><span class="c1"># 2. 哈希对照（最硬的证据）</span>
 <a id="__codelineno-17-5" name="__codelineno-17-5" href="#__codelineno-17-5"></a>sha256sum./app.tar.gz
-<a id="__codelineno-17-6" name="__codelineno-17-6" href="#__codelineno-17-6"></a>ssh<span class="w"> </span>ubuntu@192.0.2.10<span class="w"> </span><span class="s1">'sha256sum /data/incoming/app.tar.gz'</span>
+<a id="__codelineno-17-6" name="__codelineno-17-6" href="#__codelineno-17-6"></a>ssh<span class="w"> </span>ubuntu@192.0.2.10<span class="w"> </span><span class="s1">&#39;sha256sum /data/incoming/app.tar.gz&#39;</span>
 <a id="__codelineno-17-7" name="__codelineno-17-7" href="#__codelineno-17-7"></a><span class="c1"># 3. 目录同步后做一次 dry-run，应无待传文件输出</span>
 <a id="__codelineno-17-8" name="__codelineno-17-8" href="#__codelineno-17-8"></a>rsync<span class="w"> </span>-av<span class="w"> </span>--dry-run./site/<span class="w"> </span>ubuntu@192.0.2.10:/var/www/site/
 </code></pre></div>

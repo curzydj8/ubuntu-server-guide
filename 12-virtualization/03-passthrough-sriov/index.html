@@ -5325,14 +5325,14 @@
 <h3 id="32-grub">3.2 备份并修改 GRUB 内核参数<a class="headerlink" href="#32-grub" title="Permanent link">&para;</a></h3>
 <p>修改启动参数前必须先备份，这是本章回滚链的第一环：</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>sudo<span class="w"> </span>cp<span class="w"> </span>/etc/default/grub<span class="w"> </span>/etc/default/grub.bak-<span class="k">$(</span>date<span class="w"> </span>+%F<span class="k">)</span>-before-iommu
-<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>sudo<span class="w"> </span>cp<span class="w"> </span>-a<span class="w"> </span>/boot/grub<span class="w"> </span>/root/grub-backup-<span class="k">$(</span>date<span class="w"> </span>+%F<span class="k">)</span><span class="w"> </span><span class="m">2</span>&gt;/dev/null<span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="s2">"grub 目录备份跳过，以 /etc/default/grub 备份为准"</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>sudo<span class="w"> </span>cp<span class="w"> </span>-a<span class="w"> </span>/boot/grub<span class="w"> </span>/root/grub-backup-<span class="k">$(</span>date<span class="w"> </span>+%F<span class="k">)</span><span class="w"> </span><span class="m">2</span>&gt;/dev/null<span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;grub 目录备份跳过，以 /etc/default/grub 备份为准&quot;</span>
 <a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>cat<span class="w"> </span>/etc/default/grub
 </code></pre></div>
 <p>编辑 <code>/etc/default/grub</code>，在 <code>GRUB_CMDLINE_LINUX_DEFAULT</code> 的引号内追加参数。Intel 平台完整示例行：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="na">GRUB_CMDLINE_LINUX_DEFAULT</span><span class="o">=</span><span class="s">"quiet splash intel_iommu=on iommu=pt"</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="na">GRUB_CMDLINE_LINUX_DEFAULT</span><span class="o">=</span><span class="s">&quot;quiet splash intel_iommu=on iommu=pt&quot;</span>
 </code></pre></div>
 <p>AMD 平台完整示例行：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="na">GRUB_CMDLINE_LINUX_DEFAULT</span><span class="o">=</span><span class="s">"quiet splash amd_iommu=on iommu=pt"</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="na">GRUB_CMDLINE_LINUX_DEFAULT</span><span class="o">=</span><span class="s">&quot;quiet splash amd_iommu=on iommu=pt&quot;</span>
 </code></pre></div>
 <p>参数讲解：</p>
 <table>
@@ -5362,18 +5362,18 @@
 <a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>sudo<span class="w"> </span>reboot
 </code></pre></div>
 <h3 id="33-iommu">3.3 验证 IOMMU 与查看分组<a class="headerlink" href="#33-iommu" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>dmesg<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-i<span class="w"> </span>-E<span class="w"> </span><span class="s2">"iommu|DMAR"</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>dmesg<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-i<span class="w"> </span>-E<span class="w"> </span><span class="s2">&quot;iommu|DMAR&quot;</span>
 <a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>cat<span class="w"> </span>/proc/cmdline
 </code></pre></div>
 <p>Intel 平台期望看到 DMAR 与 IOMMU 启用行，AMD 平台期望看到 AMD-Vi 行；<code>/proc/cmdline</code> 应包含 iommu 参数。未开启时回 BIOS 与 GRUB 逐项核对。</p>
 <p>查看分组用下面的脚本，它按分组列出每组内的全部设备：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>cat<span class="w"> </span>&gt;<span class="w"> </span>/tmp/list-iommu.sh<span class="w"> </span><span class="s">&lt;&lt;'EOF'</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>cat<span class="w"> </span>&gt;<span class="w"> </span>/tmp/list-iommu.sh<span class="w"> </span><span class="s">&lt;&lt;&#39;EOF&#39;</span>
 <a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="s">#!/bin/bash</span>
 <a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="s">shopt -s nullglob</span>
 <a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="s">for g in /sys/kernel/iommu_groups/*; do</span>
-<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a><span class="s">  echo "IOMMU Group ${g##*/}:"</span>
+<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a><span class="s">  echo &quot;IOMMU Group ${g##*/}:&quot;</span>
 <a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a><span class="s">  for d in ${g}/devices/*; do</span>
-<a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a><span class="s">    echo -e "  $(lspci -nns ${d##*/})"</span>
+<a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a><span class="s">    echo -e &quot;  $(lspci -nns ${d##*/})&quot;</span>
 <a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a><span class="s">  done</span>
 <a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a><span class="s">done</span>
 <a id="__codelineno-5-10" name="__codelineno-5-10" href="#__codelineno-5-10"></a><span class="s">EOF</span>
@@ -5389,20 +5389,20 @@
 </code></pre></div>
 <p>方括号内的十六进制组合就是 ID，厂商号在前、设备号在后。直通整组时每个功能的 ID 都要列全，包括音频功能。备份并写 VFIO 配置：</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>sudo<span class="w"> </span>cp<span class="w"> </span>-a<span class="w"> </span>/etc/modprobe.d<span class="w"> </span>/root/modprobe.d.bak-<span class="k">$(</span>date<span class="w"> </span>+%F<span class="k">)</span>
-<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>sudo<span class="w"> </span>cp<span class="w"> </span>/etc/initramfs-tools/modules<span class="w"> </span>/etc/initramfs-tools/modules.bak-<span class="k">$(</span>date<span class="w"> </span>+%F<span class="k">)</span><span class="w"> </span><span class="m">2</span>&gt;/dev/null<span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="s2">"modules 文件不存在，跳过该项备份"</span>
-<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>cat<span class="w"> </span>&gt;<span class="w"> </span>/tmp/vfio-conf.sh<span class="w"> </span><span class="s">&lt;&lt;'EOF'</span>
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>sudo<span class="w"> </span>cp<span class="w"> </span>/etc/initramfs-tools/modules<span class="w"> </span>/etc/initramfs-tools/modules.bak-<span class="k">$(</span>date<span class="w"> </span>+%F<span class="k">)</span><span class="w"> </span><span class="m">2</span>&gt;/dev/null<span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;modules 文件不存在，跳过该项备份&quot;</span>
+<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>cat<span class="w"> </span>&gt;<span class="w"> </span>/tmp/vfio-conf.sh<span class="w"> </span><span class="s">&lt;&lt;&#39;EOF&#39;</span>
 <a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a><span class="s">#!/bin/bash</span>
-<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a><span class="s">echo "options vfio-pci ids=厂商号:设备号,厂商号:音频设备号" | sudo tee /etc/modprobe.d/vfio.conf</span>
-<a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a><span class="s">echo "softdep nvidia pre: vfio-pci" | sudo tee -a /etc/modprobe.d/vfio.conf</span>
+<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a><span class="s">echo &quot;options vfio-pci ids=厂商号:设备号,厂商号:音频设备号&quot; | sudo tee /etc/modprobe.d/vfio.conf</span>
+<a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a><span class="s">echo &quot;softdep nvidia pre: vfio-pci&quot; | sudo tee -a /etc/modprobe.d/vfio.conf</span>
 <a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a><span class="s">cat /etc/modprobe.d/vfio.conf</span>
 <a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a><span class="s">EOF</span>
 <a id="__codelineno-7-9" name="__codelineno-7-9" href="#__codelineno-7-9"></a>bash<span class="w"> </span>/tmp/vfio-conf.sh
 </code></pre></div>
 <p>上面脚本中的中文占位必须替换为真实 ID 后再执行，软依赖一行仅在宿主机同时装有对应原生驱动时按需保留，目的是让 vfio-pci 在原生驱动之前抢先绑定设备。随后把 VFIO 模块写入 initramfs 并重建：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>cat<span class="w"> </span>&gt;<span class="w"> </span>/tmp/vfio-modules.sh<span class="w"> </span><span class="s">&lt;&lt;'EOF'</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>cat<span class="w"> </span>&gt;<span class="w"> </span>/tmp/vfio-modules.sh<span class="w"> </span><span class="s">&lt;&lt;&#39;EOF&#39;</span>
 <a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="s">#!/bin/bash</span>
 <a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="s">for m in vfio vfio_iommu_type1 vfio_pci vfio_virqfd; do</span>
-<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a><span class="s">  grep -qx "$m" /etc/initramfs-tools/modules || echo "$m" | sudo tee -a /etc/initramfs-tools/modules</span>
+<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a><span class="s">  grep -qx &quot;$m&quot; /etc/initramfs-tools/modules || echo &quot;$m&quot; | sudo tee -a /etc/initramfs-tools/modules</span>
 <a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a><span class="s">done</span>
 <a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a><span class="s">cat /etc/initramfs-tools/modules</span>
 <a id="__codelineno-8-7" name="__codelineno-8-7" href="#__codelineno-8-7"></a><span class="s">EOF</span>
@@ -5424,14 +5424,14 @@
 <a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a>virsh<span class="w"> </span>edit<span class="w"> </span>ubuntu-guest-01
 </code></pre></div>
 <p>在 <code>devices</code> 段内加入 hostdev 片段。显卡显示功能示例（地址与 ID 替换为真实值）：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="nt">&lt;hostdev</span><span class="w"> </span><span class="na">mode=</span><span class="s">'subsystem'</span><span class="w"> </span><span class="na">type=</span><span class="s">'pci'</span><span class="w"> </span><span class="na">managed=</span><span class="s">'yes'</span><span class="nt">&gt;</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="nt">&lt;hostdev</span><span class="w"> </span><span class="na">mode=</span><span class="s">&#39;subsystem&#39;</span><span class="w"> </span><span class="na">type=</span><span class="s">&#39;pci&#39;</span><span class="w"> </span><span class="na">managed=</span><span class="s">&#39;yes&#39;</span><span class="nt">&gt;</span>
 <a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a><span class="w">  </span><span class="nt">&lt;source&gt;</span>
-<a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a><span class="w">    </span><span class="nt">&lt;address</span><span class="w"> </span><span class="na">domain=</span><span class="s">'0x0000'</span><span class="w"> </span><span class="na">bus=</span><span class="s">'0x03'</span><span class="w"> </span><span class="na">slot=</span><span class="s">'0x00'</span><span class="w"> </span><span class="na">function=</span><span class="s">'0x0'</span><span class="nt">/&gt;</span>
+<a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a><span class="w">    </span><span class="nt">&lt;address</span><span class="w"> </span><span class="na">domain=</span><span class="s">&#39;0x0000&#39;</span><span class="w"> </span><span class="na">bus=</span><span class="s">&#39;0x03&#39;</span><span class="w"> </span><span class="na">slot=</span><span class="s">&#39;0x00&#39;</span><span class="w"> </span><span class="na">function=</span><span class="s">&#39;0x0&#39;</span><span class="nt">/&gt;</span>
 <a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a><span class="w">  </span><span class="nt">&lt;/source&gt;</span>
 <a id="__codelineno-11-5" name="__codelineno-11-5" href="#__codelineno-11-5"></a><span class="nt">&lt;/hostdev&gt;</span>
-<a id="__codelineno-11-6" name="__codelineno-11-6" href="#__codelineno-11-6"></a><span class="nt">&lt;hostdev</span><span class="w"> </span><span class="na">mode=</span><span class="s">'subsystem'</span><span class="w"> </span><span class="na">type=</span><span class="s">'pci'</span><span class="w"> </span><span class="na">managed=</span><span class="s">'yes'</span><span class="nt">&gt;</span>
+<a id="__codelineno-11-6" name="__codelineno-11-6" href="#__codelineno-11-6"></a><span class="nt">&lt;hostdev</span><span class="w"> </span><span class="na">mode=</span><span class="s">&#39;subsystem&#39;</span><span class="w"> </span><span class="na">type=</span><span class="s">&#39;pci&#39;</span><span class="w"> </span><span class="na">managed=</span><span class="s">&#39;yes&#39;</span><span class="nt">&gt;</span>
 <a id="__codelineno-11-7" name="__codelineno-11-7" href="#__codelineno-11-7"></a><span class="w">  </span><span class="nt">&lt;source&gt;</span>
-<a id="__codelineno-11-8" name="__codelineno-11-8" href="#__codelineno-11-8"></a><span class="w">    </span><span class="nt">&lt;address</span><span class="w"> </span><span class="na">domain=</span><span class="s">'0x0000'</span><span class="w"> </span><span class="na">bus=</span><span class="s">'0x03'</span><span class="w"> </span><span class="na">slot=</span><span class="s">'0x00'</span><span class="w"> </span><span class="na">function=</span><span class="s">'0x1'</span><span class="nt">/&gt;</span>
+<a id="__codelineno-11-8" name="__codelineno-11-8" href="#__codelineno-11-8"></a><span class="w">    </span><span class="nt">&lt;address</span><span class="w"> </span><span class="na">domain=</span><span class="s">&#39;0x0000&#39;</span><span class="w"> </span><span class="na">bus=</span><span class="s">&#39;0x03&#39;</span><span class="w"> </span><span class="na">slot=</span><span class="s">&#39;0x00&#39;</span><span class="w"> </span><span class="na">function=</span><span class="s">&#39;0x1&#39;</span><span class="nt">/&gt;</span>
 <a id="__codelineno-11-9" name="__codelineno-11-9" href="#__codelineno-11-9"></a><span class="w">  </span><span class="nt">&lt;/source&gt;</span>
 <a id="__codelineno-11-10" name="__codelineno-11-10" href="#__codelineno-11-10"></a><span class="nt">&lt;/hostdev&gt;</span>
 </code></pre></div>
@@ -5467,7 +5467,7 @@
 <a id="__codelineno-16-5" name="__codelineno-16-5" href="#__codelineno-16-5"></a>
 <a id="__codelineno-16-6" name="__codelineno-16-6" href="#__codelineno-16-6"></a><span class="k">[Service]</span>
 <a id="__codelineno-16-7" name="__codelineno-16-7" href="#__codelineno-16-7"></a><span class="na">Type</span><span class="o">=</span><span class="s">oneshot</span>
-<a id="__codelineno-16-8" name="__codelineno-16-8" href="#__codelineno-16-8"></a><span class="na">ExecStart</span><span class="o">=</span><span class="s">/bin/bash -c 'echo 4 &gt; /sys/class/net/enp3s0f0/device/sriov_numvfs'</span>
+<a id="__codelineno-16-8" name="__codelineno-16-8" href="#__codelineno-16-8"></a><span class="na">ExecStart</span><span class="o">=</span><span class="s">/bin/bash -c &#39;echo 4 &gt; /sys/class/net/enp3s0f0/device/sriov_numvfs&#39;</span>
 <a id="__codelineno-16-9" name="__codelineno-16-9" href="#__codelineno-16-9"></a><span class="na">RemainAfterExit</span><span class="o">=</span><span class="s">yes</span>
 <a id="__codelineno-16-10" name="__codelineno-16-10" href="#__codelineno-16-10"></a>
 <a id="__codelineno-16-11" name="__codelineno-16-11" href="#__codelineno-16-11"></a><span class="k">[Install]</span>
@@ -5482,7 +5482,7 @@
 <h2 id="_4">四、效果验证与测试<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h2>
 <p>宿主机侧验证清单：</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a>cat<span class="w"> </span>/proc/cmdline
-<a id="__codelineno-18-2" name="__codelineno-18-2" href="#__codelineno-18-2"></a>dmesg<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-i<span class="w"> </span>-E<span class="w"> </span><span class="s2">"iommu|AMD-Vi|DMAR"</span>
+<a id="__codelineno-18-2" name="__codelineno-18-2" href="#__codelineno-18-2"></a>dmesg<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-i<span class="w"> </span>-E<span class="w"> </span><span class="s2">&quot;iommu|AMD-Vi|DMAR&quot;</span>
 <a id="__codelineno-18-3" name="__codelineno-18-3" href="#__codelineno-18-3"></a>lspci<span class="w"> </span>-nnk<span class="w"> </span>-s<span class="w"> </span><span class="m">03</span>:00
 <a id="__codelineno-18-4" name="__codelineno-18-4" href="#__codelineno-18-4"></a>virsh<span class="w"> </span>nodedev-list<span class="w"> </span>--tree
 <a id="__codelineno-18-5" name="__codelineno-18-5" href="#__codelineno-18-5"></a>cat<span class="w"> </span>/sys/class/net/enp3s0f0/device/sriov_numvfs

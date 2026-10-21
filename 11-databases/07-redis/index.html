@@ -5213,8 +5213,8 @@
 <p>改完重启并验证密码生效：</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>sudo<span class="w"> </span>systemctl<span class="w"> </span>restart<span class="w"> </span>redis-server
 <a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>redis-cli<span class="w"> </span>ping
-<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>redis-cli<span class="w"> </span>-a<span class="w"> </span><span class="s1">'&lt;password&gt;'</span><span class="w"> </span>ping
-<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>redis-cli<span class="w"> </span>-a<span class="w"> </span><span class="s1">'&lt;password&gt;'</span><span class="w"> </span>CONFIG<span class="w"> </span>GET<span class="w"> </span>requirepass
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>redis-cli<span class="w"> </span>-a<span class="w"> </span><span class="s1">&#39;&lt;password&gt;&#39;</span><span class="w"> </span>ping
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>redis-cli<span class="w"> </span>-a<span class="w"> </span><span class="s1">&#39;&lt;password&gt;&#39;</span><span class="w"> </span>CONFIG<span class="w"> </span>GET<span class="w"> </span>requirepass
 </code></pre></div>
 <p>未带密码的 <code>ping</code> 应返回 <code>(error) NOAUTH Authentication required.</code>，带密码返回 <code>PONG</code>，这才是期望结果。</p>
 <div class="admonition warning">
@@ -5264,7 +5264,7 @@
 <a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="na">save 60 10000</span>
 <a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="na">dbfilename dump.rdb</span>
 <a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a><span class="na">appendonly yes</span>
-<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a><span class="na">appendfilename "appendonly.aof"</span>
+<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a><span class="na">appendfilename &quot;appendonly.aof&quot;</span>
 <a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a><span class="na">appendfsync everysec</span>
 <a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a><span class="na">no-appendfsync-on-rewrite no</span>
 <a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a><span class="na">auto-aof-rewrite-percentage 100</span>
@@ -5272,9 +5272,9 @@
 </code></pre></div>
 <p><code>save</code> 三行含义：900 秒内至少 1 次写入、300 秒内至少 10 次写入、60 秒内至少 10000 次写入，任一满足即触发快照。<code>appendfsync</code> 三种策略取舍：<code>always</code> 每条命令都刷盘，最安全但性能损失明显；<code>everysec</code> 每秒刷盘，最多丢约 1 秒数据，生产首选；<code>no</code> 交给操作系统决定，速度最快但宕机可能丢数十秒数据。<code>auto-aof-rewrite-percentage 100</code> 表示 AOF 文件比上次重写后增大 100% 且超过 64 MB 时自动重写控体积。</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>sudo<span class="w"> </span>systemctl<span class="w"> </span>restart<span class="w"> </span>redis-server
-<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>redis-cli<span class="w"> </span>-a<span class="w"> </span><span class="s1">'&lt;password&gt;'</span><span class="w"> </span>INFO<span class="w"> </span>persistence
-<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>redis-cli<span class="w"> </span>-a<span class="w"> </span><span class="s1">'&lt;password&gt;'</span><span class="w"> </span>SET<span class="w"> </span>persist_test<span class="w"> </span>ok
-<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a>redis-cli<span class="w"> </span>-a<span class="w"> </span><span class="s1">'&lt;password&gt;'</span><span class="w"> </span>BGSAVE
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>redis-cli<span class="w"> </span>-a<span class="w"> </span><span class="s1">&#39;&lt;password&gt;&#39;</span><span class="w"> </span>INFO<span class="w"> </span>persistence
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>redis-cli<span class="w"> </span>-a<span class="w"> </span><span class="s1">&#39;&lt;password&gt;&#39;</span><span class="w"> </span>SET<span class="w"> </span>persist_test<span class="w"> </span>ok
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a>redis-cli<span class="w"> </span>-a<span class="w"> </span><span class="s1">&#39;&lt;password&gt;&#39;</span><span class="w"> </span>BGSAVE
 <a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a>ls<span class="w"> </span>-lh<span class="w"> </span>/var/lib/redis/
 </code></pre></div>
 <h3 id="34">3.4 主从复制配置<a class="headerlink" href="#34" title="Permanent link">&para;</a></h3>
@@ -5295,8 +5295,8 @@
 <a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a><span class="na">replica-read-only yes</span>
 </code></pre></div>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>sudo<span class="w"> </span>systemctl<span class="w"> </span>restart<span class="w"> </span>redis-server
-<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a>redis-cli<span class="w"> </span>-a<span class="w"> </span><span class="s1">'&lt;password&gt;'</span><span class="w"> </span>INFO<span class="w"> </span>replication
-<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a>redis-cli<span class="w"> </span>-h<span class="w"> </span><span class="m">192</span>.0.2.11<span class="w"> </span>-a<span class="w"> </span><span class="s1">'&lt;password&gt;'</span><span class="w"> </span>INFO<span class="w"> </span>replication
+<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a>redis-cli<span class="w"> </span>-a<span class="w"> </span><span class="s1">&#39;&lt;password&gt;&#39;</span><span class="w"> </span>INFO<span class="w"> </span>replication
+<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a>redis-cli<span class="w"> </span>-h<span class="w"> </span><span class="m">192</span>.0.2.11<span class="w"> </span>-a<span class="w"> </span><span class="s1">&#39;&lt;password&gt;&#39;</span><span class="w"> </span>INFO<span class="w"> </span>replication
 </code></pre></div>
 <p>也可以不改文件、运行时指定（重启失效，仅用于临时演练）：<code>redis-cli -a '&lt;password&gt;' REPLICAOF 192.0.2.11 6379</code>。</p>
 <h3 id="35-sentinel-3">3.5 Sentinel 哨兵高可用（3 节点）<a class="headerlink" href="#35-sentinel-3" title="Permanent link">&para;</a></h3>
@@ -5344,22 +5344,22 @@
 </div>
 <h2 id="_4">四、效果验证与测试<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h2>
 <p>单机与持久化验证：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a>redis-cli<span class="w"> </span>-a<span class="w"> </span><span class="s1">'&lt;password&gt;'</span><span class="w"> </span>INFO<span class="w"> </span>server
-<a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a>redis-cli<span class="w"> </span>-a<span class="w"> </span><span class="s1">'&lt;password&gt;'</span><span class="w"> </span>INFO<span class="w"> </span>persistence
-<a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a>redis-cli<span class="w"> </span>-a<span class="w"> </span><span class="s1">'&lt;password&gt;'</span><span class="w"> </span>SET<span class="w"> </span>verify_key<span class="w"> </span>hello
+<div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a>redis-cli<span class="w"> </span>-a<span class="w"> </span><span class="s1">&#39;&lt;password&gt;&#39;</span><span class="w"> </span>INFO<span class="w"> </span>server
+<a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a>redis-cli<span class="w"> </span>-a<span class="w"> </span><span class="s1">&#39;&lt;password&gt;&#39;</span><span class="w"> </span>INFO<span class="w"> </span>persistence
+<a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a>redis-cli<span class="w"> </span>-a<span class="w"> </span><span class="s1">&#39;&lt;password&gt;&#39;</span><span class="w"> </span>SET<span class="w"> </span>verify_key<span class="w"> </span>hello
 <a id="__codelineno-14-4" name="__codelineno-14-4" href="#__codelineno-14-4"></a>sudo<span class="w"> </span>systemctl<span class="w"> </span>restart<span class="w"> </span>redis-server
-<a id="__codelineno-14-5" name="__codelineno-14-5" href="#__codelineno-14-5"></a>redis-cli<span class="w"> </span>-a<span class="w"> </span><span class="s1">'&lt;password&gt;'</span><span class="w"> </span>GET<span class="w"> </span>verify_key
+<a id="__codelineno-14-5" name="__codelineno-14-5" href="#__codelineno-14-5"></a>redis-cli<span class="w"> </span>-a<span class="w"> </span><span class="s1">&#39;&lt;password&gt;&#39;</span><span class="w"> </span>GET<span class="w"> </span>verify_key
 </code></pre></div>
 <p>重启后 <code>GET verify_key</code> 仍返回 <code>hello</code>，证明持久化有效。</p>
 <p>主从验证：主库 <code>INFO replication</code> 期望包含 <code>role:master</code> 与 <code>connected_slaves:1</code>；从库期望包含 <code>role:slave</code>、<code>master_link_status:up</code>、<code>master_last_io_seconds_ago</code> 为个位数：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a>redis-cli<span class="w"> </span>-h<span class="w"> </span><span class="m">192</span>.0.2.11<span class="w"> </span>-a<span class="w"> </span><span class="s1">'&lt;password&gt;'</span><span class="w"> </span>INFO<span class="w"> </span>replication
-<a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a>redis-cli<span class="w"> </span>-h<span class="w"> </span><span class="m">192</span>.0.2.12<span class="w"> </span>-a<span class="w"> </span><span class="s1">'&lt;password&gt;'</span><span class="w"> </span>INFO<span class="w"> </span>replication
-<a id="__codelineno-15-3" name="__codelineno-15-3" href="#__codelineno-15-3"></a>redis-cli<span class="w"> </span>-h<span class="w"> </span><span class="m">192</span>.0.2.11<span class="w"> </span>-a<span class="w"> </span><span class="s1">'&lt;password&gt;'</span><span class="w"> </span>SET<span class="w"> </span>repl_test<span class="w"> </span>ok
-<a id="__codelineno-15-4" name="__codelineno-15-4" href="#__codelineno-15-4"></a>redis-cli<span class="w"> </span>-h<span class="w"> </span><span class="m">192</span>.0.2.12<span class="w"> </span>-a<span class="w"> </span><span class="s1">'&lt;password&gt;'</span><span class="w"> </span>GET<span class="w"> </span>repl_test
+<div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a>redis-cli<span class="w"> </span>-h<span class="w"> </span><span class="m">192</span>.0.2.11<span class="w"> </span>-a<span class="w"> </span><span class="s1">&#39;&lt;password&gt;&#39;</span><span class="w"> </span>INFO<span class="w"> </span>replication
+<a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a>redis-cli<span class="w"> </span>-h<span class="w"> </span><span class="m">192</span>.0.2.12<span class="w"> </span>-a<span class="w"> </span><span class="s1">&#39;&lt;password&gt;&#39;</span><span class="w"> </span>INFO<span class="w"> </span>replication
+<a id="__codelineno-15-3" name="__codelineno-15-3" href="#__codelineno-15-3"></a>redis-cli<span class="w"> </span>-h<span class="w"> </span><span class="m">192</span>.0.2.11<span class="w"> </span>-a<span class="w"> </span><span class="s1">&#39;&lt;password&gt;&#39;</span><span class="w"> </span>SET<span class="w"> </span>repl_test<span class="w"> </span>ok
+<a id="__codelineno-15-4" name="__codelineno-15-4" href="#__codelineno-15-4"></a>redis-cli<span class="w"> </span>-h<span class="w"> </span><span class="m">192</span>.0.2.12<span class="w"> </span>-a<span class="w"> </span><span class="s1">&#39;&lt;password&gt;&#39;</span><span class="w"> </span>GET<span class="w"> </span>repl_test
 </code></pre></div>
 <p>Sentinel 故障切换演练：记录当前主库，在主库上人为停服，观察切换：</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a>redis-cli<span class="w"> </span>-p<span class="w"> </span><span class="m">26379</span><span class="w"> </span>SENTINEL<span class="w"> </span>master<span class="w"> </span>mymaster
-<a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a>redis-cli<span class="w"> </span>-h<span class="w"> </span><span class="m">192</span>.0.2.11<span class="w"> </span>-a<span class="w"> </span><span class="s1">'&lt;password&gt;'</span><span class="w"> </span>DEBUG<span class="w"> </span>sleep<span class="w"> </span><span class="m">0</span>
+<a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a>redis-cli<span class="w"> </span>-h<span class="w"> </span><span class="m">192</span>.0.2.11<span class="w"> </span>-a<span class="w"> </span><span class="s1">&#39;&lt;password&gt;&#39;</span><span class="w"> </span>DEBUG<span class="w"> </span>sleep<span class="w"> </span><span class="m">0</span>
 <a id="__codelineno-16-3" name="__codelineno-16-3" href="#__codelineno-16-3"></a>sudo<span class="w"> </span>systemctl<span class="w"> </span>stop<span class="w"> </span>redis-server
 <a id="__codelineno-16-4" name="__codelineno-16-4" href="#__codelineno-16-4"></a>redis-cli<span class="w"> </span>-p<span class="w"> </span><span class="m">26379</span><span class="w"> </span>SENTINEL<span class="w"> </span>master<span class="w"> </span>mymaster
 <a id="__codelineno-16-5" name="__codelineno-16-5" href="#__codelineno-16-5"></a>redis-cli<span class="w"> </span>-p<span class="w"> </span><span class="m">26379</span><span class="w"> </span>SENTINEL<span class="w"> </span>replicas<span class="w"> </span>mymaster
@@ -5367,14 +5367,14 @@
 </code></pre></div>
 <p>演练不要用 <code>DEBUG sleep</code> 做长时间阻塞测试，此处仅示意记录命令；正式演练直接停服即可。期望在 <code>down-after-milliseconds</code> 加选举时间内，<code>SENTINEL master</code> 显示的新主变为原从库地址，日志出现 <code>+switch-master</code>。恢复旧主后它会自动以从库身份加入：</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a>sudo<span class="w"> </span>systemctl<span class="w"> </span>start<span class="w"> </span>redis-server
-<a id="__codelineno-17-2" name="__codelineno-17-2" href="#__codelineno-17-2"></a>redis-cli<span class="w"> </span>-h<span class="w"> </span><span class="m">192</span>.0.2.11<span class="w"> </span>-a<span class="w"> </span><span class="s1">'&lt;password&gt;'</span><span class="w"> </span>INFO<span class="w"> </span>replication
+<a id="__codelineno-17-2" name="__codelineno-17-2" href="#__codelineno-17-2"></a>redis-cli<span class="w"> </span>-h<span class="w"> </span><span class="m">192</span>.0.2.11<span class="w"> </span>-a<span class="w"> </span><span class="s1">&#39;&lt;password&gt;&#39;</span><span class="w"> </span>INFO<span class="w"> </span>replication
 </code></pre></div>
 <p>旧主的 <code>role</code> 应为 <code>slave</code>。</p>
 <h2 id="_5">五、常见错误与排坑指南<a class="headerlink" href="#_5" title="Permanent link">&para;</a></h2>
 <p>场景一：从库连不上主库。<code>INFO replication</code> 显示 <code>master_link_status:down</code>，日志报错原文片段：<code>Unable to connect to MASTER: Connection refused</code> 或 <code>Master has disconnected</code>。原因：主库 <code>bind</code> 未包含内网地址、防火墙未放行、或 <code>masterauth</code> 与主库 <code>requirepass</code> 不一致。修复：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a>sudo<span class="w"> </span>grep<span class="w"> </span>-E<span class="w"> </span><span class="s2">"^bind|^requirepass|^masterauth"</span><span class="w"> </span>/etc/redis/redis.conf
+<div class="highlight"><pre><span></span><code><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a>sudo<span class="w"> </span>grep<span class="w"> </span>-E<span class="w"> </span><span class="s2">&quot;^bind|^requirepass|^masterauth&quot;</span><span class="w"> </span>/etc/redis/redis.conf
 <a id="__codelineno-18-2" name="__codelineno-18-2" href="#__codelineno-18-2"></a>sudo<span class="w"> </span>ufw<span class="w"> </span>allow<span class="w"> </span>from<span class="w"> </span><span class="m">192</span>.0.2.12<span class="w"> </span>to<span class="w"> </span>any<span class="w"> </span>port<span class="w"> </span><span class="m">6379</span><span class="w"> </span>proto<span class="w"> </span>tcp
-<a id="__codelineno-18-3" name="__codelineno-18-3" href="#__codelineno-18-3"></a>redis-cli<span class="w"> </span>-h<span class="w"> </span><span class="m">192</span>.0.2.11<span class="w"> </span>-a<span class="w"> </span><span class="s1">'&lt;password&gt;'</span><span class="w"> </span>ping
+<a id="__codelineno-18-3" name="__codelineno-18-3" href="#__codelineno-18-3"></a>redis-cli<span class="w"> </span>-h<span class="w"> </span><span class="m">192</span>.0.2.11<span class="w"> </span>-a<span class="w"> </span><span class="s1">&#39;&lt;password&gt;&#39;</span><span class="w"> </span>ping
 </code></pre></div>
 <p>场景二：改完密码客户端全断。报错原文片段：<code>(error) NOAUTH Authentication required.</code> 与 <code>(error) WRONGPASS invalid username-password pair</code>。原因：只改了服务端 <code>requirepass</code>，应用与 Sentinel 的 <code>auth-pass</code> 未同步。修复：统一更新应用连接串、从库 <code>masterauth</code> 与三台 Sentinel 的 <code>sentinel auth-pass</code> 后逐台重启。</p>
 <p>场景三：AOF 文件损坏启动失败。日志报错原文片段：<code>Bad file format reading the append only file</code>。原因：宕机时 AOF 尾部写入不完整。修复：先备份原文件，再用官方修复工具截断到最后一条完整命令（会丢失尾部少量数据，需评估）：</p>
@@ -5385,12 +5385,12 @@
 <p>新版 Redis 使用多部分 AOF 目录 <code>appendonlydir</code> 时，对目录内的 manifest 与 incr 文件执行同样的检查流程，以当前版本官方文档为准。</p>
 <h2 id="_6">六、生产环境最佳实践与安全建议<a class="headerlink" href="#_6" title="Permanent link">&para;</a></h2>
 <p>安全：密码用密码管理系统下发并定期轮换；禁用或重命名高危命令时用 ACL 替代粗暴改名，为应用创建专用 ACL 用户只给所需命令与键前缀权限：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-20-1" name="__codelineno-20-1" href="#__codelineno-20-1"></a>redis-cli<span class="w"> </span>-a<span class="w"> </span><span class="s1">'&lt;password&gt;'</span><span class="w"> </span>ACL<span class="w"> </span>SETUSER<span class="w"> </span>appuser<span class="w"> </span>on<span class="w"> </span><span class="s1">'&gt;&lt;password&gt;'</span><span class="w"> </span>~app:*<span class="w"> </span>+get<span class="w"> </span>+set<span class="w"> </span>+del
-<a id="__codelineno-20-2" name="__codelineno-20-2" href="#__codelineno-20-2"></a>redis-cli<span class="w"> </span>-a<span class="w"> </span><span class="s1">'&lt;password&gt;'</span><span class="w"> </span>ACL<span class="w"> </span>LIST
+<div class="highlight"><pre><span></span><code><a id="__codelineno-20-1" name="__codelineno-20-1" href="#__codelineno-20-1"></a>redis-cli<span class="w"> </span>-a<span class="w"> </span><span class="s1">&#39;&lt;password&gt;&#39;</span><span class="w"> </span>ACL<span class="w"> </span>SETUSER<span class="w"> </span>appuser<span class="w"> </span>on<span class="w"> </span><span class="s1">&#39;&gt;&lt;password&gt;&#39;</span><span class="w"> </span>~app:*<span class="w"> </span>+get<span class="w"> </span>+set<span class="w"> </span>+del
+<a id="__codelineno-20-2" name="__codelineno-20-2" href="#__codelineno-20-2"></a>redis-cli<span class="w"> </span>-a<span class="w"> </span><span class="s1">&#39;&lt;password&gt;&#39;</span><span class="w"> </span>ACL<span class="w"> </span>LIST
 </code></pre></div>
 <p>容量：设置 <code>maxmemory</code> 并选明确淘汰策略，如缓存场景用 <code>allkeys-lru</code>；开启慢日志 <code>slowlog-log-slower-than 10000</code> 便于定位大键问题。可用性：Sentinel 三节点跨故障域部署，客户端必须使用 Sentinel 模式连接而非写死主库 IP，否则切换后应用仍连旧主。备份：RDB 文件每日同步到独立存储并做一次隔离恢复演练，验证 <code>redis-check-rdb</code> 无错误：</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-21-1" name="__codelineno-21-1" href="#__codelineno-21-1"></a>sudo<span class="w"> </span>redis-check-rdb<span class="w"> </span>/var/lib/redis/dump.rdb
-<a id="__codelineno-21-2" name="__codelineno-21-2" href="#__codelineno-21-2"></a>redis-cli<span class="w"> </span>-a<span class="w"> </span><span class="s1">'&lt;password&gt;'</span><span class="w"> </span>INFO<span class="w"> </span>stats
+<a id="__codelineno-21-2" name="__codelineno-21-2" href="#__codelineno-21-2"></a>redis-cli<span class="w"> </span>-a<span class="w"> </span><span class="s1">&#39;&lt;password&gt;&#39;</span><span class="w"> </span>INFO<span class="w"> </span>stats
 </code></pre></div>
 
 

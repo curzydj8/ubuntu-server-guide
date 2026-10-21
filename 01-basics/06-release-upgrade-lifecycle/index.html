@@ -5395,7 +5395,7 @@
 <p>升级器是否提示新版本、提示哪一类版本，由 /etc/update-manager/release-upgrades 中的 Prompt 参数决定。</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>sudo<span class="w"> </span>cp<span class="w"> </span>/etc/update-manager/release-upgrades<span class="w"> </span>/root/backup-20261021/release-upgrades.bak
 <a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>cat<span class="w"> </span>/etc/update-manager/release-upgrades
-<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>grep<span class="w"> </span><span class="s2">"^Prompt"</span><span class="w"> </span>/etc/update-manager/release-upgrades
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>grep<span class="w"> </span><span class="s2">&quot;^Prompt&quot;</span><span class="w"> </span>/etc/update-manager/release-upgrades
 </code></pre></div>
 <p>Prompt 三种取值的含义如下表。</p>
 <table>
@@ -5427,7 +5427,7 @@
 <p><code>Prompt=lts</code> 意味着两件事：你不会被普通版发布打扰，系统只沿 LTS 到 LTS 的路线走；且 LTS 间升级通道通常在目标 LTS 第一个小版本发布后才开放，所以新 LTS 刚发布的那几个月里检查显示没有新版本是正常现象，不是故障。切忌为了早几天升上去就把 Prompt 改成 normal，那会把机器带进普通版的短支持周期。本节只确认该值为 lts，若发现是 never 或 normal，先备份留档，再改回 lts 并记录原因。</p>
 <h3 id="33-d">3.3 检查可用新版本与 -d 参数警告<a class="headerlink" href="#33-d" title="Permanent link">&para;</a></h3>
 <p>确认通道后用只检查模式预演，它只报告有没有可用升级，不会真正动手。</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>sudo<span class="w"> </span>do-release-upgrade<span class="w"> </span>--check-dist-upgrade-only
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>sudo<span class="w"> </span><span class="k">do</span>-release-upgrade<span class="w"> </span>--check-dist-upgrade-only
 </code></pre></div>
 <p>若有可用升级，命令会报出目标版本；若没有，会显示没有找到新版本。后者出现时按顺序排查：当前版本是否已更新到最新、Prompt 是否为 lts、目标 LTS 第一个小版本是否已发布。三项都正常仍无提示时，耐心等待官方开放通道，不要用开发版参数强行绕过。</p>
 <div class="admonition warning">
@@ -5437,7 +5437,7 @@
 <h3 id="34">3.4 正式执行发行版升级<a class="headerlink" href="#34" title="Permanent link">&para;</a></h3>
 <p>正式升级建议在本地控制台或带外通道执行；只能用 SSH 时，先确认云平台提供串口控制台或救援模式，并把会话放进 tmux，避免本地网络抖动杀死升级进程。</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>tmux<span class="w"> </span>new<span class="w"> </span>-s<span class="w"> </span>upgrade
-<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>sudo<span class="w"> </span>do-release-upgrade
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>sudo<span class="w"> </span><span class="k">do</span>-release-upgrade
 </code></pre></div>
 <p>升级器启动后会依次：校验签名并做依赖计算，给出安装、升级和移除清单（移除清单里不能出现业务关键软件，必须认真看）；自动禁用第三方源和 PPA（见 3.5 节）；询问是否开始，确认后进入下载替换阶段，此阶段不要中断、不要另开终端执行 apt；遇到配置冲突时逐个询问，业务改过的选保留，没碰过的可选新版本，不确定时先保留并记下文件名待升级后合并；最后提示移除过时包并要求重启，重启后才真正运行在新版本上。升级中保持供电和网络稳定，时长几十分钟到数小时都属正常，不要急于强制中断。</p>
 <h3 id="35-ppa">3.5 第三方源与 PPA：为什么被禁用，升级后如何恢复<a class="headerlink" href="#35-ppa" title="Permanent link">&para;</a></h3>
@@ -5445,7 +5445,7 @@
 <p>第一，为什么自动禁用。第三方源的包是针对旧代号编译的，例如为 jammy 构建的包依赖旧版基础库，让它们参与新版本依赖计算极易冲突甚至算不出方案，因此升级器把 /etc/apt/sources.list.d/ 下的第三方条目禁用，只用官方源先升系统本体。</p>
 <p>第二，在哪里看被禁用的条目。</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>ls<span class="w"> </span>-l<span class="w"> </span>/etc/apt/sources.list.d/
-<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>grep<span class="w"> </span>-r<span class="w"> </span><span class="s2">"disabled on upgrade"</span><span class="w"> </span>/etc/apt/sources.list.d/
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>grep<span class="w"> </span>-r<span class="w"> </span><span class="s2">&quot;disabled on upgrade&quot;</span><span class="w"> </span>/etc/apt/sources.list.d/
 <a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>cat<span class="w"> </span>/etc/apt/sources.list
 </code></pre></div>
 <p>带 disabled on upgrade 注释或被改名的文件就是升级器动过的条目。先把清单抄进运维记录，再逐个处理，不要一条命令全部启用。</p>
@@ -5461,7 +5461,7 @@
 <a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a>sudo<span class="w"> </span>apt<span class="w"> </span>install<span class="w"> </span>--fix-broken<span class="w"> </span>-y
 <a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a>sudo<span class="w"> </span>apt<span class="w"> </span>update
 <a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a>sudo<span class="w"> </span>apt<span class="w"> </span>full-upgrade<span class="w"> </span>-y
-<a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a>sudo<span class="w"> </span>do-release-upgrade<span class="w"> </span>--check-dist-upgrade-only
+<a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a>sudo<span class="w"> </span><span class="k">do</span>-release-upgrade<span class="w"> </span>--check-dist-upgrade-only
 </code></pre></div>
 <p>逐条说明：<code>dpkg --configure -a</code> 配置所有已解压未配置的包，<code>apt install --fix-broken</code> 修复破损依赖，随后刷新索引并完整更新，把系统先拉回自洽状态，最后重新检查升级是否可继续。处置过程每一步的报错原文都要保存，它是判断续修还是恢复快照的关键证据。</p>
 <h3 id="37">3.7 认清边界：发行版升级没有官方回滚机制<a class="headerlink" href="#37" title="Permanent link">&para;</a></h3>
@@ -5550,7 +5550,7 @@
 <p>现象：更新或升级时报错提示 /boot 空间不足、无法安装新内核镜像，或升级后重启仍进入旧内核。根因是 /boot 通常只有几百 MB 到 1 GB，历次内核更新留下的旧镜像和 initramfs 长期累积把分区塞满，新内核没有落脚之地。先确认现状，再让系统按自身保留策略清理旧内核；清理前先确认当前运行的内核版本，绝不能删正在运行的内核。</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a>uname<span class="w"> </span>-r
 <a id="__codelineno-17-2" name="__codelineno-17-2" href="#__codelineno-17-2"></a>df<span class="w"> </span>-h<span class="w"> </span>/boot
-<a id="__codelineno-17-3" name="__codelineno-17-3" href="#__codelineno-17-3"></a>dpkg<span class="w"> </span>-l<span class="w"> </span><span class="s2">"linux-image-*"</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span><span class="s2">"^ii"</span>
+<a id="__codelineno-17-3" name="__codelineno-17-3" href="#__codelineno-17-3"></a>dpkg<span class="w"> </span>-l<span class="w"> </span><span class="s2">&quot;linux-image-*&quot;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span><span class="s2">&quot;^ii&quot;</span>
 <a id="__codelineno-17-4" name="__codelineno-17-4" href="#__codelineno-17-4"></a>sudo<span class="w"> </span>apt<span class="w"> </span>autoremove<span class="w"> </span>-y
 <a id="__codelineno-17-5" name="__codelineno-17-5" href="#__codelineno-17-5"></a>df<span class="w"> </span>-h<span class="w"> </span>/boot
 </code></pre></div>
@@ -5561,7 +5561,7 @@
 <a id="__codelineno-18-2" name="__codelineno-18-2" href="#__codelineno-18-2"></a>sudo<span class="w"> </span>apt<span class="w"> </span>full-upgrade<span class="w"> </span>-y
 <a id="__codelineno-18-3" name="__codelineno-18-3" href="#__codelineno-18-3"></a>apt-mark<span class="w"> </span>showhold
 <a id="__codelineno-18-4" name="__codelineno-18-4" href="#__codelineno-18-4"></a>ls<span class="w"> </span>-l<span class="w"> </span>/etc/apt/sources.list.d/
-<a id="__codelineno-18-5" name="__codelineno-18-5" href="#__codelineno-18-5"></a>sudo<span class="w"> </span>do-release-upgrade<span class="w"> </span>--check-dist-upgrade-only
+<a id="__codelineno-18-5" name="__codelineno-18-5" href="#__codelineno-18-5"></a>sudo<span class="w"> </span><span class="k">do</span>-release-upgrade<span class="w"> </span>--check-dist-upgrade-only
 </code></pre></div>
 <p>若某个第三方软件确实与新版本不兼容，正确决策是先在测试机确认替代方案或卸载该软件再升生产机，而不是用强制参数硬闯。依赖计算失败是升级器在保护系统，绕过保护等于把问题留到升级中途爆发，后果严重得多。</p>
 <h3 id="_8">场景三：升级后服务未自启，系统正常但业务没起来<a class="headerlink" href="#_8" title="Permanent link">&para;</a></h3>

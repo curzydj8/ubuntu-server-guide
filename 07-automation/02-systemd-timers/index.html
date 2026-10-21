@@ -5137,7 +5137,7 @@
 <h2 id="_3">三、手把手操作步骤<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h2>
 <h3 id="31-service">3.1 Service 单元逐行讲解<a class="headerlink" href="#31-service" title="Permanent link">&para;</a></h3>
 <p>先以巡检脚本为例写一个最基础的 Service 单元。系统级单元目录里如已有同名文件，先备份再覆盖：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>sudo<span class="w"> </span>cp<span class="w"> </span>/etc/systemd/system/health-check.service<span class="w"> </span>/etc/systemd/system/health-check.service.bak<span class="w"> </span><span class="m">2</span>&gt;/dev/null<span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="s2">"无旧单元，跳过备份"</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>sudo<span class="w"> </span>cp<span class="w"> </span>/etc/systemd/system/health-check.service<span class="w"> </span>/etc/systemd/system/health-check.service.bak<span class="w"> </span><span class="m">2</span>&gt;/dev/null<span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;无旧单元，跳过备份&quot;</span>
 <a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>sudo<span class="w"> </span>nano<span class="w"> </span>/etc/systemd/system/health-check.service
 </code></pre></div>
 <p>文件完整内容如下：</p>
@@ -5245,7 +5245,7 @@
 </div>
 <h3 id="33-timer-oncalendar">3.3 Timer 单元与 OnCalendar 语法<a class="headerlink" href="#33-timer-oncalendar" title="Permanent link">&para;</a></h3>
 <p>Timer 单元与同名 Service 单元配套，文件名主体必须一致，例如 health-check.timer 对应 health-check.service。创建 Timer 文件：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>sudo<span class="w"> </span>cp<span class="w"> </span>/etc/systemd/system/health-check.timer<span class="w"> </span>/etc/systemd/system/health-check.timer.bak<span class="w"> </span><span class="m">2</span>&gt;/dev/null<span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="s2">"无旧单元，跳过备份"</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>sudo<span class="w"> </span>cp<span class="w"> </span>/etc/systemd/system/health-check.timer<span class="w"> </span>/etc/systemd/system/health-check.timer.bak<span class="w"> </span><span class="m">2</span>&gt;/dev/null<span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;无旧单元，跳过备份&quot;</span>
 <a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>sudo<span class="w"> </span>nano<span class="w"> </span>/etc/systemd/system/health-check.timer
 </code></pre></div>
 <p>完整内容如下，表示每天凌晨两点半执行巡检，带随机延迟和错过补跑：</p>
@@ -5302,8 +5302,8 @@
 </tbody>
 </table>
 <p>写完表达式不要凭感觉，先用工具验证下一次触发时间是否符合预期：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>systemd-analyze<span class="w"> </span>calendar<span class="w"> </span><span class="s2">"*-*-* 02:30:00"</span>
-<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a>systemd-analyze<span class="w"> </span>calendar<span class="w"> </span><span class="s2">"Mon..Fri *-*-* 09:00:00"</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>systemd-analyze<span class="w"> </span>calendar<span class="w"> </span><span class="s2">&quot;*-*-* 02:30:00&quot;</span>
+<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a>systemd-analyze<span class="w"> </span>calendar<span class="w"> </span><span class="s2">&quot;Mon..Fri *-*-* 09:00:00&quot;</span>
 </code></pre></div>
 <p>除了日历触发，还有相对时间触发的写法，例如 OnBootSec=15min 表示开机十五分钟后执行，OnUnitActiveSec=1h 表示上次执行后隔一小时再执行，两者可写在同一个 Timer 里组合使用。启用 Timer 的标准命令如下，注意 enable 的对象是 timer 不是 service：</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>sudo<span class="w"> </span>systemctl<span class="w"> </span>daemon-reload
@@ -5373,7 +5373,7 @@
 <p>服务和定时任务的日志统一用 journalctl 按单元查看，常用命令如下：</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a>journalctl<span class="w"> </span>-u<span class="w"> </span>health-check.service<span class="w"> </span>--no-pager
 <a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a>journalctl<span class="w"> </span>-u<span class="w"> </span>health-check.service<span class="w"> </span>--since<span class="w"> </span>today<span class="w"> </span>--no-pager
-<a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a>journalctl<span class="w"> </span>-u<span class="w"> </span>health-check.service<span class="w"> </span>--since<span class="w"> </span><span class="s2">"2026-10-20 00:00:00"</span><span class="w"> </span>--until<span class="w"> </span><span class="s2">"2026-10-21 00:00:00"</span><span class="w"> </span>--no-pager
+<a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a>journalctl<span class="w"> </span>-u<span class="w"> </span>health-check.service<span class="w"> </span>--since<span class="w"> </span><span class="s2">&quot;2026-10-20 00:00:00&quot;</span><span class="w"> </span>--until<span class="w"> </span><span class="s2">&quot;2026-10-21 00:00:00&quot;</span><span class="w"> </span>--no-pager
 <a id="__codelineno-13-4" name="__codelineno-13-4" href="#__codelineno-13-4"></a>journalctl<span class="w"> </span>-u<span class="w"> </span>health-check.service<span class="w"> </span>-f
 <a id="__codelineno-13-5" name="__codelineno-13-5" href="#__codelineno-13-5"></a>journalctl<span class="w"> </span>-u<span class="w"> </span>health-check.timer<span class="w"> </span>--no-pager
 <a id="__codelineno-13-6" name="__codelineno-13-6" href="#__codelineno-13-6"></a>journalctl<span class="w"> </span>--disk-usage
@@ -5390,7 +5390,7 @@
 <a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a>sudo<span class="w"> </span>systemctl<span class="w"> </span>start<span class="w"> </span>health-check.service
 <a id="__codelineno-15-3" name="__codelineno-15-3" href="#__codelineno-15-3"></a>systemctl<span class="w"> </span>show<span class="w"> </span>health-check.service<span class="w"> </span>-p<span class="w"> </span>ExecMainStatus
 <a id="__codelineno-15-4" name="__codelineno-15-4" href="#__codelineno-15-4"></a>journalctl<span class="w"> </span>-u<span class="w"> </span>health-check.service<span class="w"> </span>-n<span class="w"> </span><span class="m">20</span><span class="w"> </span>--no-pager
-<a id="__codelineno-15-5" name="__codelineno-15-5" href="#__codelineno-15-5"></a>systemd-analyze<span class="w"> </span>calendar<span class="w"> </span><span class="s2">"*-*-* 02:30:00"</span>
+<a id="__codelineno-15-5" name="__codelineno-15-5" href="#__codelineno-15-5"></a>systemd-analyze<span class="w"> </span>calendar<span class="w"> </span><span class="s2">&quot;*-*-* 02:30:00&quot;</span>
 </code></pre></div>
 <p>期望结果：list-timers 输出里 health-check.timer 有明确的 NEXT 下次触发时间和 LAST 上次触发时间；手工 start 后 ExecMainStatus 为 0；日志里能看到巡检脚本的完整输出行；calendar 工具解析出的下一次时间与你预期的凌晨两点半在日期上吻合。再把 Timer 的 OnCalendar 临时改成一分钟后的时间做一次真实触发测试，确认到点自动执行后改回正式时间，不要拿生产时间表赌运气。</p>
 <h2 id="_5">五、常见错误与排坑指南<a class="headerlink" href="#_5" title="Permanent link">&para;</a></h2>
@@ -5412,7 +5412,7 @@
 <p>场景三：Timer 已启用但从不触发。list-timers 里 NEXT 一列为空。常见原因有两个：enable 的是 service 而不是 timer，或者 OnCalendar 表达式写错被解析成了过去时间。修复步骤：</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a>systemctl<span class="w"> </span>is-enabled<span class="w"> </span>health-check.timer
 <a id="__codelineno-19-2" name="__codelineno-19-2" href="#__codelineno-19-2"></a>systemctl<span class="w"> </span>list-timers<span class="w"> </span>--all
-<a id="__codelineno-19-3" name="__codelineno-19-3" href="#__codelineno-19-3"></a>systemd-analyze<span class="w"> </span>calendar<span class="w"> </span><span class="s2">"*-*-* 02:30:00"</span>
+<a id="__codelineno-19-3" name="__codelineno-19-3" href="#__codelineno-19-3"></a>systemd-analyze<span class="w"> </span>calendar<span class="w"> </span><span class="s2">&quot;*-*-* 02:30:00&quot;</span>
 <a id="__codelineno-19-4" name="__codelineno-19-4" href="#__codelineno-19-4"></a>sudo<span class="w"> </span>systemctl<span class="w"> </span><span class="nb">enable</span><span class="w"> </span>--now<span class="w"> </span>health-check.timer
 </code></pre></div>
 <p>is-enabled 输出应为 enabled，calendar 验证能给出未来的 Next elapse 时间，两项都对了再等待一个触发周期观察日志。</p>

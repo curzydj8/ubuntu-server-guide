@@ -5215,11 +5215,11 @@
 <li><strong>示例</strong>：</li>
 </ul>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>sudo<span class="w"> </span>ss<span class="w"> </span>-tuln
-<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>sudo<span class="w"> </span>ss<span class="w"> </span>-lntp<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-E<span class="w"> </span><span class="s2">":80|:443"</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>sudo<span class="w"> </span>ss<span class="w"> </span>-lntp<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-E<span class="w"> </span><span class="s2">&quot;:80|:443&quot;</span>
 <a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>ss<span class="w"> </span>-s
 </code></pre></div>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>LISTEN 0  4096  0.0.0.0:22   0.0.0.0:*  users:(("sshd",pid=1234,fd=3))
-<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>LISTEN 0  511   127.0.0.1:3306 0.0.0.0:* users:(("mysqld",pid=2345,fd=21))
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>LISTEN 0  4096  0.0.0.0:22   0.0.0.0:*  users:((&quot;sshd&quot;,pid=1234,fd=3))
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>LISTEN 0  511   127.0.0.1:3306 0.0.0.0:* users:((&quot;mysqld&quot;,pid=2345,fd=21))
 </code></pre></div>
 <p>解读：看监听地址列——<code>0.0.0.0</code> 表示对外可达，只写 <code>127.0.0.1</code> 时外部永远连不上，先查这一列再查防火墙。</p>
 <ul>
@@ -5320,8 +5320,8 @@
 </ul>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>curl<span class="w"> </span>-I<span class="w"> </span>https://example.com/
 <a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>curl<span class="w"> </span>-v<span class="w"> </span>--connect-timeout<span class="w"> </span><span class="m">5</span><span class="w"> </span>https://example.com/<span class="w"> </span><span class="m">2</span>&gt;<span class="p">&amp;</span><span class="m">1</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>head<span class="w"> </span>-n<span class="w"> </span><span class="m">30</span>
-<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>curl<span class="w"> </span>-o<span class="w"> </span>/dev/null<span class="w"> </span>-s<span class="w"> </span>-w<span class="w"> </span><span class="s2">"%{http_code} %{time_total}\n"</span><span class="w"> </span>https://example.com/
-<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a>curl<span class="w"> </span>-X<span class="w"> </span>POST<span class="w"> </span>--data<span class="w"> </span><span class="s2">"name=test"</span><span class="w"> </span>http://192.0.2.10:8080/api/check
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>curl<span class="w"> </span>-o<span class="w"> </span>/dev/null<span class="w"> </span>-s<span class="w"> </span>-w<span class="w"> </span><span class="s2">&quot;%{http_code} %{time_total}\n&quot;</span><span class="w"> </span>https://example.com/
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a>curl<span class="w"> </span>-X<span class="w"> </span>POST<span class="w"> </span>--data<span class="w"> </span><span class="s2">&quot;name=test&quot;</span><span class="w"> </span>http://192.0.2.10:8080/api/check
 </code></pre></div>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>200 0.183
 </code></pre></div>
@@ -5610,7 +5610,7 @@
 <li><strong>示例</strong>：</li>
 </ul>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a>ssh<span class="w"> </span>ubuntu@192.0.2.10
-<a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a>ssh<span class="w"> </span>-p<span class="w"> </span><span class="m">2222</span><span class="w"> </span>-i<span class="w"> </span>~/.ssh/id_ed25519<span class="w"> </span>ubuntu@192.0.2.10<span class="w"> </span><span class="s2">"hostname &amp;&amp; uptime"</span>
+<a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a>ssh<span class="w"> </span>-p<span class="w"> </span><span class="m">2222</span><span class="w"> </span>-i<span class="w"> </span>~/.ssh/id_ed25519<span class="w"> </span>ubuntu@192.0.2.10<span class="w"> </span><span class="s2">&quot;hostname &amp;&amp; uptime&quot;</span>
 <a id="__codelineno-16-3" name="__codelineno-16-3" href="#__codelineno-16-3"></a>ssh<span class="w"> </span>-v<span class="w"> </span>ubuntu@192.0.2.10
 </code></pre></div>
 <p>解读：带远程命令的形式执行完即退出，适合脚本巡检；登录失败先加 <code>-v</code> 看卡在网络、认证还是密钥哪一阶段。</p>

@@ -5245,7 +5245,7 @@
 <p>若所有管理账号都被踢出，只能通过控制台以恢复模式挂载系统盘后修改 <code>/etc/group</code> 中 <code>sudo</code> 组的成员列表，这也是必须至少保留两个管理账号的理由。</p>
 <p>场景三：PAM 改完后所有登录被拒。报错表现为密码正确仍提示认证失败，日志中出现 <code>PAM unable to dlopen</code> 或模块名拼写错误的记录。原因通常是手写模块行时把 <code>pam_pwquality.so</code> 拼错，或引用了未安装的模块。修复是切到事先保留的 Root 会话，用备份还原对应文件再逐项重加：</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-21-1" name="__codelineno-21-1" href="#__codelineno-21-1"></a>sudo<span class="w"> </span>cp<span class="w"> </span>/etc/pam.d/common-password.bak<span class="w"> </span>/etc/pam.d/common-password
-<a id="__codelineno-21-2" name="__codelineno-21-2" href="#__codelineno-21-2"></a>sudo<span class="w"> </span>grep<span class="w"> </span>-R<span class="w"> </span><span class="s2">"pam_pwquality"</span><span class="w"> </span>/etc/pam.d/
+<a id="__codelineno-21-2" name="__codelineno-21-2" href="#__codelineno-21-2"></a>sudo<span class="w"> </span>grep<span class="w"> </span>-R<span class="w"> </span><span class="s2">&quot;pam_pwquality&quot;</span><span class="w"> </span>/etc/pam.d/
 <a id="__codelineno-21-3" name="__codelineno-21-3" href="#__codelineno-21-3"></a>sudo<span class="w"> </span>ls<span class="w"> </span>/usr/lib/x86_64-linux-gnu/security/pam_pwquality.so
 </code></pre></div>
 <p>最后一条确认模块文件真实存在，路径不存在说明软件包没装好，先重新安装 <code>libpam-pwquality</code> 再改配置。</p>

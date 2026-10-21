@@ -5642,12 +5642,12 @@
 <h3 id="38-docker-gpu">3.8 配置 Docker 使用 GPU<a class="headerlink" href="#38-docker-gpu" title="Permanent link">&para;</a></h3>
 <p>当前主流有两种配置方式。方式一是 CDI（Container Device Interface），由工具包生成设备规范文件，Docker 直接按规范注入设备，不需要额外的默认运行时，结构更清晰，是新安装的推荐方式：</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>sudo<span class="w"> </span>nvidia-ctk<span class="w"> </span>cdi<span class="w"> </span>generate<span class="w"> </span>--output<span class="o">=</span>/etc/cdi/nvidia.yaml
-<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>sudo<span class="w"> </span>cp<span class="w"> </span>/etc/docker/daemon.json<span class="w"> </span>/etc/docker/daemon.json.bak-<span class="k">$(</span>date<span class="w"> </span>+%F<span class="k">)</span><span class="w"> </span><span class="m">2</span>&gt;/dev/null<span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="s2">"daemon.json 尚不存在，跳过备份"</span>
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>sudo<span class="w"> </span>cp<span class="w"> </span>/etc/docker/daemon.json<span class="w"> </span>/etc/docker/daemon.json.bak-<span class="k">$(</span>date<span class="w"> </span>+%F<span class="k">)</span><span class="w"> </span><span class="m">2</span>&gt;/dev/null<span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;daemon.json 尚不存在，跳过备份&quot;</span>
 <a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>sudo<span class="w"> </span>systemctl<span class="w"> </span>restart<span class="w"> </span>docker
 <a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a>nvidia-ctk<span class="w"> </span>cdi<span class="w"> </span>list
 </code></pre></div>
 <p>方式二是传统的 nvidia runtime，由工具包的配置命令改写 daemon 配置：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>sudo<span class="w"> </span>cp<span class="w"> </span>/etc/docker/daemon.json<span class="w"> </span>/etc/docker/daemon.json.bak-<span class="k">$(</span>date<span class="w"> </span>+%F<span class="k">)</span><span class="w"> </span><span class="m">2</span>&gt;/dev/null<span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="s2">"daemon.json 尚不存在，跳过备份"</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>sudo<span class="w"> </span>cp<span class="w"> </span>/etc/docker/daemon.json<span class="w"> </span>/etc/docker/daemon.json.bak-<span class="k">$(</span>date<span class="w"> </span>+%F<span class="k">)</span><span class="w"> </span><span class="m">2</span>&gt;/dev/null<span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;daemon.json 尚不存在，跳过备份&quot;</span>
 <a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>sudo<span class="w"> </span>nvidia-ctk<span class="w"> </span>runtime<span class="w"> </span>configure<span class="w"> </span>--runtime<span class="o">=</span>docker
 <a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a>sudo<span class="w"> </span>systemctl<span class="w"> </span>restart<span class="w"> </span>docker
 <a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a>sudo<span class="w"> </span>cat<span class="w"> </span>/etc/docker/daemon.json
@@ -5709,7 +5709,7 @@
 <h3 id="secure-boot">场景二：Secure Boot 导致模块签名失败<a class="headerlink" href="#secure-boot" title="Permanent link">&para;</a></h3>
 <p>报错原文片段：</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a>nvidia: module verification failed: signature and/or required key missing - tainting kernel
-<a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a>modprobe: ERROR: could not insert 'nvidia': Key was rejected by service
+<a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a>modprobe: ERROR: could not insert &#39;nvidia&#39;: Key was rejected by service
 </code></pre></div>
 <p>原因是 Secure Boot 只允许加载已签名内核模块，而 DKMS 本地构建的 NVIDIA 模块签名未被固件信任。处理方法是完成 MOK（Machine Owner Key）登记：安装驱动时若弹出设置 MOK 密码的界面，设置一个临时密码并牢记；重启时在蓝色的 MOK Manager 界面依次选择 Enroll MOK、Continue、Yes，并输入刚才的密码完成登记，之后正常启动再验证：</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a>mokutil<span class="w"> </span>--sb-state
@@ -5719,7 +5719,7 @@
 <p><code>mokutil --sb-state</code> 用于确认 Secure Boot 状态。若组织规范不允许登记自签密钥，替代方案是改用发行版已签名的驱动包，或在合规评估后在 BIOS 中关闭 Secure Boot，三种方式选一种并记录在运维文档中，不要在多台机器上混用不同处理法。</p>
 <h3 id="gpu">场景三：容器内看不到 GPU<a class="headerlink" href="#gpu" title="Permanent link">&para;</a></h3>
 <p>报错原文片段：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a>docker: Error response from daemon: could not select device driver "" with capabilities: [[gpu]]
+<div class="highlight"><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a>docker: Error response from daemon: could not select device driver &quot;&quot; with capabilities: [[gpu]]
 </code></pre></div>
 <p>或容器内执行 <code>nvidia-smi</code> 报 <code>No devices were found</code>。原因是 Container Toolkit 未安装、CDI 规范未生成或 Docker 未重启加载配置。修复命令：</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a>sudo<span class="w"> </span>apt<span class="w"> </span>install<span class="w"> </span>-y<span class="w"> </span>nvidia-container-toolkit

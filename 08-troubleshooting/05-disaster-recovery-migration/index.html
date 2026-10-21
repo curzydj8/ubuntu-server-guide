@@ -5274,7 +5274,7 @@
 </code></pre></div>
 <p><code>dpkg --set-selections</code> 把源机软件包的安装状态导入目标机，<code>apt-get dselect-upgrade</code> 按导入的状态实际安装。执行中若提示个别软件包在目标版本仓库中不存在，单独记录包名，不要中断整批安装，这类包多为源机手动安装的第三方包，最后单独处理。</p>
 <p>验证：随机抽查三个关键服务的软件包状态与版本，与源机记录对照：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>dpkg<span class="w"> </span>-l<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-E<span class="w"> </span><span class="s2">"nginx|mysql|docker"</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>dpkg<span class="w"> </span>-l<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-E<span class="w"> </span><span class="s2">&quot;nginx|mysql|docker&quot;</span>
 <a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>systemctl<span class="w"> </span>list-unit-files<span class="w"> </span>--state<span class="o">=</span>enabled<span class="w"> </span>--no-pager
 </code></pre></div>
 <h4 id="_7">阶段三：数据与配置迁移<a class="headerlink" href="#_7" title="Permanent link">&para;</a></h4>
@@ -5349,7 +5349,7 @@
 <p>验证：每个迁入的服务先做配置语法检查（如 <code>nginx -t</code>），再启动并查状态，两个命令都通过才算该服务配置迁移完成：</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>sudo<span class="w"> </span>systemctl<span class="w"> </span>restart<span class="w"> </span>nginx
 <a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>sudo<span class="w"> </span>systemctl<span class="w"> </span>status<span class="w"> </span>nginx<span class="w"> </span>--no-pager
-<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a>ss<span class="w"> </span>-tlnp<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-E<span class="w"> </span><span class="s2">":80|:443"</span>
+<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a>ss<span class="w"> </span>-tlnp<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-E<span class="w"> </span><span class="s2">&quot;:80|:443&quot;</span>
 </code></pre></div>
 <h4 id="_8">阶段四：引导与网络恢复<a class="headerlink" href="#_8" title="Permanent link">&para;</a></h4>
 <p>全新最小安装的目标机引导是安装程序生成的，一般无需处理。以下两种情况才需要修引导：一是直接克隆系统盘到新盘启动，二是迁移后更换了磁盘或启动模式。处理方法与完整命令见 <a href="../01-boot-repair/">系统无法启动故障修复</a> 的重装 GRUB 一节，本节只给迁移场景的判读点：克隆盘启动失败先查 EFI 启动项是否仍指向旧盘，再查 fstab 的 UUID 是否与新盘一致，两处都对齐后再考虑其他原因。</p>
@@ -5424,7 +5424,7 @@
 <p>UUID 变化排错：重装、克隆或换盘后最常见的故障是 fstab 里仍写着旧 UUID，启动时卡在等待设备或进入 Emergency 模式。判读与修法：</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a>sudo<span class="w"> </span>blkid
 <a id="__codelineno-18-2" name="__codelineno-18-2" href="#__codelineno-18-2"></a>cat<span class="w"> </span>/etc/fstab
-<a id="__codelineno-18-3" name="__codelineno-18-3" href="#__codelineno-18-3"></a>sudo<span class="w"> </span>journalctl<span class="w"> </span>-xb<span class="w"> </span>--no-pager<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-i<span class="w"> </span>-E<span class="w"> </span><span class="s2">"timed out waiting for device|dependency failed"</span>
+<a id="__codelineno-18-3" name="__codelineno-18-3" href="#__codelineno-18-3"></a>sudo<span class="w"> </span>journalctl<span class="w"> </span>-xb<span class="w"> </span>--no-pager<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-i<span class="w"> </span>-E<span class="w"> </span><span class="s2">&quot;timed out waiting for device|dependency failed&quot;</span>
 </code></pre></div>
 <p>日志中出现等待设备超时且设备号正是 fstab 中的某个 UUID，而 <code>blkid</code> 中查不到该 UUID，即可确诊为 UUID 失效。修正方法是在 Emergency 模式或 Live 加 chroot 环境中（进入方法见 <a href="../01-boot-repair/">系统无法启动故障修复</a>），把该行 UUID 改为 <code>blkid</code> 中的现值；临时无法确认对应关系时，先在该行行首加井号注释并确认其他条目带 <code>nofail</code> 的必要性，待系统起来后再逐项补回，不要直接删行以免丢失原挂载信息对照。</p>
 <p>验证：修正后执行 <code>sudo findmnt --verify</code> 与 <code>sudo mount -a</code> 均无报错，重启后 <code>systemctl --failed</code> 为零个失败单元，数据盘目录内容与故障前一致。</p>
@@ -5440,7 +5440,7 @@
 </code></pre></div>
 <p>执行 <code>cat &gt;&gt;</code> 后把新公钥整行粘贴进去，再按 Ctrl 加 D 结束输入。若家目录或密钥文件属主不对，sshd 会静默拒绝密钥登录，一并修正：</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-20-1" name="__codelineno-20-1" href="#__codelineno-20-1"></a>sudo<span class="w"> </span>chown<span class="w"> </span>-R<span class="w"> </span><span class="k">$(</span>whoami<span class="k">)</span>:<span class="k">$(</span>whoami<span class="k">)</span><span class="w"> </span>~/.ssh
-<a id="__codelineno-20-2" name="__codelineno-20-2" href="#__codelineno-20-2"></a>sudo<span class="w"> </span>sshd<span class="w"> </span>-T<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-i<span class="w"> </span>-E<span class="w"> </span><span class="s2">"pubkeyauthentication|authorizedkeysfile"</span>
+<a id="__codelineno-20-2" name="__codelineno-20-2" href="#__codelineno-20-2"></a>sudo<span class="w"> </span>sshd<span class="w"> </span>-T<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-i<span class="w"> </span>-E<span class="w"> </span><span class="s2">&quot;pubkeyauthentication|authorizedkeysfile&quot;</span>
 </code></pre></div>
 <p>入口二：云厂商救援模式或挂载系统盘到救援机。控制台密码也不可用时，用救援模式启动（救援系统是独立的小系统，原系统盘会被挂载或可手动挂载），把原根分区挂载后直接改文件：</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-21-1" name="__codelineno-21-1" href="#__codelineno-21-1"></a>lsblk<span class="w"> </span>-f
@@ -5458,8 +5458,8 @@
 </code></pre></div>
 <p>或修改完成后直接重启。单用户模式绕过了全部认证，仅限本机物理可控场景，公共环境使用后要在恢复记录中注明。</p>
 <p>恢复后验证，三项缺一不可：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-23-1" name="__codelineno-23-1" href="#__codelineno-23-1"></a>ssh<span class="w"> </span>-i<span class="w"> </span>~/.ssh/新私钥文件<span class="w"> </span>-o<span class="w"> </span><span class="nv">IdentitiesOnly</span><span class="o">=</span>yes<span class="w"> </span>zhang@192.0.2.10<span class="w"> </span><span class="s2">"hostname; whoami"</span>
-<a id="__codelineno-23-2" name="__codelineno-23-2" href="#__codelineno-23-2"></a>sudo<span class="w"> </span>journalctl<span class="w"> </span>-u<span class="w"> </span>ssh<span class="w"> </span>--since<span class="w"> </span><span class="s2">"-10 minutes"</span><span class="w"> </span>--no-pager<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-i<span class="w"> </span>accepted
+<div class="highlight"><pre><span></span><code><a id="__codelineno-23-1" name="__codelineno-23-1" href="#__codelineno-23-1"></a>ssh<span class="w"> </span>-i<span class="w"> </span>~/.ssh/新私钥文件<span class="w"> </span>-o<span class="w"> </span><span class="nv">IdentitiesOnly</span><span class="o">=</span>yes<span class="w"> </span>zhang@192.0.2.10<span class="w"> </span><span class="s2">&quot;hostname; whoami&quot;</span>
+<a id="__codelineno-23-2" name="__codelineno-23-2" href="#__codelineno-23-2"></a>sudo<span class="w"> </span>journalctl<span class="w"> </span>-u<span class="w"> </span>ssh<span class="w"> </span>--since<span class="w"> </span><span class="s2">&quot;-10 minutes&quot;</span><span class="w"> </span>--no-pager<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-i<span class="w"> </span>accepted
 <a id="__codelineno-23-3" name="__codelineno-23-3" href="#__codelineno-23-3"></a>ls<span class="w"> </span>-l<span class="w"> </span>~/.ssh/authorized_keys
 </code></pre></div>
 <p>判读：新会话能登录且返回正确的主机名与用户名；服务端日志出现 Accepted publickey 记录；密钥文件权限为 600、目录为 700、属主为登录账号本人。三项全过才算恢复。</p>
@@ -5484,7 +5484,7 @@
 </code></pre></div>
 <p>判读：<code>dpkg --configure -a</code> 把所有已解包未配置的软件包完成配置；<code>apt install -f</code> 修复破损依赖关系，它提出移除大量核心包的方案时不要直接接受，先停下来记录方案，这通常说明源配置处于跨版本中间状态，需要先把 <code>/etc/apt/sources.list</code> 与 <code>/etc/apt/sources.list.d</code> 中的版本代号统一到目标版本或回退到原版本，再重复本步骤。两条命令都能干净完成、<code>apt update</code> 无报错，说明包管理已回到一致状态。</p>
 <p>第三步，决定继续升级还是回退。包管理修复成功且系统版本处于中间状态时，重新执行升级命令续完升级通常是最短路径：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-26-1" name="__codelineno-26-1" href="#__codelineno-26-1"></a>sudo<span class="w"> </span>do-release-upgrade
+<div class="highlight"><pre><span></span><code><a id="__codelineno-26-1" name="__codelineno-26-1" href="#__codelineno-26-1"></a>sudo<span class="w"> </span><span class="k">do</span>-release-upgrade
 </code></pre></div>
 <p>若续升再次失败或核心服务已损坏，按决策点判断：有升级前快照或 Timeshift 还原点，直接回滚快照，不要在损坏的系统上反复修补；无快照但数据完好且业务停机窗口允许，走「重装新版本加按 3.1 节迁移数据与配置」的路线，比无限修补更可控。做决定前先确认数据与配置已按 3.1 阶段一的方法采集到独立介质。</p>
 <p>关于快照思路：云服务器在升级前用云厂商控制台创建整机快照，回滚就是控制台一键恢复，升级前五分钟的操作换来最可靠的退路。物理机可用 Timeshift 在升级前创建系统还原点，它只快照系统文件不含用户数据，正好适合升级回滚这个场景；但 Timeshift 需要在升级前就安装并创建好还原点，事后无法补。没有事先快照时，Clonezilla 整盘镜像是物理机的等价退路，同样必须事前制作。</p>
@@ -5524,7 +5524,7 @@
 </code></pre></div>
 <p><code>-v 卷名:/data:ro</code> 以只读方式把卷挂进临时容器，<code>--rm</code> 让临时容器退出即删，tar 把卷内容打包到当前目录。恢复到新机器时先建空卷，再用同样的方法解包：</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-31-1" name="__codelineno-31-1" href="#__codelineno-31-1"></a>docker<span class="w"> </span>volume<span class="w"> </span>create<span class="w"> </span>卷名
-<a id="__codelineno-31-2" name="__codelineno-31-2" href="#__codelineno-31-2"></a>docker<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </span>-v<span class="w"> </span>卷名:/data<span class="w"> </span>-v<span class="w"> </span><span class="k">$(</span><span class="nb">pwd</span><span class="k">)</span>:/backup<span class="w"> </span>alpine<span class="w"> </span>sh<span class="w"> </span>-c<span class="w"> </span><span class="s2">"cd /data &amp;&amp; tar xzf /backup/volume-backup.tar.gz"</span>
+<a id="__codelineno-31-2" name="__codelineno-31-2" href="#__codelineno-31-2"></a>docker<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </span>-v<span class="w"> </span>卷名:/data<span class="w"> </span>-v<span class="w"> </span><span class="k">$(</span><span class="nb">pwd</span><span class="k">)</span>:/backup<span class="w"> </span>alpine<span class="w"> </span>sh<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;cd /data &amp;&amp; tar xzf /backup/volume-backup.tar.gz&quot;</span>
 <a id="__codelineno-31-3" name="__codelineno-31-3" href="#__codelineno-31-3"></a>docker<span class="w"> </span>volume<span class="w"> </span>inspect<span class="w"> </span>卷名
 </code></pre></div>
 <p>解包命令在容器内执行，卷名与备份文件名按实际值替换，禁止把备份文件路径写错到其他卷上。恢复后不要急于删源端备份，待应用验证通过再按保留策略处理。</p>
@@ -5538,7 +5538,7 @@
 <div class="highlight"><pre><span></span><code><a id="__codelineno-33-1" name="__codelineno-33-1" href="#__codelineno-33-1"></a><span class="nb">cd</span><span class="w"> </span>/srv/app<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>docker<span class="w"> </span>compose<span class="w"> </span>up<span class="w"> </span>-d
 <a id="__codelineno-33-2" name="__codelineno-33-2" href="#__codelineno-33-2"></a>docker<span class="w"> </span>compose<span class="w"> </span>ps
 <a id="__codelineno-33-3" name="__codelineno-33-3" href="#__codelineno-33-3"></a>docker<span class="w"> </span>compose<span class="w"> </span>logs<span class="w"> </span>--tail<span class="o">=</span><span class="m">50</span>
-<a id="__codelineno-33-4" name="__codelineno-33-4" href="#__codelineno-33-4"></a>curl<span class="w"> </span>-o<span class="w"> </span>/dev/null<span class="w"> </span>-s<span class="w"> </span>-w<span class="w"> </span><span class="s2">"%{http_code}\n"</span><span class="w"> </span>http://127.0.0.1:8080/
+<a id="__codelineno-33-4" name="__codelineno-33-4" href="#__codelineno-33-4"></a>curl<span class="w"> </span>-o<span class="w"> </span>/dev/null<span class="w"> </span>-s<span class="w"> </span>-w<span class="w"> </span><span class="s2">&quot;%{http_code}\n&quot;</span><span class="w"> </span>http://127.0.0.1:8080/
 <a id="__codelineno-33-5" name="__codelineno-33-5" href="#__codelineno-33-5"></a>docker<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>应用容器名<span class="w"> </span>ls<span class="w"> </span>-l<span class="w"> </span>/data
 </code></pre></div>
 <p>判读：容器状态为 Up 且日志无持续报错，接口返回预期状态码，容器内数据目录能看到恢复的文件且数量、时间与源端记录相符。数据库类容器还要执行计数查询与源端对照，文件在不等于数据对。</p>

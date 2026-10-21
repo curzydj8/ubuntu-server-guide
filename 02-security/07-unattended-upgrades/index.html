@@ -5126,10 +5126,10 @@
 </code></pre></div>
 <p>最重要的是来源白名单段 <code>Unattended-Upgrade::Allowed-Origins</code>，它决定哪些来源的包允许自动安装。逐行讲解：</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>Unattended-Upgrade::Allowed-Origins {
-<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>        "${distro_id}:${distro_codename}";
-<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>        "${distro_id}:${distro_codename}-security";
-<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>        "${distro_id}ESMApps:${distro_codename}-apps-security";
-<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>        "${distro_id}ESM:${distro_codename}-infra-security";
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>        &quot;${distro_id}:${distro_codename}&quot;;
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>        &quot;${distro_id}:${distro_codename}-security&quot;;
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>        &quot;${distro_id}ESMApps:${distro_codename}-apps-security&quot;;
+<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>        &quot;${distro_id}ESM:${distro_codename}-infra-security&quot;;
 <a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a>};
 </code></pre></div>
 <table>
@@ -5160,8 +5160,8 @@
 </table>
 <p>原则一句话：自动通道只放行名字带 <code>security</code> 的来源，其余来源留给人工。改完这一段，其余参数在同一文件里继续配。黑名单段写法如下：</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>Unattended-Upgrade::Package-Blacklist {
-<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>        "linux-image-generic";
-<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>        "postgresql.*";
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>        &quot;linux-image-generic&quot;;
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>        &quot;postgresql.*&quot;;
 <a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a>};
 </code></pre></div>
 <p>黑名单按包名正则匹配，列进来的包永远不会被自动更新，适合数据库、内核这类要人工挑窗口升级的组件。示例中的写法只是格式演示，请按本机实际包名填写；黑名单不是偷懒清单，列进去的每个包都必须有人负责跟踪它的人工升级节奏，否则安全更新会被永久挡在门外。</p>
@@ -5220,10 +5220,10 @@
 <p>再看启用文件 <code>/etc/apt/apt.conf.d/20auto-upgrades</code>，它管周期节奏，逐行讲解：</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>sudo<span class="w"> </span>nano<span class="w"> </span>/etc/apt/apt.conf.d/20auto-upgrades
 </code></pre></div>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>APT::Periodic::Update-Package-Lists "1";
-<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>APT::Periodic::Unattended-Upgrade "1";
-<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a>APT::Periodic::Download-Upgradeable-Packages "1";
-<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a>APT::Periodic::AutocleanInterval "7";
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>APT::Periodic::Update-Package-Lists &quot;1&quot;;
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>APT::Periodic::Unattended-Upgrade &quot;1&quot;;
+<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a>APT::Periodic::Download-Upgradeable-Packages &quot;1&quot;;
+<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a>APT::Periodic::AutocleanInterval &quot;7&quot;;
 </code></pre></div>
 <p><code>Update-Package-Lists "1"</code> 表示每天刷新一次软件包列表，<code>0</code> 为关闭；<code>Unattended-Upgrade "1"</code> 表示每天执行一次自动升级，这是总开关；<code>Download-Upgradeable-Packages "1"</code> 提前下载好待装的包，缩短真正安装时的等待；<code>AutocleanInterval "7"</code> 每 7 天清理一次本地包缓存。数值单位是天，写 <code>0</code> 即禁用对应项，第 4 节暂停自动更新用的就是这一招。</p>
 <p>两处配置都改完后不要急着等定时器，先用第 4 节的模拟运行验证配置可被正确解析。</p>
@@ -5252,33 +5252,33 @@
 <p>文件存在即表示有待重启生效的更新，后一个文件列出触发原因的包。自动重启关闭的机器靠这一项决定何时排人工重启窗口。</p>
 <p>暂停自动更新的方法（预期管理的一部分，先学会关再放心开）：把总开关置 0 并复查，不要卸载软件包，卸载会把配置与日志一起带走，恢复时反而麻烦：</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a>sudo<span class="w"> </span>cp<span class="w"> </span>/etc/apt/apt.conf.d/20auto-upgrades<span class="w"> </span>/root/20auto-upgrades.bak.<span class="k">$(</span>date<span class="w"> </span>+%F<span class="k">)</span>
-<a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a>sudo<span class="w"> </span>sed<span class="w"> </span>-i<span class="w"> </span><span class="s1">'s/APT::Periodic::Unattended-Upgrade "1";/APT::Periodic::Unattended-Upgrade "0";/'</span><span class="w"> </span>/etc/apt/apt.conf.d/20auto-upgrades
+<a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a>sudo<span class="w"> </span>sed<span class="w"> </span>-i<span class="w"> </span><span class="s1">&#39;s/APT::Periodic::Unattended-Upgrade &quot;1&quot;;/APT::Periodic::Unattended-Upgrade &quot;0&quot;;/&#39;</span><span class="w"> </span>/etc/apt/apt.conf.d/20auto-upgrades
 <a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a>cat<span class="w"> </span>/etc/apt/apt.conf.d/20auto-upgrades
 </code></pre></div>
 <p>恢复时把 <code>0</code> 改回 <code>1</code> 即可。暂停期间安全更新改为人工执行并留记录，暂停必须有明确的恢复时间，不要无限期挂着。</p>
 <p>回滚与如实说明：自动更新装出的有问题版本，处置顺序是先定位再处理。用日志锁定问题包与版本：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a>grep<span class="w"> </span>-A2<span class="w"> </span>-B2<span class="w"> </span><span class="s2">"问题包名"</span><span class="w"> </span>/var/log/dpkg.log
+<div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a>grep<span class="w"> </span>-A2<span class="w"> </span>-B2<span class="w"> </span><span class="s2">&quot;问题包名&quot;</span><span class="w"> </span>/var/log/dpkg.log
 <a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a>apt<span class="w"> </span><span class="nb">history</span>
-<a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a>zcat<span class="w"> </span>/var/log/apt/history.log*.gz<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-A3<span class="w"> </span><span class="s2">"问题包名"</span>
+<a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a>zcat<span class="w"> </span>/var/log/apt/history.log*.gz<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-A3<span class="w"> </span><span class="s2">&quot;问题包名&quot;</span>
 </code></pre></div>
 <p>定位后可选的动作按风险从低到高：先看新版本是否有后续修复版，直接升级到修复版是最优解；其次是把问题包临时加入黑名单或 <code>sudo apt-mark hold 包名</code> 锁定，阻止它被再次自动处理，同时排人工处理窗口。包降级（<code>sudo apt install 包名=旧版本号</code>）只在旧版本仍在仓库里且依赖允许时才可行，还可能触发连串依赖降级，风险高，不是万能回滚手段，生产执行前必须在测试机验证并留完整记录。本机没有快照或备份系统时，能退回的程度取决于仓库是否还保留旧包，这一点要在启用自动更新前就对业务方讲明，不要事后承诺退不回去的东西。</p>
 <h2 id="_5">五、常见错误与排坑指南<a class="headerlink" href="#_5" title="Permanent link">&para;</a></h2>
 <p>场景一：开了自动重启却没按预期重启。先分清是「没触发」还是「被推迟」，按顺序查三处：</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a>ls<span class="w"> </span>-l<span class="w"> </span>/var/run/reboot-required
-<a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a>grep<span class="w"> </span>-E<span class="w"> </span><span class="s2">"Automatic-Reboot"</span><span class="w"> </span>/etc/apt/apt.conf.d/50unattended-upgrades
+<a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a>grep<span class="w"> </span>-E<span class="w"> </span><span class="s2">&quot;Automatic-Reboot&quot;</span><span class="w"> </span>/etc/apt/apt.conf.d/50unattended-upgrades
 <a id="__codelineno-15-3" name="__codelineno-15-3" href="#__codelineno-15-3"></a>who
 <a id="__codelineno-15-4" name="__codelineno-15-4" href="#__codelineno-15-4"></a>sudo<span class="w"> </span>tail<span class="w"> </span>-n<span class="w"> </span><span class="m">100</span><span class="w"> </span>/var/log/unattended-upgrades/unattended-upgrades.log
 </code></pre></div>
 <p>判读：没有 <code>reboot-required</code> 标记，说明本轮更新根本不需要重启，不是故障；标记存在但配置里 <code>Automatic-Reboot</code> 为 <code>false</code>，是按配置行事；标记存在、配置已开启，但 <code>Automatic-Reboot-WithUsers</code> 为 <code>false</code> 且 <code>who</code> 显示有人登录未退出，重启会被推迟，这也是预期行为。日志里通常会写明推迟原因，先读日志再改配置。</p>
 <p>场景二：更新被 held 包或黑名单卡住。表现是日志里反复出现某些包被跳过，或 <code>apt list --upgradable</code> 里安全更新长期不动。先查锁定与黑名单，再查依赖：</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a>apt-mark<span class="w"> </span>showhold
-<a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a>grep<span class="w"> </span>-A5<span class="w"> </span><span class="s2">"Package-Blacklist"</span><span class="w"> </span>/etc/apt/apt.conf.d/50unattended-upgrades
-<a id="__codelineno-16-3" name="__codelineno-16-3" href="#__codelineno-16-3"></a>sudo<span class="w"> </span>unattended-upgrade<span class="w"> </span>--dry-run<span class="w"> </span>--debug<span class="w"> </span><span class="m">2</span>&gt;<span class="p">&amp;</span><span class="m">1</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-i<span class="w"> </span>-E<span class="w"> </span><span class="s2">"hold|blacklist|skipp"</span>
+<a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a>grep<span class="w"> </span>-A5<span class="w"> </span><span class="s2">&quot;Package-Blacklist&quot;</span><span class="w"> </span>/etc/apt/apt.conf.d/50unattended-upgrades
+<a id="__codelineno-16-3" name="__codelineno-16-3" href="#__codelineno-16-3"></a>sudo<span class="w"> </span>unattended-upgrade<span class="w"> </span>--dry-run<span class="w"> </span>--debug<span class="w"> </span><span class="m">2</span>&gt;<span class="p">&amp;</span><span class="m">1</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-i<span class="w"> </span>-E<span class="w"> </span><span class="s2">&quot;hold|blacklist|skipp&quot;</span>
 </code></pre></div>
 <p>被 <code>hold</code> 的包自动通道不会碰，这是设计而非故障：确需更新时由人工 <code>sudo apt-mark unhold 包名</code> 解锁、手动升级验证后再决定是否重新锁定。黑名单命中的按 3.2 节的纪律处理：有人负责就保留，没有人负责的黑名单条目等于永久不打补丁，必须在复查时清掉或落实责任人。另外注意，某个包因依赖关系被连带跳过时，不要为了让它装上就放宽整段白名单，先把依赖链看懂再单项处理。</p>
 <p>场景三：邮件通知一直收不到。先验证本机发信通道，再看配置，不要上来就改收件人：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a>grep<span class="w"> </span>-E<span class="w"> </span><span class="s2">"Mail"</span><span class="w"> </span>/etc/apt/apt.conf.d/50unattended-upgrades
-<a id="__codelineno-17-2" name="__codelineno-17-2" href="#__codelineno-17-2"></a><span class="nb">echo</span><span class="w"> </span><span class="s2">"uu test"</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>mail<span class="w"> </span>-s<span class="w"> </span><span class="s2">"unattended test"</span><span class="w"> </span>root
+<div class="highlight"><pre><span></span><code><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a>grep<span class="w"> </span>-E<span class="w"> </span><span class="s2">&quot;Mail&quot;</span><span class="w"> </span>/etc/apt/apt.conf.d/50unattended-upgrades
+<a id="__codelineno-17-2" name="__codelineno-17-2" href="#__codelineno-17-2"></a><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;uu test&quot;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>mail<span class="w"> </span>-s<span class="w"> </span><span class="s2">&quot;unattended test&quot;</span><span class="w"> </span>root
 <a id="__codelineno-17-3" name="__codelineno-17-3" href="#__codelineno-17-3"></a>sudo<span class="w"> </span>tail<span class="w"> </span>-n<span class="w"> </span><span class="m">30</span><span class="w"> </span>/var/log/mail.log
 <a id="__codelineno-17-4" name="__codelineno-17-4" href="#__codelineno-17-4"></a>systemctl<span class="w"> </span>status<span class="w"> </span>postfix<span class="w"> </span>--no-pager
 </code></pre></div>

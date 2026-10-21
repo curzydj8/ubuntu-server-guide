@@ -5308,7 +5308,7 @@
 <p>解读：能输出版本号即可。版本口径为 Ubuntu 22.04 / 24.04 LTS，本章不宣称在 26.04 上验证过。</p>
 <h2 id="_3">三、手把手操作步骤<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h2>
 <h3 id="31">3.1 生成密钥：一机一钥、一服务一钥<a class="headerlink" href="#31" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>ssh-keygen<span class="w"> </span>-t<span class="w"> </span>ed25519<span class="w"> </span>-C<span class="w"> </span><span class="s2">"opsadmin-laptop-2026"</span><span class="w"> </span>-f<span class="w"> </span>~/.ssh/id_ed25519_ops
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>ssh-keygen<span class="w"> </span>-t<span class="w"> </span>ed25519<span class="w"> </span>-C<span class="w"> </span><span class="s2">&quot;opsadmin-laptop-2026&quot;</span><span class="w"> </span>-f<span class="w"> </span>~/.ssh/id_ed25519_ops
 </code></pre></div>
 <p>参数逐条讲解：</p>
 <ul>
@@ -5340,7 +5340,7 @@
 </ul>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>/usr/bin/ssh-copy-id: INFO: attempting to log in with the new key(s), to filter out any that are already installed
 <a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>/usr/bin/ssh-copy-id: INFO: 1 key(s) remain to be installed -- if you are prompted now it is to install the new keys
-<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>ubuntu@192.0.2.10's password:
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>ubuntu@192.0.2.10&#39;s password:
 <a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>
 <a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>Number of key(s) added: 1
 </code></pre></div>
@@ -5350,7 +5350,7 @@
 <div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="c1"># 在服务器上执行</span>
 <a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>mkdir<span class="w"> </span>-p<span class="w"> </span>~/.ssh<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>chmod<span class="w"> </span><span class="m">700</span><span class="w"> </span>~/.ssh
 <a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="c1"># 在客户端执行，把公钥追加到服务器（按提示输一次密码）</span>
-<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a>cat<span class="w"> </span>~/.ssh/id_ed25519_ops.pub<span class="w"> </span><span class="p">|</span><span class="w"> </span>ssh<span class="w"> </span>ubuntu@192.0.2.10<span class="w"> </span><span class="s1">'cat &gt;&gt; ~/.ssh/authorized_keys'</span>
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a>cat<span class="w"> </span>~/.ssh/id_ed25519_ops.pub<span class="w"> </span><span class="p">|</span><span class="w"> </span>ssh<span class="w"> </span>ubuntu@192.0.2.10<span class="w"> </span><span class="s1">&#39;cat &gt;&gt; ~/.ssh/authorized_keys&#39;</span>
 <a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a><span class="c1"># 回到服务器上修正权限</span>
 <a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a>chmod<span class="w"> </span><span class="m">600</span><span class="w"> </span>~/.ssh/authorized_keys
 </code></pre></div>
@@ -5443,12 +5443,12 @@
 <li><code>Authentication succeeded (publickey)</code>：验证通过，本次登录用的是公钥而不是密码。</li>
 </ul>
 <p>三行齐全才算部署真正成功。还可以加 <code>-o PasswordAuthentication=no</code> 再连一次，强制禁用密码回退，验证"只靠密钥也能进"：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>ssh<span class="w"> </span>-o<span class="w"> </span><span class="nv">PasswordAuthentication</span><span class="o">=</span>no<span class="w"> </span>-i<span class="w"> </span>~/.ssh/id_ed25519_ops<span class="w"> </span>ubuntu@192.0.2.10<span class="w"> </span><span class="s1">'echo OK'</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>ssh<span class="w"> </span>-o<span class="w"> </span><span class="nv">PasswordAuthentication</span><span class="o">=</span>no<span class="w"> </span>-i<span class="w"> </span>~/.ssh/id_ed25519_ops<span class="w"> </span>ubuntu@192.0.2.10<span class="w"> </span><span class="s1">&#39;echo OK&#39;</span>
 </code></pre></div>
 <h3 id="35-ssh-agent">3.5 ssh-agent：口令只输一次<a class="headerlink" href="#35-ssh-agent" title="Permanent link">&para;</a></h3>
 <p>原理：<code>ssh-agent</code> 是常驻后台进程，在内存里解密并保管私钥。<code>ssh-add</code> 把私钥交给它（此时输一次口令），之后 <code>ssh</code> 命令通过环境变量 <code>SSH_AUTH_SOCK</code> 找到 agent 代签，不再输口令。</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="c1"># 启动 agent，并把输出的环境变量导入当前 shell</span>
-<a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a><span class="nb">eval</span><span class="w"> </span><span class="s2">"</span><span class="k">$(</span>ssh-agent<span class="w"> </span>-s<span class="k">)</span><span class="s2">"</span>
+<a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a><span class="nb">eval</span><span class="w"> </span><span class="s2">&quot;</span><span class="k">$(</span>ssh-agent<span class="w"> </span>-s<span class="k">)</span><span class="s2">&quot;</span>
 <a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a><span class="c1"># 把私钥交给 agent（此时输一次私钥口令）</span>
 <a id="__codelineno-12-4" name="__codelineno-12-4" href="#__codelineno-12-4"></a>ssh-add<span class="w"> </span>~/.ssh/id_ed25519_ops
 <a id="__codelineno-12-5" name="__codelineno-12-5" href="#__codelineno-12-5"></a><span class="c1"># 查看 agent 里已加载的密钥</span>
@@ -5478,13 +5478,13 @@
 <h3 id="36">3.6 密钥撤销：有人离职或设备丢失时<a class="headerlink" href="#36" title="Permanent link">&para;</a></h3>
 <p>撤销 = 从目标服务器的 <code>authorized_keys</code> 里删掉对应那一行。先按 3.1 节写好的备注定位：</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="c1"># 在服务器上，按备注关键字定位行号</span>
-<a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a>grep<span class="w"> </span>-n<span class="w"> </span><span class="s2">"opsadmin-laptop-2026"</span><span class="w"> </span>~/.ssh/authorized_keys
+<a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a>grep<span class="w"> </span>-n<span class="w"> </span><span class="s2">&quot;opsadmin-laptop-2026&quot;</span><span class="w"> </span>~/.ssh/authorized_keys
 </code></pre></div>
 <p>改文件前先备份，再删除对应行：</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a>cp<span class="w"> </span>~/.ssh/authorized_keys<span class="w"> </span>~/.ssh/authorized_keys.bak.<span class="k">$(</span>date<span class="w"> </span>+%F<span class="k">)</span>
-<a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a>sed<span class="w"> </span>-i<span class="w"> </span><span class="s1">'/opsadmin-laptop-2026/d'</span><span class="w"> </span>~/.ssh/authorized_keys
+<a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a>sed<span class="w"> </span>-i<span class="w"> </span><span class="s1">&#39;/opsadmin-laptop-2026/d&#39;</span><span class="w"> </span>~/.ssh/authorized_keys
 <a id="__codelineno-15-3" name="__codelineno-15-3" href="#__codelineno-15-3"></a><span class="c1"># 复查：应无输出</span>
-<a id="__codelineno-15-4" name="__codelineno-15-4" href="#__codelineno-15-4"></a>grep<span class="w"> </span>-c<span class="w"> </span><span class="s2">"opsadmin-laptop-2026"</span><span class="w"> </span>~/.ssh/authorized_keys<span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="nb">true</span>
+<a id="__codelineno-15-4" name="__codelineno-15-4" href="#__codelineno-15-4"></a>grep<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;opsadmin-laptop-2026&quot;</span><span class="w"> </span>~/.ssh/authorized_keys<span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="nb">true</span>
 </code></pre></div>
 <p>撤销后必须验证旧钥确实失效——在还持有旧私钥的机器上尝试登录，应被拒绝并回退到密码或直接失败：</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a>ssh<span class="w"> </span>-o<span class="w"> </span><span class="nv">PasswordAuthentication</span><span class="o">=</span>no<span class="w"> </span>-i<span class="w"> </span>~/.ssh/id_ed25519_ops<span class="w"> </span>ubuntu@192.0.2.10
@@ -5524,13 +5524,13 @@
 <h2 id="_4">四、效果验证与测试<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h2>
 <p>完成一轮部署后，用下面四项做验收：</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a><span class="c1"># 1. 仅密钥可登录（禁用密码回退仍能进）</span>
-<a id="__codelineno-18-2" name="__codelineno-18-2" href="#__codelineno-18-2"></a>ssh<span class="w"> </span>-o<span class="w"> </span><span class="nv">PasswordAuthentication</span><span class="o">=</span>no<span class="w"> </span>ubuntu@192.0.2.10<span class="w"> </span><span class="s1">'hostname &amp;&amp; whoami'</span>
+<a id="__codelineno-18-2" name="__codelineno-18-2" href="#__codelineno-18-2"></a>ssh<span class="w"> </span>-o<span class="w"> </span><span class="nv">PasswordAuthentication</span><span class="o">=</span>no<span class="w"> </span>ubuntu@192.0.2.10<span class="w"> </span><span class="s1">&#39;hostname &amp;&amp; whoami&#39;</span>
 <a id="__codelineno-18-3" name="__codelineno-18-3" href="#__codelineno-18-3"></a><span class="c1"># 2. agent 中密钥与服务器指纹可对应（比对 3.4 节 -v 输出的指纹）</span>
 <a id="__codelineno-18-4" name="__codelineno-18-4" href="#__codelineno-18-4"></a>ssh-add<span class="w"> </span>-l
 <a id="__codelineno-18-5" name="__codelineno-18-5" href="#__codelineno-18-5"></a><span class="c1"># 3. 服务端 authorized_keys 中行数与预期人数一致</span>
-<a id="__codelineno-18-6" name="__codelineno-18-6" href="#__codelineno-18-6"></a>ssh<span class="w"> </span>ubuntu@192.0.2.10<span class="w"> </span><span class="s1">'wc -l ~/.ssh/authorized_keys'</span>
+<a id="__codelineno-18-6" name="__codelineno-18-6" href="#__codelineno-18-6"></a>ssh<span class="w"> </span>ubuntu@192.0.2.10<span class="w"> </span><span class="s1">&#39;wc -l ~/.ssh/authorized_keys&#39;</span>
 <a id="__codelineno-18-7" name="__codelineno-18-7" href="#__codelineno-18-7"></a><span class="c1"># 4. sshd 配置语法有效</span>
-<a id="__codelineno-18-8" name="__codelineno-18-8" href="#__codelineno-18-8"></a>ssh<span class="w"> </span>ubuntu@192.0.2.10<span class="w"> </span><span class="s1">'sudo sshd -t &amp;&amp; echo config-ok'</span>
+<a id="__codelineno-18-8" name="__codelineno-18-8" href="#__codelineno-18-8"></a>ssh<span class="w"> </span>ubuntu@192.0.2.10<span class="w"> </span><span class="s1">&#39;sudo sshd -t &amp;&amp; echo config-ok&#39;</span>
 </code></pre></div>
 <p>四项全过，说明"部署—验证—托管—配置"链条完整；任何一项失败，回到第三节对应小节复查，不要跳步。</p>
 <h2 id="_5">五、常见错误与排坑指南<a class="headerlink" href="#_5" title="Permanent link">&para;</a></h2>

@@ -5212,7 +5212,7 @@
 <h3 id="33-aide">3.3 AIDE 文件完整性基线<a class="headerlink" href="#33-aide" title="Permanent link">&para;</a></h3>
 <p>AIDE 的工作分两步：先给当前干净状态拍一张全量快照作为基线数据库，之后定期拿现状与基线比对，报告新增、删除与被修改的文件。安装后先备份默认配置，再确认它监控的范围：</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>sudo<span class="w"> </span>cp<span class="w"> </span>/etc/aide/aide.conf<span class="w"> </span>/etc/aide/aide.conf.bak
-<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a>sudo<span class="w"> </span>grep<span class="w"> </span>-E<span class="w"> </span><span class="s2">"^/"</span><span class="w"> </span>/etc/aide/aide.conf
+<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a>sudo<span class="w"> </span>grep<span class="w"> </span>-E<span class="w"> </span><span class="s2">&quot;^/&quot;</span><span class="w"> </span>/etc/aide/aide.conf
 <a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a>ls<span class="w"> </span>/etc/aide/aide.conf.d/
 </code></pre></div>
 <p>默认配置已经覆盖 <code>/bin</code>、<code>/sbin</code>、<code>/etc</code>、<code>/usr</code> 等关键目录并按文件类型组合了哈希、权限、属主等检查项，入门阶段保持默认即可，重点是把基线建起来并保护好。初始化基线，数据量大时这一步会跑几分钟，属于正常现象：</p>
@@ -5243,7 +5243,7 @@
 <h2 id="_4">四、效果验证与测试<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h2>
 <p>第一，验证 Fail2ban 真的会封人。在白名单之外的网络环境下，对 SSH 连续制造 5 次失败登录，然后回服务器查看封禁列表：</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a>sudo<span class="w"> </span>fail2ban-client<span class="w"> </span>status<span class="w"> </span>sshd
-<a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a>sudo<span class="w"> </span>grep<span class="w"> </span><span class="s2">"Ban"</span><span class="w"> </span>/var/log/fail2ban.log
+<a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a>sudo<span class="w"> </span>grep<span class="w"> </span><span class="s2">&quot;Ban&quot;</span><span class="w"> </span>/var/log/fail2ban.log
 <a id="__codelineno-15-3" name="__codelineno-15-3" href="#__codelineno-15-3"></a>sudo<span class="w"> </span>nft<span class="w"> </span>list<span class="w"> </span>ruleset
 </code></pre></div>
 <p>期望在状态输出的被封列表里看到测试来源地址，日志里有对应的封禁记录，第 03 章的防火墙规则集里能看到 Fail2ban 写入的封禁集合，三处对上才算端到端生效。测试结束后用 3.1 节的解封命令把测试地址放出来。</p>

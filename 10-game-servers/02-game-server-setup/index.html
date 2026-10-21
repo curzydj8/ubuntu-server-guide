@@ -5126,7 +5126,7 @@
 </code></pre></div>
 <p>首次启动会生成 <code>eula.txt</code> 后自行退出，这是正常现象。改任何配置前先备份，再同意协议：</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>cp<span class="w"> </span>-a<span class="w"> </span>eula.txt<span class="w"> </span>eula.txt.bak
-<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>sed<span class="w"> </span>-i<span class="w"> </span><span class="s1">'s/eula=false/eula=true/'</span><span class="w"> </span>eula.txt
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>sed<span class="w"> </span>-i<span class="w"> </span><span class="s1">&#39;s/eula=false/eula=true/&#39;</span><span class="w"> </span>eula.txt
 <a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a>cp<span class="w"> </span>-a<span class="w"> </span>server.properties<span class="w"> </span>server.properties.bak
 </code></pre></div>
 <p>第四步逐行改 <code>server.properties</code> 关键项，其余保持默认：</p>
@@ -5270,7 +5270,7 @@
 </code></pre></div>
 <p>原因是 <code>eula.txt</code> 仍是 <code>eula=false</code>，或改的是备份文件。确认并修复：</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-20-1" name="__codelineno-20-1" href="#__codelineno-20-1"></a>grep<span class="w"> </span>eula<span class="w"> </span>/home/steam/minecraft/eula.txt
-<a id="__codelineno-20-2" name="__codelineno-20-2" href="#__codelineno-20-2"></a>sed<span class="w"> </span>-i<span class="w"> </span><span class="s1">'s/eula=false/eula=true/'</span><span class="w"> </span>/home/steam/minecraft/eula.txt
+<a id="__codelineno-20-2" name="__codelineno-20-2" href="#__codelineno-20-2"></a>sed<span class="w"> </span>-i<span class="w"> </span><span class="s1">&#39;s/eula=false/eula=true/&#39;</span><span class="w"> </span>/home/steam/minecraft/eula.txt
 </code></pre></div>
 <p><strong>场景 3：Palworld 改了模板文件，设置不生效。</strong> 现象是服务器名、密码仍是默认值。原因是改了 <code>DefaultPalWorldSettings.ini</code> 而不是 <code>LinuxServer</code> 目录下的生效文件，或把长行配置改出了缺逗号的语法错误。修复：从备份恢复生效文件后重新逐项改值，只改等号右边的数值，不动结构：</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-21-1" name="__codelineno-21-1" href="#__codelineno-21-1"></a>cp<span class="w"> </span>-a<span class="w"> </span>PalWorldSettings.ini.bak<span class="w"> </span>PalWorldSettings.ini
