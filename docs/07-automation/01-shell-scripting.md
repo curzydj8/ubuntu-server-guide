@@ -1,3 +1,7 @@
+---
+description: "Shell 脚本是 Linux 运维自动化的基本功。凡是需要重复执行的检查、备份、清理、部署动作，都应该沉淀为脚本，而不是每次靠手工敲命令。"
+---
+
 # Shell 自动化运维脚本编写规范与范例
 
 ## 一、概述与使用场景
@@ -285,7 +289,6 @@ shellcheck /opt/ops/scripts/cert_check.sh
 /opt/ops/scripts/cert_check.sh
 echo "退出码 $?"
 ```
-
 
 ## 四、效果验证与测试
 
