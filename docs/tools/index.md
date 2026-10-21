@@ -11,6 +11,22 @@ description: "互动工具：Netplan 配置生成器与 UFW 防火墙规则生�
     - 生成器给的是通用模板，接口名、IP、端口必须换成你机器的真实值。
     - 改网络配置前先确保有控制台/带外管理通道，远程改 Netplan 有断联风险，先用 `netplan try` 验证。
 
+## 执行顺序与风险提示
+
+两个生成器产出的配置与命令，请按同一套顺序使用，不要生成后整段粘贴就执行：
+
+1. **先检查现状**：先看现有配置文件、服务状态与防火墙规则，确认机器当前是什么状态。
+2. **先备份**：改任何配置之前留一份带日期的副本，确认回滚路径真实存在。
+3. **小步应用**：一次只改一处，先走校验或试运行（如 `netplan generate`、`netplan try`），再正式应用。
+4. **复核规则**：应用后重新读取生效的配置与规则列表，与预期逐条对照。
+5. **从预期来源验证**：在另一台机器或本地终端，从实际使用路径验证连通性，不要只在服务器本机自测。
+
+!!! danger "三条红线"
+
+    - 改网络或防火墙配置前，先保留控制台或带外管理通道，远程会话断了也要有路可退。
+    - 启用 UFW 前先放行当前 SSH 端口，顺序反了会把自己锁在门外。
+    - 数据库端口（3306 / 5432 / 6379 / 27017 等）不要向公网开放，只允许内网或应用服务器来源。
+
 ## Netplan 配置生成器
 
 填写后实时生成 `/etc/netplan/99-custom.yaml` 内容。默认写到 `99-custom.yaml`，不要直接改 `50-cloud-init.yaml`：`50-cloud-init.yaml` 是 cloud-init 托管生成的那个文件，手动改它可能在重启或 cloud-init 重新运行时被覆盖。
@@ -112,6 +128,8 @@ description: "互动工具：Netplan 配置生成器与 UFW 防火墙规则生�
 
     - 启用 UFW 前务必先放行 SSH（或你改过的 SSH 端口），顺序反了会把自己锁在外面。
     - 云服务器还要同步放行**云厂商安全组**，两层缺一不可，见[防火墙](../02-security/03-firewall.md)与[端口三重门](../10-game-servers/01-port-opening.md)。
+
+<div id="copy-toast" style="display: none; position: fixed; left: 50%; bottom: 1.4em; transform: translateX(-50%); z-index: 9999; max-width: 92vw; background: #b71c1c; color: #fff; padding: 0.7em 1.1em; border-radius: 4px; box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35); opacity: 0; transition: opacity 0.3s;">粘贴到服务器前请先逐行审阅，并确认已保留回滚通道。</div>
 
 <script>
 function npGenerate() {
@@ -273,6 +291,21 @@ function ufwGenerate() {
   lines.push("# curl -v http://<服务器IP>:" + verifyPort + "/");
   document.getElementById("ufw-out").textContent = lines.join("\n");
 }
+function showCopyToast() {
+  var toast = document.getElementById("copy-toast");
+  if (!toast) { return; }
+  toast.style.display = "block";
+  toast.style.opacity = "1";
+  if (toast._hideTimer) {
+    clearTimeout(toast._hideTimer);
+  }
+  toast._hideTimer = setTimeout(function () {
+    toast.style.opacity = "0";
+    setTimeout(function () {
+      toast.style.display = "none";
+    }, 300);
+  }, 4500);
+}
 function bindCopy(btnId, outId, msgId) {
   var btn = document.getElementById(btnId);
   if (!btn) { return; }
@@ -280,6 +313,7 @@ function bindCopy(btnId, outId, msgId) {
     var text = document.getElementById(outId).textContent;
     navigator.clipboard.writeText(text).then(function () {
       document.getElementById(msgId).textContent = "已复制";
+      showCopyToast();
     });
   });
 }
