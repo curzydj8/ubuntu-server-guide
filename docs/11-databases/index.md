@@ -1,3 +1,7 @@
+---
+description: "数据库安装、管理与高可用：MySQL/MariaDB 与 PostgreSQL 安装、权限、调优与备份恢复，Redis 主从与 Sentinel，MongoDB，容器化持久化与主从复制。"
+---
+
 # 第 11 部分：数据库安装、管理与高可用
 
 应用宕机可以重启，数据丢了往往没有第二次机会。本部分在 Ubuntu Server 22.04 / 24.04 LTS 上，把 MySQL / MariaDB、PostgreSQL、Redis、MongoDB 从「装得上」做到「管得住、扛得住、恢复得回来」，最后补齐高可用与容器化。先学 MySQL 的方法论，后面三类数据库会顺很多。
