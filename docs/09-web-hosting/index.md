@@ -1,3 +1,7 @@
+---
+description: "网站搭建、域名与应用部署：DNS 解析与 Cloudflare、宝塔面板安装与安全加固、LNMP/LAMP 自建、Docker 部署 WordPress/Nextcloud、Certbot/acme.sh 自动证书续期。"
+---
+
 # 09 网站搭建、域名与应用部署
 
 服务器装好系统、加固好 SSH 之后，真正让它对外产生价值的一步是把网站和应用跑起来。本部分从域名解析讲起，依次走完面板路线、手工 LNMP/LAMP 路线、Docker 路线，最后用 HTTPS 自动化证书收尾。读完本部分，你应该能独立完成从买域名到网站上线全流程，并且在任何一环出问题时知道去哪里查。
