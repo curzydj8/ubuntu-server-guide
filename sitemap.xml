@@ -33,6 +33,10 @@
          <lastmod>2026-10-21</lastmod>
     </url>
     <url>
+         <loc>https://curzydj8.github.io/ubuntu-server-guide/01-basics/05-cloud-init-autoinstall/</loc>
+         <lastmod>2026-10-21</lastmod>
+    </url>
+    <url>
          <loc>https://curzydj8.github.io/ubuntu-server-guide/02-security/</loc>
          <lastmod>2026-10-21</lastmod>
     </url>
@@ -50,6 +54,18 @@
     </url>
     <url>
          <loc>https://curzydj8.github.io/ubuntu-server-guide/02-security/04-defense/</loc>
+         <lastmod>2026-10-21</lastmod>
+    </url>
+    <url>
+         <loc>https://curzydj8.github.io/ubuntu-server-guide/02-security/05-enterprise-identity/</loc>
+         <lastmod>2026-10-21</lastmod>
+    </url>
+    <url>
+         <loc>https://curzydj8.github.io/ubuntu-server-guide/02-security/06-cis-baseline/</loc>
+         <lastmod>2026-10-21</lastmod>
+    </url>
+    <url>
+         <loc>https://curzydj8.github.io/ubuntu-server-guide/02-security/07-unattended-upgrades/</loc>
          <lastmod>2026-10-21</lastmod>
     </url>
     <url>
@@ -90,6 +106,10 @@
     </url>
     <url>
          <loc>https://curzydj8.github.io/ubuntu-server-guide/04-network/04-time-logging/</loc>
+         <lastmod>2026-10-21</lastmod>
+    </url>
+    <url>
+         <loc>https://curzydj8.github.io/ubuntu-server-guide/04-network/05-dnssec-advanced/</loc>
          <lastmod>2026-10-21</lastmod>
     </url>
     <url>
@@ -190,6 +210,10 @@
     </url>
     <url>
          <loc>https://curzydj8.github.io/ubuntu-server-guide/09-web-hosting/05-https-certificates/</loc>
+         <lastmod>2026-10-21</lastmod>
+    </url>
+    <url>
+         <loc>https://curzydj8.github.io/ubuntu-server-guide/09-web-hosting/06-mail-server/</loc>
          <lastmod>2026-10-21</lastmod>
     </url>
     <url>
@@ -338,6 +362,30 @@
     </url>
     <url>
          <loc>https://curzydj8.github.io/ubuntu-server-guide/15-command-reference/06-scheduling-containers-more/</loc>
+         <lastmod>2026-10-21</lastmod>
+    </url>
+    <url>
+         <loc>https://curzydj8.github.io/ubuntu-server-guide/reference/</loc>
+         <lastmod>2026-10-21</lastmod>
+    </url>
+    <url>
+         <loc>https://curzydj8.github.io/ubuntu-server-guide/reference/command-index/</loc>
+         <lastmod>2026-10-21</lastmod>
+    </url>
+    <url>
+         <loc>https://curzydj8.github.io/ubuntu-server-guide/reference/config-files/</loc>
+         <lastmod>2026-10-21</lastmod>
+    </url>
+    <url>
+         <loc>https://curzydj8.github.io/ubuntu-server-guide/reference/contributing/</loc>
+         <lastmod>2026-10-21</lastmod>
+    </url>
+    <url>
+         <loc>https://curzydj8.github.io/ubuntu-server-guide/reference/glossary/</loc>
+         <lastmod>2026-10-21</lastmod>
+    </url>
+    <url>
+         <loc>https://curzydj8.github.io/ubuntu-server-guide/reference/ports/</loc>
          <lastmod>2026-10-21</lastmod>
     </url>
     <url>
