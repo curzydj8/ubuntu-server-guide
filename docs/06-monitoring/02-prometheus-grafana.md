@@ -1,3 +1,7 @@
+---
+description: "第 1 章的工具只能看当下。生产环境还需要三件事：指标长期留存、阈值自动通知、多机统一视图。本章的 Prometheus 加 Grafana 加 Alertmanager 组合正是为这三件事设计的开源事实标准。"
+---
+
 # 企业级监控栈：Prometheus 与 Grafana
 
 ## 一、概述与使用场景
