@@ -1,10 +1,10 @@
 ---
-description: "互动工具：Netplan 配置生成器与 UFW 防火墙规则生成器，填表实时生成可直接复制的 YAML 配置与命令，纯前端运行、不上传任何数据。"
+description: "互动工具：Netplan 配置生成器、UFW 防火墙规则生成器与 SSH 命令生成器，填表实时生成可直接复制的配置与命令，纯前端运行、不上传任何数据。"
 ---
 
 # 互动工具
 
-两个纯前端小工具：在浏览器里填表，实时生成可复制的配置与命令，**不上传任何数据**。生成结果请先核对再落到服务器上执行。
+三个纯前端小工具：在浏览器里填表，实时生成可复制的配置与命令，**不上传任何数据**。生成结果请先核对再落到服务器上执行。
 
 !!! warning "使用前必读"
 
@@ -13,7 +13,7 @@ description: "互动工具：Netplan 配置生成器与 UFW 防火墙规则生�
 
 ## 执行顺序与风险提示
 
-两个生成器产出的配置与命令，请按同一套顺序使用，不要生成后整段粘贴就执行：
+各生成器产出的配置与命令，请按同一套顺序使用，不要生成后整段粘贴就执行：
 
 1. **先检查现状**：先看现有配置文件、服务状态与防火墙规则，确认机器当前是什么状态。
 2. **先备份**：改任何配置之前留一份带日期的副本，确认回滚路径真实存在。
@@ -128,6 +128,66 @@ description: "互动工具：Netplan 配置生成器与 UFW 防火墙规则生�
 
     - 启用 UFW 前务必先放行 SSH（或你改过的 SSH 端口），顺序反了会把自己锁在外面。
     - 云服务器还要同步放行**云厂商安全组**，两层缺一不可，见[防火墙](../02-security/03-firewall.md)与[端口三重门](../10-game-servers/01-port-opening.md)。
+
+## SSH 命令生成器
+
+按命令类型填表，实时生成可复制的 `ssh` / `scp` 命令。本工具只在浏览器里拼字符串，**不会真的连接任何服务器，也不会收集或上传你填的内容**。系统讲解见 [SSH 专题](../14-ssh/index.md)。
+
+!!! danger "私钥只填路径，绝不粘贴内容"
+
+    - 「私钥路径」只填本地文件路径（如 `~/.ssh/id_ed25519`），**不要把私钥文件的内容粘贴到任何网页、聊天或仓库里**——私钥内容等于钥匙本身，泄露就立即换钥。
+    - 执行前确认目标主机与端口无误；首次连接出现指纹提示时，先与服务器控制台显示的指纹核对再接受（方法见 [连接与客户端配置](../14-ssh/02-connect-config.md)）。
+
+<div>
+  <p>
+    <label>命令类型
+      <select id="ssh-type">
+        <option value="login" selected>登录远程服务器</option>
+        <option value="upload">上传文件（scp）</option>
+        <option value="download">下载文件（scp）</option>
+        <option value="local">本地端口转发（-L）</option>
+        <option value="remote">远程端口转发（-R）</option>
+        <option value="dynamic">动态转发（SOCKS）</option>
+        <option value="debug">调试模式（-vvv）</option>
+        <option value="jump">经跳板机（ProxyJump）</option>
+      </select>
+    </label>
+  </p>
+  <p>
+    <label>服务器 IP 或域名 <input type="text" id="ssh-host" value="192.0.2.10"></label>
+    <label>用户名 <input type="text" id="ssh-user" value="ubuntu"></label>
+    <label>SSH 端口 <input type="number" id="ssh-port" min="1" max="65535" value="22"></label>
+    <label>私钥路径（可选） <input type="text" id="ssh-key" placeholder="~/.ssh/id_ed25519"></label>
+  </p>
+  <div id="ssh-grp-file" style="display: none;">
+    <p>
+      <label>本地文件路径 <input type="text" id="ssh-local" value="./backup.tar.gz"></label>
+      <label>远程路径 <input type="text" id="ssh-remote" value="/tmp/"></label>
+    </p>
+  </div>
+  <div id="ssh-grp-fwd" style="display: none;">
+    <p>
+      <label>本地监听端口 <input type="number" id="ssh-listen" min="1" max="65535" value="8080"></label>
+      <span id="ssh-fwd-targets">
+        <label>目标主机（以服务器视角） <input type="text" id="ssh-thost" value="127.0.0.1"></label>
+        <label>目标端口 <input type="number" id="ssh-tport" min="1" max="65535" value="80"></label>
+      </span>
+    </p>
+  </div>
+  <div id="ssh-grp-jump" style="display: none;">
+    <p>
+      <label>跳板机 <input type="text" id="ssh-jump" placeholder="ubuntu@192.0.2.1 或 config 别名"></label>
+    </p>
+  </div>
+  <div id="ssh-err" style="display: none; border: 1px solid #c62828; background: rgba(198, 40, 40, 0.10); padding: 0.6em 0.9em; margin: 0.6em 0;"></div>
+  <pre id="ssh-out" style="white-space: pre; overflow-x: auto;"></pre>
+  <p><button type="button" id="ssh-copy">复制命令</button> <span id="ssh-msg"></span></p>
+</div>
+
+!!! note "生成器覆盖不到的用法"
+
+    - 多台服务器的别名、连接复用与跳板机长期配置，写进 `~/.ssh/config` 比每次拼命令更可靠，见 [连接与客户端配置](../14-ssh/02-connect-config.md)。
+    - 大文件、增量同步与断点续传用 `rsync`，见 [文件传输与远程执行](../14-ssh/04-transfer-remote-exec.md)；三种转发与跳板机的原理和排坑见 [隧道与跳板机](../14-ssh/05-tunnels-jump.md)。
 
 <div id="copy-toast" style="display: none; position: fixed; left: 50%; bottom: 1.4em; transform: translateX(-50%); z-index: 9999; max-width: 92vw; background: #b71c1c; color: #fff; padding: 0.7em 1.1em; border-radius: 4px; box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35); opacity: 0; transition: opacity 0.3s;">粘贴到服务器前请先逐行审阅，并确认已保留回滚通道。</div>
 
@@ -291,6 +351,128 @@ function ufwGenerate() {
   lines.push("# curl -v http://<服务器IP>:" + verifyPort + "/");
   document.getElementById("ufw-out").textContent = lines.join("\n");
 }
+function sshQuote(v) {
+  if (/^[A-Za-z0-9_@%+=:,.\/~-]+$/.test(v)) { return v; }
+  return "'" + v.replace(/'/g, "'\\''") + "'";
+}
+function sshShowGroup(id, show) {
+  var el = document.getElementById(id);
+  if (el) { el.style.display = show ? "block" : "none"; }
+}
+function sshGenerate() {
+  var out = document.getElementById("ssh-out");
+  if (!out) { return; }
+  var type = document.getElementById("ssh-type").value;
+  var host = document.getElementById("ssh-host").value.trim();
+  var user = document.getElementById("ssh-user").value.trim();
+  var portRaw = document.getElementById("ssh-port").value.trim();
+  var key = document.getElementById("ssh-key").value.trim();
+  var isFile = (type === "upload" || type === "download");
+  var isFwd = (type === "local" || type === "remote" || type === "dynamic");
+  sshShowGroup("ssh-grp-file", isFile);
+  sshShowGroup("ssh-grp-fwd", isFwd);
+  sshShowGroup("ssh-grp-jump", type === "jump");
+  var tgt = document.getElementById("ssh-fwd-targets");
+  if (tgt) { tgt.style.display = (type === "dynamic") ? "none" : "inline"; }
+  var errs = [];
+  if (!host) { errs.push("服务器 IP / 域名不能为空"); }
+  else if (!/^[A-Za-z0-9._:\[\]-]+$/.test(host)) { errs.push("服务器地址含非法字符"); }
+  if (!user) { errs.push("用户名不能为空"); }
+  else if (!/^[A-Za-z0-9._-]+$/.test(user)) { errs.push("用户名含非法字符"); }
+  var port = 22;
+  if (portRaw) {
+    if (!/^\d+$/.test(portRaw)) { errs.push("SSH 端口必须是数字"); }
+    else {
+      port = parseInt(portRaw, 10);
+      if (port < 1 || port > 65535) { errs.push("SSH 端口必须在 1–65535 之间"); }
+    }
+  }
+  var listen = 8080;
+  if (isFwd) {
+    var lRaw = document.getElementById("ssh-listen").value.trim();
+    if (lRaw) {
+      if (!/^\d+$/.test(lRaw)) { errs.push("本地监听端口必须是数字"); }
+      else {
+        listen = parseInt(lRaw, 10);
+        if (listen < 1 || listen > 65535) { errs.push("本地监听端口必须在 1–65535 之间"); }
+      }
+    }
+  }
+  var tport = 80;
+  if (isFwd && type !== "dynamic") {
+    var tRaw = document.getElementById("ssh-tport").value.trim();
+    if (tRaw) {
+      if (!/^\d+$/.test(tRaw)) { errs.push("目标端口必须是数字"); }
+      else {
+        tport = parseInt(tRaw, 10);
+        if (tport < 1 || tport > 65535) { errs.push("目标端口必须在 1–65535 之间"); }
+      }
+    }
+  }
+  var jump = "";
+  if (type === "jump") {
+    jump = document.getElementById("ssh-jump").value.trim();
+    if (!jump) { errs.push("跳板机不能为空（格式：用户@跳板机IP 或 ~/.ssh/config 别名）"); }
+  }
+  var errBox = document.getElementById("ssh-err");
+  if (errs.length) {
+    if (errBox) { errBox.style.display = "block"; errBox.textContent = "输入有误：" + errs.join("；"); }
+    out.textContent = "# 请先修正上面的输入，再复制命令执行";
+    return;
+  }
+  if (errBox) { errBox.style.display = "none"; }
+  var target = user + "@" + host;
+  var portOpt = (port !== 22) ? " -p " + port : "";
+  var portOptScp = (port !== 22) ? " -P " + port : "";
+  var keyOpt = key ? " -i " + sshQuote(key) : "";
+  var cmd = "";
+  var notes = [];
+  if (type === "login") {
+    cmd = "ssh" + portOpt + keyOpt + " " + target;
+  } else if (type === "debug") {
+    cmd = "ssh -vvv" + portOpt + keyOpt + " " + target;
+    notes.push("# -vvv 输出三级调试日志，重点看认证方式与 Permission denied 之前的几行");
+  } else if (isFile) {
+    var local = document.getElementById("ssh-local").value.trim() || "./file";
+    var remote = document.getElementById("ssh-remote").value.trim() || "/tmp/";
+    if (type === "upload") {
+      cmd = "scp" + portOptScp + keyOpt + " " + sshQuote(local) + " " + target + ":" + sshQuote(remote);
+    } else {
+      cmd = "scp" + portOptScp + keyOpt + " " + target + ":" + sshQuote(remote) + " " + sshQuote(local);
+    }
+    notes.push("# scp 的端口参数是大写 -P（与 ssh 的小写 -p 不同）；整个目录传输加 -r；大文件与增量同步建议改用 rsync（见 SSH 专题第 04 章）");
+  } else if (isFwd) {
+    var thost = document.getElementById("ssh-thost").value.trim() || "127.0.0.1";
+    if (type === "local") {
+      cmd = "ssh -L " + listen + ":" + thost + ":" + tport + portOpt + keyOpt + " " + target;
+      notes.push("# 在本机打开 http://127.0.0.1:" + listen + " 即经服务器访问目标服务；只转发不开远程会话可追加 -N，后台运行追加 -fN");
+    } else if (type === "remote") {
+      cmd = "ssh -R " + listen + ":" + thost + ":" + tport + portOpt + keyOpt + " " + target;
+      notes.push("# 默认只在服务器的 127.0.0.1:" + listen + " 上监听；要让服务器对外提供该端口需服务端开启 GatewayPorts，请先评估安全风险");
+    } else {
+      cmd = "ssh -D " + listen + portOpt + keyOpt + " " + target;
+      notes.push("# 本地 SOCKS5 代理：127.0.0.1:" + listen + "，在浏览器或系统代理里填这个地址；只转发可追加 -N");
+    }
+  } else if (type === "jump") {
+    cmd = "ssh -J " + sshQuote(jump) + portOpt + keyOpt + " " + target;
+    notes.push("# -J 后面是跳板机（用户@跳板机[:端口] 或 ~/.ssh/config 别名）；目标机地址从跳板机视角解析");
+  }
+  out.textContent = [cmd].concat(notes).join("\n");
+}
+function initSshGen() {
+  var out = document.getElementById("ssh-out");
+  if (!out || out.getAttribute("data-ready") === "1") { return; }
+  out.setAttribute("data-ready", "1");
+  ["ssh-type", "ssh-host", "ssh-user", "ssh-port", "ssh-key", "ssh-local", "ssh-remote", "ssh-listen", "ssh-thost", "ssh-tport", "ssh-jump"].forEach(function (id) {
+    var el = document.getElementById(id);
+    if (el) {
+      el.addEventListener("input", sshGenerate);
+      el.addEventListener("change", sshGenerate);
+    }
+  });
+  bindCopy("ssh-copy", "ssh-out", "ssh-msg");
+  sshGenerate();
+}
 function showCopyToast() {
   var toast = document.getElementById("copy-toast");
   if (!toast) { return; }
@@ -347,7 +529,10 @@ function initGuideTools() {
 }
 if (window.document$ && typeof document$.subscribe === "function") {
   document$.subscribe(initGuideTools);
+  document$.subscribe(initSshGen);
 }
 document.addEventListener("DOMContentLoaded", initGuideTools);
+document.addEventListener("DOMContentLoaded", initSshGen);
 initGuideTools();
+initSshGen();
 </script>

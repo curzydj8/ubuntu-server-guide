@@ -1,5 +1,5 @@
 ---
-description: "Ubuntu Server 终极指南与实战教程：从安装、安全加固、存储网络、容器监控到数据库、虚拟化与 AI 运维，13 个部分、开箱即用的完整命令，适配 Ubuntu 22.04 / 24.04 LTS。"
+description: "Ubuntu Server 终极指南与实战教程：从安装、安全加固、存储网络、容器监控到数据库、虚拟化、AI 运维与 SSH 专题，15 个部分、开箱即用的完整命令，适配 Ubuntu 22.04 / 24.04 LTS。"
 ---
 
 # Ubuntu Server 终极指南与实战教程
@@ -31,6 +31,7 @@ description: "Ubuntu Server 终极指南与实战教程：从安装、安全加�
     日常维护与架构搭建：
 
     - 安全基线：[用户与 Sudo](02-security/02-users-sudo-pam.md) → [防火墙](02-security/03-firewall.md) → [入侵防御](02-security/04-defense.md)
+    - SSH 实战：[SSH 专题](14-ssh/index.md)——连接、密钥、隧道与排错（服务端加固见第 02 部分）；命令忘了查 [Linux 命令速查手册](15-command-reference/index.md)
     - 存储：[LVM](03-storage/01-lvm.md) → [ZFS/Btrfs](03-storage/02-zfs-btrfs.md) → [备份](03-storage/04-backup.md)
     - 服务：[DNS](04-network/01-dns.md) → [Web 与反向代理](04-network/02-web-proxy.md) → [VPN 组网](04-network/03-vpn-tunnel.md)
 
@@ -74,8 +75,10 @@ description: "Ubuntu Server 终极指南与实战教程：从安装、安全加�
 | 11 | 数据库安装、管理与高可用 | MySQL/MariaDB、PostgreSQL、Redis、MongoDB、主从与备份恢复 |
 | 12 | 硬件、虚拟化与私有云 | GPU/CUDA、KVM/QEMU/PVE、直通与 SR-IOV |
 | 13 | AI 工具与智能化运维 | 本地大模型、AI CLI 安全边界、IaC 与 GitOps |
+| 14 | SSH 专题：连接、密钥与隧道 | 原理与安装、连接与配置、密钥与 Agent、传输与远程执行、隧道与跳板机、排错与加固 |
+| 15 | Linux 命令速查手册 | 文件权限、软件包服务、网络诊断、磁盘进程、文本归档、定时容器系统 |
 
-另有：[互动工具](tools/index.md)（Netplan / UFW 在线生成器）与[更新日志](changelog.md)。
+另有：[互动工具](tools/index.md)（Netplan / UFW / SSH 在线生成器）与[更新日志](changelog.md)。
 
 ## 与旧教程的关系
 
