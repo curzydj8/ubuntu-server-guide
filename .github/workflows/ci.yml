@@ -1,0 +1,78 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+  schedule:
+    # 每周一 04:23 UTC 全量跑一遍（含死链扫描），防软件源/外链过期失效
+    - cron: "23 4 * * 1"
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: MkDocs 构建校验
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: 安装依赖
+        run: pip install mkdocs-material jieba
+      - name: 构建站点
+        run: mkdocs build
+
+  linkcheck:
+    name: 死链扫描（仅报告，不拦截）
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - name: lychee 扫描 docs 内链接
+        uses: lycheeverse/lychee-action@v2
+        with:
+          args: --no-progress --verbose "docs/**/*.md"
+          fail: false
+
+  markdownlint:
+    name: Markdown 格式校验
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      # 规则在仓库根 .markdownlint.json：按中文技术文档实际放宽了
+      # MD013 行长、MD033 内嵌 HTML（互动工具页需要）、MD034 裸 URL、
+      # MD036/MD040/MD046/MD051/MD060（模板化小节与 CJK 表格对齐不适用）
+      - name: markdownlint-cli2 校验 docs
+        run: npx --yes markdownlint-cli2 "docs/**/*.md"
+
+  scripts-smoke:
+    name: 脚本冒烟（bash -n + shellcheck）
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-22.04, ubuntu-24.04]
+    steps:
+      - uses: actions/checkout@v4
+      - name: bash 语法检查
+        run: |
+          set -e
+          for f in docs/scripts/*.sh; do
+            echo "bash -n $f"
+            bash -n "$f"
+          done
+      - name: shellcheck（可用时执行）
+        run: |
+          if command -v shellcheck >/dev/null 2>&1; then
+            shellcheck docs/scripts/*.sh
+          else
+            sudo apt-get update && sudo apt-get install -y shellcheck
+            shellcheck docs/scripts/*.sh
+          fi
