@@ -1,3 +1,7 @@
+---
+description: "Ansible 是目前使用最广的开源自动化配置管理工具。它的核心特点是无代理：控制节点通过 SSH 连接被管理节点，用 YAML 文件描述期望状态，再由 Ansible 负责把每台机器调整到期望状态。"
+---
+
 # Ansible 自动化配置管理
 
 ## 一、概述与使用场景
@@ -25,7 +29,6 @@ ssh-keygen -t ed25519 -f ~/.ssh/id_ed25519
 ssh-copy-id -i ~/.ssh/id_ed25519.pub opsadmin@192.0.2.21
 ssh opsadmin@192.0.2.21 "hostname && id"
 ```
-
 
 !!! warning "先小范围再全量"
 
@@ -56,7 +59,6 @@ ansible --version
 ```
 
 执行 pipx ensurepath 后需要重新打开终端，ansible 命令才会在 PATH 里。ansible --version 能输出版本号和配置文件路径即安装成功，本章后文命令与装法无关，两种都适用。
-
 
 ### 3.2 编写 inventory 清单
 
@@ -98,14 +100,12 @@ become = False
 become_method = sudo
 ```
 
-
 ```bash
 cd ~/ansible-lab
 ansible all -m ping
 ansible webservers -m ping
 ansible all -a "hostname"
 ```
-
 
 ### 3.3 ad-hoc 临时命令
 
@@ -119,7 +119,6 @@ ansible all -m copy -a "src=/tmp/motd.txt dest=/tmp/motd.txt mode=0644"
 ansible all -m file -a "path=/tmp/motd.txt state=absent"
 ansible dbservers -m service -a "name=cron state=restarted" --become
 ```
-
 
 !!! tip "临时命令的选择顺序"
 
@@ -201,7 +200,6 @@ nano init-nodes.yaml
         state: restarted
 ```
 
-
 !!! warning "改 SSH 配置前确认密钥能登录"
 
     禁止密码登录的任务一旦生效，密钥失效的节点将无法再用密码补救。在执行这份 Playbook 前，必须先逐台验证 opsadmin 用密钥能正常登录且 sudo 可用，也就是 3.2 节的 ping 测试全部通过。执行顺序也要遵守：先 --limit 跑一台，亲手用密钥重新登录验证成功，再放行全量。
@@ -232,7 +230,6 @@ ansible-galaxy role init base
 find base -type f | sort
 ```
 
-
 | 目录 | 用途 |
 | --- | --- |
 | tasks | 任务入口，main.yaml 是主文件 |
@@ -242,7 +239,6 @@ find base -type f | sort
 | templates | Jinja2 模板文件，生成的配置文件放这里 |
 | files | 原样分发的静态文件 |
 | meta | Role 的说明和依赖声明 |
-
 
 把 base 的任务拆分完成后，主 Playbook 就简化为引用形式。新建 site.yaml，完整内容如下：
 
@@ -265,7 +261,6 @@ ansible-playbook site.yaml
 ```
 
 入门阶段做到会生成、会拆分、会引用即可，不要一开始就追求把所有逻辑都 Role 化。先有一份能跑的 Playbook，再在第二次复用时抽 Role，是最稳妥的演进节奏。
-
 
 ### 3.6 幂等与检查模式
 
@@ -329,7 +324,6 @@ ansible-doc community.general.timezone
 
 ## 六、生产环境最佳实践与安全建议
 
-
 第二，敏感变量用 Ansible Vault 加密，不要明文写在变量文件里。创建加密变量文件的命令为 ansible-vault create group_vars/all/vault.yaml，执行 Playbook 时加 --ask-vault-pass 输入口令。Vault 口令本身按团队密钥管理规范保管，不与仓库放在一起。
 
 第三，执行纪律固定化：语法检查、单台灰度、全量预演、全量执行、结果验证五步缺一不可，并把每次全量执行的输出留档。批量工具的价值建立在可控上，跳步省下的几分钟，远不够赔一次批量误操作。
@@ -337,4 +331,3 @@ ansible-doc community.general.timezone
 第四，账号与密钥定期轮换。各节点统一使用密钥登录并关闭密码登录后，控制节点的私钥就是核心资产，权限必须为 600，存放在加密磁盘上，人员离岗时立即从全部节点的 authorized_keys 里移除对应公钥，用 Ansible 本身就能批量完成这件事。
 
 第五，控制节点本身要纳入备份和管控。能免密登录全部节点的控制节点一旦失守，等于整个机群失守。控制节点只允许少数运维人员登录，开启登录审计，不在上面运行无关服务。
-
