@@ -1,3 +1,7 @@
+---
+description: "LVM（Logical Volume Manager，逻辑卷管理器）是 Linux 在物理磁盘与文件系统之间插入的一层抽象。"
+---
+
 # LVM 动态卷管理
 
 ## 一、概述与使用场景
