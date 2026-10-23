@@ -16,6 +16,8 @@ description: "Ubuntu Server 网络服务与核心架构：BIND9/dnsmasq DNS 服�
 | 第 4 章 | [04-time-logging.md](04-time-logging.md) | 用 Chrony 对齐全网时间（含时间同步深化：选型、漂移与对 TLS、复制、Kerberos 的连锁影响），用 rsyslog 与 journald 把日志收齐、留存并查得动。 |
 | 第 5 章 | [05-dnssec-advanced.md](05-dnssec-advanced.md) | DNS 进阶：分清权威/递归/缓存三角色，逐行拆解区域文件，用 DNSSEC 给解析结果加上可验证的签名，并安全完成记录迁移。 |
 | 第 6 章 | [06-haproxy.md](06-haproxy.md) | 用 HAProxy 做四层/七层负载均衡：健康检查、故障摘除、连接排空与统计面安全。 |
+| 第 7 章 | [07-keepalived-vrrp.md](07-keepalived-vrrp.md) | 用 Keepalived 实现 VRRP 虚拟 IP 主备漂移：给双机 HAProxy 一个永不变更的入口地址，含健康检查、脑裂防护与切换演练。 |
+| 第 8 章 | [08-bonding-lacp.md](08-bonding-lacp.md) | 网卡 bonding 与 LACP：双网卡聚合做冗余与带宽叠加，Netplan 落地、交换机侧配合、拔线演练与解散回滚。 |
 
 ## 推荐阅读顺序
 

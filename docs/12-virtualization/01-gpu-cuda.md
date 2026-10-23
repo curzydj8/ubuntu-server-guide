@@ -343,6 +343,54 @@ docker run --rm --gpus all nvidia/cuda:<版本标签>-base-ubuntu24.04 nvidia-sm
 - 判读方法：先分清三个数——`nvidia-smi` 表头右侧的 `CUDA Version` 是**当前驱动最高支持**的 CUDA 版本；`nvcc --version` 是**本机工具链**的版本；框架文档写的是它**要求**的 CUDA 与最低驱动。要求高于驱动上限时，升工具链没有用，必须升驱动；工具链高于框架要求时，按框架要求降工具链或换用自带运行时的框架镜像。
 - 对应关系以 **NVIDIA 官方 CUDA Toolkit Release Notes 中的兼容表为准**：本节不复制具体版本号对应表，因为对应关系随版本发布持续变化，抄下来的表很快过期且容易抄错。查法是打开所用工具链版本对应的 Release Notes，在兼容性章节核对最低驱动要求，再与本机 `nvidia-smi` 表头的驱动版本对照，两者对上才动手安装或升级。
 
+### 回滚与恢复：驱动或 CUDA 变更后退回上一状态
+
+3.4 节记录的两份清单（`/root/nvidia-packages-before.txt`、`/root/apt-manual-before.txt`）是回退的对照基线：动手回退前先打开它确认变更前的分支号，下面命令中的 `OLD_BRANCH` 就填它。回退分三种情形，按你遇到的挑一种，不要混着来。
+
+**情形一：新驱动装上了、能进系统，但工作不正常——回退到原分支。** 先解除锁定（如变更前执行过 hold），再把原分支装回来，重启后对照基线验证：
+
+```bash
+OLD_BRANCH='570'
+sudo apt-mark unhold "nvidia-driver-${OLD_BRANCH}"
+sudo apt install -y "nvidia-driver-${OLD_BRANCH}" "nvidia-utils-${OLD_BRANCH}"
+sudo apt autoremove -y
+sudo reboot
+nvidia-smi
+```
+
+`OLD_BRANCH` 替换为基线清单里记录的实际分支号。期望 `nvidia-smi` 表头的驱动版本与清单记录一致，再按 4.3 节验收清单复验一遍容器链路，才算退稳。
+
+**情形二：新驱动导致进不了图形界面或开机反复重启。** 不要在这个状态里反复重装。开机在 GRUB 菜单的 Advanced options 里选上一个可用内核启动（保留旧内核就是为这一步）；旧内核同样起不来时，用恢复模式（recovery mode）的 root shell，或在登录界面按 `Ctrl+Alt+F3` 切到 TTY 登录；没有本地屏幕的云服务器走厂商控制台的 VNC 或串口终端。进入可用命令行后，整体卸载专有驱动、先恢复到开源 Nouveau 能进系统的状态：
+
+```bash
+sudo apt purge -y 'nvidia-*' 'libnvidia-*'
+sudo apt autoremove -y
+sudo update-initramfs -u
+sudo reboot
+lsmod | grep nouveau
+```
+
+期望重启后能正常进入桌面或登录界面、`lsmod` 里能看到 `nouveau`。此时 GPU 计算不可用是预期内的中间状态——先保证系统可用，再回第三节用 `ubuntu-drivers devices` 重新选分支安装，不要在救援环境里顺手把新驱动又装回去。
+
+**情形三：只回退 CUDA 工具链或容器配置，驱动不动。** 工具链按当初的路线退：发行版路线执行 `sudo apt purge -y nvidia-cuda-toolkit`；官方源路线先把 3.6 节备份的源配置还原、再卸掉对应工具链包：
+
+```bash
+CUDA_PKG='cuda-toolkit-12-6'
+sudo apt purge -y "${CUDA_PKG}"
+sudo cp -a /root/sources.list.d.bak-2026-01-01/. /etc/apt/sources.list.d/
+sudo apt update
+```
+
+`CUDA_PKG` 换成你实际装的工具链包名，源备份目录名按 3.6 节备份当天的日期替换。Docker 侧的 GPU 配置回退用 3.8 节的 daemon.json 备份还原；当时走 CDI 方式的，再删掉生成的规范文件：
+
+```bash
+sudo cp /etc/docker/daemon.json.bak-2026-01-01 /etc/docker/daemon.json
+sudo rm -f /etc/cdi/nvidia.yaml
+sudo systemctl restart docker
+```
+
+备份文件名按 3.8 节实际生成的那份替换（先 `ls /etc/docker/daemon.json.bak-*` 确认）。三种情形回退完成后都回 4.1、4.2 节复验，并把失败原因与回退后的版本组合记进基线文档，下次变更窗口先看这份记录。
+
 ## 六、生产环境最佳实践与安全建议
 
 驱动变更走变更流程：升级前记录旧版本与 `nvidia-smi` 输出，升级后跑固定冒烟集，包括宿主机检查、容器检查与一次真实短推理，全部通过才算完成。验证通过的驱动与 CUDA 组合写入配置基线，新机器按基线装配。

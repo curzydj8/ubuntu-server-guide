@@ -67,6 +67,7 @@ description: "Ubuntu Server 终极指南版本兼容与验证状态：按已实�
 | 02 系统安全与权限管理 | [自动安全更新](02-security/07-unattended-upgrades.md) | 文档核对 | 文档核对 | 待核验 | 第一期新增，文档核对整理；待核验，26.04 亦未实机验证 |
 | 02 系统安全与权限管理 | [证书与密钥生命周期管理](02-security/08-certificate-lifecycle.md) | 文档核对 | 文档核对 | 待核验 | 第二期新增，文档核对整理；待核验，26.04 亦未实机验证 |
 | 02 系统安全与权限管理 | [秘密信息管理](02-security/09-secrets-management.md) | 文档核对 | 文档核对 | 待核验 | 第二期新增，文档核对整理；待核验，26.04 亦未实机验证 |
+| 02 系统安全与权限管理 | [LUKS 磁盘加密](02-security/10-luks-disk-encryption.md) | 文档核对 | 文档核对 | 待核验 | 第三期新增（内容补缺），文档核对整理，开机解锁流程未实机走通；待核验，26.04 亦未实机验证 |
 | 03 磁盘、文件系统与存储 | [部分导览](03-storage/index.md) | 文档核对 | 文档核对 | 待核验 | 待核验，26.04 亦未实机验证 |
 | 03 磁盘、文件系统与存储 | [LVM 动态卷管理](03-storage/01-lvm.md) | 文档核对 | 文档核对 | 待核验 | 待核验，26.04 亦未实机验证 |
 | 03 磁盘、文件系统与存储 | [ZFS 与 Btrfs](03-storage/02-zfs-btrfs.md) | 文档核对 | 文档核对 | 待核验 | 待核验，26.04 亦未实机验证 |
@@ -80,6 +81,8 @@ description: "Ubuntu Server 终极指南版本兼容与验证状态：按已实�
 | 04 网络服务与核心架构 | [网络隧道与 VPN](04-network/03-vpn-tunnel.md) | 文档核对 | 文档核对 | 待核验 | 待核验，26.04 亦未实机验证 |
 | 04 网络服务与核心架构 | [时间同步与系统日志](04-network/04-time-logging.md) | 文档核对 | 文档核对 | 待核验 | 待核验，26.04 亦未实机验证 |
 | 04 网络服务与核心架构 | [负载均衡：HAProxy](04-network/06-haproxy.md) | 文档核对 | 文档核对 | 待核验 | 第二期新增，文档核对整理；待核验，26.04 亦未实机验证 |
+| 04 网络服务与核心架构 | [Keepalived 与 VRRP 高可用](04-network/07-keepalived-vrrp.md) | 文档核对 | 文档核对 | 待核验 | 第三期新增（P0-3）；两份 keepalived.conf 示例已用 24.04 的 Keepalived 2.2.8 官方二进制通过配置语法校验，双机故障切换行为未实机验证；待核验，26.04 亦未实机验证 |
+| 04 网络服务与核心架构 | [网卡 Bonding 与 LACP](04-network/08-bonding-lacp.md) | 文档核对 | 文档核对 | 待核验 | 第三期新增（内容补缺），文档核对整理；Netplan YAML 示例经结构解析校验，实机协商与拔线切换未验证；待核验，26.04 亦未实机验证 |
 | 05 容器化与云原生 | [部分导览](05-containers/index.md) | 已实测（核心流程） | 已实测（核心流程） | 待核验 | 以 Docker 为核心；Podman、k3s 为文档核对 |
 | 05 容器化与云原生 | [Docker 基础与进阶](05-containers/01-docker.md) | 已实测（核心流程） | 已实测（核心流程） | 待核验 | 待 26.04 机器恢复后实测 |
 | 05 容器化与云原生 | [Podman 无根容器](05-containers/02-podman.md) | 文档核对 | 文档核对 | 待核验 | 待核验，26.04 亦未实机验证 |
@@ -92,6 +95,7 @@ description: "Ubuntu Server 终极指南版本兼容与验证状态：按已实�
 | 06 系统监控、日志与性能调优 | [内核与性能调优](06-monitoring/04-kernel-tuning.md) | 文档核对 | 文档核对 | 待核验 | 待核验，26.04 亦未实机验证 |
 | 06 系统监控、日志与性能调优 | [可观测性与告警治理](06-monitoring/05-observability-alerting.md) | 文档核对 | 文档核对 | 待核验 | 第二期新增，文档核对整理；待核验，26.04 亦未实机验证 |
 | 06 系统监控、日志与性能调优 | [容量规划与日志治理](06-monitoring/06-capacity-log-governance.md) | 文档核对 | 文档核对 | 待核验 | 第二期新增，文档核对整理；待核验，26.04 亦未实机验证 |
+| 06 系统监控、日志与性能调优 | [OpenTelemetry 统一接入](06-monitoring/07-opentelemetry.md) | 文档核对 | 已实测（核心流程） | 待核验 | 第三期新增（内容补缺）；本章 config.yaml 已用官方 otelcol-contrib 0.163.2 在 24.04 环境实测：validate 通过、启动健康检查正常、三类信号经 OTLP/HTTP 注入后 debug 输出与 Prometheus 抓取端点均实查到数据；真实服务器长期运行与后端分发为文档核对；待核验，26.04 亦未实机验证 |
 | 07 自动化运维与脚本 | [部分导览](07-automation/index.md) | 文档核对 | 文档核对 | 待核验 | 待核验，26.04 亦未实机验证 |
 | 07 自动化运维与脚本 | [Shell 脚本规范与范例](07-automation/01-shell-scripting.md) | 文档核对 | 文档核对 | 待核验 | 待核验，26.04 亦未实机验证 |
 | 07 自动化运维与脚本 | [Systemd 服务与定时任务](07-automation/02-systemd-timers.md) | 文档核对 | 文档核对 | 待核验 | 待核验，26.04 亦未实机验证 |
@@ -118,7 +122,7 @@ description: "Ubuntu Server 终极指南版本兼容与验证状态：按已实�
 | 10 游戏服务器部署与端口映射 | [性能调优与守护](10-game-servers/03-performance-daemon.md) | 文档核对 | 文档核对 | 待核验 | 待核验，26.04 亦未实机验证 |
 | 10 游戏服务器部署与端口映射 | [内网穿透与公网映射](10-game-servers/04-nat-traversal.md) | 文档核对 | 文档核对 | 待核验 | 待核验，26.04 亦未实机验证 |
 | 11 数据库安装、管理与高可用 | [部分导览](11-databases/index.md) | 已实测（核心流程） | 已实测（核心流程） | 待核验 | 以 MySQL / PostgreSQL 为核心；Redis、MongoDB、主从复制为文档核对 |
-| 11 数据库安装、管理与高可用 | [MySQL 安装与安全初始化](11-databases/01-mysql-install-security.md) | 已实测（核心流程） | 已实测（核心流程） | 待核验 | 待 26.04 机器恢复后实测 |
+| 11 数据库安装、管理与高可用 | [MySQL 安装与安全初始化](11-databases/01-mysql-install-security.md) | 文档核对 | 文档核对 | 待核验 | 2026-10 主线已切换为 MySQL 8.4 LTS（Oracle 官方源），8.4 安装与 8.0→8.4 升级路径为文档核对级，待实机复测后升级状态；原发行版仓库版 8.0 核心流程曾实测，26.04 待机器恢复后实测 |
 | 11 数据库安装、管理与高可用 | [MySQL 用户、权限与远程访问](11-databases/02-mysql-users-remote.md) | 已实测（核心流程） | 已实测（核心流程） | 待核验 | 待 26.04 机器恢复后实测 |
 | 11 数据库安装、管理与高可用 | [MySQL 核心参数调优](11-databases/03-mysql-tuning.md) | 文档核对 | 文档核对 | 待核验 | 调优参数属进阶内容，为文档核对 |
 | 11 数据库安装、管理与高可用 | [MySQL 备份与还原演练](11-databases/04-mysql-backup-restore.md) | 文档核对 | 文档核对 | 待核验 | mysqldump 基础备份属核心流程，binlog 增量恢复属进阶文档核对 |
@@ -128,6 +132,8 @@ description: "Ubuntu Server 终极指南版本兼容与验证状态：按已实�
 | 11 数据库安装、管理与高可用 | [MongoDB 安装与调优](11-databases/08-mongodb.md) | 文档核对 | 文档核对 | 待核验 | 待核验，26.04 亦未实机验证 |
 | 11 数据库安装、管理与高可用 | [容器化数据库与主从复制](11-databases/09-ha-containerized.md) | 文档核对 | 文档核对 | 待核验 | 主从复制属进阶内容，为文档核对 |
 | 11 数据库安装、管理与高可用 | [数据库高可用实战与恢复演练](11-databases/10-ha-recovery-drills.md) | 文档核对 | 文档核对 | 待核验 | 第二期新增，文档核对整理；待核验，26.04 亦未实机验证 |
+| 11 数据库安装、管理与高可用 | [PgBouncer 连接池](11-databases/11-pgbouncer-pooling.md) | 文档核对 | 已实测（核心流程） | 待核验 | 第三期新增（内容补缺）；本章 ini 已用 24.04 官方仓库 PgBouncer 1.22.0 在沙箱实测：启动监听、SCRAM 管理登录、SHOW POOLS、transaction 模式建池与 query_wait_timeout 触发均符合预期；与真实 PostgreSQL 的业务联调及 auth_query 路线为文档核对；待核验，26.04 亦未实机验证 |
+| 11 数据库安装、管理与高可用 | [MySQL 集群与 ProxySQL](11-databases/12-mysql-cluster-proxysql.md) | 文档核对 | 文档核对 | 待核验 | 第三期新增（内容补缺），文档核对整理；三机集群与代理分流行为未实机验证；待核验，26.04 亦未实机验证 |
 | 12 硬件、虚拟化与私有云 | [部分导览](12-virtualization/index.md) | 文档核对 | 文档核对 | 待核验 | 待核验，26.04 亦未实机验证 |
 | 12 硬件、虚拟化与私有云 | [GPU 与 CUDA](12-virtualization/01-gpu-cuda.md) | 文档核对 | 文档核对 | 待核验 | 待核验，26.04 亦未实机验证 |
 | 12 硬件、虚拟化与私有云 | [KVM/QEMU 与 Proxmox VE](12-virtualization/02-kvm-qemu-pve.md) | 文档核对 | 文档核对 | 待核验 | 待核验，26.04 亦未实机验证 |

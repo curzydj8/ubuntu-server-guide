@@ -16,6 +16,7 @@ description: "Ubuntu Server 系统监控、日志与性能调优：htop/btop/gla
 | 第 4 章 | 04-kernel-tuning.md | 用 sysctl、Governor、zram 做有依据可回滚的内核调优 |
 | 第 5 章 | 05-observability-alerting.md | 从指标、日志、追踪三支柱看全系统，并把告警的分级、抑制与升级治理好 |
 | 第 6 章 | 06-capacity-log-governance.md | 用趋势数据做容量规划，用上限与轮转策略管住日志膨胀 |
+| 第 7 章 | 07-opentelemetry.md | 用 OpenTelemetry Collector 做统一接入层：应用只埋一次点，分发给站内既有监控与日志后端 |
 
 ## 推荐阅读顺序
 

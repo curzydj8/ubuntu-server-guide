@@ -1,0 +1,18 @@
+# Dependabot：三类依赖分组巡检，升级一律走 PR + 完整 CI，不自动合并。
+version: 2
+updates:
+  - package-ecosystem: "pip"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    # 构建依赖（requirements.txt）：mkdocs / mkdocs-material / jieba
+  - package-ecosystem: "npm"
+    directory: "/tests/tools"
+    schedule:
+      interval: "weekly"
+    # 工具测试依赖（tests/tools/package.json）：jsdom
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    # 工作流中的 Actions 已按完整 SHA 固定，升级 PR 需同步更新 SHA 与版本注释

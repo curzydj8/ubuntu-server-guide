@@ -359,6 +359,68 @@ Data source connected, but no labels received
 
 原因：数据源本身连通但 Loki 中还没有任何数据，多见于刚部署且 Vector 尚未成功推送时。修复顺序：先按第四节做端到端写入测试，确认查询接口能返回数据后，再回 Grafana 重新测试，提示即会变为成功。不要在无数据时反复改数据源地址。
 
+### 5.4 回滚与恢复：日志栈变更如何退回
+
+日志栈能退回的对象有四个：Loki 二进制、Loki 配置、Vector 配置、Grafana 里的 Loki 数据源。共同前提是改之前先留备份，命名沿用本章的 `.bak-日期` 后缀：
+
+```bash
+# Loki：停服务后给数据目录做整目录快照（保证一致性），并备份二进制与配置
+sudo systemctl stop loki
+sudo cp -a /var/lib/loki /var/lib/loki.bak-20260101
+sudo cp /usr/local/bin/loki /usr/local/bin/loki.bak-20260101
+sudo cp /etc/loki/config.yaml /etc/loki/config.yaml.bak-20260101
+sudo systemctl start loki
+loki --version
+
+# Vector 配置与 Grafana 的状态库（数据源与仪表盘都存在 grafana.db 里）
+sudo cp /etc/vector/vector.yaml /etc/vector/vector.yaml.bak-20260101
+vector --version
+sudo systemctl stop grafana-server
+sudo cp /var/lib/grafana/grafana.db /var/lib/grafana/grafana.db.bak-20260101
+sudo systemctl start grafana-server
+```
+
+数据目录快照体积大，先按 3.5 节的测算确认磁盘放得下；只改配置、不动版本的变更可以只备配置与状态库，不必每次整备数据目录。
+
+Loki 版本或配置回退：把备份的二进制与配置覆盖回去再启动。若新版已经写入了旧版读不懂的索引（启动日志报 schema 相关错误），连数据目录一并整体还原；被换下来的现场先改名封存，不要直接删：
+
+```bash
+sudo systemctl stop loki
+sudo cp /usr/local/bin/loki.bak-20260101 /usr/local/bin/loki
+sudo cp /etc/loki/config.yaml.bak-20260101 /etc/loki/config.yaml
+sudo systemctl start loki
+curl http://localhost:3100/ready
+```
+
+```bash
+# 仅在旧版读不了新数据时执行这一组：整体还原数据目录
+sudo systemctl stop loki
+sudo mv /var/lib/loki /var/lib/loki.after-upgrade
+sudo cp -a /var/lib/loki.bak-20260101 /var/lib/loki
+sudo chown -R loki:loki /var/lib/loki
+sudo systemctl start loki
+curl http://localhost:3100/ready
+```
+
+Vector 回退：恢复备份配置，先校验再重启，看日志确认推送恢复；选了 Promtail 的机器同理，恢复 `/etc/promtail/config.yaml` 的备份后重启 promtail 服务：
+
+```bash
+sudo cp /etc/vector/vector.yaml.bak-20260101 /etc/vector/vector.yaml
+vector validate /etc/vector/vector.yaml
+sudo systemctl restart vector
+journalctl -u vector -n 30 --no-pager
+```
+
+Grafana 数据源回退：本章对 Grafana 只新增了一个 Loki 数据源。若只是地址写错，在 UI 里把该数据源的 URL 改回原值即可，不必动状态库；若数据源或仪表盘被改乱，恢复改前备份的 grafana.db：
+
+```bash
+sudo systemctl stop grafana-server
+sudo cp /var/lib/grafana/grafana.db.bak-20260101 /var/lib/grafana/grafana.db
+sudo systemctl start grafana-server
+```
+
+退完按第四节的口径三查：`/ready` 返回 ready；用 query_range 查一条回退前就存在的历史日志，确认旧数据仍可读；再按第四节的办法写入一条新标记，确认采集链路恢复、新数据继续进入，Grafana Explore 里同样查得到。三处一致才算回退完成，观察一段时间无新增报错后，再清理 after-upgrade 封存目录。
+
 ## 六、生产环境最佳实践与安全建议
 
 第一，网络收口。Loki 的 3100 端口只允许来源机网段与 Grafana 所在机器访问，禁止暴露到公网；跨公网传输时必须套 TLS 或走专线与隧道，明文 HTTP 只适用于可信内网。

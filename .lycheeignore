@@ -1,0 +1,6 @@
+# lychee 误报豁免（逐条注明原因；只豁免提取器误判，不豁免真实链接）
+# 1) 06-monitoring/03-logging-stack.md 散文中的示例地址 http://localhost:3100），点击…：
+#    lychee 把全角括号与后续中文粘进了 URL。这不是 Markdown 链接，是填写示例。
+localhost:3100%EF%BC%89
+# 2) docs/tools/index.md 内嵌 JS 字符串里的转义引号 \" 被提取成 %5C%22%22 的伪链接。
+%5C%22%22
