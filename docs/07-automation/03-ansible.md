@@ -322,6 +322,58 @@ ansible-doc community.general.timezone
 
 装完先用 ansible-doc 确认模块存在，再重跑 Playbook。遇到同类报错时先判断模块属于核心还是某个合集，按报错里点分名字的前两段去安装对应合集，不要盲目重装整个 Ansible。
 
+### 回滚与恢复：批量变更如何退回
+
+Ansible 没有撤销按钮：执行过的变更不会因为把 Playbook 改回去就自动消失。回退靠三样东西——目标机上的配置备份、把期望状态显式改回去再收敛、以及和正向变更完全相同的灰度纪律（回滚同样先 `--limit` 一台、`--check --diff` 预演、验证后再全量；保持一个已登录的 SSH 会话不要关，验证新会话能登录后再关旧会话）。按变更类型分三种退法。
+
+第一种，配置文件类变更，按备份文件退回。以本章的 SSH 配置为例：3.4 节的 Playbook 改它之前已用 copy 任务把原文件备份为 `/etc/ssh/sshd_config.bak`，退回就是把备份拷回、先校验语法、再重启服务（相当于手动执行一遍 handler 的动作）：
+
+```bash
+cd ~/ansible-lab
+ansible all -m copy -a "src=/etc/ssh/sshd_config.bak dest=/etc/ssh/sshd_config remote_src=true owner=root group=root mode=0644" --become
+ansible all -a "/usr/sbin/sshd -t" --become
+ansible all -m service -a "name=ssh state=restarted" --become
+ansible all -m shell -a "grep -E '^(PasswordAuthentication|PermitRootLogin)' /etc/ssh/sshd_config"
+ssh opsadmin@192.0.2.21 "hostname && id"
+```
+
+期望：`sshd -t` 无报错，grep 输出与执行前的留档一致，新开终端用密钥能正常登录。
+
+第二种，其他会被覆盖的配置文件，靠给任务加 `backup` 参数留底。copy、template、lineinfile 等模块都支持 `backup: yes`：每次覆盖前在目标机的同目录留一份带时间戳的备份。回退时先列出备份、确认要退到哪一份，再按第一种的 copy 拷回：
+
+```bash
+ansible node1 -a "ls -lt /etc/ssh/" --become
+```
+
+本章 Playbook 用的是单独的 copy 备份任务，效果相同；新写 Playbook 时优先用 `backup: yes`，少一个手工步骤就少一个漏做点。
+
+第三种，状态类变更（装上的软件包、建出的账号）不会被「改回 Playbook」自动撤销，必须把状态显式反转，写一份回滚 Playbook 来执行。以本章的基础包为例，新建 rollback-init.yaml：
+
+```yaml
+---
+- name: 回滚示例：卸载本章基础包
+  hosts: all
+  become: true
+  tasks:
+    - name: 卸载基础软件包
+      ansible.builtin.apt:
+        name:
+          - htop
+          - net-tools
+        state: absent
+```
+
+```bash
+cd ~/ansible-lab
+ansible-playbook rollback-init.yaml --check --diff --limit node1
+ansible-playbook rollback-init.yaml --limit node1
+ansible-playbook rollback-init.yaml
+```
+
+两个边界要记清。其一，Playbook 本身回退到上一版（执行前 `cp` 留的 `.bak`，或版本管理里的上一版）重新执行，只能把「上一版仍然描述的那些状态」收敛回去；新版新增的任务在旧版里根本不存在，不会有人替你撤销，必须按第三种显式写反向任务。其二，账号类回滚（把 user 的 state 改为 absent）风险最高：删掉的正是当前登录用的 opsadmin 时会把自己锁在门外，执行前必须先备好替代登录通道并验证可用，这类回滚只在人员下线流程里做，不作为常规排障手段。
+
+回滚完成后，重跑第四节的四项验证，并把回滚执行的输出与正向执行一样留档存好——变更记录里正向和回滚成对出现，事后才追溯得清。
+
 ## 六、生产环境最佳实践与安全建议
 
 第二，敏感变量用 Ansible Vault 加密，不要明文写在变量文件里。创建加密变量文件的命令为 ansible-vault create group_vars/all/vault.yaml，执行 Playbook 时加 --ask-vault-pass 输入口令。Vault 口令本身按团队密钥管理规范保管，不与仓库放在一起。

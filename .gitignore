@@ -1,0 +1,10 @@
+# MkDocs 构建产物（CI 与发布流程按需生成，不入库）
+site/
+
+# 工具测试的本地依赖（按 tests/tools/package-lock.json 还原）
+tests/tools/node_modules/
+
+# Python 缓存
+__pycache__/
+*.pyc
+content-export/

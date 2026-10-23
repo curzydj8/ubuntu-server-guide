@@ -1,0 +1,12 @@
+import { JSDOM } from 'jsdom';
+import fs from 'fs';
+const html = fs.readFileSync(process.argv[2], 'utf8');
+const dom = new JSDOM(html, { runScripts: 'dangerously', url: 'https://example.com/tools/', pretendToBeVisual: true });
+await new Promise(r => setTimeout(r, 1500));
+const d = dom.window.document;
+const inp = d.getElementById('explain-text');
+inp.value = 'rm -rf /tmp/x';
+d.getElementById('explain-run').click();
+const out = d.getElementById('explain-out').textContent;
+console.log(/⚠|高风险|危险/.test(out) ? 'PASS explain 交互：rm -rf 标风险' : 'FAIL explain 交互');
+console.log(out.split('\n').slice(0, 4).join('\n'));

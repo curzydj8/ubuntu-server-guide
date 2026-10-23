@@ -266,6 +266,71 @@ echo "net.ipv4.ip_unprivileged_port_start=0" | sudo tee -a /etc/sysctl.conf
 sudo sysctl -p
 ```
 
+### 回滚与恢复：Podman 升级或迁移失败如何退回
+
+无根 Podman 的全部数据都在当前用户目录下，回退是否走得通，取决于动手前有没有导出三样东西：镜像、卷数据、systemd 单元文件。升级 Podman 版本或做迁移之前，先留一份底：
+
+```bash
+mkdir -p ~/podman-backup
+podman version > ~/podman-backup/before.txt
+podman ps -a >> ~/podman-backup/before.txt
+podman images >> ~/podman-backup/before.txt
+podman volume ls >> ~/podman-backup/before.txt
+podman save -o ~/podman-backup/nginx-alpine.tar docker.io/library/nginx:alpine
+cp -a ~/.config/containers/systemd ~/podman-backup/systemd-units
+```
+
+镜像有几个关键的就逐个 save 几个。卷数据按存放方式分两种备份：3.4 节 Quadlet 示例用的绑定目录直接打包；命名卷（卷名换成 `podman volume ls` 里的实际名字，本例写作 appdata）用一个临时容器把卷内容打成 tar 包：
+
+```bash
+tar -czf ~/podman-backup/webdata.tar.gz -C /home/ubuntu webdata
+podman run --rm -v appdata:/data:ro -v "$HOME/podman-backup:/backup" docker.io/library/alpine:latest tar -czf /backup/appdata.tar.gz -C /data .
+```
+
+版本回退：升级后容器起不来或行为异常，先把 Podman 本体降回旧版。版本号不要凭记忆写，先查仓库里还提供哪些版本，再指定旧版本号安装（命令里的版本号以查询结果为准）：
+
+```bash
+apt-cache policy podman
+sudo apt install -y "podman=<上一步查到的旧版本号>"
+podman version
+podman ps -a
+```
+
+降级后若 `podman info` 报存储不兼容，不要执行 `podman system reset`——那是清空全部数据的命令。先把用户存储改名封存、让旧版重建空存储，再用留底的 tar 把镜像导回来：
+
+```bash
+mv ~/.local/share/containers ~/.local/share/containers.after-upgrade
+podman load -i ~/podman-backup/nginx-alpine.tar
+podman images
+```
+
+卷数据随之恢复：绑定目录解包回原位置；命名卷先建空卷再把 tar 内容灌回去：
+
+```bash
+tar -xzf ~/podman-backup/webdata.tar.gz -C /home/ubuntu
+podman volume create appdata
+podman run --rm -v appdata:/data -v "$HOME/podman-backup:/backup" docker.io/library/alpine:latest tar -xzf /backup/appdata.tar.gz -C /data
+```
+
+systemd 单元恢复：Quadlet 单元改坏或被误删时，从留底目录拷回、重载并重新拉起（路线二 `podman generate systemd` 生成的 `.service` 文件同理，备份文件拷回 `~/.config/systemd/user/` 后执行同样的 daemon-reload 与 enable）：
+
+```bash
+cp -a ~/podman-backup/systemd-units/. ~/.config/containers/systemd/
+systemctl --user daemon-reload
+systemctl --user enable --now web.service
+systemctl --user status web.service --no-pager
+```
+
+若决定整体退回第 1 章的 Docker：save 出的镜像 tar 是 OCI 通用格式，Docker 可直接 load。先停掉 Podman 侧的单元，再在 Docker 侧导镜像、按第 1 章的方式重建容器，卷数据用上面的解包方法灌进 Docker 的卷或绑定目录：
+
+```bash
+systemctl --user disable --now web.service
+docker load -i ~/podman-backup/nginx-alpine.tar
+docker images
+```
+
+退完按第四节同一套口径验收：`podman version` 为目标版本、`podman ps` 中容器在跑、`curl -s http://127.0.0.1:8080/` 返回页面、`systemctl --user status web.service` 为 active，四项全对才算回退完成；封存的 containers.after-upgrade 目录先保留，观察确认无碍后再清理。
+
 ## 六、生产环境最佳实践与安全建议
 
 第一，无根模式要作为默认选择。只有确实需要特权能力的容器才考虑有根运行，并且要在部署文档里写明原因和影响范围，能拆分的尽量拆分，把特权范围压到最小。

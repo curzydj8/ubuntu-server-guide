@@ -283,6 +283,73 @@ mysql -h 127.0.0.1 -u appuser -p -e "SELECT 1;"
 
 账号主机对不上时，按程序实际的连接方式补建对应账号，不要图省事把主机写成百分号放行全网。
 
+### 回滚与恢复：变更后退回上一状态
+
+前面各节留的备份（3.3、3.4 的站点配置副本、3.6 的 mysqld.cnf 副本）就是为回滚准备的。再补两样变更前必做的备份——站点目录打包与数据库导出；没有这两份，配置能退、数据退不回去：
+
+```bash
+sudo tar -czf /root/www-example.com-$(date +%F).tar.gz -C /var/www example.com
+sudo mysqldump -u root -p appdb | sudo tee /root/appdb-$(date +%F).sql > /dev/null
+ls -lh /root/www-example.com-*.tar.gz /root/appdb-*.sql
+```
+
+**配置回退**：改坏任一配置时，先用语法检查确认是本次改动引起的，再用备份覆盖回来，不要在坏配置上继续叠加修改。编辑站点配置前同样先留一份副本：
+
+```bash
+sudo cp /etc/nginx/sites-available/example.com /etc/nginx/sites-available/example.com.bak-$(date +%F)
+
+# Nginx 默认站点配置退回 3.3 节的备份（example.com 配置同理换成它自己的 .bak 副本）
+sudo cp /etc/nginx/sites-available/default.bak.20260101 /etc/nginx/sites-available/default
+sudo nginx -t
+sudo systemctl reload nginx
+
+# MySQL 配置退回 3.6 节的备份
+sudo cp /etc/mysql/mysql.conf.d/mysqld.cnf.bak.20260101 /etc/mysql/mysql.conf.d/mysqld.cnf
+sudo systemctl restart mysql
+```
+
+Apache 路线把第一组命令换成 `/etc/apache2/sites-available/` 下的对应文件，语法检查换 `sudo apachectl configtest`、生效换 `sudo systemctl reload apache2`。若新站点配置本身就是故障源，先把它移出启用目录、恢复到只有默认站点的状态再慢慢查：Nginx 删掉 `sites-enabled` 里指向它的符号链接后 reload；Apache 用 `sudo a2dissite example.com.conf` 后 reload。
+
+**PHP 版本回退**：跨版本升级（如 8.1 升到 8.3）后程序不兼容，不必先卸载新版本——两个版本的 FPM 可以并存，先把站点指回旧版本，确认业务恢复后再决定去留：
+
+```bash
+OLD_PHP='8.1'
+sudo sed -i "s|/run/php/php[0-9.]*-fpm.sock|/run/php/php${OLD_PHP}-fpm.sock|" /etc/nginx/sites-available/example.com
+sudo nginx -t
+sudo systemctl reload nginx
+sudo systemctl status "php${OLD_PHP}-fpm" --no-pager
+```
+
+Apache 路线改为切换它加载的 PHP 模块：
+
+```bash
+OLD_PHP='8.1'
+NEW_PHP='8.3'
+sudo a2dismod "php${NEW_PHP}"
+sudo a2enmod "php${OLD_PHP}"
+sudo systemctl restart apache2
+```
+
+**站点文件与数据库恢复**：程序升级把文件或数据改坏时，用变更前的打包与导出整体还原（导入会按导出文件里的语句重建表，变更后新写入的数据会丢，回滚前先想清楚这笔账）：
+
+```bash
+WWW_BAK='/root/www-example.com-2026-01-01.tar.gz'
+sudo tar -xzf "${WWW_BAK}" -C /var/www
+sudo chown -R www-data:www-data /var/www/example.com
+DUMP_FILE='/root/appdb-2026-01-01.sql'
+sudo mysql -u root -p appdb < "${DUMP_FILE}"
+```
+
+上面两个文件名按你备份当天的实际日期替换。**回滚验证**按第四节的顺序再走一遍，并与变更前记录逐项对照：
+
+```bash
+systemctl is-active nginx php8.1-fpm mysql
+curl -I http://127.0.0.1
+mysql -u appuser -p -e "SHOW DATABASES;"
+```
+
+三项全过、页面打开后 PHP 版本号与业务数据都与变更前一致，才算回滚完成；刚回滚完不要立即叠加下一次变更，先定位上一次失败的原因再动手。
+
 ## 六、生产环境最佳实践与安全建议
 
 第一，PHP-FPM 按站点拆进程池并用不同系统用户运行，一个站点被攻破不直接带走全部站点，配置目录在 /etc/php/ 对应版本的 fpm/pool.d/ 下，改前先备份原文件。第二，生产环境关闭错误回显，在 php.ini 里把 display_errors 设为 Off，错误只写日志。第三，数据库坚持最小权限和本机监听两个原则，远程管理需求用 SSH 隧道解决，不要开放 3306 到公网。第四，Nginx 和 Apache 只保留一个对外，另一个即使不用也要 disable 掉自启，避免重启机器后抢端口。第五，配置变更走固定动作：备份、改文件、语法检查、reload、看错误日志，五步缺一不可，reload 失败时服务仍用旧配置运行，不要误判为已生效。第六，系统和组件更新纳入固定节奏，PHP 跨版本升级前先在测试机验证程序兼容性，尤其是从 8.1 升到 8.3 这类跨版本动作。

@@ -78,7 +78,25 @@ description: "Ubuntu Server 终极指南与实战教程：从安装、安全加�
 | 14 | SSH 专题：连接、密钥与隧道 | 原理与安装、连接与配置、密钥与 Agent、传输与远程执行、隧道与跳板机、排错与加固 |
 | 15 | Linux 命令速查手册 | 文件权限、软件包服务、网络诊断、磁盘进程、文本归档、定时容器系统 |
 
-另有：[参考索引](reference/index.md)（术语表、命令索引、端口与协议目录、配置文件索引、内容贡献规范）、[互动工具](tools/index.md)（九个在线工具：Netplan、UFW、SSH、子网计算、Cron、systemd、Nginx 反代、Compose、LVM 扩容）与[更新日志](changelog.md)。
+另有：[参考索引](reference/index.md)（术语表、命令索引、端口与协议目录、配置文件索引、内容贡献规范）、[互动工具](tools/index.md)（38 个在线工具，除 DNS 查询外全部在浏览器本地运行、不上传数据：Netplan 配置、UFW 规则、SSH 命令与配置、子网 / CIDR 计算（含 IPv6）、Cron 表达式、systemd Unit、Nginx 反向代理、Docker Compose 模板、LVM 扩容步骤、TLS 证书检查、Linux 权限计算、Hash 计算、版本号比较、Docker 资源换算、HTTP 状态码查询、格式校验与转换、配置差异比较、cloud-init 配置、SSH 服务端配置、systemd Timer、故障诊断决策树、Compose 安全审查、磁盘容量规划、备份策略计算、正则表达式测试、.env 检查、GitHub Actions 工作流、服务器资源规划、日志分析、APT 源辅助、服务器迁移计划、curl 命令构建、SSH 日志分析、Git 命令、命令解释、DNS 解析与记录查询、HTTP 响应头分析、端口与防火墙规划）与[更新日志](changelog.md)。
+
+## 最近更新
+
+- **2026-10-23 · 互动工具扩充至 38 个**：新增格式校验与转换、配置差异比较、cloud-init 配置、SSH 服务端配置、systemd Timer、故障诊断决策树、Compose 安全审查、磁盘容量规划、备份策略计算、正则测试、.env 检查、Actions 工作流、资源规划、日志分析、APT 源辅助、迁移计划、curl 构建、SSH 日志分析、Git 命令、命令解释、DNS 查询、HTTP 响应头分析、端口规划等 23 个工具；UFW 规则生成器补齐 IPv6 来源支持。
+
+- **2026-10-21 · 互动工具扩充至 15 个**：新增 TLS 证书检查、Linux 权限计算、Hash 计算、版本号比较、Docker 资源换算、HTTP 状态码查询六个工具；子网计算器支持 IPv6；SSH、systemd、Nginx、UFW 四个生成器升级（配置生成、加固选项、负载与服务规划）。
+- **2026-10-21 · 第三期扩展（v8.0）**：运维工具箱上线（子网、Cron、systemd、Nginx、Compose、LVM 六个生成器与 SSL 证书速查卡）。
+- **2026-10-21 · 第二期扩展（v7.0）**：新增 13 章生产深度专题（系统升级与生命周期、证书与秘密管理、可观测性、事故响应、数据库高可用实战等）。
+
+完整记录见[更新日志](changelog.md)。
+
+## 反馈与共建
+
+发现错误、命令在你的 Ubuntu 版本上跑不通，或想补充一个实战场景：
+
+- 到 [GitHub Issues](https://github.com/curzydj8/ubuntu-server-guide/issues) 提交 issue，请注明 Ubuntu 版本、执行命令与报错输出，方便复现定位。
+- 工具类问题请注明所用工具、浏览器与输入样例；**不要粘贴私钥、密码、令牌等敏感信息**（本站工具全部在本地运行，也没有任何输入框需要这些内容）。
+- 想直接贡献内容，先看[内容贡献规范](reference/contributing.md)。
 
 ## 与旧教程的关系
 

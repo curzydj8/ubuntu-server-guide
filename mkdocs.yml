@@ -93,6 +93,7 @@ nav:
       - 自动安全更新: 02-security/07-unattended-upgrades.md
       - 证书与密钥生命周期: 02-security/08-certificate-lifecycle.md
       - 秘密信息管理: 02-security/09-secrets-management.md
+      - LUKS 磁盘加密: 02-security/10-luks-disk-encryption.md
   - 03 磁盘、文件系统与存储:
       - 03-storage/index.md
       - LVM 动态卷管理: 03-storage/01-lvm.md
@@ -108,6 +109,8 @@ nav:
       - 网络隧道与 VPN: 04-network/03-vpn-tunnel.md
       - 时间同步与系统日志: 04-network/04-time-logging.md
       - 负载均衡 HAProxy: 04-network/06-haproxy.md
+      - Keepalived 与 VRRP 高可用: 04-network/07-keepalived-vrrp.md
+      - 网卡 Bonding 与 LACP: 04-network/08-bonding-lacp.md
   - 05 容器化与云原生:
       - 05-containers/index.md
       - Docker 基础与进阶: 05-containers/01-docker.md
@@ -122,6 +125,7 @@ nav:
       - 内核与性能调优: 06-monitoring/04-kernel-tuning.md
       - 可观测性与告警治理: 06-monitoring/05-observability-alerting.md
       - 容量规划与日志治理: 06-monitoring/06-capacity-log-governance.md
+      - OpenTelemetry 统一接入: 06-monitoring/07-opentelemetry.md
   - 07 自动化运维与脚本:
       - 07-automation/index.md
       - Shell 脚本规范与范例: 07-automation/01-shell-scripting.md
@@ -163,6 +167,8 @@ nav:
       - MongoDB 安装与调优: 11-databases/08-mongodb.md
       - 容器化数据库与主从复制: 11-databases/09-ha-containerized.md
       - 高可用实战与恢复演练: 11-databases/10-ha-recovery-drills.md
+      - PgBouncer 连接池: 11-databases/11-pgbouncer-pooling.md
+      - MySQL 集群与 ProxySQL: 11-databases/12-mysql-cluster-proxysql.md
   - 12 硬件、虚拟化与私有云:
       - 12-virtualization/index.md
       - GPU 与 CUDA: 12-virtualization/01-gpu-cuda.md

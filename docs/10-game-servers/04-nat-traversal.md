@@ -220,6 +220,57 @@ login to server failed: token in login doesn't match token from configuration
 
 **场景 3：TCP 游戏能连、UDP 游戏连不上。** 现象与日志都指向隧道正常，唯独 Palworld 无响应。原因是只建了 tcp 代理、漏了 udp 代理，或 VPS 安全组与 UFW 只放行了 8211/TCP。按第三步补齐 `type = "udp"` 的代理段与 UDP 放行规则后重启 frpc 即可。
 
+### 回滚：停用穿透并恢复无暴露状态
+
+不再开服、VPS 退租或改用其他方案时，按下面顺序完整拆除，不要只停一端：只停内网的 frpc、不处理 VPS，VPS 上的游戏端口仍在监听等待连接，暴露面还在；只停 frps、不删安全组规则，规则会一直留着等下一个服务踩上去。
+
+**第一步：停两端服务。** 先内网 frpc、后 VPS 上的 frps；停 frpc 的瞬间在线玩家会全部掉线，提前在群里打个招呼：
+
+```bash
+# 内网游戏主机上执行
+sudo systemctl disable --now frpc.service
+
+# VPS 上执行
+sudo systemctl disable --now frps.service
+```
+
+**第二步：撤销 VPS 的暴露面。** 删掉第二步加过的三条 UFW 规则：
+
+```bash
+sudo ufw delete allow 7000/tcp
+sudo ufw delete allow 25565/tcp
+sudo ufw delete allow 8211/udp
+sudo ufw status verbose
+```
+
+再回云厂商控制台，按第 01 章的位置把 7000、25565、8211 三条入站规则一并删除，UFW 与安全组两层都要清，这一步没有命令行可代劳。
+
+**第三步：卸载 frp 并清掉凭据。** 两台机器路径相同，各自执行（每台只有自己的那个 unit 文件，另一条删除会报不存在，忽略即可）：
+
+```bash
+sudo rm -f /etc/systemd/system/frps.service /etc/systemd/system/frpc.service
+sudo systemctl daemon-reload
+sudo rm -rf /opt/frp /etc/frp
+rm -f /tmp/frp_*_linux_amd64.tar.gz
+```
+
+`/etc/frp` 里有含 token 与面板口令的配置和 `.bak` 备份，删目录即一并清除；token 随 frps 配置消失自动失效，日后重建穿透必须重新生成新 token，不要复用旧值。第四步的两个备选方案同理收尾：NPS 在其服务端面板里删掉全部转发条目、停用并卸载服务端与客户端程序，面板口令在下线前先改掉；Tailscale 在管理后台把这台设备移除、关闭 Funnel 并撤销已签发的授权密钥，本机再执行 `tailscale logout` 退出登录。
+
+**第四步：验证已恢复无暴露状态。** 在 VPS 上确认 frp 相关监听全部消失：
+
+```bash
+ss -tulnp | grep -E '7000|25565|8211'
+systemctl is-active frps.service frpc.service
+```
+
+期望 `ss` 无输出（这台 VPS 若还直连跑着别的服务，按其实际端口判断）、两个服务都显示 inactive 或不存在。再从外网设备测一次玩家地址，应已连不上：
+
+```bash
+nc -vz 198.51.100.10 25565
+```
+
+最后在内网主机上用局域网地址直连一次游戏服，能连上才证明拆掉的只是穿透、游戏服本身完好——本机可连、外网不可达，就是回滚完成的标准状态。
+
 ## 六、生产环境最佳实践与安全建议
 
 token 按密码同等级别管理：高强度随机生成、只存放在两台机器的配置文件里、文件权限收紧到 600，不进聊天记录与公开仓库，怀疑泄露就两端同步更换。`allowPorts` 永远保持最小范围，只列在用的游戏端口，不写大区间图省事。管理面板只绑 127.0.0.1 并走 SSH 隧道访问，绝不直接对公网开放。VPS 除了 frp 不要跑无关服务，它现在是玩家入口，被攻破等于内网游戏主机一起暴露。延迟方面要提前管理预期：玩家延迟约等于玩家到 VPS 加 VPS 到内网主机两段之和，VPS 选离玩家与家里都近的机房。最后定期更新 frp 版本并关注其官方安全公告，更新流程与安装相同：备份配置、替换二进制、重启服务、按第四节做一遍真实验收。

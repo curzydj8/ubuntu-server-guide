@@ -14,7 +14,7 @@ description: "建账号是最容易埋雷的一步。给应用一个 root，或�
 
 | 项目 | 要求 | 说明 |
 | --- | --- | --- |
-| 操作系统 | Ubuntu Server 22.04 / 24.04 LTS | 已按第 11.1 章完成 MySQL 8.0 或 MariaDB 安装与安全初始化 |
+| 操作系统 | Ubuntu Server 22.04 / 24.04 LTS | 已按第 11.1 章完成 MySQL 8.4 LTS 或 MariaDB 安装与安全初始化 |
 | 数据库权限 | 可用 `root` 或等效管理账号本机登录 | 本章的建号、授权、回收都在此账号下执行 |
 | 系统权限 | 登录用户 `ubuntu` / `opsadmin` 具备 `sudo` | 改配置与防火墙需要 |
 | 防火墙 | UFW 已安装（Ubuntu 默认自带） | 未启用时本章给出启用顺序，注意不要把自己锁在 SSH 外面 |
@@ -279,6 +279,64 @@ mysql -h 192.0.2.20 -u appuser -p -e "SELECT 1;"
 ```
 
 端口不通先查防火墙与安全组，端口通但登录失败再回到账号与密码问题（注意账号的来源主机是否包含你的地址）。两类原因分开定位，不要一上来就把防火墙全关或把 `bind-address` 改成全网监听来「试试」，那会把排障变成新的事故。
+
+### 回滚与恢复：改错之后如何退回改前状态
+
+本章的变更都属于「改错一次就可能把自己锁在门外」的类型，能安全回退的前提是动手前先留一份可回放的基线。做任何建号、授权、回收或改监听之前，先把全量账号的建号语句与授权语句导成文件存好：
+
+```bash
+# 生成「逐个账号执行 SHOW」的语句清单，再借它导出全部账号定义与授权
+sudo mysql -u root -N -e "SELECT CONCAT('SHOW CREATE USER ', QUOTE(user), '@', QUOTE(host), ';') FROM mysql.user;" > /tmp/show-create-user.sql
+sudo mysql -u root -N < /tmp/show-create-user.sql | sudo tee /root/mysql-create-users-$(date +%F-%H%M).sql > /dev/null
+sudo mysql -u root -N -e "SELECT CONCAT('SHOW GRANTS FOR ', QUOTE(user), '@', QUOTE(host), ';') FROM mysql.user;" > /tmp/show-grants.sql
+sudo mysql -u root -N < /tmp/show-grants.sql | sudo tee /root/mysql-grants-$(date +%F-%H%M).sql > /dev/null
+ls -lh /root/mysql-create-users-*.sql /root/mysql-grants-*.sql
+```
+
+两份基线的区别：建号语句里带口令哈希，按它重建出的账号口令与删除前完全一致，应用侧不用改配置；授权语句就是可直接重放的 `GRANT`。回退按出错类型分三种：
+
+第一种，授权改错（多授要收回、少授要补回）。先把该账号在目标库上的权限清干净，再从基线里只挑这个账号的授权语句重放，避免新旧权限叠加残留：
+
+```sql
+REVOKE ALL PRIVILEGES ON appdb.* FROM 'appuser'@'localhost';
+```
+
+```bash
+# 基线文件取最近一份，只重放被误改账号的授权行
+BASE=$(sudo ls -t /root/mysql-grants-*.sql | head -n 1)
+grep "appuser" "$BASE" | sudo mysql -u root
+sudo mysql -u root -e "SHOW GRANTS FOR 'appuser'@'localhost';"
+```
+
+第二种，账号被误删或误锁。误锁用 `ALTER USER 'appuser'@'localhost' ACCOUNT UNLOCK;` 解开即可；误删的从建号基线重建，再按第一种重放它的授权：
+
+```bash
+BASEU=$(sudo ls -t /root/mysql-create-users-*.sql | head -n 1)
+grep "appuser" "$BASEU" | sudo mysql -u root
+grep "appuser" "$BASE" | sudo mysql -u root
+sudo mysql -u root -e "SELECT user, host, plugin FROM mysql.user WHERE user = 'appuser';"
+```
+
+第三种，`bind-address` 改错导致连不上或监听范围过大。用 3.5 节改前留的 `.bak` 备份覆盖回去（MariaDB 把路径换成 `/etc/mysql/mariadb.conf.d/50-server.cnf` 同理），覆盖前先把当前这份改坏的配置另存留证；UFW 若多放行了规则，一并按原样删掉那条：
+
+```bash
+CNFBAK=$(sudo ls -t /etc/mysql/mysql.conf.d/mysqld.cnf.bak-* | head -n 1)
+sudo cp /etc/mysql/mysql.conf.d/mysqld.cnf /etc/mysql/mysql.conf.d/mysqld.cnf.bad-$(date +%F-%H%M)
+sudo cp "$CNFBAK" /etc/mysql/mysql.conf.d/mysqld.cnf
+sudo systemctl restart mysql
+ss -tlnp | grep 3306
+sudo ufw delete allow from 192.0.2.0/24 to any port 3306 proto tcp
+sudo ufw status numbered
+```
+
+退完必须验证，不要凭感觉收工：把回退后的授权重新导一份，与基线逐行比对无差异，再按第四节复核应用账号的读写与越界拒绝、按 3.6 节从段内机器远程连一次：
+
+```bash
+sudo mysql -u root -N < /tmp/show-grants.sql > /tmp/grants-after.sql
+diff <(grep "appuser" "$BASE") <(grep "appuser" /tmp/grants-after.sql) && echo "授权已与基线一致"
+```
+
+若回退过程中把自己的管理通道也弄丢了（管理账号被删或被锁、已登录会话又断了），不要在原地反复试错：先按 [第 11.1 章](01-mysql-install-security.md) 场景三的 init-file 流程重置出一个可用的管理账号，并遵守该章「先建新路、验证、再改旧路」的双管理通道纪律，恢复管理入口后，再按本节的基线把其余账号与授权逐项补齐。
 
 ## 六、生产环境最佳实践与安全建议
 

@@ -14,7 +14,7 @@ description: "默认参数的目标是「小机器也能装起来」，不是「
 
 | 项目 | 要求 | 说明 |
 | --- | --- | --- |
-| 操作系统 | Ubuntu Server 22.04 / 24.04 LTS | MySQL 8.0 或 MariaDB 已按第 11.1、11.2 章部署 |
+| 操作系统 | Ubuntu Server 22.04 / 24.04 LTS | MySQL 8.4 LTS 或 MariaDB 已按第 11.1、11.2 章部署 |
 | 数据库权限 | 管理账号可执行 `SHOW VARIABLES` 与重启服务 | 改 `my.cnf` 需要文件写权限加 `sudo` |
 | 已知输入 | 物理内存总量、同机是否还有其他大内存服务、应用连接池配置 | 这三项决定缓冲池与连接数的取值，没有它们不要动手改 |
 | 变更窗口 | 需要一次服务重启 | 多数 InnoDB 参数改文件后必须重启才生效，安排在低峰期 |
@@ -121,7 +121,7 @@ innodb_log_file_size = 512M
 ```
 
 !!! note "版本差异提示"
-    MySQL 8.0 较新版本可用 `innodb_redo_log_capacity` 统一管理重做日志总容量，与旧的 `innodb_log_file_size` 不要在同一配置里互相矛盾地重复设置。以你机器的实际版本文档为准，改后用 `SHOW VARIABLES` 验证哪个参数在生效。MariaDB 沿用 `innodb_log_file_size` 方式。
+    MySQL 8.0.30 起、8.4 LTS 主线使用 `innodb_redo_log_capacity` 统一管理重做日志总容量，与旧的 `innodb_log_file_size` 不要在同一配置里互相矛盾地重复设置。以你机器的实际版本文档为准，改后用 `SHOW VARIABLES` 验证哪个参数在生效。MariaDB 沿用 `innodb_log_file_size` 方式。
 
 ### 3.5 innodb_flush_log_at_trx_commit 与 sync_binlog：性能与安全的权衡
 
