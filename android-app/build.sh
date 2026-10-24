@@ -17,6 +17,13 @@ fi
 if [ ! -x ./gradlew ]; then
   gradle -q wrapper --gradle-version 8.14.3 --distribution-type bin --offline
 fi
+# W1（第六阶段）起：仪器化 UI 测试单独成项，不混入默认全量（需真机在线）。
+# 用法：./build.sh ui-test  —— 只跑 connectedDebugAndroidTest，离线时由 Gradle 报无设备，不冒充通过。
+if [ "${1:-}" = "ui-test" ]; then
+  ./gradlew --no-daemon connectedDebugAndroidTest --console=plain
+  echo "UI-TEST OK"
+  exit 0
+fi
 ./gradlew --no-daemon assembleDebug testDebugUnitTest lintDebug --console=plain "$@"
 echo "BUILD+TEST+LINT OK"
 ls -la app/build/outputs/apk/debug/app-debug.apk

@@ -6,6 +6,7 @@ import java.io.ByteArrayOutputStream
 import java.security.PublicKey
 import java.security.Security
 import java.util.concurrent.TimeUnit
+import java.util.concurrent.TimeoutException
 import java.util.concurrent.atomic.AtomicBoolean
 import java.util.concurrent.atomic.AtomicReference
 import kotlinx.coroutines.Dispatchers
@@ -170,7 +171,11 @@ class SshTransport(private val hostKeyStore: HostKeyStore) {
 
 class SshSession internal constructor(private val client: SSHClient) : AutoCloseable {
 
-    /** 执行一条命令并收集输出；单次尝试、绝不重试。timeoutMs<=0 表示不限时（由用户取消）。 */
+    /** 执行一条命令并收集输出；单次尝试、绝不重试。
+     * 超时返回 Failure 且文案明确为“超时”：sshj 的 join(timeout) 超时时内部产生 TimeoutException，
+     * 但经 ExceptionChainer 链式转换后到达此处时已不是 TimeoutException 类型（W1 实测：
+     * 仅按类型捕获仍落入通用 catch），故以 "Timeout expired" 文案双重判定。
+     * finally 照常关闭通道会话，只杀命令不杀底层连接。 */
     suspend fun exec(commandText: String, timeoutMs: Long = 0): AppResult<ExecResult> =
         withContext(Dispatchers.IO) {
             var session: Session? = null
@@ -182,8 +187,14 @@ class SshSession internal constructor(private val client: SSHClient) : AutoClose
                 val copyOut = Thread { command.inputStream.copyTo(out) }
                 val copyErr = Thread { command.errorStream.copyTo(err) }
                 copyOut.start(); copyErr.start()
-                if (timeoutMs > 0) command.join(timeoutMs, TimeUnit.MILLISECONDS)
-                else command.join()
+                if (timeoutMs > 0) {
+                    command.join(timeoutMs, TimeUnit.MILLISECONDS)
+                    if (command.exitStatus == null) {
+                        return@withContext AppResult.Failure(
+                            AppError.Io("命令执行超时：${timeoutMs}ms 内未完成"),
+                        )
+                    }
+                } else command.join()
                 copyOut.join(2_000); copyErr.join(2_000)
                 AppResult.Success(
                     ExecResult(
@@ -192,8 +203,15 @@ class SshSession internal constructor(private val client: SSHClient) : AutoClose
                         exitCode = command.exitStatus,
                     )
                 )
+            } catch (e: TimeoutException) {
+                AppResult.Failure(AppError.Io("命令执行超时：${timeoutMs}ms 内未完成", e))
             } catch (e: Exception) {
-                AppResult.Failure(AppError.Io("命令执行中断：${e.message}", e))
+                if (e.message?.contains("Timeout expired") == true) {
+                    // sshj 的 ExceptionChainer 已把 TimeoutException 转成其他类型：按文案判定超时
+                    AppResult.Failure(AppError.Io("命令执行超时：${timeoutMs}ms 内未完成", e))
+                } else {
+                    AppResult.Failure(AppError.Io("命令执行中断：${e.message}", e))
+                }
             } finally {
                 runCatching { session?.close() }
             }

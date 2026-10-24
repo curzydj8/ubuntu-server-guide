@@ -71,7 +71,33 @@ class SshTransportIntegrationTest {
         runCatching { server.stop(true) }
     }
 
-    private fun startServerWithFreshKey(fixedPort: Int = 0): SshServer {
+    /** 只睡不退出的命令：模拟远端长命令，destroy 时中断（供 exec 超时测试）。 */
+    private class BlockingCommand : Command {
+        private var callback: ExitCallback? = null
+        private var sleeper: Thread? = null
+        override fun setInputStream(inputStream: InputStream?) {}
+        override fun setOutputStream(outputStream: OutputStream?) {}
+        override fun setErrorStream(errorStream: OutputStream?) {}
+        override fun setExitCallback(callback: ExitCallback?) { this.callback = callback }
+        override fun start(channel: ChannelSession?, env: Environment?) {
+            sleeper = Thread {
+                try {
+                    Thread.sleep(30_000)
+                    callback?.onExit(0)
+                } catch (_: InterruptedException) {
+                    // 被 destroy 中断：不回调退出码，模拟命令被杀
+                }
+            }.also { it.start() }
+        }
+        override fun destroy(channel: ChannelSession?) {
+            sleeper?.interrupt()
+        }
+    }
+
+    private fun startServerWithFreshKey(
+        fixedPort: Int = 0,
+        factory: CommandFactory = CommandFactory { _, command -> EchoCommand(command) },
+    ): SshServer {
         val generator = java.security.KeyPairGenerator.getInstance("RSA")
         generator.initialize(2048)
         val pair = generator.generateKeyPair()
@@ -82,7 +108,7 @@ class SshTransportIntegrationTest {
         s.passwordAuthenticator = PasswordAuthenticator { u, p, _ ->
             u == "zhangdawei" && p == "test-pass"
         }
-        s.commandFactory = CommandFactory { _, command -> EchoCommand(command) }
+        s.commandFactory = factory
         s.start()
         return s
     }
@@ -141,5 +167,21 @@ class SshTransportIntegrationTest {
         val result = transport.openSession(endpoint(), passwordAuth()) { _, _, _, _ -> false }
         assertTrue(result is AppResult.Failure)
         assertTrue(store.map.isEmpty())
+    }
+
+    @Test fun `exec timeout is reported as failure, not success`() = runBlocking {
+        server.stop(true)
+        server = startServerWithFreshKey(0, CommandFactory { _, _ -> BlockingCommand() })
+        val result = transport.openSession(endpoint(), passwordAuth()) { _, _, _, _ -> true }
+        val session = (result as AppResult.Success).value
+        val timedOut = session.exec("sleep 30", timeoutMs = 500)
+        assertTrue("actual: $timedOut", timedOut is AppResult.Failure)
+        assertTrue(
+            "actual message: ${(timedOut as AppResult.Failure).error.message}",
+            timedOut.error.message.contains("超时"),
+        )
+        // 超时只杀命令，不杀连接：底层 SSH 连接仍在
+        assertTrue(session.isConnected)
+        session.close()
     }
 }
