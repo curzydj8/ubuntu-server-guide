@@ -1096,6 +1096,8 @@
       
         
       
+        
+      
     
     
     
@@ -1405,6 +1407,34 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="10-luks-disk-encryption/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    LUKS 磁盘加密
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -1661,6 +1691,10 @@
       
         
       
+        
+      
+        
+      
     
     
     
@@ -1870,6 +1904,62 @@
     
   
     负载均衡 HAProxy
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../04-network/07-keepalived-vrrp/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Keepalived 与 VRRP 高可用
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../04-network/08-bonding-lacp/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    网卡 Bonding 与 LACP
   
 
     
@@ -2109,6 +2199,8 @@
       
         
       
+        
+      
     
     
     
@@ -2318,6 +2410,34 @@
     
   
     容量规划与日志治理
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../06-monitoring/07-opentelemetry/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    OpenTelemetry 统一接入
   
 
     
@@ -3297,6 +3417,10 @@
       
         
       
+        
+      
+        
+      
     
     
     
@@ -3618,6 +3742,62 @@
     
   
     高可用实战与恢复演练
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../11-databases/11-pgbouncer-pooling/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    PgBouncer 连接池
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../11-databases/12-mysql-cluster-proxysql/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MySQL 集群与 ProxySQL
   
 
     
@@ -4926,6 +5106,7 @@
 <li><strong>自动安全更新</strong>：让安全补丁自己按时装上，只放行安全来源、敏感包进黑名单、重启只走低峰窗口，出问题能定位也能暂停。</li>
 <li><strong>证书与密钥生命周期</strong>：管证书的全程：链判读、私钥存放与权限、全机盘点、续期失败处置、吊销、轮换与到期监控。</li>
 <li><strong>秘密信息管理</strong>：给凭据分级落位，从 600 权限文件到 systemd 凭据与 Vault 选型，并备好轮换流程与泄露应急顺序。</li>
+<li><strong>LUKS 磁盘加密</strong>：给数据盘加 LUKS2 加密：口令槽与 LUKS 头备份的管理纪律、开机解锁的两条路线与各自的安全含义，丢了钥匙就是丢了数据这件事讲在最前。</li>
 </ul>
 <h2 id="_3">推荐顺序与依赖关系<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h2>
 <p>请按 01 → 02 → 03 → 04 → 05 → 06 → 07 的顺序学习和实操，前四章不要跳章，后三章可在前四章基线稳定后按需推进。原因很具体：01 章会关掉密码登录，如果 02 章的备用管理账号还没有建好，操作失误时就没有第二条退路；03 章的防火墙规则要放行 01 章改过的新 SSH 端口，顺序反了会直接断连；04 章的 Fail2ban 监控的是 01 章的 SSH 日志，AppArmor 与 AIDE 则建立在前几章账号与权限已经收紧的前提上。每章末尾的验证步骤通过之后，再进入下一章。</p>

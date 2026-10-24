@@ -1185,6 +1185,8 @@
       
         
       
+        
+      
     
     
     
@@ -1491,6 +1493,34 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../02-security/10-luks-disk-encryption/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    LUKS 磁盘加密
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -1747,6 +1777,10 @@
       
         
       
+        
+      
+        
+      
     
     
     
@@ -1956,6 +1990,62 @@
     
   
     负载均衡 HAProxy
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../04-network/07-keepalived-vrrp/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Keepalived 与 VRRP 高可用
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../04-network/08-bonding-lacp/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    网卡 Bonding 与 LACP
   
 
     
@@ -2195,6 +2285,8 @@
       
         
       
+        
+      
     
     
     
@@ -2404,6 +2496,34 @@
     
   
     容量规划与日志治理
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../06-monitoring/07-opentelemetry/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    OpenTelemetry 统一接入
   
 
     
@@ -3383,6 +3503,10 @@
       
         
       
+        
+      
+        
+      
     
     
     
@@ -3704,6 +3828,62 @@
     
   
     高可用实战与恢复演练
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../11-databases/11-pgbouncer-pooling/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    PgBouncer 连接池
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../11-databases/12-mysql-cluster-proxysql/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MySQL 集群与 ProxySQL
   
 
     
@@ -5216,6 +5396,14 @@
 <td>第二期新增，文档核对整理；待核验，26.04 亦未实机验证</td>
 </tr>
 <tr>
+<td>02 系统安全与权限管理</td>
+<td><a href="../02-security/10-luks-disk-encryption/">LUKS 磁盘加密</a></td>
+<td>文档核对</td>
+<td>文档核对</td>
+<td>待核验</td>
+<td>第三期新增（内容补缺），文档核对整理，开机解锁流程未实机走通；待核验，26.04 亦未实机验证</td>
+</tr>
+<tr>
 <td>03 磁盘、文件系统与存储</td>
 <td><a href="../03-storage/">部分导览</a></td>
 <td>文档核对</td>
@@ -5320,6 +5508,22 @@
 <td>第二期新增，文档核对整理；待核验，26.04 亦未实机验证</td>
 </tr>
 <tr>
+<td>04 网络服务与核心架构</td>
+<td><a href="../04-network/07-keepalived-vrrp/">Keepalived 与 VRRP 高可用</a></td>
+<td>文档核对</td>
+<td>文档核对</td>
+<td>待核验</td>
+<td>第三期新增（P0-3）；两份 keepalived.conf 示例已用 24.04 的 Keepalived 2.2.8 官方二进制通过配置语法校验，双机故障切换行为未实机验证；待核验，26.04 亦未实机验证</td>
+</tr>
+<tr>
+<td>04 网络服务与核心架构</td>
+<td><a href="../04-network/08-bonding-lacp/">网卡 Bonding 与 LACP</a></td>
+<td>文档核对</td>
+<td>文档核对</td>
+<td>待核验</td>
+<td>第三期新增（内容补缺），文档核对整理；Netplan YAML 示例经结构解析校验，实机协商与拔线切换未验证；待核验，26.04 亦未实机验证</td>
+</tr>
+<tr>
 <td>05 容器化与云原生</td>
 <td><a href="../05-containers/">部分导览</a></td>
 <td>已实测（核心流程）</td>
@@ -5414,6 +5618,14 @@
 <td>文档核对</td>
 <td>待核验</td>
 <td>第二期新增，文档核对整理；待核验，26.04 亦未实机验证</td>
+</tr>
+<tr>
+<td>06 系统监控、日志与性能调优</td>
+<td><a href="../06-monitoring/07-opentelemetry/">OpenTelemetry 统一接入</a></td>
+<td>文档核对</td>
+<td>已实测（核心流程）</td>
+<td>待核验</td>
+<td>第三期新增（内容补缺）；本章 config.yaml 已用官方 otelcol-contrib 0.163.2 在 24.04 环境实测：validate 通过、启动健康检查正常、三类信号经 OTLP/HTTP 注入后 debug 输出与 Prometheus 抓取端点均实查到数据；真实服务器长期运行与后端分发为文档核对；待核验，26.04 亦未实机验证</td>
 </tr>
 <tr>
 <td>07 自动化运维与脚本</td>
@@ -5626,10 +5838,10 @@
 <tr>
 <td>11 数据库安装、管理与高可用</td>
 <td><a href="../11-databases/01-mysql-install-security/">MySQL 安装与安全初始化</a></td>
-<td>已实测（核心流程）</td>
-<td>已实测（核心流程）</td>
+<td>文档核对</td>
+<td>文档核对</td>
 <td>待核验</td>
-<td>待 26.04 机器恢复后实测</td>
+<td>2026-10 主线已切换为 MySQL 8.4 LTS（Oracle 官方源），8.4 安装与 8.0→8.4 升级路径为文档核对级，待实机复测后升级状态；原发行版仓库版 8.0 核心流程曾实测，26.04 待机器恢复后实测</td>
 </tr>
 <tr>
 <td>11 数据库安装、管理与高可用</td>
@@ -5702,6 +5914,22 @@
 <td>文档核对</td>
 <td>待核验</td>
 <td>第二期新增，文档核对整理；待核验，26.04 亦未实机验证</td>
+</tr>
+<tr>
+<td>11 数据库安装、管理与高可用</td>
+<td><a href="../11-databases/11-pgbouncer-pooling/">PgBouncer 连接池</a></td>
+<td>文档核对</td>
+<td>已实测（核心流程）</td>
+<td>待核验</td>
+<td>第三期新增（内容补缺）；本章 ini 已用 24.04 官方仓库 PgBouncer 1.22.0 在沙箱实测：启动监听、SCRAM 管理登录、SHOW POOLS、transaction 模式建池与 query_wait_timeout 触发均符合预期；与真实 PostgreSQL 的业务联调及 auth_query 路线为文档核对；待核验，26.04 亦未实机验证</td>
+</tr>
+<tr>
+<td>11 数据库安装、管理与高可用</td>
+<td><a href="../11-databases/12-mysql-cluster-proxysql/">MySQL 集群与 ProxySQL</a></td>
+<td>文档核对</td>
+<td>文档核对</td>
+<td>待核验</td>
+<td>第三期新增（内容补缺），文档核对整理；三机集群与代理分流行为未实机验证；待核验，26.04 亦未实机验证</td>
 </tr>
 <tr>
 <td>12 硬件、虚拟化与私有云</td>
