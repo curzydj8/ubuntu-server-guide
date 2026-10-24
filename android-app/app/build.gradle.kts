@@ -19,8 +19,8 @@ android {
         applicationId = "dev.linuxserver.toolkit"
         minSdk = 26
         targetSdk = 36
-        versionCode = 13
-        versionName = "0.6.4"
+        versionCode = 14
+        versionName = "0.6.5"
     }
     // BouncyCastle 三件套自带同名 META-INF 文件，合并 APK 资源时排除重复项
     packaging {
