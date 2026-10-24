@@ -39,4 +39,36 @@ data class SshHostEntity(
     val username: String,
     val credentialRef: String?,
     val hostKeyFingerprint: String?,
+    // v3 扩展：分组、标签（逗号分隔）、认证方式 PASSWORD/KEY、备注
+    val groupName: String = "",
+    val tags: String = "",
+    val authType: String = "PASSWORD",
+    val note: String = "",
+)
+
+/** 已信任主机密钥（TOFU 信任库，按 host+port 唯一；指纹变化即视为异常）。 */
+@Entity(tableName = "host_keys", primaryKeys = ["host", "port"])
+data class HostKeyEntity(
+    val host: String,
+    val port: Int,
+    val fingerprint: String,
+    val keyType: String,
+    val firstSeenAtMillis: Long,
+    val lastSeenAtMillis: Long,
+)
+
+/**
+ * 操作审计（第五阶段）：连接与命令执行留痕。
+ * command 字段只存脱敏后的文本——调用方写入前必须过 Redact，禁止明文机密入表。
+ */
+@Entity(tableName = "op_audit")
+data class OpAuditEntity(
+    @PrimaryKey(autoGenerate = true) val id: Long = 0,
+    val atMillis: Long,
+    val profileId: Long?,
+    val hostLabel: String,
+    val action: String,
+    val command: String?,
+    val risk: String?,
+    val exitCode: Int?,
 )

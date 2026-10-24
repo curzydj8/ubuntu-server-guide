@@ -33,7 +33,11 @@ class KeystoreCredentialVault(private val storeDir: File) : CredentialVault {
     }
 
     override suspend fun get(ref: String): AppResult<CharArray?> {
-        val file = fileFor(ref)
+        // fileFor 的 ref 校验在 runCatchingVault 之外时会把 IllegalArgumentException 抛给调用方
+        // （0.6.0 真机闪退根因之一），此处先收口：非法 ref 一律回 Failure，绝不抛。
+        val file = try { fileFor(ref) } catch (e: Exception) {
+            return AppResult.Failure(AppError.Security("保险库引用不合法：${e.message}"))
+        }
         if (!file.exists()) return AppResult.Success(null)
         return runCatchingVault {
             val (ivB64, dataB64) = file.readText().split(":", limit = 2)
@@ -56,10 +60,14 @@ class KeystoreCredentialVault(private val storeDir: File) : CredentialVault {
         Unit
     }
 
-    override suspend fun contains(ref: String): Boolean = fileFor(ref).exists()
+    override suspend fun contains(ref: String): Boolean =
+        runCatching { fileFor(ref).exists() }.getOrDefault(false)
 
     private fun fileFor(ref: String): File {
         require(ref.matches(Regex("[A-Za-z0-9._-]{1,64}"))) { "ref 仅允许字母数字与 ._-" }
+        // storeDir（filesDir/vault）默认不存在，File.writeText 不建父目录——
+        // 0.6.1 真机实测 put 恒 FileNotFoundException 的根因，此处统一兜底创建。
+        if (!storeDir.exists()) storeDir.mkdirs()
         return File(storeDir, "vault-$ref.bin")
     }
 
@@ -83,7 +91,10 @@ class KeystoreCredentialVault(private val storeDir: File) : CredentialVault {
 
     private inline fun <T> runCatchingVault(block: () -> T): AppResult<T> =
         try { AppResult.Success(block()) }
-        catch (e: Exception) { AppResult.Failure(AppError.Security("保险库操作失败：${e.javaClass.simpleName}")) }
+        catch (e: Exception) {
+            // 带上异常信息便于真机问题定位（IO/Keystore 异常信息不含凭据内容）
+            AppResult.Failure(AppError.Security("保险库操作失败：${e.javaClass.simpleName}: ${e.message}"))
+        }
 
     companion object {
         private const val ANDROID_KEYSTORE = "AndroidKeyStore"

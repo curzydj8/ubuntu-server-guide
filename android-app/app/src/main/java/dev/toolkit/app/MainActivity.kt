@@ -58,6 +58,7 @@ private fun ToolkitApp(container: AppContainer, themeMode: ThemeMode, themePalet
     val scope = rememberCoroutineScope()
     val dashboardViewModel = remember { container.dashboardViewModel() }
     val knowledgeViewModel = remember { container.knowledgeViewModel() }
+    val serversViewModel = remember { container.serversViewModel() }
     val context = androidx.compose.ui.platform.LocalContext.current
     androidx.compose.runtime.LaunchedEffect(Unit) {
         kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.IO) {
@@ -68,7 +69,10 @@ private fun ToolkitApp(container: AppContainer, themeMode: ThemeMode, themePalet
     val currentRoute = backStackEntry?.destination?.route
     fun tabSelected(tab: String): Boolean = when (tab) {
         "knowledge" -> currentRoute == "knowledge" || currentRoute?.startsWith("article") == true
-        "dashboard" -> currentRoute == "dashboard" || currentRoute?.startsWith("tool") == true
+        "dashboard" -> currentRoute == "dashboard" || currentRoute?.startsWith("tool") == true ||
+            currentRoute == "servers" || currentRoute?.startsWith("server-edit") == true ||
+            currentRoute?.startsWith("terminal") == true || currentRoute?.startsWith("diagnostics") == true ||
+            currentRoute == "audit"
         else -> currentRoute == tab
     }
     fun goTab(route: String) {
@@ -111,6 +115,7 @@ private fun ToolkitApp(container: AppContainer, themeMode: ThemeMode, themePalet
                 DashboardScreen(
                     viewModel = dashboardViewModel,
                     onToolClick = { meta -> navController.navigate("tool/${meta.id.value}") },
+                    onServersClick = { navController.navigate("servers") },
                 )
             }
             composable("tool/{toolId}") { entry ->
@@ -150,6 +155,57 @@ private fun ToolkitApp(container: AppContainer, themeMode: ThemeMode, themePalet
                         onToolClick = { toolId -> navController.navigate("tool/$toolId") },
                     )
                     }
+                }
+            }
+            composable("servers") {
+                Column {
+                    BackBar(title = "服务器管理") { navController.popBackStack() }
+                    dev.toolkit.feature.servers.ServerListScreen(
+                        viewModel = serversViewModel,
+                        onAdd = { navController.navigate("server-edit/0") },
+                        onEdit = { navController.navigate("server-edit/${it.id}") },
+                        onTerminal = { navController.navigate("terminal/${it.id}") },
+                        onDiagnostics = { navController.navigate("diagnostics/${it.id}") },
+                        onAudit = { navController.navigate("audit") },
+                    )
+                }
+            }
+            composable("server-edit/{id}") { entry ->
+                val id = entry.arguments?.getString("id")?.toLongOrNull() ?: 0L
+                val hosts by serversViewModel.hosts.collectAsState()
+                Column {
+                    BackBar(title = if (id == 0L) "添加主机" else "编辑主机") { navController.popBackStack() }
+                    dev.toolkit.feature.servers.ServerEditScreen(
+                        viewModel = serversViewModel,
+                        existing = if (id == 0L) null else hosts.firstOrNull { it.id == id },
+                        onDone = { navController.popBackStack() },
+                    )
+                }
+            }
+            composable("terminal/{id}") { entry ->
+                val id = entry.arguments?.getString("id")?.toLongOrNull() ?: 0L
+                val hosts by serversViewModel.hosts.collectAsState()
+                val host = hosts.firstOrNull { it.id == id }
+                Column {
+                    BackBar(title = "终端") { navController.popBackStack() }
+                    if (host == null) Text("主机不存在或加载中")
+                    else dev.toolkit.feature.servers.TerminalScreen(serversViewModel, host)
+                }
+            }
+            composable("diagnostics/{id}") { entry ->
+                val id = entry.arguments?.getString("id")?.toLongOrNull() ?: 0L
+                val hosts by serversViewModel.hosts.collectAsState()
+                val host = hosts.firstOrNull { it.id == id }
+                Column {
+                    BackBar(title = "只读诊断") { navController.popBackStack() }
+                    if (host == null) Text("主机不存在或加载中")
+                    else dev.toolkit.feature.servers.DiagnosticsScreen(serversViewModel, host)
+                }
+            }
+            composable("audit") {
+                Column {
+                    BackBar(title = "操作审计") { navController.popBackStack() }
+                    dev.toolkit.feature.servers.AuditScreen(serversViewModel)
                 }
             }
             composable("settings") {

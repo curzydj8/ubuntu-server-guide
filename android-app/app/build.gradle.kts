@@ -19,8 +19,17 @@ android {
         applicationId = "dev.linuxserver.toolkit"
         minSdk = 26
         targetSdk = 36
-        versionCode = 7
-        versionName = "0.5.2"
+        versionCode = 13
+        versionName = "0.6.4"
+    }
+    // BouncyCastle 三件套自带同名 META-INF 文件，合并 APK 资源时排除重复项
+    packaging {
+        resources {
+            excludes += setOf(
+                "META-INF/LICENSE.md", "META-INF/LICENSE",
+                "META-INF/NOTICE.md", "META-INF/NOTICE",
+            )
+        }
     }
     buildTypes {
         release { isMinifyEnabled = false }
@@ -41,6 +50,8 @@ dependencies {
     implementation(project(":feature:knowledge"))
     implementation(project(":core:sync"))
     implementation(project(":core:knowledge"))
+    implementation(project(":core:ssh"))
+    implementation(project(":feature:servers"))
     implementation(platform(libs.compose.bom))
     implementation(libs.compose.ui)
     implementation(libs.compose.material3)
