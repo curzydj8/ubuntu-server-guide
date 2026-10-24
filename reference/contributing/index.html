@@ -1094,6 +1094,8 @@
       
         
       
+        
+      
     
     
     
@@ -1400,6 +1402,34 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../02-security/10-luks-disk-encryption/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    LUKS 磁盘加密
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -1656,6 +1686,10 @@
       
         
       
+        
+      
+        
+      
     
     
     
@@ -1865,6 +1899,62 @@
     
   
     负载均衡 HAProxy
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../04-network/07-keepalived-vrrp/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Keepalived 与 VRRP 高可用
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../04-network/08-bonding-lacp/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    网卡 Bonding 与 LACP
   
 
     
@@ -2104,6 +2194,8 @@
       
         
       
+        
+      
     
     
     
@@ -2313,6 +2405,34 @@
     
   
     容量规划与日志治理
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../06-monitoring/07-opentelemetry/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    OpenTelemetry 统一接入
   
 
     
@@ -3292,6 +3412,10 @@
       
         
       
+        
+      
+        
+      
     
     
     
@@ -3613,6 +3737,62 @@
     
   
     高可用实战与恢复演练
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../11-databases/11-pgbouncer-pooling/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    PgBouncer 连接池
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../11-databases/12-mysql-cluster-proxysql/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MySQL 集群与 ProxySQL
   
 
     
@@ -5077,9 +5257,13 @@
 <a id="__codelineno-0-30" name="__codelineno-0-30" href="#__codelineno-0-30"></a>
 <a id="__codelineno-0-31" name="__codelineno-0-31" href="#__codelineno-0-31"></a>新手最容易踩的坑：现象、原因、修复方法，危险操作在此处或步骤内用警示块标出。
 <a id="__codelineno-0-32" name="__codelineno-0-32" href="#__codelineno-0-32"></a>
-<a id="__codelineno-0-33" name="__codelineno-0-33" href="#__codelineno-0-33"></a><span class="gu">## 六、生产环境最佳实践与安全建议</span>
+<a id="__codelineno-0-33" name="__codelineno-0-33" href="#__codelineno-0-33"></a><span class="gu">### 回滚与恢复（强制小节）</span>
 <a id="__codelineno-0-34" name="__codelineno-0-34" href="#__codelineno-0-34"></a>
-<a id="__codelineno-0-35" name="__codelineno-0-35" href="#__codelineno-0-35"></a>上生产前的安全与运维建议：最小权限、审计、监控、回滚路径。
+<a id="__codelineno-0-35" name="__codelineno-0-35" href="#__codelineno-0-35"></a>本章操作失败、做错或需要撤销时怎么办：改动前备份的对象在哪、按什么顺序退回、退回后用什么命令验证已恢复原状。标题必须含「回滚」或「恢复」二字（可独立成节，或作为第五、六节下的子节），不许只在正文里提一句带过。
+<a id="__codelineno-0-36" name="__codelineno-0-36" href="#__codelineno-0-36"></a>
+<a id="__codelineno-0-37" name="__codelineno-0-37" href="#__codelineno-0-37"></a><span class="gu">## 六、生产环境最佳实践与安全建议</span>
+<a id="__codelineno-0-38" name="__codelineno-0-38" href="#__codelineno-0-38"></a>
+<a id="__codelineno-0-39" name="__codelineno-0-39" href="#__codelineno-0-39"></a>上生产前的安全与运维建议：最小权限、审计、监控、回滚路径。
 </code></pre></div>
 <p>速查类条目（第 15 部分）不套六段式，按速查固定结构写：用途、语法、参数表、示例、常见错误、风险提示，见<a href="../../15-command-reference/">速查手册导览</a>的条目结构说明。</p>
 <h2 id="_4">命令测试要求<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h2>
@@ -5094,6 +5278,7 @@
 <li>代码块必须标注语言（<code>bash</code>、<code>yaml</code>、<code>ini</code>、<code>nginx</code>、<code>sql</code> 等），不写无语言的裸代码块；命令默认给出可直接执行的完整形式，需要 root 的命令显式带 <code>sudo</code>。</li>
 <li>配置文件示例逐行注释关键行：这一行改的是什么、为什么改成这个值、不改会怎样；占位符（域名、IP、口令）用明显的示例值，并在注释里提醒替换。</li>
 <li><strong>改前备份命令必备</strong>：凡是步骤里出现编辑配置文件的动作，前面必须先出现该文件的备份命令（见模板第三节），这是本站的固定动作，不许省略成一句「请先备份」。</li>
+<li><strong>回滚/恢复小节必备</strong>：每个正文章节必须有一个标题含「回滚」或「恢复」的小节（见模板第五节的强制小节），写清备份对象、回退步骤与退回后的验证命令；审查时按标题检索核查，缺失不予合并。纯概念导览页与速查条目除外，但凡含可执行变更步骤的章节一律适用。</li>
 <li>示例 IP 只使用文档保留段 192.0.2.0/24 与 198.51.100.0/24，凭据只用占位符；不许出现真实公网 IP、真实口令、私钥或任何密钥材料。脚本类内容必须提示「先下载审阅再执行」。</li>
 </ul>
 <h2 id="_6">风险标注规范<a class="headerlink" href="#_6" title="Permanent link">&para;</a></h2>
