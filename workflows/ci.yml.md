@@ -1,0 +1,120 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+  schedule:
+    # 每周一 04:23 UTC 全量跑一遍（含外链死链扫描），防软件源/外链过期失效
+    - cron: "23 4 * * 1"
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: MkDocs 构建校验（strict）
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
+        with:
+          python-version: "3.12"
+      - name: 安装依赖（按 requirements.txt 锁定版本）
+        run: pip install -r requirements.txt
+      - name: 构建站点（strict：警告即失败）
+        run: mkdocs build --strict
+
+  linkcheck-internal:
+    name: 内部链接门禁（lychee 离线）
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - name: lychee 校验站内链接（离线，失败拦截）
+        uses: lycheeverse/lychee-action@e7477775783ea5526144ba13e8db5eec57747ce8 # v2
+        with:
+          args: --offline --no-progress "docs/**/*.md"
+          fail: true
+
+  linkcheck:
+    name: 外链死链扫描（仅报告，不拦截）
+    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - name: lychee 扫描 docs 内全部链接
+        uses: lycheeverse/lychee-action@e7477775783ea5526144ba13e8db5eec57747ce8 # v2
+        with:
+          args: --no-progress --verbose "docs/**/*.md"
+          fail: false
+
+  markdownlint:
+    name: Markdown 格式校验
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: "20"
+      # 规则在仓库根 .markdownlint.json：按中文技术文档实际放宽了
+      # MD013 行长、MD033 内嵌 HTML（互动工具页需要）、MD034 裸 URL、
+      # MD036/MD040/MD046/MD051/MD060（模板化小节与 CJK 表格对齐不适用）
+      # 根目录只点名治理文档：AUDIT_REPORT.md 是历史报告（双 H1 结构），不纳入格式门禁
+      - name: markdownlint-cli2 校验 docs 与根目录治理文档
+        run: npx --yes markdownlint-cli2 "docs/**/*.md" "TOOLS_*.md" "CONTRIBUTING.md" "SECURITY.md"
+
+  scripts-smoke:
+    name: 脚本冒烟（bash -n + shellcheck）
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-22.04, ubuntu-24.04]
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - name: bash 语法检查
+        run: |
+          set -e
+          for f in docs/scripts/*.sh scripts/checks/*.sh; do
+            echo "bash -n $f"
+            bash -n "$f"
+          done
+      - name: shellcheck（可用时执行）
+        run: |
+          if command -v shellcheck >/dev/null 2>&1; then
+            shellcheck docs/scripts/*.sh scripts/checks/*.sh
+          else
+            sudo apt-get update && sudo apt-get install -y shellcheck
+            shellcheck docs/scripts/*.sh scripts/checks/*.sh
+          fi
+
+  content-export:
+    name: 内容同步导出校验（协议 V1）
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - name: 生成内容包并校验（脚本生成后自动对账校验）
+        run: python3 scripts/export-content.py
+
+  tools-tests:
+    name: 工具页测试（jsdom 单元 + 整页集成）
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
+        with:
+          python-version: "3.12"
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: "20"
+      - name: 安装构建依赖与测试依赖
+        run: |
+          pip install -r requirements.txt
+          pip install pyyaml==6.0.2
+          npm --prefix tests/tools ci
+      - name: 构建站点并运行工具测试
+        run: |
+          mkdocs build --strict -d /tmp/guide-site
+          bash tests/tools/run.sh /tmp/guide-site/tools/index.html
