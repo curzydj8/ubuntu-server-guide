@@ -7,6 +7,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.Card
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -24,6 +26,7 @@ fun DashboardScreen(
     viewModel: DashboardViewModel,
     onToolClick: (ToolMeta) -> Unit,
     modifier: Modifier = Modifier,
+    onServersClick: () -> Unit = {},
 ) {
     val state by viewModel.state.collectAsState()
     Column(modifier.fillMaxSize().padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
@@ -37,12 +40,22 @@ fun DashboardScreen(
         if (!state.loading && state.tools.isEmpty()) {
             EmptyState("没有匹配的工具")
         }
-        LazyColumn(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+        LazyColumn(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(8.dp)) {
             items(state.tools, key = { it.id.value }) { meta ->
                 ToolCard(meta) {
                     viewModel.onToolOpened(meta)
                     onToolClick(meta)
                 }
+            }
+        }
+        // 服务器管理入口置于工具页最后（站长 2026-10-24 指定）
+        Card(onClick = onServersClick, modifier = Modifier.fillMaxWidth()) {
+            Column(Modifier.padding(14.dp), verticalArrangement = Arrangement.spacedBy(2.dp)) {
+                Text("🖥 服务器管理（SSH）", style = MaterialTheme.typography.titleMedium)
+                Text(
+                    "主机档案 · 终端 · 只读诊断 · 操作审计",
+                    style = MaterialTheme.typography.bodySmall,
+                )
             }
         }
     }

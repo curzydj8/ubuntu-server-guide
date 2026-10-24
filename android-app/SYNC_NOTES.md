@@ -12,6 +12,7 @@
 | `keystore/debug.keystore` | 工程固定的调试密钥（非发布密钥）：`keytool -genkeypair -alias androiddebugkey -keyalg RSA -keysize 2048 -validity 10000 -dname 'CN=Android Debug,O=Linux Server Toolkit' -keystore keystore/debug.keystore -storepass android -keypass android`（说明见 keystore/README.md） |
 | `core/network/src/test/resources/test-keystore.jks` | 测试用自签证书库，生成方式见工程 docs/ 验收记录-第四阶段 |
 | 各模块 `build/`、`.gradle/` 等 | 构建产物，不入库 |
+| `local.properties` | 本机构建机 SDK 路径（`sdk.dir=…/devtools/android-sdk`），与他人机器无关，不入库 |
 
 ## 构建
 

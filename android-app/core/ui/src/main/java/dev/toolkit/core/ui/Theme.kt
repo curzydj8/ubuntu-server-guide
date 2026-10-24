@@ -32,17 +32,36 @@ private val WebsiteLight = lightColorScheme(
     primary = Color(0xFFD84315), onPrimary = Color(0xFFFFFFFF),
     primaryContainer = Color(0xFFFFDBCF), onPrimaryContainer = Color(0xFF5F1900),
     secondary = Color(0xFF8D5B4C), tertiary = Color(0xFF6C5D2E),
+    secondaryContainer = Color(0xFFFFDBCF), onSecondaryContainer = Color(0xFF5F1900),
     background = Color(0xFFFFF9F6), surface = Color(0xFFFFF9F6),
     surfaceVariant = Color(0xFFF7DCD2), onSurface = Color(0xFF2A1710),
-    outline = Color(0xFF8D7166),
+    onSurfaceVariant = Color(0xFF57423A),
+    // 容器色显式给定（网站浅色系暖灰），避免回落到 Material 基线紫灰
+    surfaceContainerLowest = Color(0xFFFFFFFF),
+    surfaceContainerLow = Color(0xFFFBF3EE),
+    surfaceContainer = Color(0xFFF6EDE8),
+    surfaceContainerHigh = Color(0xFFF0E6E0),
+    surfaceContainerHighest = Color(0xFFEADFD8),
+    surfaceDim = Color(0xFFE3D5CE), surfaceBright = Color(0xFFFFF9F6),
+    outline = Color(0xFF8D7166), outlineVariant = Color(0xFFDCC3B8),
 )
 private val WebsiteDark = darkColorScheme(
     primary = Color(0xFFFFB59D), onPrimary = Color(0xFF5F1900),
     primaryContainer = Color(0xFF8A3A14), onPrimaryContainer = Color(0xFFFFDBCF),
     secondary = Color(0xFFE7BFA9), tertiary = Color(0xFFD3C48C),
-    background = Color(0xFF1E120E), surface = Color(0xFF1E120E),
-    surfaceVariant = Color(0xFF3D2A22), onSurface = Color(0xFFF1DFD7),
-    outline = Color(0xFFA08D84),
+    secondaryContainer = Color(0xFF6E3418), onSecondaryContainer = Color(0xFFFFDBCF),
+    // 深色背景改用网站 slate 原色（hue 225 / 15%）：背景 14%、面板 18%、最深 8%
+    // 取自网站 palette CSS 的 --md-default-bg-color / --md-code-bg-color / footer
+    background = Color(0xFF1E2129), surface = Color(0xFF1E2129),
+    surfaceVariant = Color(0xFF272A35), onSurface = Color(0xFFD7DAE0),
+    onSurfaceVariant = Color(0xFFB7BAC2),
+    surfaceContainerLowest = Color(0xFF0E1013),
+    surfaceContainerLow = Color(0xFF23262F),
+    surfaceContainer = Color(0xFF272A35),
+    surfaceContainerHigh = Color(0xFF2D303B),
+    surfaceContainerHighest = Color(0xFF333743),
+    surfaceDim = Color(0xFF111317), surfaceBright = Color(0xFF383C47),
+    outline = Color(0xFF8B9099), outlineVariant = Color(0xFF43464E),
 )
 private val DeepSeaLight = lightColorScheme(
     primary = Color(0xFF0B57D0), onPrimary = Color(0xFFFFFFFF),

@@ -59,9 +59,39 @@ interface SshHostDao {
     @Query("SELECT * FROM ssh_hosts ORDER BY alias")
     fun observeAll(): Flow<List<SshHostEntity>>
 
+    @Query("SELECT * FROM ssh_hosts WHERE id = :id")
+    suspend fun getById(id: Long): SshHostEntity?
+
     @Insert(onConflict = OnConflictStrategy.ABORT)
     suspend fun insert(host: SshHostEntity): Long
 
+    @androidx.room.Update
+    suspend fun update(host: SshHostEntity)
+
     @Query("DELETE FROM ssh_hosts WHERE id = :id")
     suspend fun delete(id: Long)
+}
+
+@Dao
+interface HostKeyDao {
+    @Query("SELECT * FROM host_keys WHERE host = :host AND port = :port")
+    suspend fun get(host: String, port: Int): HostKeyEntity?
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun upsert(entity: HostKeyEntity)
+
+    @Query("DELETE FROM host_keys WHERE host = :host AND port = :port")
+    suspend fun delete(host: String, port: Int)
+}
+
+@Dao
+interface OpAuditDao {
+    @Query("SELECT * FROM op_audit ORDER BY atMillis DESC LIMIT :limit")
+    fun observeRecent(limit: Int = 200): Flow<List<OpAuditEntity>>
+
+    @Insert
+    suspend fun insert(entity: OpAuditEntity): Long
+
+    @Query("DELETE FROM op_audit WHERE atMillis < :beforeMillis")
+    suspend fun pruneOlderThan(beforeMillis: Long)
 }
