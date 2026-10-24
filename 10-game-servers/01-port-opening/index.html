@@ -1094,6 +1094,8 @@
       
         
       
+        
+      
     
     
     
@@ -1400,6 +1402,34 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../02-security/10-luks-disk-encryption/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    LUKS 磁盘加密
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -1656,6 +1686,10 @@
       
         
       
+        
+      
+        
+      
     
     
     
@@ -1865,6 +1899,62 @@
     
   
     负载均衡 HAProxy
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../04-network/07-keepalived-vrrp/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Keepalived 与 VRRP 高可用
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../04-network/08-bonding-lacp/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    网卡 Bonding 与 LACP
   
 
     
@@ -2104,6 +2194,8 @@
       
         
       
+        
+      
     
     
     
@@ -2313,6 +2405,34 @@
     
   
     容量规划与日志治理
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../06-monitoring/07-opentelemetry/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    OpenTelemetry 统一接入
   
 
     
@@ -3303,10 +3423,27 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="五、常见错误与排坑指南">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_8" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        回滚：关闭已开放的端口，恢复变更前状态
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
-  <a href="#_8" class="md-nav__link">
+  <a href="#_9" class="md-nav__link">
     <span class="md-ellipsis">
       
         六、生产环境最佳实践与安全建议
@@ -3427,6 +3564,10 @@
       
         
           
+        
+      
+        
+      
         
       
         
@@ -3770,6 +3911,62 @@
     
   
     高可用实战与恢复演练
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../11-databases/11-pgbouncer-pooling/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    PgBouncer 连接池
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../11-databases/12-mysql-cluster-proxysql/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MySQL 集群与 ProxySQL
   
 
     
@@ -5022,10 +5219,27 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="五、常见错误与排坑指南">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_8" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        回滚：关闭已开放的端口，恢复变更前状态
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
-  <a href="#_8" class="md-nav__link">
+  <a href="#_9" class="md-nav__link">
     <span class="md-ellipsis">
       
         六、生产环境最佳实践与安全建议
@@ -5228,7 +5442,56 @@
 </tr>
 </tbody>
 </table>
-<h2 id="_8">六、生产环境最佳实践与安全建议<a class="headerlink" href="#_8" title="Permanent link">&para;</a></h2>
+<h3 id="_8">回滚：关闭已开放的端口，恢复变更前状态<a class="headerlink" href="#_8" title="Permanent link">&para;</a></h3>
+<p>下线游戏、临时开放到期或放行错了端口时，按开门的相反顺序逐项关闭：先 UFW、再安全组、最后验证。三道门只要重新关上一道，外网就已不可达；但要恢复到变更前的干净状态，三处都要处理，只删一处会留下日后没人记得的残规则。</p>
+<p><strong>第一步：删除 UFW 规则。</strong> 先看带编号的现状，再逐条删本章加过的游戏规则（当时开了 RCON 的一并删 25575/tcp）。<strong>22/tcp 的 SSH 规则不在回滚范围内，删它会把自己锁在服务器外面</strong>：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a>sudo<span class="w"> </span>ufw<span class="w"> </span>status<span class="w"> </span>numbered
+<a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a>sudo<span class="w"> </span>ufw<span class="w"> </span>delete<span class="w"> </span>allow<span class="w"> </span><span class="m">25565</span>/tcp
+<a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a>sudo<span class="w"> </span>ufw<span class="w"> </span>delete<span class="w"> </span>allow<span class="w"> </span><span class="m">8211</span>/udp
+<a id="__codelineno-13-4" name="__codelineno-13-4" href="#__codelineno-13-4"></a>sudo<span class="w"> </span>ufw<span class="w"> </span>delete<span class="w"> </span>allow<span class="w"> </span><span class="m">25575</span>/tcp
+</code></pre></div>
+<p>最后一条 RCON 没开过时执行会报错说规则不存在，忽略即可。删完与第三步变更前留存的快照对照，应当完全一致：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a>sudo<span class="w"> </span>ufw<span class="w"> </span>status<span class="w"> </span>verbose<span class="w"> </span>&gt;<span class="w"> </span>/tmp/ufw-after.txt
+<a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a>diff<span class="w"> </span>/tmp/ufw-before.txt<span class="w"> </span>/tmp/ufw-after.txt
+</code></pre></div>
+<p><code>diff</code> 无输出即表示 UFW 已回到开放端口之前的状态。</p>
+<p><strong>第二步：删除安全组规则。</strong> 回云厂商控制台的安全组/防火墙页签，按备注 <code>minecraft-game</code>、<code>palworld-game</code> 逐条删除对应的入站放行规则；实例绑了多个安全组的逐个检查，不要只删当前页签看到的那个。</p>
+<p><strong>第三步：验证外网已不可达。</strong> 在外网设备上重测 TCP 端口，期望从第四节的 <code>succeeded!</code> 变为连接超时或被拒绝：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a>nc<span class="w"> </span>-vz<span class="w"> </span><span class="m">198</span>.51.100.10<span class="w"> </span><span class="m">25565</span>
+</code></pre></div>
+<p>同时请一位玩家再连一次 UDP 游戏，服务器上 <code>sudo tcpdump -ni any udp port 8211 -c 5</code> 应一个包都抓不到。注意此时服务器本机 <code>ss</code> 仍能看到游戏进程在监听，这是正常的——进程还在，只是三道门关了；若是整个游戏下线，再停掉游戏服务端进程本身。收尾逐项核对：</p>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>回滚动作</th>
+<th>确认方式</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>UFW 游戏规则</td>
+<td><code>ufw delete allow</code> 逐条删除</td>
+<td><code>ufw status</code> 无 25565、8211、25575 行，与 <code>/tmp/ufw-before.txt</code> 对照一致</td>
+</tr>
+<tr>
+<td>安全组入站规则</td>
+<td>控制台按备注删除</td>
+<td>规则列表里查不到对应端口与协议</td>
+</tr>
+<tr>
+<td>SSH 规则</td>
+<td>不动</td>
+<td><code>ufw status</code> 中 22/tcp 仍为 ALLOW IN，自己仍能 SSH 登录</td>
+</tr>
+<tr>
+<td>外网连通性</td>
+<td>无需动作，被动验证</td>
+<td>外网 <code>nc</code> 失败、玩家连不上、<code>tcpdump</code> 抓不到包</td>
+</tr>
+</tbody>
+</table>
+<h2 id="_9">六、生产环境最佳实践与安全建议<a class="headerlink" href="#_9" title="Permanent link">&para;</a></h2>
 <p>只开放确有游戏在用的端口，关服或下线游戏时同步删除安全组与 UFW 里的对应规则，减少暴露面。管理类端口（RCON、面板、数据库）一律限制来源 IP 或只监听本机，再通过 SSH 隧道访问。为每条规则写清备注，注明游戏名与添加日期，半年复查一次。不要为了省事关闭 UFW 或把安全组设为全端口放行，一旦服务端程序出现漏洞，全网扫描器几分钟内就能找上门。最后，把本章的三层检查写成开服习惯：每次改完网络配置，先 <code>ss</code> 看监听、再外网测连通、最后请一位玩家实连确认，三步全过才算交付。</p>
 
 

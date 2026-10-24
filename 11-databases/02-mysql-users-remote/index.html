@@ -1094,6 +1094,8 @@
       
         
       
+        
+      
     
     
     
@@ -1400,6 +1402,34 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../02-security/10-luks-disk-encryption/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    LUKS 磁盘加密
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -1656,6 +1686,10 @@
       
         
       
+        
+      
+        
+      
     
     
     
@@ -1865,6 +1899,62 @@
     
   
     负载均衡 HAProxy
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../04-network/07-keepalived-vrrp/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Keepalived 与 VRRP 高可用
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../04-network/08-bonding-lacp/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    网卡 Bonding 与 LACP
   
 
     
@@ -2104,6 +2194,8 @@
       
         
       
+        
+      
     
     
     
@@ -2313,6 +2405,34 @@
     
   
     容量规划与日志治理
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../06-monitoring/07-opentelemetry/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    OpenTelemetry 统一接入
   
 
     
@@ -3294,6 +3414,10 @@
       
         
       
+        
+      
+        
+      
     
     
     
@@ -3606,13 +3730,24 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        回滚与恢复：改错之后如何退回改前状态
+      
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#_3" class="md-nav__link">
+  <a href="#_4" class="md-nav__link">
     <span class="md-ellipsis">
       
         六、生产环境最佳实践与安全建议
@@ -3842,6 +3977,62 @@
     
   
     高可用实战与恢复演练
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../11-pgbouncer-pooling/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    PgBouncer 连接池
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../12-mysql-cluster-proxysql/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MySQL 集群与 ProxySQL
   
 
     
@@ -5163,13 +5354,24 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        回滚与恢复：改错之后如何退回改前状态
+      
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#_3" class="md-nav__link">
+  <a href="#_4" class="md-nav__link">
     <span class="md-ellipsis">
       
         六、生产环境最佳实践与安全建议
@@ -5229,7 +5431,7 @@
 <tr>
 <td>操作系统</td>
 <td>Ubuntu Server 22.04 / 24.04 LTS</td>
-<td>已按第 11.1 章完成 MySQL 8.0 或 MariaDB 安装与安全初始化</td>
+<td>已按第 11.1 章完成 MySQL 8.4 LTS 或 MariaDB 安装与安全初始化</td>
 </tr>
 <tr>
 <td>数据库权限</td>
@@ -5445,10 +5647,48 @@
 <a id="__codelineno-24-5" name="__codelineno-24-5" href="#__codelineno-24-5"></a>mysql<span class="w"> </span>-h<span class="w"> </span><span class="m">192</span>.0.2.20<span class="w"> </span>-u<span class="w"> </span>appuser<span class="w"> </span>-p<span class="w"> </span>-e<span class="w"> </span><span class="s2">"SELECT 1;"</span>
 </code></pre></div>
 <p>端口不通先查防火墙与安全组，端口通但登录失败再回到账号与密码问题（注意账号的来源主机是否包含你的地址）。两类原因分开定位，不要一上来就把防火墙全关或把 <code>bind-address</code> 改成全网监听来「试试」，那会把排障变成新的事故。</p>
-<h2 id="_3">六、生产环境最佳实践与安全建议<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h2>
+<h3 id="_3">回滚与恢复：改错之后如何退回改前状态<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h3>
+<p>本章的变更都属于「改错一次就可能把自己锁在门外」的类型，能安全回退的前提是动手前先留一份可回放的基线。做任何建号、授权、回收或改监听之前，先把全量账号的建号语句与授权语句导成文件存好：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-25-1" name="__codelineno-25-1" href="#__codelineno-25-1"></a><span class="c1"># 生成「逐个账号执行 SHOW」的语句清单，再借它导出全部账号定义与授权</span>
+<a id="__codelineno-25-2" name="__codelineno-25-2" href="#__codelineno-25-2"></a>sudo<span class="w"> </span>mysql<span class="w"> </span>-u<span class="w"> </span>root<span class="w"> </span>-N<span class="w"> </span>-e<span class="w"> </span><span class="s2">"SELECT CONCAT('SHOW CREATE USER ', QUOTE(user), '@', QUOTE(host), ';') FROM mysql.user;"</span><span class="w"> </span>&gt;<span class="w"> </span>/tmp/show-create-user.sql
+<a id="__codelineno-25-3" name="__codelineno-25-3" href="#__codelineno-25-3"></a>sudo<span class="w"> </span>mysql<span class="w"> </span>-u<span class="w"> </span>root<span class="w"> </span>-N<span class="w"> </span>&lt;<span class="w"> </span>/tmp/show-create-user.sql<span class="w"> </span><span class="p">|</span><span class="w"> </span>sudo<span class="w"> </span>tee<span class="w"> </span>/root/mysql-create-users-<span class="k">$(</span>date<span class="w"> </span>+%F-%H%M<span class="k">)</span>.sql<span class="w"> </span>&gt;<span class="w"> </span>/dev/null
+<a id="__codelineno-25-4" name="__codelineno-25-4" href="#__codelineno-25-4"></a>sudo<span class="w"> </span>mysql<span class="w"> </span>-u<span class="w"> </span>root<span class="w"> </span>-N<span class="w"> </span>-e<span class="w"> </span><span class="s2">"SELECT CONCAT('SHOW GRANTS FOR ', QUOTE(user), '@', QUOTE(host), ';') FROM mysql.user;"</span><span class="w"> </span>&gt;<span class="w"> </span>/tmp/show-grants.sql
+<a id="__codelineno-25-5" name="__codelineno-25-5" href="#__codelineno-25-5"></a>sudo<span class="w"> </span>mysql<span class="w"> </span>-u<span class="w"> </span>root<span class="w"> </span>-N<span class="w"> </span>&lt;<span class="w"> </span>/tmp/show-grants.sql<span class="w"> </span><span class="p">|</span><span class="w"> </span>sudo<span class="w"> </span>tee<span class="w"> </span>/root/mysql-grants-<span class="k">$(</span>date<span class="w"> </span>+%F-%H%M<span class="k">)</span>.sql<span class="w"> </span>&gt;<span class="w"> </span>/dev/null
+<a id="__codelineno-25-6" name="__codelineno-25-6" href="#__codelineno-25-6"></a>ls<span class="w"> </span>-lh<span class="w"> </span>/root/mysql-create-users-*.sql<span class="w"> </span>/root/mysql-grants-*.sql
+</code></pre></div>
+<p>两份基线的区别：建号语句里带口令哈希，按它重建出的账号口令与删除前完全一致，应用侧不用改配置；授权语句就是可直接重放的 <code>GRANT</code>。回退按出错类型分三种：</p>
+<p>第一种，授权改错（多授要收回、少授要补回）。先把该账号在目标库上的权限清干净，再从基线里只挑这个账号的授权语句重放，避免新旧权限叠加残留：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-26-1" name="__codelineno-26-1" href="#__codelineno-26-1"></a><span class="k">REVOKE</span><span class="w"> </span><span class="k">ALL</span><span class="w"> </span><span class="k">PRIVILEGES</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">appdb</span><span class="p">.</span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="s1">'appuser'</span><span class="o">@</span><span class="s1">'localhost'</span><span class="p">;</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-27-1" name="__codelineno-27-1" href="#__codelineno-27-1"></a><span class="c1"># 基线文件取最近一份，只重放被误改账号的授权行</span>
+<a id="__codelineno-27-2" name="__codelineno-27-2" href="#__codelineno-27-2"></a><span class="nv">BASE</span><span class="o">=</span><span class="k">$(</span>sudo<span class="w"> </span>ls<span class="w"> </span>-t<span class="w"> </span>/root/mysql-grants-*.sql<span class="w"> </span><span class="p">|</span><span class="w"> </span>head<span class="w"> </span>-n<span class="w"> </span><span class="m">1</span><span class="k">)</span>
+<a id="__codelineno-27-3" name="__codelineno-27-3" href="#__codelineno-27-3"></a>grep<span class="w"> </span><span class="s2">"appuser"</span><span class="w"> </span><span class="s2">"</span><span class="nv">$BASE</span><span class="s2">"</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>sudo<span class="w"> </span>mysql<span class="w"> </span>-u<span class="w"> </span>root
+<a id="__codelineno-27-4" name="__codelineno-27-4" href="#__codelineno-27-4"></a>sudo<span class="w"> </span>mysql<span class="w"> </span>-u<span class="w"> </span>root<span class="w"> </span>-e<span class="w"> </span><span class="s2">"SHOW GRANTS FOR 'appuser'@'localhost';"</span>
+</code></pre></div>
+<p>第二种，账号被误删或误锁。误锁用 <code>ALTER USER 'appuser'@'localhost' ACCOUNT UNLOCK;</code> 解开即可；误删的从建号基线重建，再按第一种重放它的授权：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-28-1" name="__codelineno-28-1" href="#__codelineno-28-1"></a><span class="nv">BASEU</span><span class="o">=</span><span class="k">$(</span>sudo<span class="w"> </span>ls<span class="w"> </span>-t<span class="w"> </span>/root/mysql-create-users-*.sql<span class="w"> </span><span class="p">|</span><span class="w"> </span>head<span class="w"> </span>-n<span class="w"> </span><span class="m">1</span><span class="k">)</span>
+<a id="__codelineno-28-2" name="__codelineno-28-2" href="#__codelineno-28-2"></a>grep<span class="w"> </span><span class="s2">"appuser"</span><span class="w"> </span><span class="s2">"</span><span class="nv">$BASEU</span><span class="s2">"</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>sudo<span class="w"> </span>mysql<span class="w"> </span>-u<span class="w"> </span>root
+<a id="__codelineno-28-3" name="__codelineno-28-3" href="#__codelineno-28-3"></a>grep<span class="w"> </span><span class="s2">"appuser"</span><span class="w"> </span><span class="s2">"</span><span class="nv">$BASE</span><span class="s2">"</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>sudo<span class="w"> </span>mysql<span class="w"> </span>-u<span class="w"> </span>root
+<a id="__codelineno-28-4" name="__codelineno-28-4" href="#__codelineno-28-4"></a>sudo<span class="w"> </span>mysql<span class="w"> </span>-u<span class="w"> </span>root<span class="w"> </span>-e<span class="w"> </span><span class="s2">"SELECT user, host, plugin FROM mysql.user WHERE user = 'appuser';"</span>
+</code></pre></div>
+<p>第三种，<code>bind-address</code> 改错导致连不上或监听范围过大。用 3.5 节改前留的 <code>.bak</code> 备份覆盖回去（MariaDB 把路径换成 <code>/etc/mysql/mariadb.conf.d/50-server.cnf</code> 同理），覆盖前先把当前这份改坏的配置另存留证；UFW 若多放行了规则，一并按原样删掉那条：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-29-1" name="__codelineno-29-1" href="#__codelineno-29-1"></a><span class="nv">CNFBAK</span><span class="o">=</span><span class="k">$(</span>sudo<span class="w"> </span>ls<span class="w"> </span>-t<span class="w"> </span>/etc/mysql/mysql.conf.d/mysqld.cnf.bak-*<span class="w"> </span><span class="p">|</span><span class="w"> </span>head<span class="w"> </span>-n<span class="w"> </span><span class="m">1</span><span class="k">)</span>
+<a id="__codelineno-29-2" name="__codelineno-29-2" href="#__codelineno-29-2"></a>sudo<span class="w"> </span>cp<span class="w"> </span>/etc/mysql/mysql.conf.d/mysqld.cnf<span class="w"> </span>/etc/mysql/mysql.conf.d/mysqld.cnf.bad-<span class="k">$(</span>date<span class="w"> </span>+%F-%H%M<span class="k">)</span>
+<a id="__codelineno-29-3" name="__codelineno-29-3" href="#__codelineno-29-3"></a>sudo<span class="w"> </span>cp<span class="w"> </span><span class="s2">"</span><span class="nv">$CNFBAK</span><span class="s2">"</span><span class="w"> </span>/etc/mysql/mysql.conf.d/mysqld.cnf
+<a id="__codelineno-29-4" name="__codelineno-29-4" href="#__codelineno-29-4"></a>sudo<span class="w"> </span>systemctl<span class="w"> </span>restart<span class="w"> </span>mysql
+<a id="__codelineno-29-5" name="__codelineno-29-5" href="#__codelineno-29-5"></a>ss<span class="w"> </span>-tlnp<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span><span class="m">3306</span>
+<a id="__codelineno-29-6" name="__codelineno-29-6" href="#__codelineno-29-6"></a>sudo<span class="w"> </span>ufw<span class="w"> </span>delete<span class="w"> </span>allow<span class="w"> </span>from<span class="w"> </span><span class="m">192</span>.0.2.0/24<span class="w"> </span>to<span class="w"> </span>any<span class="w"> </span>port<span class="w"> </span><span class="m">3306</span><span class="w"> </span>proto<span class="w"> </span>tcp
+<a id="__codelineno-29-7" name="__codelineno-29-7" href="#__codelineno-29-7"></a>sudo<span class="w"> </span>ufw<span class="w"> </span>status<span class="w"> </span>numbered
+</code></pre></div>
+<p>退完必须验证，不要凭感觉收工：把回退后的授权重新导一份，与基线逐行比对无差异，再按第四节复核应用账号的读写与越界拒绝、按 3.6 节从段内机器远程连一次：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-30-1" name="__codelineno-30-1" href="#__codelineno-30-1"></a>sudo<span class="w"> </span>mysql<span class="w"> </span>-u<span class="w"> </span>root<span class="w"> </span>-N<span class="w"> </span>&lt;<span class="w"> </span>/tmp/show-grants.sql<span class="w"> </span>&gt;<span class="w"> </span>/tmp/grants-after.sql
+<a id="__codelineno-30-2" name="__codelineno-30-2" href="#__codelineno-30-2"></a>diff<span class="w"> </span>&lt;<span class="o">(</span>grep<span class="w"> </span><span class="s2">"appuser"</span><span class="w"> </span><span class="s2">"</span><span class="nv">$BASE</span><span class="s2">"</span><span class="o">)</span><span class="w"> </span>&lt;<span class="o">(</span>grep<span class="w"> </span><span class="s2">"appuser"</span><span class="w"> </span>/tmp/grants-after.sql<span class="o">)</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="s2">"授权已与基线一致"</span>
+</code></pre></div>
+<p>若回退过程中把自己的管理通道也弄丢了（管理账号被删或被锁、已登录会话又断了），不要在原地反复试错：先按 <a href="../01-mysql-install-security/">第 11.1 章</a> 场景三的 init-file 流程重置出一个可用的管理账号，并遵守该章「先建新路、验证、再改旧路」的双管理通道纪律，恢复管理入口后，再按本节的基线把其余账号与授权逐项补齐。</p>
+<h2 id="_4">六、生产环境最佳实践与安全建议<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h2>
 <p>第一，账号台账化：记录用途、负责人、来源、权限与创建时间，离职与下线当天回收，每季度用 <code>SHOW GRANTS</code> 盘查一次，重点清理 <code>'%'</code> 与 <code>ALL</code> 账号。第二，应用绝不用 <code>root</code> 跑业务，口令放密钥管理，不进代码仓库、不写进镜像。第三，远程三层缺一不可：<code>bind-address</code> 限监听、安全组加 UFW 限来源、账号限来源与权限；想省任何一层就不开远程，优先走 SSH 隧道：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-25-1" name="__codelineno-25-1" href="#__codelineno-25-1"></a>ssh<span class="w"> </span>-L<span class="w"> </span><span class="m">13306</span>:127.0.0.1:3306<span class="w"> </span>ubuntu@192.0.2.20
-<a id="__codelineno-25-2" name="__codelineno-25-2" href="#__codelineno-25-2"></a>mysql<span class="w"> </span>-h<span class="w"> </span><span class="m">127</span>.0.0.1<span class="w"> </span>-P<span class="w"> </span><span class="m">13306</span><span class="w"> </span>-u<span class="w"> </span>appuser<span class="w"> </span>-p
+<div class="highlight"><pre><span></span><code><a id="__codelineno-31-1" name="__codelineno-31-1" href="#__codelineno-31-1"></a>ssh<span class="w"> </span>-L<span class="w"> </span><span class="m">13306</span>:127.0.0.1:3306<span class="w"> </span>ubuntu@192.0.2.20
+<a id="__codelineno-31-2" name="__codelineno-31-2" href="#__codelineno-31-2"></a>mysql<span class="w"> </span>-h<span class="w"> </span><span class="m">127</span>.0.0.1<span class="w"> </span>-P<span class="w"> </span><span class="m">13306</span><span class="w"> </span>-u<span class="w"> </span>appuser<span class="w"> </span>-p
 </code></pre></div>
 <p>第四，权限变更留痕：来源变了就建新账号、验证、切流量、删旧账号。第五，巡查连接失败日志，对 <code>Access denied</code> 激增告警。下一章讲参数调优。</p>
 

@@ -1094,6 +1094,8 @@
       
         
       
+        
+      
     
     
     
@@ -1400,6 +1402,34 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../02-security/10-luks-disk-encryption/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    LUKS 磁盘加密
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -1656,6 +1686,10 @@
       
         
       
+        
+      
+        
+      
     
     
     
@@ -1865,6 +1899,62 @@
     
   
     负载均衡 HAProxy
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../04-network/07-keepalived-vrrp/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Keepalived 与 VRRP 高可用
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../04-network/08-bonding-lacp/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    网卡 Bonding 与 LACP
   
 
     
@@ -2104,6 +2194,8 @@
       
         
       
+        
+      
     
     
     
@@ -2313,6 +2405,34 @@
     
   
     容量规划与日志治理
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../06-monitoring/07-opentelemetry/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    OpenTelemetry 统一接入
   
 
     
@@ -3398,10 +3518,27 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="五、常见错误与排坑指南">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        回滚：停用穿透并恢复无暴露状态
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
-  <a href="#_6" class="md-nav__link">
+  <a href="#_7" class="md-nav__link">
     <span class="md-ellipsis">
       
         六、生产环境最佳实践与安全建议
@@ -3438,6 +3575,10 @@
       
         
           
+        
+      
+        
+      
         
       
         
@@ -3781,6 +3922,62 @@
     
   
     高可用实战与恢复演练
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../11-databases/11-pgbouncer-pooling/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    PgBouncer 连接池
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../11-databases/12-mysql-cluster-proxysql/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MySQL 集群与 ProxySQL
   
 
     
@@ -5044,10 +5241,27 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="五、常见错误与排坑指南">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        回滚：停用穿透并恢复无暴露状态
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
-  <a href="#_6" class="md-nav__link">
+  <a href="#_7" class="md-nav__link">
     <span class="md-ellipsis">
       
         六、生产环境最佳实践与安全建议
@@ -5280,7 +5494,38 @@
 </code></pre></div>
 <p>原因是 <code>remotePort</code> 不在 frps 的 <code>allowPorts</code> 范围内，或该端口已被 VPS 上其它程序占用。先用 <code>ss -tulnp | grep 25565</code> 查占用，再核对服务端 <code>allowPorts</code> 是否包含该端口，改配置前先备份 <code>frps.toml</code>，改完 <code>sudo systemctl restart frps.service</code> 并让 frpc 重新连接。</p>
 <p><strong>场景 3：TCP 游戏能连、UDP 游戏连不上。</strong> 现象与日志都指向隧道正常，唯独 Palworld 无响应。原因是只建了 tcp 代理、漏了 udp 代理，或 VPS 安全组与 UFW 只放行了 8211/TCP。按第三步补齐 <code>type = "udp"</code> 的代理段与 UDP 放行规则后重启 frpc 即可。</p>
-<h2 id="_6">六、生产环境最佳实践与安全建议<a class="headerlink" href="#_6" title="Permanent link">&para;</a></h2>
+<h3 id="_6">回滚：停用穿透并恢复无暴露状态<a class="headerlink" href="#_6" title="Permanent link">&para;</a></h3>
+<p>不再开服、VPS 退租或改用其他方案时，按下面顺序完整拆除，不要只停一端：只停内网的 frpc、不处理 VPS，VPS 上的游戏端口仍在监听等待连接，暴露面还在；只停 frps、不删安全组规则，规则会一直留着等下一个服务踩上去。</p>
+<p><strong>第一步：停两端服务。</strong> 先内网 frpc、后 VPS 上的 frps；停 frpc 的瞬间在线玩家会全部掉线，提前在群里打个招呼：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="c1"># 内网游戏主机上执行</span>
+<a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a>sudo<span class="w"> </span>systemctl<span class="w"> </span>disable<span class="w"> </span>--now<span class="w"> </span>frpc.service
+<a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a>
+<a id="__codelineno-13-4" name="__codelineno-13-4" href="#__codelineno-13-4"></a><span class="c1"># VPS 上执行</span>
+<a id="__codelineno-13-5" name="__codelineno-13-5" href="#__codelineno-13-5"></a>sudo<span class="w"> </span>systemctl<span class="w"> </span>disable<span class="w"> </span>--now<span class="w"> </span>frps.service
+</code></pre></div>
+<p><strong>第二步：撤销 VPS 的暴露面。</strong> 删掉第二步加过的三条 UFW 规则：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a>sudo<span class="w"> </span>ufw<span class="w"> </span>delete<span class="w"> </span>allow<span class="w"> </span><span class="m">7000</span>/tcp
+<a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a>sudo<span class="w"> </span>ufw<span class="w"> </span>delete<span class="w"> </span>allow<span class="w"> </span><span class="m">25565</span>/tcp
+<a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a>sudo<span class="w"> </span>ufw<span class="w"> </span>delete<span class="w"> </span>allow<span class="w"> </span><span class="m">8211</span>/udp
+<a id="__codelineno-14-4" name="__codelineno-14-4" href="#__codelineno-14-4"></a>sudo<span class="w"> </span>ufw<span class="w"> </span>status<span class="w"> </span>verbose
+</code></pre></div>
+<p>再回云厂商控制台，按第 01 章的位置把 7000、25565、8211 三条入站规则一并删除，UFW 与安全组两层都要清，这一步没有命令行可代劳。</p>
+<p><strong>第三步：卸载 frp 并清掉凭据。</strong> 两台机器路径相同，各自执行（每台只有自己的那个 unit 文件，另一条删除会报不存在，忽略即可）：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a>sudo<span class="w"> </span>rm<span class="w"> </span>-f<span class="w"> </span>/etc/systemd/system/frps.service<span class="w"> </span>/etc/systemd/system/frpc.service
+<a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a>sudo<span class="w"> </span>systemctl<span class="w"> </span>daemon-reload
+<a id="__codelineno-15-3" name="__codelineno-15-3" href="#__codelineno-15-3"></a>sudo<span class="w"> </span>rm<span class="w"> </span>-rf<span class="w"> </span>/opt/frp<span class="w"> </span>/etc/frp
+<a id="__codelineno-15-4" name="__codelineno-15-4" href="#__codelineno-15-4"></a>rm<span class="w"> </span>-f<span class="w"> </span>/tmp/frp_*_linux_amd64.tar.gz
+</code></pre></div>
+<p><code>/etc/frp</code> 里有含 token 与面板口令的配置和 <code>.bak</code> 备份，删目录即一并清除；token 随 frps 配置消失自动失效，日后重建穿透必须重新生成新 token，不要复用旧值。第四步的两个备选方案同理收尾：NPS 在其服务端面板里删掉全部转发条目、停用并卸载服务端与客户端程序，面板口令在下线前先改掉；Tailscale 在管理后台把这台设备移除、关闭 Funnel 并撤销已签发的授权密钥，本机再执行 <code>tailscale logout</code> 退出登录。</p>
+<p><strong>第四步：验证已恢复无暴露状态。</strong> 在 VPS 上确认 frp 相关监听全部消失：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a>ss<span class="w"> </span>-tulnp<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-E<span class="w"> </span><span class="s1">'7000|25565|8211'</span>
+<a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a>systemctl<span class="w"> </span>is-active<span class="w"> </span>frps.service<span class="w"> </span>frpc.service
+</code></pre></div>
+<p>期望 <code>ss</code> 无输出（这台 VPS 若还直连跑着别的服务，按其实际端口判断）、两个服务都显示 inactive 或不存在。再从外网设备测一次玩家地址，应已连不上：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a>nc<span class="w"> </span>-vz<span class="w"> </span><span class="m">198</span>.51.100.10<span class="w"> </span><span class="m">25565</span>
+</code></pre></div>
+<p>最后在内网主机上用局域网地址直连一次游戏服，能连上才证明拆掉的只是穿透、游戏服本身完好——本机可连、外网不可达，就是回滚完成的标准状态。</p>
+<h2 id="_7">六、生产环境最佳实践与安全建议<a class="headerlink" href="#_7" title="Permanent link">&para;</a></h2>
 <p>token 按密码同等级别管理：高强度随机生成、只存放在两台机器的配置文件里、文件权限收紧到 600，不进聊天记录与公开仓库，怀疑泄露就两端同步更换。<code>allowPorts</code> 永远保持最小范围，只列在用的游戏端口，不写大区间图省事。管理面板只绑 127.0.0.1 并走 SSH 隧道访问，绝不直接对公网开放。VPS 除了 frp 不要跑无关服务，它现在是玩家入口，被攻破等于内网游戏主机一起暴露。延迟方面要提前管理预期：玩家延迟约等于玩家到 VPS 加 VPS 到内网主机两段之和，VPS 选离玩家与家里都近的机房。最后定期更新 frp 版本并关注其官方安全公告，更新流程与安装相同：备份配置、替换二进制、重启服务、按第四节做一遍真实验收。</p>
 
 

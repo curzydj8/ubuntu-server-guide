@@ -1094,6 +1094,8 @@
       
         
       
+        
+      
     
     
     
@@ -1400,6 +1402,34 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../02-security/10-luks-disk-encryption/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    LUKS 磁盘加密
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -1656,6 +1686,10 @@
       
         
       
+        
+      
+        
+      
     
     
     
@@ -1865,6 +1899,62 @@
     
   
     负载均衡 HAProxy
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../04-network/07-keepalived-vrrp/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Keepalived 与 VRRP 高可用
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../04-network/08-bonding-lacp/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    网卡 Bonding 与 LACP
   
 
     
@@ -2104,6 +2194,8 @@
       
         
       
+        
+      
     
     
     
@@ -2313,6 +2405,34 @@
     
   
     容量规划与日志治理
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../06-monitoring/07-opentelemetry/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    OpenTelemetry 统一接入
   
 
     
@@ -3294,6 +3414,10 @@
       
         
       
+        
+      
+        
+      
     
     
     
@@ -3853,6 +3977,62 @@
     
   
     高可用实战与恢复演练
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../11-pgbouncer-pooling/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    PgBouncer 连接池
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../12-mysql-cluster-proxysql/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MySQL 集群与 ProxySQL
   
 
     
@@ -5251,7 +5431,7 @@
 <tr>
 <td>操作系统</td>
 <td>Ubuntu Server 22.04 / 24.04 LTS</td>
-<td>MySQL 8.0 或 MariaDB 已按第 11.1、11.2 章部署</td>
+<td>MySQL 8.4 LTS 或 MariaDB 已按第 11.1、11.2 章部署</td>
 </tr>
 <tr>
 <td>数据库权限</td>
@@ -5363,7 +5543,7 @@
 </code></pre></div>
 <div class="admonition note">
 <p class="admonition-title">版本差异提示</p>
-<p>MySQL 8.0 较新版本可用 <code>innodb_redo_log_capacity</code> 统一管理重做日志总容量，与旧的 <code>innodb_log_file_size</code> 不要在同一配置里互相矛盾地重复设置。以你机器的实际版本文档为准，改后用 <code>SHOW VARIABLES</code> 验证哪个参数在生效。MariaDB 沿用 <code>innodb_log_file_size</code> 方式。</p>
+<p>MySQL 8.0.30 起、8.4 LTS 主线使用 <code>innodb_redo_log_capacity</code> 统一管理重做日志总容量，与旧的 <code>innodb_log_file_size</code> 不要在同一配置里互相矛盾地重复设置。以你机器的实际版本文档为准，改后用 <code>SHOW VARIABLES</code> 验证哪个参数在生效。MariaDB 沿用 <code>innodb_log_file_size</code> 方式。</p>
 </div>
 <h3 id="35-innodb_flush_log_at_trx_commit-sync_binlog">3.5 innodb_flush_log_at_trx_commit 与 sync_binlog：性能与安全的权衡<a class="headerlink" href="#35-innodb_flush_log_at_trx_commit-sync_binlog" title="Permanent link">&para;</a></h3>
 <p>这两个参数决定事务提交时日志刷盘的严格程度，直接在「性能」与「断电不丢数据」之间取舍，必须按业务容忍度选，不要抄「最快组合」上生产：</p>

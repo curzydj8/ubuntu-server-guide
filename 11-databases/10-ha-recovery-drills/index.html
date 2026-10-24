@@ -18,7 +18,7 @@
         <link rel="prev" href="../09-ha-containerized/">
       
       
-        <link rel="next" href="../../12-virtualization/">
+        <link rel="next" href="../11-pgbouncer-pooling/">
       
       
         
@@ -1094,6 +1094,8 @@
       
         
       
+        
+      
     
     
     
@@ -1400,6 +1402,34 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../02-security/10-luks-disk-encryption/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    LUKS 磁盘加密
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -1656,6 +1686,10 @@
       
         
       
+        
+      
+        
+      
     
     
     
@@ -1865,6 +1899,62 @@
     
   
     负载均衡 HAProxy
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../04-network/07-keepalived-vrrp/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Keepalived 与 VRRP 高可用
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../04-network/08-bonding-lacp/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    网卡 Bonding 与 LACP
   
 
     
@@ -2104,6 +2194,8 @@
       
         
       
+        
+      
     
     
     
@@ -2313,6 +2405,34 @@
     
   
     容量规划与日志治理
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../06-monitoring/07-opentelemetry/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    OpenTelemetry 统一接入
   
 
     
@@ -3294,6 +3414,10 @@
       
         
       
+        
+      
+        
+      
     
     
     
@@ -3855,6 +3979,62 @@
   
 </nav>
       
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../11-pgbouncer-pooling/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    PgBouncer 连接池
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../12-mysql-cluster-proxysql/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MySQL 集群与 ProxySQL
+  
+
+    
+  </span>
+  
+  
+
+      </a>
     </li>
   
 
@@ -5231,9 +5411,9 @@
 <li><a href="../09-ha-containerized/">容器化数据库与主从复制</a>：主从搭建与状态字段在该章，本章往上走一层，讲自动切换、回切与延迟判读。</li>
 </ul>
 <p>三个口径先说清：可用性目标（如 99.95%，全年允许停机约 4.38 小时）决定冗余层数；RTO 是故障后多久恢复可用；RPO 是最多允许丢多少时间的数据。主从复制只解决「有一份副本」，没有仲裁、隔离与切换编排，副本只是一份可能一起写坏的副本。本章为「文档核对」级别：命令已按官方文档核对，未在本机实测；集群与切换为概念加最小示例，生产落地前必须在隔离环境演练。命令适配 Ubuntu 22.04 / 24.04 LTS，26.04 包版本与参数待核验。</p>
-<p>单点消除要逐层查，而不是只盯着数据库进程：主机层靠双机与双路供电，存储层靠 RAID 或 DRBD，网络层靠双网卡与 VIP 入口，数据库层靠切换编排与连接串指向 VIP，流程层靠检查表与演练记录成文——任一层留单点，HA 都只是名义上的。</p>
+<p>单点消除要逐层查，而不是只盯着数据库进程：主机层靠双机与双路供电，存储层靠 RAID 或 DRBD，网络层靠双网卡与 VIP 入口，数据库层靠切换编排与连接串指向 VIP，流程层靠检查表与演练记录成文——任一层留单点，HA 都只是名义上的。其中 VIP 的创建与主备漂移机制（VRRP）见第 04 部分 <a href="../../04-network/07-keepalived-vrrp/">Keepalived 与 VRRP 高可用</a>，本章的演练纪律（先隔离、再提升）与该章的脑裂防护互为表里。</p>
 <h2 id="_3">二、环境准备与前置条件<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h2>
-<p>演练环境使用虚构主机名与文档段 IP：主库 <code>db1</code>（192.0.2.31）、备库 <code>db2</code>（192.0.2.32）、见证节点 <code>db3</code>（192.0.2.33，可为小规格主机）、对外虚拟 IP（VIP）192.0.2.30、恢复演练目标机 <code>db-restore</code>（192.0.2.34）。数据库版本与前面章节一致：MySQL 8.0 系列、PostgreSQL 16，操作系统 Ubuntu 22.04 / 24.04 LTS（26.04 待核验）。</p>
+<p>演练环境使用虚构主机名与文档段 IP：主库 <code>db1</code>（192.0.2.31）、备库 <code>db2</code>（192.0.2.32）、见证节点 <code>db3</code>（192.0.2.33，可为小规格主机）、对外虚拟 IP（VIP）192.0.2.30、恢复演练目标机 <code>db-restore</code>（192.0.2.34）。数据库版本与前面章节一致：MySQL 8.4 LTS 系列、PostgreSQL 16，操作系统 Ubuntu 22.04 / 24.04 LTS（26.04 待核验）。</p>
 <p>备份前提，缺一不开始演练：集群、数据库与复制配置各留一份带日期副本，失败可退回；最近一次全量备份已过校验和比对，并有恢复到临时实例查到正确数据的记录（见 3.8 节）；恢复目标机与生产网络隔离，避免演练实例被应用误连；各机时钟偏差在 1 秒内，PITR 与 binlog 时间点以统一时钟为准。</p>
 <div class="admonition danger">
 <p class="admonition-title">生产切换需变更审批</p>
@@ -5683,13 +5863,13 @@
         
         
           
-          <a href="../../12-virtualization/" class="md-footer__link md-footer__link--next" aria-label="下一页: 第 12 部分：硬件、虚拟化与私有云">
+          <a href="../11-pgbouncer-pooling/" class="md-footer__link md-footer__link--next" aria-label="下一页: PgBouncer 连接池">
             <div class="md-footer__title">
               <span class="md-footer__direction">
                 下一页
               </span>
               <div class="md-ellipsis">
-                第 12 部分：硬件、虚拟化与私有云
+                PgBouncer 连接池
               </div>
             </div>
             <div class="md-footer__button md-icon">

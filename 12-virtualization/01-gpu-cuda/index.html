@@ -1094,6 +1094,8 @@
       
         
       
+        
+      
     
     
     
@@ -1400,6 +1402,34 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../02-security/10-luks-disk-encryption/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    LUKS 磁盘加密
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -1656,6 +1686,10 @@
       
         
       
+        
+      
+        
+      
     
     
     
@@ -1865,6 +1899,62 @@
     
   
     负载均衡 HAProxy
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../04-network/07-keepalived-vrrp/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Keepalived 与 VRRP 高可用
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../04-network/08-bonding-lacp/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    网卡 Bonding 与 LACP
   
 
     
@@ -2104,6 +2194,8 @@
       
         
       
+        
+      
     
     
     
@@ -2313,6 +2405,34 @@
     
   
     容量规划与日志治理
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../06-monitoring/07-opentelemetry/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    OpenTelemetry 统一接入
   
 
     
@@ -3292,6 +3412,10 @@
       
         
       
+        
+      
+        
+      
     
     
     
@@ -3613,6 +3737,62 @@
     
   
     高可用实战与恢复演练
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../11-databases/11-pgbouncer-pooling/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    PgBouncer 连接池
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../11-databases/12-mysql-cluster-proxysql/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MySQL 集群与 ProxySQL
   
 
     
@@ -4021,6 +4201,17 @@
     <span class="md-ellipsis">
       
         分层排错：先定位在哪一层，再动手修
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cuda" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        回滚与恢复：驱动或 CUDA 变更后退回上一状态
       
     </span>
   </a>
@@ -5341,6 +5532,17 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#cuda" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        回滚与恢复：驱动或 CUDA 变更后退回上一状态
+      
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -5760,6 +5962,37 @@
 <li>判读方法：先分清三个数——<code>nvidia-smi</code> 表头右侧的 <code>CUDA Version</code> 是<strong>当前驱动最高支持</strong>的 CUDA 版本；<code>nvcc --version</code> 是<strong>本机工具链</strong>的版本；框架文档写的是它<strong>要求</strong>的 CUDA 与最低驱动。要求高于驱动上限时，升工具链没有用，必须升驱动；工具链高于框架要求时，按框架要求降工具链或换用自带运行时的框架镜像。</li>
 <li>对应关系以 <strong>NVIDIA 官方 CUDA Toolkit Release Notes 中的兼容表为准</strong>：本节不复制具体版本号对应表，因为对应关系随版本发布持续变化，抄下来的表很快过期且容易抄错。查法是打开所用工具链版本对应的 Release Notes，在兼容性章节核对最低驱动要求，再与本机 <code>nvidia-smi</code> 表头的驱动版本对照，两者对上才动手安装或升级。</li>
 </ul>
+<h3 id="cuda">回滚与恢复：驱动或 CUDA 变更后退回上一状态<a class="headerlink" href="#cuda" title="Permanent link">&para;</a></h3>
+<p>3.4 节记录的两份清单（<code>/root/nvidia-packages-before.txt</code>、<code>/root/apt-manual-before.txt</code>）是回退的对照基线：动手回退前先打开它确认变更前的分支号，下面命令中的 <code>OLD_BRANCH</code> 就填它。回退分三种情形，按你遇到的挑一种，不要混着来。</p>
+<p><strong>情形一：新驱动装上了、能进系统，但工作不正常——回退到原分支。</strong> 先解除锁定（如变更前执行过 hold），再把原分支装回来，重启后对照基线验证：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a><span class="nv">OLD_BRANCH</span><span class="o">=</span><span class="s1">'570'</span>
+<a id="__codelineno-18-2" name="__codelineno-18-2" href="#__codelineno-18-2"></a>sudo<span class="w"> </span>apt-mark<span class="w"> </span>unhold<span class="w"> </span><span class="s2">"nvidia-driver-</span><span class="si">${</span><span class="nv">OLD_BRANCH</span><span class="si">}</span><span class="s2">"</span>
+<a id="__codelineno-18-3" name="__codelineno-18-3" href="#__codelineno-18-3"></a>sudo<span class="w"> </span>apt<span class="w"> </span>install<span class="w"> </span>-y<span class="w"> </span><span class="s2">"nvidia-driver-</span><span class="si">${</span><span class="nv">OLD_BRANCH</span><span class="si">}</span><span class="s2">"</span><span class="w"> </span><span class="s2">"nvidia-utils-</span><span class="si">${</span><span class="nv">OLD_BRANCH</span><span class="si">}</span><span class="s2">"</span>
+<a id="__codelineno-18-4" name="__codelineno-18-4" href="#__codelineno-18-4"></a>sudo<span class="w"> </span>apt<span class="w"> </span>autoremove<span class="w"> </span>-y
+<a id="__codelineno-18-5" name="__codelineno-18-5" href="#__codelineno-18-5"></a>sudo<span class="w"> </span>reboot
+<a id="__codelineno-18-6" name="__codelineno-18-6" href="#__codelineno-18-6"></a>nvidia-smi
+</code></pre></div>
+<p><code>OLD_BRANCH</code> 替换为基线清单里记录的实际分支号。期望 <code>nvidia-smi</code> 表头的驱动版本与清单记录一致，再按 4.3 节验收清单复验一遍容器链路，才算退稳。</p>
+<p><strong>情形二：新驱动导致进不了图形界面或开机反复重启。</strong> 不要在这个状态里反复重装。开机在 GRUB 菜单的 Advanced options 里选上一个可用内核启动（保留旧内核就是为这一步）；旧内核同样起不来时，用恢复模式（recovery mode）的 root shell，或在登录界面按 <code>Ctrl+Alt+F3</code> 切到 TTY 登录；没有本地屏幕的云服务器走厂商控制台的 VNC 或串口终端。进入可用命令行后，整体卸载专有驱动、先恢复到开源 Nouveau 能进系统的状态：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a>sudo<span class="w"> </span>apt<span class="w"> </span>purge<span class="w"> </span>-y<span class="w"> </span><span class="s1">'nvidia-*'</span><span class="w"> </span><span class="s1">'libnvidia-*'</span>
+<a id="__codelineno-19-2" name="__codelineno-19-2" href="#__codelineno-19-2"></a>sudo<span class="w"> </span>apt<span class="w"> </span>autoremove<span class="w"> </span>-y
+<a id="__codelineno-19-3" name="__codelineno-19-3" href="#__codelineno-19-3"></a>sudo<span class="w"> </span>update-initramfs<span class="w"> </span>-u
+<a id="__codelineno-19-4" name="__codelineno-19-4" href="#__codelineno-19-4"></a>sudo<span class="w"> </span>reboot
+<a id="__codelineno-19-5" name="__codelineno-19-5" href="#__codelineno-19-5"></a>lsmod<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>nouveau
+</code></pre></div>
+<p>期望重启后能正常进入桌面或登录界面、<code>lsmod</code> 里能看到 <code>nouveau</code>。此时 GPU 计算不可用是预期内的中间状态——先保证系统可用，再回第三节用 <code>ubuntu-drivers devices</code> 重新选分支安装，不要在救援环境里顺手把新驱动又装回去。</p>
+<p><strong>情形三：只回退 CUDA 工具链或容器配置，驱动不动。</strong> 工具链按当初的路线退：发行版路线执行 <code>sudo apt purge -y nvidia-cuda-toolkit</code>；官方源路线先把 3.6 节备份的源配置还原、再卸掉对应工具链包：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-20-1" name="__codelineno-20-1" href="#__codelineno-20-1"></a><span class="nv">CUDA_PKG</span><span class="o">=</span><span class="s1">'cuda-toolkit-12-6'</span>
+<a id="__codelineno-20-2" name="__codelineno-20-2" href="#__codelineno-20-2"></a>sudo<span class="w"> </span>apt<span class="w"> </span>purge<span class="w"> </span>-y<span class="w"> </span><span class="s2">"</span><span class="si">${</span><span class="nv">CUDA_PKG</span><span class="si">}</span><span class="s2">"</span>
+<a id="__codelineno-20-3" name="__codelineno-20-3" href="#__codelineno-20-3"></a>sudo<span class="w"> </span>cp<span class="w"> </span>-a<span class="w"> </span>/root/sources.list.d.bak-2026-01-01/.<span class="w"> </span>/etc/apt/sources.list.d/
+<a id="__codelineno-20-4" name="__codelineno-20-4" href="#__codelineno-20-4"></a>sudo<span class="w"> </span>apt<span class="w"> </span>update
+</code></pre></div>
+<p><code>CUDA_PKG</code> 换成你实际装的工具链包名，源备份目录名按 3.6 节备份当天的日期替换。Docker 侧的 GPU 配置回退用 3.8 节的 daemon.json 备份还原；当时走 CDI 方式的，再删掉生成的规范文件：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-21-1" name="__codelineno-21-1" href="#__codelineno-21-1"></a>sudo<span class="w"> </span>cp<span class="w"> </span>/etc/docker/daemon.json.bak-2026-01-01<span class="w"> </span>/etc/docker/daemon.json
+<a id="__codelineno-21-2" name="__codelineno-21-2" href="#__codelineno-21-2"></a>sudo<span class="w"> </span>rm<span class="w"> </span>-f<span class="w"> </span>/etc/cdi/nvidia.yaml
+<a id="__codelineno-21-3" name="__codelineno-21-3" href="#__codelineno-21-3"></a>sudo<span class="w"> </span>systemctl<span class="w"> </span>restart<span class="w"> </span>docker
+</code></pre></div>
+<p>备份文件名按 3.8 节实际生成的那份替换（先 <code>ls /etc/docker/daemon.json.bak-*</code> 确认）。三种情形回退完成后都回 4.1、4.2 节复验，并把失败原因与回退后的版本组合记进基线文档，下次变更窗口先看这份记录。</p>
 <h2 id="_8">六、生产环境最佳实践与安全建议<a class="headerlink" href="#_8" title="Permanent link">&para;</a></h2>
 <p>驱动变更走变更流程：升级前记录旧版本与 <code>nvidia-smi</code> 输出，升级后跑固定冒烟集，包括宿主机检查、容器检查与一次真实短推理，全部通过才算完成。验证通过的驱动与 CUDA 组合写入配置基线，新机器按基线装配。</p>
 <p>权限上不要对无关用户放开 GPU 设备节点；容器场景优先用 <code>--gpus</code> 按需分配指定卡，不要默认把全部卡给全部容器。多任务共用一台机器时按卡划分，避免单任务占满显存拖垮其他服务；需要细粒度切分时再评估 MIG，前提是显卡型号支持。</p>

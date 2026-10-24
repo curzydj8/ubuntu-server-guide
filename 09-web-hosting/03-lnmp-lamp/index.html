@@ -1094,6 +1094,8 @@
       
         
       
+        
+      
     
     
     
@@ -1400,6 +1402,34 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../02-security/10-luks-disk-encryption/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    LUKS 磁盘加密
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -1656,6 +1686,10 @@
       
         
       
+        
+      
+        
+      
     
     
     
@@ -1865,6 +1899,62 @@
     
   
     负载均衡 HAProxy
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../04-network/07-keepalived-vrrp/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Keepalived 与 VRRP 高可用
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../04-network/08-bonding-lacp/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    网卡 Bonding 与 LACP
   
 
     
@@ -2104,6 +2194,8 @@
       
         
       
+        
+      
     
     
     
@@ -2313,6 +2405,34 @@
     
   
     容量规划与日志治理
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../06-monitoring/07-opentelemetry/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    OpenTelemetry 统一接入
   
 
     
@@ -3142,10 +3262,27 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="五、常见错误与排坑指南">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        回滚与恢复：变更后退回上一状态
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
-  <a href="#_6" class="md-nav__link">
+  <a href="#_7" class="md-nav__link">
     <span class="md-ellipsis">
       
         六、生产环境最佳实践与安全建议
@@ -3460,6 +3597,10 @@
       
         
           
+        
+      
+        
+      
         
       
         
@@ -3803,6 +3944,62 @@
     
   
     高可用实战与恢复演练
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../11-databases/11-pgbouncer-pooling/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    PgBouncer 连接池
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../11-databases/12-mysql-cluster-proxysql/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MySQL 集群与 ProxySQL
   
 
     
@@ -5088,10 +5285,27 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="五、常见错误与排坑指南">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        回滚与恢复：变更后退回上一状态
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
-  <a href="#_6" class="md-nav__link">
+  <a href="#_7" class="md-nav__link">
     <span class="md-ellipsis">
       
         六、生产环境最佳实践与安全建议
@@ -5321,7 +5535,53 @@
 <a id="__codelineno-26-3" name="__codelineno-26-3" href="#__codelineno-26-3"></a>mysql<span class="w"> </span>-h<span class="w"> </span><span class="m">127</span>.0.0.1<span class="w"> </span>-u<span class="w"> </span>appuser<span class="w"> </span>-p<span class="w"> </span>-e<span class="w"> </span><span class="s2">"SELECT 1;"</span>
 </code></pre></div>
 <p>账号主机对不上时，按程序实际的连接方式补建对应账号，不要图省事把主机写成百分号放行全网。</p>
-<h2 id="_6">六、生产环境最佳实践与安全建议<a class="headerlink" href="#_6" title="Permanent link">&para;</a></h2>
+<h3 id="_6">回滚与恢复：变更后退回上一状态<a class="headerlink" href="#_6" title="Permanent link">&para;</a></h3>
+<p>前面各节留的备份（3.3、3.4 的站点配置副本、3.6 的 mysqld.cnf 副本）就是为回滚准备的。再补两样变更前必做的备份——站点目录打包与数据库导出；没有这两份，配置能退、数据退不回去：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-27-1" name="__codelineno-27-1" href="#__codelineno-27-1"></a>sudo<span class="w"> </span>tar<span class="w"> </span>-czf<span class="w"> </span>/root/www-example.com-<span class="k">$(</span>date<span class="w"> </span>+%F<span class="k">)</span>.tar.gz<span class="w"> </span>-C<span class="w"> </span>/var/www<span class="w"> </span>example.com
+<a id="__codelineno-27-2" name="__codelineno-27-2" href="#__codelineno-27-2"></a>sudo<span class="w"> </span>mysqldump<span class="w"> </span>-u<span class="w"> </span>root<span class="w"> </span>-p<span class="w"> </span>appdb<span class="w"> </span><span class="p">|</span><span class="w"> </span>sudo<span class="w"> </span>tee<span class="w"> </span>/root/appdb-<span class="k">$(</span>date<span class="w"> </span>+%F<span class="k">)</span>.sql<span class="w"> </span>&gt;<span class="w"> </span>/dev/null
+<a id="__codelineno-27-3" name="__codelineno-27-3" href="#__codelineno-27-3"></a>ls<span class="w"> </span>-lh<span class="w"> </span>/root/www-example.com-*.tar.gz<span class="w"> </span>/root/appdb-*.sql
+</code></pre></div>
+<p><strong>配置回退</strong>：改坏任一配置时，先用语法检查确认是本次改动引起的，再用备份覆盖回来，不要在坏配置上继续叠加修改。编辑站点配置前同样先留一份副本：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-28-1" name="__codelineno-28-1" href="#__codelineno-28-1"></a>sudo<span class="w"> </span>cp<span class="w"> </span>/etc/nginx/sites-available/example.com<span class="w"> </span>/etc/nginx/sites-available/example.com.bak-<span class="k">$(</span>date<span class="w"> </span>+%F<span class="k">)</span>
+<a id="__codelineno-28-2" name="__codelineno-28-2" href="#__codelineno-28-2"></a>
+<a id="__codelineno-28-3" name="__codelineno-28-3" href="#__codelineno-28-3"></a><span class="c1"># Nginx 默认站点配置退回 3.3 节的备份（example.com 配置同理换成它自己的 .bak 副本）</span>
+<a id="__codelineno-28-4" name="__codelineno-28-4" href="#__codelineno-28-4"></a>sudo<span class="w"> </span>cp<span class="w"> </span>/etc/nginx/sites-available/default.bak.20260101<span class="w"> </span>/etc/nginx/sites-available/default
+<a id="__codelineno-28-5" name="__codelineno-28-5" href="#__codelineno-28-5"></a>sudo<span class="w"> </span>nginx<span class="w"> </span>-t
+<a id="__codelineno-28-6" name="__codelineno-28-6" href="#__codelineno-28-6"></a>sudo<span class="w"> </span>systemctl<span class="w"> </span>reload<span class="w"> </span>nginx
+<a id="__codelineno-28-7" name="__codelineno-28-7" href="#__codelineno-28-7"></a>
+<a id="__codelineno-28-8" name="__codelineno-28-8" href="#__codelineno-28-8"></a><span class="c1"># MySQL 配置退回 3.6 节的备份</span>
+<a id="__codelineno-28-9" name="__codelineno-28-9" href="#__codelineno-28-9"></a>sudo<span class="w"> </span>cp<span class="w"> </span>/etc/mysql/mysql.conf.d/mysqld.cnf.bak.20260101<span class="w"> </span>/etc/mysql/mysql.conf.d/mysqld.cnf
+<a id="__codelineno-28-10" name="__codelineno-28-10" href="#__codelineno-28-10"></a>sudo<span class="w"> </span>systemctl<span class="w"> </span>restart<span class="w"> </span>mysql
+</code></pre></div>
+<p>Apache 路线把第一组命令换成 <code>/etc/apache2/sites-available/</code> 下的对应文件，语法检查换 <code>sudo apachectl configtest</code>、生效换 <code>sudo systemctl reload apache2</code>。若新站点配置本身就是故障源，先把它移出启用目录、恢复到只有默认站点的状态再慢慢查：Nginx 删掉 <code>sites-enabled</code> 里指向它的符号链接后 reload；Apache 用 <code>sudo a2dissite example.com.conf</code> 后 reload。</p>
+<p><strong>PHP 版本回退</strong>：跨版本升级（如 8.1 升到 8.3）后程序不兼容，不必先卸载新版本——两个版本的 FPM 可以并存，先把站点指回旧版本，确认业务恢复后再决定去留：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-29-1" name="__codelineno-29-1" href="#__codelineno-29-1"></a><span class="nv">OLD_PHP</span><span class="o">=</span><span class="s1">'8.1'</span>
+<a id="__codelineno-29-2" name="__codelineno-29-2" href="#__codelineno-29-2"></a>sudo<span class="w"> </span>sed<span class="w"> </span>-i<span class="w"> </span><span class="s2">"s|/run/php/php[0-9.]*-fpm.sock|/run/php/php</span><span class="si">${</span><span class="nv">OLD_PHP</span><span class="si">}</span><span class="s2">-fpm.sock|"</span><span class="w"> </span>/etc/nginx/sites-available/example.com
+<a id="__codelineno-29-3" name="__codelineno-29-3" href="#__codelineno-29-3"></a>sudo<span class="w"> </span>nginx<span class="w"> </span>-t
+<a id="__codelineno-29-4" name="__codelineno-29-4" href="#__codelineno-29-4"></a>sudo<span class="w"> </span>systemctl<span class="w"> </span>reload<span class="w"> </span>nginx
+<a id="__codelineno-29-5" name="__codelineno-29-5" href="#__codelineno-29-5"></a>sudo<span class="w"> </span>systemctl<span class="w"> </span>status<span class="w"> </span><span class="s2">"php</span><span class="si">${</span><span class="nv">OLD_PHP</span><span class="si">}</span><span class="s2">-fpm"</span><span class="w"> </span>--no-pager
+</code></pre></div>
+<p>Apache 路线改为切换它加载的 PHP 模块：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-30-1" name="__codelineno-30-1" href="#__codelineno-30-1"></a><span class="nv">OLD_PHP</span><span class="o">=</span><span class="s1">'8.1'</span>
+<a id="__codelineno-30-2" name="__codelineno-30-2" href="#__codelineno-30-2"></a><span class="nv">NEW_PHP</span><span class="o">=</span><span class="s1">'8.3'</span>
+<a id="__codelineno-30-3" name="__codelineno-30-3" href="#__codelineno-30-3"></a>sudo<span class="w"> </span>a2dismod<span class="w"> </span><span class="s2">"php</span><span class="si">${</span><span class="nv">NEW_PHP</span><span class="si">}</span><span class="s2">"</span>
+<a id="__codelineno-30-4" name="__codelineno-30-4" href="#__codelineno-30-4"></a>sudo<span class="w"> </span>a2enmod<span class="w"> </span><span class="s2">"php</span><span class="si">${</span><span class="nv">OLD_PHP</span><span class="si">}</span><span class="s2">"</span>
+<a id="__codelineno-30-5" name="__codelineno-30-5" href="#__codelineno-30-5"></a>sudo<span class="w"> </span>systemctl<span class="w"> </span>restart<span class="w"> </span>apache2
+</code></pre></div>
+<p><strong>站点文件与数据库恢复</strong>：程序升级把文件或数据改坏时，用变更前的打包与导出整体还原（导入会按导出文件里的语句重建表，变更后新写入的数据会丢，回滚前先想清楚这笔账）：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-31-1" name="__codelineno-31-1" href="#__codelineno-31-1"></a><span class="nv">WWW_BAK</span><span class="o">=</span><span class="s1">'/root/www-example.com-2026-01-01.tar.gz'</span>
+<a id="__codelineno-31-2" name="__codelineno-31-2" href="#__codelineno-31-2"></a>sudo<span class="w"> </span>tar<span class="w"> </span>-xzf<span class="w"> </span><span class="s2">"</span><span class="si">${</span><span class="nv">WWW_BAK</span><span class="si">}</span><span class="s2">"</span><span class="w"> </span>-C<span class="w"> </span>/var/www
+<a id="__codelineno-31-3" name="__codelineno-31-3" href="#__codelineno-31-3"></a>sudo<span class="w"> </span>chown<span class="w"> </span>-R<span class="w"> </span>www-data:www-data<span class="w"> </span>/var/www/example.com
+<a id="__codelineno-31-4" name="__codelineno-31-4" href="#__codelineno-31-4"></a><span class="nv">DUMP_FILE</span><span class="o">=</span><span class="s1">'/root/appdb-2026-01-01.sql'</span>
+<a id="__codelineno-31-5" name="__codelineno-31-5" href="#__codelineno-31-5"></a>sudo<span class="w"> </span>mysql<span class="w"> </span>-u<span class="w"> </span>root<span class="w"> </span>-p<span class="w"> </span>appdb<span class="w"> </span>&lt;<span class="w"> </span><span class="s2">"</span><span class="si">${</span><span class="nv">DUMP_FILE</span><span class="si">}</span><span class="s2">"</span>
+</code></pre></div>
+<p>上面两个文件名按你备份当天的实际日期替换。<strong>回滚验证</strong>按第四节的顺序再走一遍，并与变更前记录逐项对照：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-32-1" name="__codelineno-32-1" href="#__codelineno-32-1"></a>systemctl<span class="w"> </span>is-active<span class="w"> </span>nginx<span class="w"> </span>php8.1-fpm<span class="w"> </span>mysql
+<a id="__codelineno-32-2" name="__codelineno-32-2" href="#__codelineno-32-2"></a>curl<span class="w"> </span>-I<span class="w"> </span>http://127.0.0.1
+<a id="__codelineno-32-3" name="__codelineno-32-3" href="#__codelineno-32-3"></a>mysql<span class="w"> </span>-u<span class="w"> </span>appuser<span class="w"> </span>-p<span class="w"> </span>-e<span class="w"> </span><span class="s2">"SHOW DATABASES;"</span>
+</code></pre></div>
+<p>三项全过、页面打开后 PHP 版本号与业务数据都与变更前一致，才算回滚完成；刚回滚完不要立即叠加下一次变更，先定位上一次失败的原因再动手。</p>
+<h2 id="_7">六、生产环境最佳实践与安全建议<a class="headerlink" href="#_7" title="Permanent link">&para;</a></h2>
 <p>第一，PHP-FPM 按站点拆进程池并用不同系统用户运行，一个站点被攻破不直接带走全部站点，配置目录在 /etc/php/ 对应版本的 fpm/pool.d/ 下，改前先备份原文件。第二，生产环境关闭错误回显，在 php.ini 里把 display_errors 设为 Off，错误只写日志。第三，数据库坚持最小权限和本机监听两个原则，远程管理需求用 SSH 隧道解决，不要开放 3306 到公网。第四，Nginx 和 Apache 只保留一个对外，另一个即使不用也要 disable 掉自启，避免重启机器后抢端口。第五，配置变更走固定动作：备份、改文件、语法检查、reload、看错误日志，五步缺一不可，reload 失败时服务仍用旧配置运行，不要误判为已生效。第六，系统和组件更新纳入固定节奏，PHP 跨版本升级前先在测试机验证程序兼容性，尤其是从 8.1 升到 8.3 这类跨版本动作。</p>
 
 
