@@ -1,1 +1,1 @@
-{"apkUrl":"","notes":"第五阶段 SSH 服务器管理真机验收版：流式终端、8 项只读诊断、操作审计、高风险命令拦截确认；修复连接闪退、凭据写入失败、终端打不开三处真机问题。","versionCode":13,"versionName":"0.6.4"}
+{"apkUrl":"","notes":"检查更新修复：主清单（Workers）失败自动换备用清单（GitHub Pages），每地址 3 次重试；双失败时两边原因同报。","versionCode":14,"versionName":"0.6.5"}
