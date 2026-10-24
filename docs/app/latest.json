@@ -1,1 +1,1 @@
-{"apkUrl":"","notes":"检查更新修复：主清单（Workers）失败自动换备用清单（GitHub Pages），每地址 3 次重试；双失败时两边原因同报。","versionCode":14,"versionName":"0.6.5"}
+{"apkUrl":"https://ubuntu-server-guide.lindemann-zhang.workers.dev/app/toolkit-1.0.0.apk","notes":"1.0.0 正式版：第六阶段验收完成，R8 + 资源收缩，发布签名版；服务器管理与 TOFU 安全审计全过。","versionCode":15,"versionName":"1.0.0"}
