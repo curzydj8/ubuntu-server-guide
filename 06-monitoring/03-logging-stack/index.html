@@ -1094,6 +1094,8 @@
       
         
       
+        
+      
     
     
     
@@ -1400,6 +1402,34 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../02-security/10-luks-disk-encryption/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    LUKS 磁盘加密
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -1656,6 +1686,10 @@
       
         
       
+        
+      
+        
+      
     
     
     
@@ -1865,6 +1899,62 @@
     
   
     负载均衡 HAProxy
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../04-network/07-keepalived-vrrp/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Keepalived 与 VRRP 高可用
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../04-network/08-bonding-lacp/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    网卡 Bonding 与 LACP
   
 
     
@@ -2092,6 +2182,8 @@
       
         
           
+        
+      
         
       
         
@@ -2446,6 +2538,17 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#54" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.4 回滚与恢复：日志栈变更如何退回
+      
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -2542,6 +2645,34 @@
     
   
     容量规划与日志治理
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../07-opentelemetry/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    OpenTelemetry 统一接入
   
 
     
@@ -3521,6 +3652,10 @@
       
         
       
+        
+      
+        
+      
     
     
     
@@ -3842,6 +3977,62 @@
     
   
     高可用实战与恢复演练
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../11-databases/11-pgbouncer-pooling/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    PgBouncer 连接池
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../11-databases/12-mysql-cluster-proxysql/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MySQL 集群与 ProxySQL
   
 
     
@@ -5163,6 +5354,17 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#54" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.4 回滚与恢复：日志栈变更如何退回
+      
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -5544,10 +5746,55 @@
 <div class="highlight"><pre><span></span><code><a id="__codelineno-22-1" name="__codelineno-22-1" href="#__codelineno-22-1"></a>Data source connected, but no labels received
 </code></pre></div>
 <p>原因：数据源本身连通但 Loki 中还没有任何数据，多见于刚部署且 Vector 尚未成功推送时。修复顺序：先按第四节做端到端写入测试，确认查询接口能返回数据后，再回 Grafana 重新测试，提示即会变为成功。不要在无数据时反复改数据源地址。</p>
+<h3 id="54">5.4 回滚与恢复：日志栈变更如何退回<a class="headerlink" href="#54" title="Permanent link">&para;</a></h3>
+<p>日志栈能退回的对象有四个：Loki 二进制、Loki 配置、Vector 配置、Grafana 里的 Loki 数据源。共同前提是改之前先留备份，命名沿用本章的 <code>.bak-日期</code> 后缀：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-23-1" name="__codelineno-23-1" href="#__codelineno-23-1"></a><span class="c1"># Loki：停服务后给数据目录做整目录快照（保证一致性），并备份二进制与配置</span>
+<a id="__codelineno-23-2" name="__codelineno-23-2" href="#__codelineno-23-2"></a>sudo<span class="w"> </span>systemctl<span class="w"> </span>stop<span class="w"> </span>loki
+<a id="__codelineno-23-3" name="__codelineno-23-3" href="#__codelineno-23-3"></a>sudo<span class="w"> </span>cp<span class="w"> </span>-a<span class="w"> </span>/var/lib/loki<span class="w"> </span>/var/lib/loki.bak-20260101
+<a id="__codelineno-23-4" name="__codelineno-23-4" href="#__codelineno-23-4"></a>sudo<span class="w"> </span>cp<span class="w"> </span>/usr/local/bin/loki<span class="w"> </span>/usr/local/bin/loki.bak-20260101
+<a id="__codelineno-23-5" name="__codelineno-23-5" href="#__codelineno-23-5"></a>sudo<span class="w"> </span>cp<span class="w"> </span>/etc/loki/config.yaml<span class="w"> </span>/etc/loki/config.yaml.bak-20260101
+<a id="__codelineno-23-6" name="__codelineno-23-6" href="#__codelineno-23-6"></a>sudo<span class="w"> </span>systemctl<span class="w"> </span>start<span class="w"> </span>loki
+<a id="__codelineno-23-7" name="__codelineno-23-7" href="#__codelineno-23-7"></a>loki<span class="w"> </span>--version
+<a id="__codelineno-23-8" name="__codelineno-23-8" href="#__codelineno-23-8"></a>
+<a id="__codelineno-23-9" name="__codelineno-23-9" href="#__codelineno-23-9"></a><span class="c1"># Vector 配置与 Grafana 的状态库（数据源与仪表盘都存在 grafana.db 里）</span>
+<a id="__codelineno-23-10" name="__codelineno-23-10" href="#__codelineno-23-10"></a>sudo<span class="w"> </span>cp<span class="w"> </span>/etc/vector/vector.yaml<span class="w"> </span>/etc/vector/vector.yaml.bak-20260101
+<a id="__codelineno-23-11" name="__codelineno-23-11" href="#__codelineno-23-11"></a>vector<span class="w"> </span>--version
+<a id="__codelineno-23-12" name="__codelineno-23-12" href="#__codelineno-23-12"></a>sudo<span class="w"> </span>systemctl<span class="w"> </span>stop<span class="w"> </span>grafana-server
+<a id="__codelineno-23-13" name="__codelineno-23-13" href="#__codelineno-23-13"></a>sudo<span class="w"> </span>cp<span class="w"> </span>/var/lib/grafana/grafana.db<span class="w"> </span>/var/lib/grafana/grafana.db.bak-20260101
+<a id="__codelineno-23-14" name="__codelineno-23-14" href="#__codelineno-23-14"></a>sudo<span class="w"> </span>systemctl<span class="w"> </span>start<span class="w"> </span>grafana-server
+</code></pre></div>
+<p>数据目录快照体积大，先按 3.5 节的测算确认磁盘放得下；只改配置、不动版本的变更可以只备配置与状态库，不必每次整备数据目录。</p>
+<p>Loki 版本或配置回退：把备份的二进制与配置覆盖回去再启动。若新版已经写入了旧版读不懂的索引（启动日志报 schema 相关错误），连数据目录一并整体还原；被换下来的现场先改名封存，不要直接删：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-24-1" name="__codelineno-24-1" href="#__codelineno-24-1"></a>sudo<span class="w"> </span>systemctl<span class="w"> </span>stop<span class="w"> </span>loki
+<a id="__codelineno-24-2" name="__codelineno-24-2" href="#__codelineno-24-2"></a>sudo<span class="w"> </span>cp<span class="w"> </span>/usr/local/bin/loki.bak-20260101<span class="w"> </span>/usr/local/bin/loki
+<a id="__codelineno-24-3" name="__codelineno-24-3" href="#__codelineno-24-3"></a>sudo<span class="w"> </span>cp<span class="w"> </span>/etc/loki/config.yaml.bak-20260101<span class="w"> </span>/etc/loki/config.yaml
+<a id="__codelineno-24-4" name="__codelineno-24-4" href="#__codelineno-24-4"></a>sudo<span class="w"> </span>systemctl<span class="w"> </span>start<span class="w"> </span>loki
+<a id="__codelineno-24-5" name="__codelineno-24-5" href="#__codelineno-24-5"></a>curl<span class="w"> </span>http://localhost:3100/ready
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-25-1" name="__codelineno-25-1" href="#__codelineno-25-1"></a><span class="c1"># 仅在旧版读不了新数据时执行这一组：整体还原数据目录</span>
+<a id="__codelineno-25-2" name="__codelineno-25-2" href="#__codelineno-25-2"></a>sudo<span class="w"> </span>systemctl<span class="w"> </span>stop<span class="w"> </span>loki
+<a id="__codelineno-25-3" name="__codelineno-25-3" href="#__codelineno-25-3"></a>sudo<span class="w"> </span>mv<span class="w"> </span>/var/lib/loki<span class="w"> </span>/var/lib/loki.after-upgrade
+<a id="__codelineno-25-4" name="__codelineno-25-4" href="#__codelineno-25-4"></a>sudo<span class="w"> </span>cp<span class="w"> </span>-a<span class="w"> </span>/var/lib/loki.bak-20260101<span class="w"> </span>/var/lib/loki
+<a id="__codelineno-25-5" name="__codelineno-25-5" href="#__codelineno-25-5"></a>sudo<span class="w"> </span>chown<span class="w"> </span>-R<span class="w"> </span>loki:loki<span class="w"> </span>/var/lib/loki
+<a id="__codelineno-25-6" name="__codelineno-25-6" href="#__codelineno-25-6"></a>sudo<span class="w"> </span>systemctl<span class="w"> </span>start<span class="w"> </span>loki
+<a id="__codelineno-25-7" name="__codelineno-25-7" href="#__codelineno-25-7"></a>curl<span class="w"> </span>http://localhost:3100/ready
+</code></pre></div>
+<p>Vector 回退：恢复备份配置，先校验再重启，看日志确认推送恢复；选了 Promtail 的机器同理，恢复 <code>/etc/promtail/config.yaml</code> 的备份后重启 promtail 服务：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-26-1" name="__codelineno-26-1" href="#__codelineno-26-1"></a>sudo<span class="w"> </span>cp<span class="w"> </span>/etc/vector/vector.yaml.bak-20260101<span class="w"> </span>/etc/vector/vector.yaml
+<a id="__codelineno-26-2" name="__codelineno-26-2" href="#__codelineno-26-2"></a>vector<span class="w"> </span>validate<span class="w"> </span>/etc/vector/vector.yaml
+<a id="__codelineno-26-3" name="__codelineno-26-3" href="#__codelineno-26-3"></a>sudo<span class="w"> </span>systemctl<span class="w"> </span>restart<span class="w"> </span>vector
+<a id="__codelineno-26-4" name="__codelineno-26-4" href="#__codelineno-26-4"></a>journalctl<span class="w"> </span>-u<span class="w"> </span>vector<span class="w"> </span>-n<span class="w"> </span><span class="m">30</span><span class="w"> </span>--no-pager
+</code></pre></div>
+<p>Grafana 数据源回退：本章对 Grafana 只新增了一个 Loki 数据源。若只是地址写错，在 UI 里把该数据源的 URL 改回原值即可，不必动状态库；若数据源或仪表盘被改乱，恢复改前备份的 grafana.db：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-27-1" name="__codelineno-27-1" href="#__codelineno-27-1"></a>sudo<span class="w"> </span>systemctl<span class="w"> </span>stop<span class="w"> </span>grafana-server
+<a id="__codelineno-27-2" name="__codelineno-27-2" href="#__codelineno-27-2"></a>sudo<span class="w"> </span>cp<span class="w"> </span>/var/lib/grafana/grafana.db.bak-20260101<span class="w"> </span>/var/lib/grafana/grafana.db
+<a id="__codelineno-27-3" name="__codelineno-27-3" href="#__codelineno-27-3"></a>sudo<span class="w"> </span>systemctl<span class="w"> </span>start<span class="w"> </span>grafana-server
+</code></pre></div>
+<p>退完按第四节的口径三查：<code>/ready</code> 返回 ready；用 query_range 查一条回退前就存在的历史日志，确认旧数据仍可读；再按第四节的办法写入一条新标记，确认采集链路恢复、新数据继续进入，Grafana Explore 里同样查得到。三处一致才算回退完成，观察一段时间无新增报错后，再清理 after-upgrade 封存目录。</p>
 <h2 id="_7">六、生产环境最佳实践与安全建议<a class="headerlink" href="#_7" title="Permanent link">&para;</a></h2>
 <p>第一，网络收口。Loki 的 3100 端口只允许来源机网段与 Grafana 所在机器访问，禁止暴露到公网；跨公网传输时必须套 TLS 或走专线与隧道，明文 HTTP 只适用于可信内网。</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-23-1" name="__codelineno-23-1" href="#__codelineno-23-1"></a>sudo<span class="w"> </span>ufw<span class="w"> </span>allow<span class="w"> </span>from<span class="w"> </span><span class="m">192</span>.0.2.0/24<span class="w"> </span>to<span class="w"> </span>any<span class="w"> </span>port<span class="w"> </span><span class="m">3100</span><span class="w"> </span>proto<span class="w"> </span>tcp
-<a id="__codelineno-23-2" name="__codelineno-23-2" href="#__codelineno-23-2"></a>sudo<span class="w"> </span>ufw<span class="w"> </span>status
+<div class="highlight"><pre><span></span><code><a id="__codelineno-28-1" name="__codelineno-28-1" href="#__codelineno-28-1"></a>sudo<span class="w"> </span>ufw<span class="w"> </span>allow<span class="w"> </span>from<span class="w"> </span><span class="m">192</span>.0.2.0/24<span class="w"> </span>to<span class="w"> </span>any<span class="w"> </span>port<span class="w"> </span><span class="m">3100</span><span class="w"> </span>proto<span class="w"> </span>tcp
+<a id="__codelineno-28-2" name="__codelineno-28-2" href="#__codelineno-28-2"></a>sudo<span class="w"> </span>ufw<span class="w"> </span>status
 </code></pre></div>
 <p>第二，标签纪律。标签只放主机、服务、环境、级别这四类低基数维度，上线前评审标签清单；正文检索靠 LogQL 过滤，不要为了查得快就把高基数字段提升为标签。</p>
 <p>第三，采集端缓冲。Vector 的 data_dir 要落在可靠磁盘上，中心端短时不可用时靠本地缓冲续传；同时给 Vector 本身设资源上限，避免日志风暴时采集器抢占业务资源。</p>

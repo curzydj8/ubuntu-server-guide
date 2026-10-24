@@ -18,7 +18,7 @@
         <link rel="prev" href="../04-time-logging/">
       
       
-        <link rel="next" href="../../05-containers/">
+        <link rel="next" href="../07-keepalived-vrrp/">
       
       
         
@@ -1094,6 +1094,8 @@
       
         
       
+        
+      
     
     
     
@@ -1400,6 +1402,34 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../02-security/10-luks-disk-encryption/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    LUKS 磁盘加密
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -1644,6 +1674,10 @@
       
         
           
+        
+      
+        
+      
         
       
         
@@ -2079,6 +2113,62 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../07-keepalived-vrrp/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Keepalived 与 VRRP 高可用
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../08-bonding-lacp/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    网卡 Bonding 与 LACP
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -2305,6 +2395,8 @@
       
         
       
+        
+      
     
     
     
@@ -2514,6 +2606,34 @@
     
   
     容量规划与日志治理
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../06-monitoring/07-opentelemetry/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    OpenTelemetry 统一接入
   
 
     
@@ -3493,6 +3613,10 @@
       
         
       
+        
+      
+        
+      
     
     
     
@@ -3814,6 +3938,62 @@
     
   
     高可用实战与恢复演练
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../11-databases/11-pgbouncer-pooling/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    PgBouncer 连接池
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../11-databases/12-mysql-cluster-proxysql/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MySQL 集群与 ProxySQL
   
 
     
@@ -5548,6 +5728,7 @@
 <p>第三，统计面与日志接入现有监控。stats socket 的指标应被采集到第 06 部分的 Prometheus 体系中，对后端 DOWN、连接数逼近 maxconn、5xx 比例突增设置告警；HAProxy 日志按天轮转并集中收集，排障时先看日志再动配置。</p>
 <p>第四，连接与上限保护。<code>maxconn</code> 要与后端总承压能力匹配，负载均衡把流量放进来但后端接不住，故障只会从入口转移到后端；同时在 frontend 侧对异常高频来源做基础限速，挡住最粗放的扫描与撞库。</p>
 <p>第五，证书与口令管理。TLS 合并 pem 与 stats auth 口令都属于敏感材料：pem 私钥部分权限收紧、不进代码仓库；统计页口令独立且定期轮换，轮换后校验并 reload 生效。第六，定期演练。每季度做一次故障摘除与排空下线的完整演练（按第四节的脚本），确认自动转移时间符合预期、值班人员熟悉 Runtime API 命令，演练记录与复盘一起归档。</p>
+<p>入口本身的高可用不在本章范围：双机 HAProxy 前面的虚拟 IP 主备漂移（Keepalived/VRRP）见下一章 <a href="../07-keepalived-vrrp/">Keepalived 与 VRRP 高可用：虚拟 IP 主备漂移</a>，两章配合即是完整的双机入口方案。</p>
 
 
 
@@ -5603,13 +5784,13 @@
         
         
           
-          <a href="../../05-containers/" class="md-footer__link md-footer__link--next" aria-label="下一页: 第 05 部分：容器化与云原生">
+          <a href="../07-keepalived-vrrp/" class="md-footer__link md-footer__link--next" aria-label="下一页: Keepalived 与 VRRP 高可用">
             <div class="md-footer__title">
               <span class="md-footer__direction">
                 下一页
               </span>
               <div class="md-ellipsis">
-                第 05 部分：容器化与云原生
+                Keepalived 与 VRRP 高可用
               </div>
             </div>
             <div class="md-footer__button md-icon">
