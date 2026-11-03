@@ -7921,10 +7921,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#8" class="md-nav__link">
+  <a href="#8-2026-11-04" class="md-nav__link">
     <span class="md-ellipsis">
       
-        8. 未完成内容（需站长单独确认，确认前不动）
+        8. 执行记录（2026-11-04，站长授权代理定）
       
     </span>
   </a>
@@ -8518,10 +8518,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#8" class="md-nav__link">
+  <a href="#8-2026-11-04" class="md-nav__link">
     <span class="md-ellipsis">
       
-        8. 未完成内容（需站长单独确认，确认前不动）
+        8. 执行记录（2026-11-04，站长授权代理定）
       
     </span>
   </a>
@@ -8724,12 +8724,15 @@
 <li>邮件服务器引用口径：按站长“本地邮件先不做”的决定，新指南引用 09-web-hosting/06-mail-server.md 时只说明其适用范围，不把本地邮件列为建站必做步骤。</li>
 <li>“转换为 PDF”一条：原始需求文件里有此行，但未明确转哪个文件、给谁用，<strong>本次未做</strong>，需站长明确范围后另立任务。</li>
 </ul>
-<h2 id="8">8. 未完成内容（需站长单独确认，确认前不动）<a class="headerlink" href="#8" title="Permanent link">&para;</a></h2>
+<h2 id="8-2026-11-04">8. 执行记录（2026-11-04，站长授权代理定）<a class="headerlink" href="#8-2026-11-04" title="Permanent link">&para;</a></h2>
+<p>站长 2026-11-03 23:58 说“你来定”，代理定为：<strong>导航接入与发布同步都做，App 不动</strong>。执行结果：</p>
 <ol>
-<li><strong>导航接入</strong>：把“网站建设与部署实战指南”接进 <code>mkdocs.yml</code> 一级导航，并给 64 篇排导航顺序；同时改动首页（加新指南入口）。这会改动现有导航与首页，<strong>需站长确认方案后才改</strong>。</li>
-<li><strong>发布与同步</strong>：服务器版（crozz.me）、Pages 版、Workers 版三路同步，以及 git 提交。服务器同步须遵守 guide-server-notes（不用 <code>--delete</code>，保住 BingSiteAuth.xml、两个百度验证文件、APK、软件页备份）；Workers 全量重建须重拷 <code>_headers</code> 并删 <code>*.map</code>。<strong>需站长确认后才做</strong>。</li>
-<li><strong>App 同步</strong>：<code>docs/app/latest.json</code> 与 APK 是否随本指南更新（原任务书收尾阶段“网站和 App 同步更新”），<strong>需站长确认是否动 App</strong>。</li>
-<li><strong>手机端实测</strong>：导航接入并发布后，在真实手机浏览器上打开首页与一篇长文，确认排版无错位。</li>
+<li><strong>导航接入</strong>：<code>mkdocs.yml</code> 加一级导航“网站建设与部署实战指南”，64 篇按 16 组顺序排入，另加“全站整合验收报告”条目；首页加新指南入口一段。严格构建通过。</li>
+<li><strong>服务器版</strong>：按 guide-server-notes 严格构建并同步到 crozz.me（不用 <code>--delete</code>），APK、Bing 验证文件、两个百度验证文件全部 intact，线上首页、指南页、验收报告、sitemap、robots 全部 200。</li>
+<li><strong>Pages 版</strong>：gh-pages 6 批推送（5 批正文 + 1 批首页与 sitemap），末 commit <code>daf3fa65</code>；分支内容经 API 核实无误，公开访问因 GitHub Pages 部署延迟晚到约半小时后才生效，最终首页与指南页全部 200。搜索索引 <code>search_index.json</code>（7.1MB）因推送工具 HTTP 413 被拒，Pages 站内搜索暂不含新指南，需走 git 全量同步时补。</li>
+<li><strong>Workers 版</strong>：全量重建（重拷 <code>_headers</code>、删 <code>*.map</code>），部署版本 <code>5ab76922</code>，线上首页与指南页全部 200。</li>
+<li><strong>App</strong>：未动（App 内置的是 Ubuntu 服务器指南 99 篇，网站指南进 App 需另做内容同步与发版）。</li>
+<li><strong>待补</strong>：手机端真实渲染未实测；原始需求里的“转换为 PDF”范围仍未明确，未做。</li>
 </ol>
 <h2 id="9">9. 下一项建议<a class="headerlink" href="#9" title="Permanent link">&para;</a></h2>
 <p>站长确认第 8 节的 1～3 项后，按确认的范围执行导航接入与发布同步，并做手机端实测；验收通过后，本项目 66 个任务全部完成（任务表实测 66 个唯一编号，WEB-00 已验收，其余 65 项本次更新为已完成）。</p>
