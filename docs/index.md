@@ -24,9 +24,9 @@ description: "Ubuntu Server 终极指南与实战教程：从安装、安全加�
 | 安全 | 10 网络安全与漏洞研究、11 逆向工程与恶意软件研究、12 数字取证与安全调查、13 密码学与隐私保护、14 Windows 深度技术 | 32 篇 | [本组说明](encyclopedia/groups/security.md) |
 | AI | 17 人工智能与机器学习、18 本地 AI 与自动化 | 10 篇 | [本组说明](encyclopedia/groups/ai.md) |
 | 应用 | 19 移动应用与跨平台开发、20 嵌入式与物联网、21 游戏与图形计算、22 数字媒体与多媒体技术 | 17 篇 | [本组说明](encyclopedia/groups/apps.md) |
-| 前沿 | 24 现代计算机前沿研究 | 27 篇 | [本组说明](encyclopedia/frontier.md) |
+| 前沿 | 24 现代计算机前沿研究 | 33 篇 | [本组说明](encyclopedia/frontier.md) |
 
-篇数为知识文章数（共 266 篇）；另有互动工具 1 页、根部站务页与参考索引、网站指南规划文件不计入域篇数。
+篇数为知识文章数（共 272 篇）；另有互动工具 1 页、根部站务页与参考索引、网站指南规划文件不计入域篇数。
 
 另有两个总入口页：[网站建设与部署实战指南总览](website-guide/index.md)（16 组）与[计算机技术百科总览](encyclopedia/index.md)（7 组、24 域）。
 

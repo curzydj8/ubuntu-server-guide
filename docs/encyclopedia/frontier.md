@@ -4,13 +4,13 @@ description: "前沿研究领域组说明：24 现代计算机前沿研究。"
 
 # 前沿研究
 
-本组包含一个知识领域，共 27 篇知识文章：
+本组包含一个知识领域，共 33 篇知识文章：
 
 | 领域 | 篇数 | 入口 |
 | --- | --- | --- |
-| 24 现代计算机前沿研究 | 27 篇 | [量子计算基础](24-frontier/01-quantum-computing.md) |
+| 24 现代计算机前沿研究 | 33 篇 | [量子计算基础](24-frontier/01-quantum-computing.md) |
 
-24 域文章按总纲第 5 章方向组织，每篇必须标注成熟度（成熟应用 / 工程发展中 / 实验研究中 / 理论探索中）与证据日期，不把预测写成事实。本组文章（27 篇）：
+24 域文章按总纲第 5 章方向组织，每篇必须标注成熟度（成熟应用 / 工程发展中 / 实验研究中 / 理论探索中）与证据日期，不把预测写成事实。本组文章（33 篇）：
 
 - [量子计算基础](24-frontier/01-quantum-computing.md)（成熟度：实验研究中）
 - [神经形态计算](24-frontier/02-neuromorphic-computing.md)（成熟度：实验研究中）
@@ -39,6 +39,12 @@ description: "前沿研究领域组说明：24 现代计算机前沿研究。"
 - [HBM 各代：带宽、容量与单引脚速率](24-frontier/25-hbm-generations.md)（成熟度：工程发展中）
 - [数据压缩、去重与纠删码](24-frontier/26-compression-dedup-erasure.md)（成熟度：成熟应用）
 - [存储可靠性与能效](24-frontier/27-storage-reliability-efficiency.md)（成熟度：成熟应用）
+- [RVA23 与扩展规范](24-frontier/28-rva23-extensions.md)（成熟度：工程发展中）
+- [RISC-V 处理器设计](24-frontier/29-processor-design.md)（成熟度：工程发展中）
+- [开源芯片设计与 EDA](24-frontier/30-open-chip-eda.md)（成熟度：工程发展中）
+- [开发板、软件生态与发行版支持](24-frontier/31-boards-software-ecosystem.md)（成熟度：工程发展中）
+- [出货量、市场份额与产业格局](24-frontier/32-market-shipments.md)（成熟度：工程发展中）
+- [RISC-V 与 ARM、x86 指令集演进对照](24-frontier/33-isa-evolution-comparison.md)（成熟度：工程发展中）
 
 本组说明页不是正式文章，只作导航与口径说明；各领域文章以导航所列为准。
 
