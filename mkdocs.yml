@@ -65,142 +65,310 @@ plugins:
   - search:
       lang: zh
 
+extra_css:
+  - stylesheets/tabs-arrows.css
+
+extra_javascript:
+  - javascripts/tabs-arrows.js
+
 extra:
   social:
     - icon: fontawesome/brands/github
       link: https://github.com/curzydj8/ubuntu-server-guide
 
 nav:
-  - 首页: index.md
-  - 版本兼容与验证状态: compatibility.md
-  - 01 基础入门与安装:
-      - 01-basics/index.md
-      - 版本选择与 Lifecycle: 01-basics/01-version-lifecycle.md
-      - 系统安装: 01-basics/02-installation.md
-      - 首次登录与网络初始化: 01-basics/03-first-login-network.md
-      - 软件源与包管理: 01-basics/04-package-management.md
-      - 云初始化与无人值守安装: 01-basics/05-cloud-init-autoinstall.md
-      - 系统升级与版本生命周期: 01-basics/06-release-upgrade-lifecycle.md
-      - 多架构服务器: 01-basics/07-multiarch.md
-  - 02 系统安全与权限管理:
-      - 02-security/index.md
-      - SSH 安全加固: 02-security/01-ssh-hardening.md
-      - 用户、Sudo 与 PAM: 02-security/02-users-sudo-pam.md
-      - 防火墙管理: 02-security/03-firewall.md
-      - 系统防御与入侵检测: 02-security/04-defense.md
-      - 企业身份认证: 02-security/05-enterprise-identity.md
-      - CIS 安全基线审计: 02-security/06-cis-baseline.md
-      - 自动安全更新: 02-security/07-unattended-upgrades.md
-      - 证书与密钥生命周期: 02-security/08-certificate-lifecycle.md
-      - 秘密信息管理: 02-security/09-secrets-management.md
-      - LUKS 磁盘加密: 02-security/10-luks-disk-encryption.md
-  - 03 磁盘、文件系统与存储:
-      - 03-storage/index.md
-      - LVM 动态卷管理: 03-storage/01-lvm.md
-      - ZFS 与 Btrfs: 03-storage/02-zfs-btrfs.md
-      - 挂载与存储共享: 03-storage/03-mount-sharing.md
-      - 磁盘健康与备份: 03-storage/04-backup.md
-      - 硬件健康检查: 03-storage/05-hardware-health.md
-  - 04 网络服务与核心架构:
-      - 04-network/index.md
-      - DNS 服务器搭建: 04-network/01-dns.md
-      - DNS 进阶与 DNSSEC: 04-network/05-dnssec-advanced.md
-      - Web 服务器与反向代理: 04-network/02-web-proxy.md
-      - 网络隧道与 VPN: 04-network/03-vpn-tunnel.md
-      - 时间同步与系统日志: 04-network/04-time-logging.md
-      - 负载均衡 HAProxy: 04-network/06-haproxy.md
-      - Keepalived 与 VRRP 高可用: 04-network/07-keepalived-vrrp.md
-      - 网卡 Bonding 与 LACP: 04-network/08-bonding-lacp.md
-  - 05 容器化与云原生:
-      - 05-containers/index.md
-      - Docker 基础与进阶: 05-containers/01-docker.md
-      - Podman 无根容器: 05-containers/02-podman.md
-      - Kubernetes 轻量集群: 05-containers/03-kubernetes-light.md
-      - 软件供应链安全: 05-containers/04-supply-chain-security.md
-  - 06 系统监控、日志与性能调优:
-      - 06-monitoring/index.md
-      - 命令行即时监控工具: 06-monitoring/01-cli-tools.md
-      - Prometheus + Grafana 监控栈: 06-monitoring/02-prometheus-grafana.md
-      - 集中式日志收集: 06-monitoring/03-logging-stack.md
-      - 内核与性能调优: 06-monitoring/04-kernel-tuning.md
-      - 可观测性与告警治理: 06-monitoring/05-observability-alerting.md
-      - 容量规划与日志治理: 06-monitoring/06-capacity-log-governance.md
-      - OpenTelemetry 统一接入: 06-monitoring/07-opentelemetry.md
-  - 07 自动化运维与脚本:
-      - 07-automation/index.md
-      - Shell 脚本规范与范例: 07-automation/01-shell-scripting.md
-      - Systemd 服务与定时任务: 07-automation/02-systemd-timers.md
-      - Ansible 自动化配置管理: 07-automation/03-ansible.md
-      - 服务工程化与配置漂移: 07-automation/04-systemd-engineering-drift.md
-  - 08 故障排查与应急响应:
-      - 08-troubleshooting/index.md
-      - 系统无法启动修复: 08-troubleshooting/01-boot-repair.md
-      - 网络故障排查流程: 08-troubleshooting/02-network-diagnosis.md
-      - 磁盘爆满与句柄耗尽: 08-troubleshooting/03-disk-full.md
-      - CPU / 内存异常定位: 08-troubleshooting/04-cpu-memory.md
-      - 灾难恢复与系统迁移: 08-troubleshooting/05-disaster-recovery-migration.md
-      - 内核与启动恢复深化: 08-troubleshooting/06-kernel-boot-remote-recovery.md
-      - 事故响应与取证: 08-troubleshooting/07-incident-response.md
-  - 09 网站搭建、域名与应用部署:
-      - 09-web-hosting/index.md
-      - 域名解析与网络连接: 09-web-hosting/01-dns-resolution.md
-      - 宝塔面板安装与安全加固: 09-web-hosting/02-baota-panel.md
-      - 经典 LNMP / LAMP 自建: 09-web-hosting/03-lnmp-lamp.md
-      - Docker 部署常用应用: 09-web-hosting/04-docker-apps.md
-      - HTTPS 自动化证书: 09-web-hosting/05-https-certificates.md
-      - 邮件服务器与送达: 09-web-hosting/06-mail-server.md
-  - 10 游戏服务器部署与端口映射:
-      - 10-game-servers/index.md
-      - 端口开放「三重门」: 10-game-servers/01-port-opening.md
-      - 游戏服务端实战: 10-game-servers/02-game-server-setup.md
-      - 性能调优与守护: 10-game-servers/03-performance-daemon.md
-      - 内网穿透与公网映射: 10-game-servers/04-nat-traversal.md
-  - 11 数据库安装、管理与高可用:
-      - 11-databases/index.md
-      - MySQL 安装与安全初始化: 11-databases/01-mysql-install-security.md
-      - MySQL 用户、权限与远程访问: 11-databases/02-mysql-users-remote.md
-      - MySQL 核心参数调优: 11-databases/03-mysql-tuning.md
-      - MySQL 备份与还原演练: 11-databases/04-mysql-backup-restore.md
-      - PostgreSQL 安装与认证: 11-databases/05-postgresql-install-auth.md
-      - PostgreSQL 插件、备份与 PITR: 11-databases/06-postgresql-extensions-backup.md
-      - Redis 与 Sentinel 高可用: 11-databases/07-redis.md
-      - MongoDB 安装与调优: 11-databases/08-mongodb.md
-      - 容器化数据库与主从复制: 11-databases/09-ha-containerized.md
-      - 高可用实战与恢复演练: 11-databases/10-ha-recovery-drills.md
-      - PgBouncer 连接池: 11-databases/11-pgbouncer-pooling.md
-      - MySQL 集群与 ProxySQL: 11-databases/12-mysql-cluster-proxysql.md
-  - 12 硬件、虚拟化与私有云:
-      - 12-virtualization/index.md
-      - GPU 与 CUDA: 12-virtualization/01-gpu-cuda.md
-      - KVM/QEMU 与 Proxmox VE: 12-virtualization/02-kvm-qemu-pve.md
-      - PCIe 直通与 SR-IOV: 12-virtualization/03-passthrough-sriov.md
-  - 13 AI 工具与智能化运维:
-      - 13-ai-ops/index.md
-      - 本地大模型运维助手: 13-ai-ops/01-local-llm.md
-      - 云端 AI CLI 助手: 13-ai-ops/02-ai-cli.md
-      - IaC 与 GitOps 深化: 13-ai-ops/03-iac-gitops.md
-  - 14 SSH 专题：连接、密钥与隧道:
-      - 14-ssh/index.md
-      - SSH 原理与服务端安装: 14-ssh/01-principles-install.md
-      - 连接与客户端配置: 14-ssh/02-connect-config.md
-      - 密钥、Agent 与轮换: 14-ssh/03-keys-agent.md
-      - 文件传输与远程执行: 14-ssh/04-transfer-remote-exec.md
-      - 隧道与跳板机: 14-ssh/05-tunnels-jump.md
-      - 故障排查与安全加固要点: 14-ssh/06-troubleshooting-hardening.md
-  - 15 Linux 命令速查手册:
-      - 15-command-reference/index.md
-      - 文件与权限速查: 15-command-reference/01-files-permissions.md
-      - 软件包与服务速查: 15-command-reference/02-packages-services.md
-      - 网络诊断速查: 15-command-reference/03-network-diagnostics.md
-      - 磁盘与进程速查: 15-command-reference/04-disk-process.md
-      - 文本与归档速查: 15-command-reference/05-text-archive.md
-      - 定时、容器与系统速查: 15-command-reference/06-scheduling-containers-more.md
-  - 参考索引:
-      - reference/index.md
-      - 术语表: reference/glossary.md
-      - 命令索引: reference/command-index.md
-      - 端口与协议目录: reference/ports.md
-      - 配置文件索引: reference/config-files.md
-      - 内容贡献规范: reference/contributing.md
+  - 基础与底层:
+      - 本组说明与筹备计划: encyclopedia/foundations.md
+      - 01 计算机基础与硬件:
+          - 数字逻辑与组成基础: encyclopedia/01-computer-basics/01-digital-logic.md
+          - CPU 组成与指令集: encyclopedia/01-computer-basics/02-cpu-instruction-set.md
+          - 内存层次与缓存: encyclopedia/01-computer-basics/03-memory-hierarchy-cache.md
+          - SSD 存储原理: encyclopedia/01-computer-basics/04-ssd-storage.md
+          - 指令集对比：x86 与 ARM 与 RISC-V: encyclopedia/01-computer-basics/05-isa-comparison.md
+          - 硬件选型与评测方法: encyclopedia/01-computer-basics/06-hardware-selection.md
+      - 15 浏览器与互联网底层:
+          - 渲染引擎与渲染流程: encyclopedia/15-browser-internals/01-rendering-pipeline.md
+          - 网络栈与缓存: encyclopedia/15-browser-internals/02-network-cache.md
+          - 存储与 Cookie 模型: encyclopedia/15-browser-internals/03-storage-cookie.md
+      - 23 计算机历史与技术文化:
+          - 计算机发展史：从机械计算到个人计算机: encyclopedia/23-history-culture/01-computer-history.md
+          - 互联网历史：从 ARPANET 到万维网: encyclopedia/23-history-culture/02-internet-history.md
+          - 开源文化与社区: encyclopedia/23-history-culture/03-open-source-culture.md
+  - 开发:
+      - 02 编程语言与开发基础:
+          - 编程基础:
+              - 数据结构与算法基础: encyclopedia/02-programming-basics/01-data-structures-algorithms.md
+              - 版本控制进阶：Git 工作流: encyclopedia/02-programming-basics/02-git-workflows.md
+              - 调试与测试方法: encyclopedia/02-programming-basics/03-debugging-testing.md
+          - JavaScript:
+              - JavaScript 基础完整教程: website-guide/javascript/01-basics.md
+              - DOM、事件、异步完整教程: website-guide/javascript/02-dom-async.md
+              - TypeScript 完整教程: website-guide/javascript/03-typescript.md
+              - npm、pnpm、Vite、前端工程化完整教程: website-guide/javascript/04-tooling.md
+      - 03 前端开发:
+          - HTML:
+              - HTML 基础与语义化标签: website-guide/html/01-basics.md
+              - HTML 表单、表格、媒体: website-guide/html/02-forms-tables-media.md
+              - HTML SEO 与无障碍: website-guide/html/03-seo-a11y.md
+          - CSS 基础:
+              - CSS 基础语法与选择器: website-guide/css/01-basics.md
+              - CSS 单位与颜色、字体、背景、边框: website-guide/css/02-units-colors.md
+              - CSS 盒模型与定位: website-guide/css/03-box-position.md
+              - Flexbox 完整教程: website-guide/css/04-flexbox.md
+              - Grid 完整教程: website-guide/css/05-grid.md
+              - CSS 响应式设计: website-guide/css/06-responsive.md
+              - CSS 动画和高级效果: website-guide/css/07-animation.md
+              - CSS 工程化: website-guide/css/08-engineering.md
+          - CSS 框架:
+              - Bootstrap 完整教程: website-guide/css-frameworks/01-bootstrap.md
+              - Tailwind CSS 完整教程: website-guide/css-frameworks/02-tailwind.md
+              - Bulma 完整教程: website-guide/css-frameworks/03-bulma.md
+              - Foundation、UIkit 完整教程: website-guide/css-frameworks/04-foundation-uikit.md
+              - Pico CSS、Materialize 完整教程: website-guide/css-frameworks/05-pico-materialize.md
+              - 自己编写 CSS 框架: website-guide/css-frameworks/06-own-framework.md
+              - 完整 Design System（自建设计系统）: website-guide/css-frameworks/07-design-system.md
+              - 同一页面需求的多框架对照实战: website-guide/css-frameworks/08-comparison.md
+          - 前端框架:
+              - Vue 3 完整教程: website-guide/frontend/01-vue.md
+              - React 完整教程: website-guide/frontend/02-react.md
+              - Angular 完整教程: website-guide/frontend/03-angular.md
+              - Svelte 完整教程: website-guide/frontend/04-svelte.md
+              - Next.js 完整教程: website-guide/frontend/05-nextjs.md
+              - Nuxt 完整教程: website-guide/frontend/06-nuxt.md
+          - UI 组件库与设计:
+              - UI 组件库完整教程: website-guide/frontend/07-ui-libraries.md
+              - 网站设计与用户体验完整教程: website-guide/design/01-ux.md
+      - 04 后端开发:
+          - 后端框架:
+              - PHP 框架完整教程: website-guide/backend/01-php.md
+              - Python 框架完整教程: website-guide/backend/02-python.md
+              - Node.js 框架完整教程: website-guide/backend/03-nodejs.md
+              - Go 框架完整教程: website-guide/backend/04-go.md
+              - Java 框架完整教程: website-guide/backend/05-java.md
+          - API 与系统集成:
+              - REST、GraphQL、WebSocket、JSON、OAuth、JWT、第三方接口完整教程: website-guide/api/01-integration.md
+      - 05 数据库与数据技术:
+          - 11 数据库安装、管理与高可用:
+              - 11-databases/index.md
+              - MySQL 安装与安全初始化: 11-databases/01-mysql-install-security.md
+              - MySQL 用户、权限与远程访问: 11-databases/02-mysql-users-remote.md
+              - MySQL 核心参数调优: 11-databases/03-mysql-tuning.md
+              - MySQL 备份与还原演练: 11-databases/04-mysql-backup-restore.md
+              - PostgreSQL 安装与认证: 11-databases/05-postgresql-install-auth.md
+              - PostgreSQL 插件、备份与 PITR: 11-databases/06-postgresql-extensions-backup.md
+              - Redis 与 Sentinel 高可用: 11-databases/07-redis.md
+              - MongoDB 安装与调优: 11-databases/08-mongodb.md
+              - 容器化数据库与主从复制: 11-databases/09-ha-containerized.md
+              - 高可用实战与恢复演练: 11-databases/10-ha-recovery-drills.md
+              - PgBouncer 连接池: 11-databases/11-pgbouncer-pooling.md
+              - MySQL 集群与 ProxySQL: 11-databases/12-mysql-cluster-proxysql.md
+          - 数据库:
+              - 数据库选型、表设计、SQL、索引、事务、连接池完整教程: website-guide/database/01-design.md
+              - 备份、恢复、迁移、慢查询、主从复制、高可用完整教程: website-guide/database/02-ops.md
+      - 16 软件工程与系统架构:
+          - 架构:
+              - 网站完整架构总览完整教程: website-guide/architecture/01-overview.md
+              - 单体、前后端分离、SSR、SSG、微服务、多站点架构对比与升级路径完整教程: website-guide/architecture/02-patterns.md
+              - 建站方案选型决策树完整教程: website-guide/architecture/03-decision-tree.md
+  - 运维与网络:
+      - 06 操作系统与服务器:
+          - 01 基础入门与安装:
+              - 01-basics/index.md
+              - 版本选择与 Lifecycle: 01-basics/01-version-lifecycle.md
+              - 系统安装: 01-basics/02-installation.md
+              - 首次登录与网络初始化: 01-basics/03-first-login-network.md
+              - 软件源与包管理: 01-basics/04-package-management.md
+              - 云初始化与无人值守安装: 01-basics/05-cloud-init-autoinstall.md
+              - 系统升级与版本生命周期: 01-basics/06-release-upgrade-lifecycle.md
+              - 多架构服务器: 01-basics/07-multiarch.md
+          - 03 磁盘、文件系统与存储:
+              - 03-storage/index.md
+              - LVM 动态卷管理: 03-storage/01-lvm.md
+              - ZFS 与 Btrfs: 03-storage/02-zfs-btrfs.md
+              - 挂载与存储共享: 03-storage/03-mount-sharing.md
+              - 磁盘健康与备份: 03-storage/04-backup.md
+              - 硬件健康检查: 03-storage/05-hardware-health.md
+          - 06 系统监控、日志与性能调优:
+              - 06-monitoring/index.md
+              - 命令行即时监控工具: 06-monitoring/01-cli-tools.md
+              - Prometheus + Grafana 监控栈: 06-monitoring/02-prometheus-grafana.md
+              - 集中式日志收集: 06-monitoring/03-logging-stack.md
+              - 内核与性能调优: 06-monitoring/04-kernel-tuning.md
+              - 可观测性与告警治理: 06-monitoring/05-observability-alerting.md
+              - 容量规划与日志治理: 06-monitoring/06-capacity-log-governance.md
+              - OpenTelemetry 统一接入: 06-monitoring/07-opentelemetry.md
+          - 07 自动化运维与脚本:
+              - 07-automation/index.md
+              - Shell 脚本规范与范例: 07-automation/01-shell-scripting.md
+              - Systemd 服务与定时任务: 07-automation/02-systemd-timers.md
+              - Ansible 自动化配置管理: 07-automation/03-ansible.md
+              - 服务工程化与配置漂移: 07-automation/04-systemd-engineering-drift.md
+          - 08 故障排查与应急响应:
+              - 08-troubleshooting/index.md
+              - 系统无法启动修复: 08-troubleshooting/01-boot-repair.md
+              - 网络故障排查流程: 08-troubleshooting/02-network-diagnosis.md
+              - 磁盘爆满与句柄耗尽: 08-troubleshooting/03-disk-full.md
+              - CPU / 内存异常定位: 08-troubleshooting/04-cpu-memory.md
+              - 灾难恢复与系统迁移: 08-troubleshooting/05-disaster-recovery-migration.md
+              - 内核与启动恢复深化: 08-troubleshooting/06-kernel-boot-remote-recovery.md
+              - 事故响应与取证: 08-troubleshooting/07-incident-response.md
+          - 12 硬件、虚拟化与私有云:
+              - 12-virtualization/index.md
+              - GPU 与 CUDA: 12-virtualization/01-gpu-cuda.md
+              - KVM/QEMU 与 Proxmox VE: 12-virtualization/02-kvm-qemu-pve.md
+              - PCIe 直通与 SR-IOV: 12-virtualization/03-passthrough-sriov.md
+          - 14 SSH 专题：连接、密钥与隧道:
+              - 14-ssh/index.md
+              - SSH 原理与服务端安装: 14-ssh/01-principles-install.md
+              - 连接与客户端配置: 14-ssh/02-connect-config.md
+              - 密钥、Agent 与轮换: 14-ssh/03-keys-agent.md
+              - 文件传输与远程执行: 14-ssh/04-transfer-remote-exec.md
+              - 隧道与跳板机: 14-ssh/05-tunnels-jump.md
+              - 故障排查与安全加固要点: 14-ssh/06-troubleshooting-hardening.md
+          - 15 Linux 命令速查手册:
+              - 15-command-reference/index.md
+              - 文件与权限速查: 15-command-reference/01-files-permissions.md
+              - 软件包与服务速查: 15-command-reference/02-packages-services.md
+              - 网络诊断速查: 15-command-reference/03-network-diagnostics.md
+              - 磁盘与进程速查: 15-command-reference/04-disk-process.md
+              - 文本与归档速查: 15-command-reference/05-text-archive.md
+              - 定时、容器与系统速查: 15-command-reference/06-scheduling-containers-more.md
+          - 生产运营·监控与备份:
+              - 监控、日志、告警、压力测试、可用性检测完整教程: website-guide/ops/03-monitoring.md
+              - 备份、迁移、灾难恢复、RTO/RPO、恢复演练完整教程: website-guide/ops/04-backup-recovery.md
+      - 07 计算机网络与通信:
+          - 04 网络服务与核心架构:
+              - 04-network/index.md
+              - DNS 服务器搭建: 04-network/01-dns.md
+              - DNS 进阶与 DNSSEC: 04-network/05-dnssec-advanced.md
+              - Web 服务器与反向代理: 04-network/02-web-proxy.md
+              - 网络隧道与 VPN: 04-network/03-vpn-tunnel.md
+              - 时间同步与系统日志: 04-network/04-time-logging.md
+              - 负载均衡 HAProxy: 04-network/06-haproxy.md
+              - Keepalived 与 VRRP 高可用: 04-network/07-keepalived-vrrp.md
+              - 网卡 Bonding 与 LACP: 04-network/08-bonding-lacp.md
+          - 网络基础:
+              - 互联网、HTTP/HTTPS、浏览器、DNS、域名、IP、端口完整教程: website-guide/basics/01-internet.md
+              - 域名购买、注册商选择、实名、备案适用范围、泛域名、多域名完整教程: website-guide/basics/02-domain.md
+      - 08 网站建设与互联网应用:
+          - 09 网站搭建、域名与应用部署:
+              - 09-web-hosting/index.md
+              - 域名解析与网络连接: 09-web-hosting/01-dns-resolution.md
+              - 宝塔面板安装与安全加固: 09-web-hosting/02-baota-panel.md
+              - 经典 LNMP / LAMP 自建: 09-web-hosting/03-lnmp-lamp.md
+              - Docker 部署常用应用: 09-web-hosting/04-docker-apps.md
+              - HTTPS 自动化证书: 09-web-hosting/05-https-certificates.md
+              - 邮件服务器与送达: 09-web-hosting/06-mail-server.md
+          - 完整实战:
+              - 静态网站从零部署完整教程: website-guide/projects/01-static.md
+              - WordPress 企业网站 / 博客从零部署完整教程: website-guide/projects/02-wordpress.md
+              - Python 网站（Flask/Django）从零部署完整教程: website-guide/projects/03-python.md
+              - Node.js 网站从零部署完整教程: website-guide/projects/04-nodejs.md
+              - PHP 网站、Go API 服务从零部署完整教程: website-guide/projects/05-php-go.md
+              - Docker 多容器网站平台完整教程: website-guide/projects/06-docker-platform.md
+              - 论坛、电商、CMS、后台管理、SaaS 完整教程: website-guide/projects/07-systems.md
+              - 旗舰：一台服务器托管多网站完整教程: website-guide/projects/08-multi-site.md
+          - 建站工具:
+              - 建站工具 1：Nginx / Apache / Caddy 配置生成器、反向代理生成器: website-guide/tools/01-config-generators.md
+              - 建站工具 2：Docker Compose、systemd、备份脚本、部署检查清单生成器: website-guide/tools/02-deploy-tools.md
+              - SSL 到期计算器、DNS 检查、HTTPS/安全/上线前检查工具: website-guide/tools/03-checkers.md
+          - 生产运营·SEO 与性能:
+              - SEO、性能、缓存、图片优化、访问统计完整教程: website-guide/ops/01-seo-performance.md
+          - 网站指南·全站整合验收报告: website-guide/FINAL_REPORT.md
+      - 09 云计算与 DevOps:
+          - 05 容器化与云原生:
+              - 05-containers/index.md
+              - Docker 基础与进阶: 05-containers/01-docker.md
+              - Podman 无根容器: 05-containers/02-podman.md
+              - Kubernetes 轻量集群: 05-containers/03-kubernetes-light.md
+              - 软件供应链安全: 05-containers/04-supply-chain-security.md
+          - 服务器与运行环境:
+              - Nginx、Apache、Caddy 完整配置与多站点完整教程: website-guide/server/01-web-servers.md
+              - PHP-FPM、systemd、运行环境与进程管理完整教程: website-guide/server/02-runtime.md
+          - 部署与发布:
+              - Git、GitHub、SSH 部署密钥、GitHub Actions 自动部署完整教程: website-guide/deploy/01-cicd.md
+              - Docker、Docker Compose 多容器网站平台、蓝绿/滚动部署、回滚完整教程: website-guide/deploy/02-docker.md
+              - HTTPS、CDN、域名解析上线全流程完整教程: website-guide/deploy/03-launch.md
+          - Kubernetes 与持续交付:
+              - Kubernetes 架构与核心对象: encyclopedia/09-cloud-devops/01-kubernetes-architecture-objects.md
+              - Kubernetes 部署与运维入门: encyclopedia/09-cloud-devops/02-kubernetes-operations.md
+              - CI/CD 流水线设计: encyclopedia/09-cloud-devops/03-cicd-pipeline-design.md
+  - 安全:
+      - 10 网络安全与漏洞研究:
+          - 02 系统安全与权限管理:
+              - 02-security/index.md
+              - SSH 安全加固: 02-security/01-ssh-hardening.md
+              - 用户、Sudo 与 PAM: 02-security/02-users-sudo-pam.md
+              - 防火墙管理: 02-security/03-firewall.md
+              - 系统防御与入侵检测: 02-security/04-defense.md
+              - 企业身份认证: 02-security/05-enterprise-identity.md
+              - CIS 安全基线审计: 02-security/06-cis-baseline.md
+              - 自动安全更新: 02-security/07-unattended-upgrades.md
+              - 证书与密钥生命周期: 02-security/08-certificate-lifecycle.md
+              - 秘密信息管理: 02-security/09-secrets-management.md
+              - LUKS 磁盘加密: 02-security/10-luks-disk-encryption.md
+          - 生产运营·安全:
+              - 安全：WAF、限流、漏洞修复、安全响应头、密钥管理完整教程: website-guide/ops/02-security.md
+          - 漏洞研究与应急响应:
+              - 漏洞分类与研究方法: encyclopedia/10-security/01-vulnerability-classification-research.md
+              - 授权测试流程: encyclopedia/10-security/02-authorized-testing-workflow.md
+              - 检测与应急响应: encyclopedia/10-security/03-detection-incident-response.md
+      - 13 密码学与隐私保护:
+          - 对称与非对称密码: encyclopedia/13-cryptography/01-symmetric-asymmetric.md
+          - 哈希与数字签名: encyclopedia/13-cryptography/02-hash-signature.md
+          - TLS 与证书体系原理: encyclopedia/13-cryptography/03-tls-pki.md
+      - 14 Windows 深度技术:
+          - Windows 系统管理：版本、账户、服务与任务计划: encyclopedia/14-windows/01-system-management.md
+          - 注册表与组策略：结构、处理顺序与定位方法: encyclopedia/14-windows/02-registry-group-policy.md
+          - PowerShell 自动化：管道、对象模型与安全边界: encyclopedia/14-windows/03-powershell-automation.md
+  - AI:
+      - 17 人工智能与机器学习:
+          - 13 AI 工具与智能化运维:
+              - 13-ai-ops/index.md
+              - 本地大模型运维助手: 13-ai-ops/01-local-llm.md
+              - 云端 AI CLI 助手: 13-ai-ops/02-ai-cli.md
+              - IaC 与 GitOps 深化: 13-ai-ops/03-iac-gitops.md
+          - 机器学习基础：问题形态、泛化与评估思想: encyclopedia/17-ai-ml/01-ml-basics.md
+          - 深度学习与神经网络：从感知机到注意力: encyclopedia/17-ai-ml/02-deep-learning-neural-networks.md
+          - 模型训练与评估：数据划分、指标取舍与早停: encyclopedia/17-ai-ml/03-model-training-evaluation.md
+      - 18 本地 AI 与自动化:
+          - 本地模型部署：工具与推理引擎的定位: encyclopedia/18-local-ai/01-local-model-deployment.md
+          - 量化与推理优化：精度、速度与显存的取舍: encyclopedia/18-local-ai/02-quantization-inference.md
+          - Agent 与工作流自动化：工具调用、规划执行与人工接管: encyclopedia/18-local-ai/03-agent-workflow.md
+  - 应用:
+      - 19 移动应用与跨平台开发:
+          - Android 开发基础: encyclopedia/19-mobile-dev/01-android-basics.md
+          - 跨平台框架选型: encyclopedia/19-mobile-dev/02-cross-platform.md
+          - 移动端性能与适配: encyclopedia/19-mobile-dev/03-performance-adaptation.md
+      - 20 嵌入式与物联网:
+          - 嵌入式基础与单片机: encyclopedia/20-embedded-iot/01-mcu-basics.md
+          - 嵌入式 Linux：启动流程、设备树与交叉编译: encyclopedia/20-embedded-iot/02-embedded-linux.md
+          - 传感器与通信协议: encyclopedia/20-embedded-iot/03-sensors-protocols.md
+      - 21 游戏与图形计算:
+          - 10 游戏服务器部署与端口映射:
+              - 10-game-servers/index.md
+              - 端口开放「三重门」: 10-game-servers/01-port-opening.md
+              - 游戏服务端实战: 10-game-servers/02-game-server-setup.md
+              - 性能调优与守护: 10-game-servers/03-performance-daemon.md
+              - 内网穿透与公网映射: 10-game-servers/04-nat-traversal.md
+      - 22 数字媒体与多媒体技术:
+          - 音视频编码基础: encyclopedia/22-digital-media/01-media-codec-basics.md
+          - 流媒体与直播基础: encyclopedia/22-digital-media/02-streaming-live-basics.md
+          - 图像处理基础: encyclopedia/22-digital-media/03-image-processing-basics.md
+  - 前沿:
+      - 本组说明与筹备计划: encyclopedia/frontier.md
   - 互动工具: tools/index.md
+  - 开源软件精选目录: https://crozz.me/software/
   - 更新日志: changelog.md
+  - 本站信息:
+      - 隐私政策: privacy.md
+      - 关于本站: about.md
+      - 联系方式: contact.md
+      - 版本兼容与验证状态: compatibility.md
+      - 参考索引:
+          - reference/index.md
+          - 术语表: reference/glossary.md
+          - 命令索引: reference/command-index.md
+          - 端口与协议目录: reference/ports.md
+          - 配置文件索引: reference/config-files.md
+          - 内容贡献规范: reference/contributing.md

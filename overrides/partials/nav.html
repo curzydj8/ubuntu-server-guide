@@ -1,0 +1,32 @@
+{#-
+  本站定制：基于 Material 原生 nav.html，仅去掉 navigation.tabs 时附加的
+  md-nav--lifted 类。原生 lifted 规则会隐藏侧栏里所有非当前部分的顶级项
+  （.md-nav--lifted > .md-nav__list > .md-nav__item { display: none }），
+  导致首页左侧栏只剩“首页”一项。去掉该类后，左侧栏恢复为完整竖向菜单：
+  全部章节标题都列出，当前部分展开，其余部分点一下展开。
+  其余内容与原生模板一致，升级主题后请对照原生文件复核。
+-#}
+{% import "partials/nav-item.html" as item with context %}
+{% set class = "md-nav md-nav--primary" %}
+{% if "toc.integrate" in features %}
+  {% set class = class ~ " md-nav--integrated" %}
+{% endif %}
+<nav class="{{ class }}" aria-label="{{ lang.t('nav') }}" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="{{ config.extra.homepage | d(nav.homepage.url, true) | url }}" title="{{ config.site_name | e }}" class="md-nav__button md-logo" aria-label="{{ config.site_name }}" data-md-component="logo">
+      {% include "partials/logo.html" %}
+    </a>
+    {{ config.site_name }}
+  </label>
+  {% if config.repo_url %}
+    <div class="md-nav__source">
+      {% include "partials/source.html" %}
+    </div>
+  {% endif %}
+  <ul class="md-nav__list" data-md-scrollfix>
+    {% for nav_item in nav.items %}
+      {% set path = "__nav_" ~ loop.index %}
+      {{ item.render(nav_item, path, 1) }}
+    {% endfor %}
+  </ul>
+</nav>
