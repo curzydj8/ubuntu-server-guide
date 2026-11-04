@@ -1,0 +1,30 @@
+/* 顶部标签栏滚动箭头：仅桌面宽度生效。
+   移动端标签栏本身是隐藏的（主题媒体查询），本规则只在桌面断点启用，
+   不会把移动端的标签栏带出来。 */
+@media screen and (min-width: 76.25em) {
+  .md-tabs.tabs-arrows {
+    display: flex;
+    align-items: stretch;
+  }
+
+  .md-tabs.tabs-arrows .md-grid {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .md-tabs__arrow {
+    flex: none;
+    width: 2.4rem;
+    border: 0;
+    background: var(--md-primary-fg-color);
+    color: var(--md-primary-bg-color);
+    font-size: 1.4rem;
+    line-height: 1;
+    cursor: pointer;
+  }
+
+  .md-tabs__arrow:disabled {
+    opacity: 0.35;
+    cursor: default;
+  }
+}
