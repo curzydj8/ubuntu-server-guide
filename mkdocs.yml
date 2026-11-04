@@ -438,6 +438,46 @@ nav:
           - Chiplet、先进封装与 3D IC: encyclopedia/24-frontier/37-chiplet-packaging-3d.md
           - AI 辅助芯片设计与验证: encyclopedia/24-frontier/38-ai-assisted-chip-design.md
           - 芯片安全与可信启动: encyclopedia/24-frontier/39-chip-security-trusted-boot.md
+          - 神经形态芯片原理: encyclopedia/24-frontier/40-neuromorphic-chip-principles.md
+          - 脉冲神经网络与类脑学习规则: encyclopedia/24-frontier/41-spiking-neural-networks.md
+          - 忆阻器与类脑器件: encyclopedia/24-frontier/42-memristor-devices.md
+          - 脑启发计算应用与局限: encyclopedia/24-frontier/43-brain-inspired-applications.md
+          - AGI 定义、争议与研究路径: encyclopedia/24-frontier/44-agi-definitions.md
+          - 基础模型与多模态模型: encyclopedia/24-frontier/45-foundation-multimodal.md
+          - 世界模型与环境建模: encyclopedia/24-frontier/46-world-models.md
+          - 推理、规划与搜索: encyclopedia/24-frontier/47-reasoning-planning-search.md
+          - 长期记忆与持续学习: encyclopedia/24-frontier/48-long-term-memory.md
+          - 自主 Agent 与多 Agent 协作: encyclopedia/24-frontier/49-multi-agent-collaboration.md
+          - 小型语言模型与端侧模型: encyclopedia/24-frontier/50-small-models-edge.md
+          - 模型压缩、量化、蒸馏与推理加速（前沿视角）: encyclopedia/24-frontier/51-model-compression.md
+          - AI 可解释性、可靠性与安全性: encyclopedia/24-frontier/52-ai-explainability.md
+          - 自主研究原型与可复现证据: encyclopedia/24-frontier/53-autonomous-research.md
+          - 具身智能与机器人基础模型: encyclopedia/24-frontier/54-embodied-foundation-models.md
+          - 人形机器人与移动机器人: encyclopedia/24-frontier/55-humanoid-mobile-robots.md
+          - ROS 2 与机器人软件架构: encyclopedia/24-frontier/56-ros2-architecture.md
+          - 视觉、定位、导航与运动规划: encyclopedia/24-frontier/57-vision-navigation-planning.md
+          - 多传感器融合: encyclopedia/24-frontier/58-multisensor-fusion.md
+          - 视觉-语言-动作模型: encyclopedia/24-frontier/59-vla-models.md
+          - 仿真训练与 Sim-to-Real: encyclopedia/24-frontier/60-sim-to-real.md
+          - 机器人边缘计算与安全: encyclopedia/24-frontier/61-robot-edge-safety.md
+          - 多机器人协作: encyclopedia/24-frontier/62-multi-robot-collaboration.md
+          - 量子比特、量子门与量子线路: encyclopedia/24-frontier/63-qubits-gates-circuits.md
+          - 量子算法与复杂度: encyclopedia/24-frontier/64-quantum-algorithms.md
+          - 量子纠错与容错计算: encyclopedia/24-frontier/65-quantum-error-correction.md
+          - 量子硬件路线：超导、离子阱、光量子、中性原子: encyclopedia/24-frontier/66-quantum-hardware-routes.md
+          - 量子模拟与量子机器学习: encyclopedia/24-frontier/67-quantum-simulation-ml.md
+          - 量子网络与量子互联网: encyclopedia/24-frontier/68-quantum-networks.md
+          - 量子软件栈、模拟器与开发工具: encyclopedia/24-frontier/69-quantum-software-stack.md
+          - 经典-量子混合计算: encyclopedia/24-frontier/70-hybrid-quantum-classical.md
+          - 量子技术成熟度与实际限制: encyclopedia/24-frontier/71-quantum-maturity-limits.md
+          - 后冯·诺依曼架构: encyclopedia/24-frontier/72-post-von-neumann.md
+          - 光子计算: encyclopedia/24-frontier/73-photonic-computing.md
+          - 模拟计算: encyclopedia/24-frontier/74-analog-computing.md
+          - 存算一体与近存计算: encyclopedia/24-frontier/75-compute-in-memory.md
+          - 分布式计算架构: encyclopedia/24-frontier/76-distributed-arch.md
+          - 异构计算与 CPU/GPU/NPU/TPU 协同: encyclopedia/24-frontier/77-heterogeneous-computing.md
+          - 可重构计算与 FPGA: encyclopedia/24-frontier/78-reconfigurable-fpga.md
+          - 计算架构仿真与基准测试: encyclopedia/24-frontier/79-arch-simulation-benchmarks.md
   - 互动工具: tools/index.md
   - 开源软件精选目录: https://crozz.me/software/
   - 更新日志: changelog.md
