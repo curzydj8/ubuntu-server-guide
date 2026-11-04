@@ -4,13 +4,13 @@ description: "前沿研究领域组说明：24 现代计算机前沿研究。"
 
 # 前沿研究
 
-本组包含一个知识领域，共 33 篇知识文章：
+本组包含一个知识领域，共 39 篇知识文章：
 
 | 领域 | 篇数 | 入口 |
 | --- | --- | --- |
-| 24 现代计算机前沿研究 | 33 篇 | [量子计算基础](24-frontier/01-quantum-computing.md) |
+| 24 现代计算机前沿研究 | 39 篇 | [量子计算基础](24-frontier/01-quantum-computing.md) |
 
-24 域文章按总纲第 5 章方向组织，每篇必须标注成熟度（成熟应用 / 工程发展中 / 实验研究中 / 理论探索中）与证据日期，不把预测写成事实。本组文章（33 篇）：
+24 域文章按总纲第 5 章方向组织，每篇必须标注成熟度（成熟应用 / 工程发展中 / 实验研究中 / 理论探索中）与证据日期，不把预测写成事实。本组文章（39 篇）：
 
 - [量子计算基础](24-frontier/01-quantum-computing.md)（成熟度：实验研究中）
 - [神经形态计算](24-frontier/02-neuromorphic-computing.md)（成熟度：实验研究中）
@@ -45,6 +45,12 @@ description: "前沿研究领域组说明：24 现代计算机前沿研究。"
 - [开发板、软件生态与发行版支持](24-frontier/31-boards-software-ecosystem.md)（成熟度：工程发展中）
 - [出货量、市场份额与产业格局](24-frontier/32-market-shipments.md)（成熟度：工程发展中）
 - [RISC-V 与 ARM、x86 指令集演进对照](24-frontier/33-isa-evolution-comparison.md)（成熟度：工程发展中）
+- [GPU、NPU 与 AI 专用芯片](24-frontier/34-gpu-npu-chips.md)（成熟度：工程发展中）
+- [低功耗与高性能处理器](24-frontier/35-low-power-perf-processors.md)（成熟度：成熟应用）
+- [缓存、互联与内存控制器](24-frontier/36-cache-interconnect.md)（成熟度：工程发展中）
+- [Chiplet、先进封装与 3D IC](24-frontier/37-chiplet-packaging-3d.md)（成熟度：工程发展中）
+- [AI 辅助芯片设计与验证](24-frontier/38-ai-assisted-chip-design.md)（成熟度：工程发展中）
+- [芯片安全与可信启动](24-frontier/39-chip-security-trusted-boot.md)（成熟度：工程发展中）
 
 本组说明页不是正式文章，只作导航与口径说明；各领域文章以导航所列为准。
 

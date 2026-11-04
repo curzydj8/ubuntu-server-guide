@@ -432,6 +432,12 @@ nav:
           - 开发板、软件生态与发行版支持: encyclopedia/24-frontier/31-boards-software-ecosystem.md
           - 出货量、市场份额与产业格局: encyclopedia/24-frontier/32-market-shipments.md
           - RISC-V 与 ARM、x86 指令集演进对照: encyclopedia/24-frontier/33-isa-evolution-comparison.md
+          - GPU、NPU 与 AI 专用芯片: encyclopedia/24-frontier/34-gpu-npu-chips.md
+          - 低功耗与高性能处理器: encyclopedia/24-frontier/35-low-power-perf-processors.md
+          - 缓存、互联与内存控制器: encyclopedia/24-frontier/36-cache-interconnect.md
+          - Chiplet、先进封装与 3D IC: encyclopedia/24-frontier/37-chiplet-packaging-3d.md
+          - AI 辅助芯片设计与验证: encyclopedia/24-frontier/38-ai-assisted-chip-design.md
+          - 芯片安全与可信启动: encyclopedia/24-frontier/39-chip-security-trusted-boot.md
   - 互动工具: tools/index.md
   - 开源软件精选目录: https://crozz.me/software/
   - 更新日志: changelog.md
