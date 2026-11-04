@@ -92,6 +92,22 @@ nav:
           - 渲染引擎与渲染流程: encyclopedia/15-browser-internals/01-rendering-pipeline.md
           - 网络栈与缓存: encyclopedia/15-browser-internals/02-network-cache.md
           - 存储与 Cookie 模型: encyclopedia/15-browser-internals/03-storage-cookie.md
+          - 布局、绘制与合成: encyclopedia/15-browser-internals/04-layout-paint-composite.md
+          - 关键渲染路径与渲染性能优化: encyclopedia/15-browser-internals/05-rendering-performance.md
+          - HTTP 缓存策略详解: encyclopedia/15-browser-internals/06-http-caching-strategies.md
+          - 浏览器网络栈与连接管理: encyclopedia/15-browser-internals/07-browser-network-stack.md
+          - Cookie 属性与安全: encyclopedia/15-browser-internals/08-cookie-attributes-security.md
+          - Web 存储详解: encyclopedia/15-browser-internals/09-web-storage-apis.md
+          - JavaScript 引擎原理: encyclopedia/15-browser-internals/10-js-engine-principles.md
+          - 内存管理与垃圾回收: encyclopedia/15-browser-internals/11-memory-gc.md
+          - 浏览器沙箱与进程架构: encyclopedia/15-browser-internals/12-browser-sandbox-architecture.md
+          - 内容安全策略 CSP 入门: encyclopedia/15-browser-internals/13-content-security-policy.md
+          - 同源策略详解: encyclopedia/15-browser-internals/14-same-origin-policy.md
+          - 跨域通信方案: encyclopedia/15-browser-internals/15-cross-origin-communication.md
+          - 浏览器扩展开发入门: encyclopedia/15-browser-internals/16-extension-development.md
+          - 开发者工具使用详解: encyclopedia/15-browser-internals/17-devtools-guide.md
+          - PWA 与 Service Worker 入门: encyclopedia/15-browser-internals/18-pwa-service-worker.md
+          - WebAssembly 入门: encyclopedia/15-browser-internals/19-webassembly-intro.md
       - 23 计算机历史与技术文化:
           - 计算机发展史：从机械计算到个人计算机: encyclopedia/23-history-culture/01-computer-history.md
           - 互联网历史：从 ARPANET 到万维网: encyclopedia/23-history-culture/02-internet-history.md
