@@ -4,13 +4,13 @@ description: "前沿研究领域组说明：24 现代计算机前沿研究。"
 
 # 前沿研究
 
-本组包含一个知识领域，共 79 篇知识文章：
+本组包含一个知识领域，共 152 篇知识文章：
 
 | 领域 | 篇数 | 入口 |
 | --- | --- | --- |
-| 24 现代计算机前沿研究 | 79 篇 | [量子计算基础](24-frontier/01-quantum-computing.md) |
+| 24 现代计算机前沿研究 | 152 篇 | [量子计算基础](24-frontier/01-quantum-computing.md) |
 
-24 域文章按总纲第 5 章方向组织，每篇必须标注成熟度（成熟应用 / 工程发展中 / 实验研究中 / 理论探索中）与证据日期，不把预测写成事实。本组文章（79 篇）：
+24 域文章按总纲第 5 章方向组织，每篇必须标注成熟度（成熟应用 / 工程发展中 / 实验研究中 / 理论探索中）与证据日期，不把预测写成事实。本组文章（152 篇）：
 
 - [量子计算基础](24-frontier/01-quantum-computing.md)（成熟度：实验研究中）
 - [神经形态计算](24-frontier/02-neuromorphic-computing.md)（成熟度：实验研究中）
@@ -93,6 +93,80 @@ description: "前沿研究领域组说明：24 现代计算机前沿研究。"
 - [计算架构仿真与基准测试](24-frontier/79-arch-simulation-benchmarks.md)（成熟度：工程发展中）
 
 本组说明页不是正式文章，只作导航与口径说明；各领域文章以导航所列为准。
+
+- [总览：新型网络与互联网架构](24-frontier/80-nextgen-networks.md)（成熟度：工程发展中）
+- [6G 和下一代无线网络](24-frontier/81-6g-wireless.md)（成熟度：实验研究中）
+- [卫星互联网和空天地一体化网络](24-frontier/82-satellite-internet.md)（成熟度：工程发展中）
+- [可编程网络、SDN 和 NFV](24-frontier/83-programmable-networks.md)（成熟度：成熟应用）
+- [确定性网络和超低延迟](24-frontier/84-deterministic-networks.md)（成熟度：工程发展中）
+- [高速光网络](24-frontier/85-high-speed-optical.md)（成熟度：成熟应用）
+- [量子通信网络（网络架构视角）](24-frontier/86-quantum-comm-networks.md)（成熟度：实验研究中）
+- [去中心化网络和 P2P](24-frontier/87-decentralized-networks.md)（成熟度：工程发展中）
+- [下一代身份、命名和服务发现](24-frontier/88-nextgen-identity.md)（成熟度：实验研究中）
+- [网络自动化与 AI 网络管理](24-frontier/89-network-automation-ai.md)（成熟度：工程发展中）
+- [下一代操作系统与系统软件](24-frontier/90-nextgen-os.md)（成熟度：工程发展中）
+- [微内核和混合内核](24-frontier/91-microkernel.md)（成熟度：成熟应用）
+- [实时操作系统](24-frontier/92-rtos.md)（成熟度：成熟应用）
+- [Unikernel 和 Library OS](24-frontier/93-unikernel.md)（成熟度：实验研究中）
+- [内存安全系统软件](24-frontier/94-memory-safe-systems.md)（成熟度：工程发展中）
+- [Rust 系统编程](24-frontier/95-rust-systems.md)（成熟度：工程发展中）
+- [分布式操作系统](24-frontier/96-distributed-os.md)（成熟度：实验研究中）
+- [云原生和边缘操作系统](24-frontier/97-cloud-edge-os.md)（成熟度：工程发展中）
+- [GPU 运行时和异构资源调度](24-frontier/98-gpu-runtime.md)（成熟度：成熟应用）
+- [轻量级沙箱和隔离机制](24-frontier/99-lightweight-sandbox.md)（成熟度：成熟应用）
+- [操作系统形式化验证](24-frontier/100-os-formal-verification.md)（成熟度：实验研究中）
+- [总览：AI 与计算机安全交叉研究](24-frontier/101-ai-security.md)（成熟度：工程发展中）
+- [AI 模型和 Agent 安全](24-frontier/102-agent-safety.md)（成熟度：工程发展中）
+- [提示注入和工具调用风险](24-frontier/103-prompt-injection-risks.md)（成熟度：工程发展中）
+- [数据投毒和模型窃取](24-frontier/104-data-poisoning.md)（成熟度：实验研究中）
+- [对抗样本和模型鲁棒性](24-frontier/105-adversarial-robustness.md)（成熟度：实验研究中）
+- [AI 辅助漏洞发现与代码审计](24-frontier/106-ai-vuln-discovery.md)（成熟度：工程发展中）
+- [自动化安全测试](24-frontier/107-automated-security-testing.md)（成熟度：工程发展中）
+- [AI 恶意行为检测](24-frontier/108-ai-malware-detection.md)（成熟度：工程发展中）
+- [软件供应链和模型供应链安全](24-frontier/109-supply-chain-security.md)（成熟度：工程发展中）
+- [机密计算和可信执行环境](24-frontier/110-confidential-computing.md)（成熟度：工程发展中）
+- [AI 安全评估、红队测试和防御](24-frontier/111-ai-red-teaming.md)（成熟度：工程发展中）
+- [总览：空间计算与新型人机交互](24-frontier/112-spatial-computing.md)（成熟度：工程发展中）
+- [VR、AR、MR、XR](24-frontier/113-vr-ar-mr-xr.md)（成熟度：工程发展中）
+- [空间计算和三维界面](24-frontier/114-spatial-3d-ui.md)（成熟度：工程发展中）
+- [全息显示和体积显示](24-frontier/115-holographic-displays.md)（成熟度：实验研究中）
+- [手势、眼动和语音交互](24-frontier/116-gesture-eye-voice.md)（成熟度：成熟应用）
+- [脑机接口](24-frontier/117-brain-computer-interface.md)（成熟度：实验研究中）
+- [神经信号处理](24-frontier/118-neural-signal-processing.md)（成熟度：实验研究中）
+- [触觉反馈](24-frontier/119-haptic-feedback.md)（成熟度：工程发展中）
+- [多模态人机交互](24-frontier/120-multimodal-interaction.md)（成熟度：工程发展中）
+- [自然语言操作系统](24-frontier/121-natural-language-os.md)（成熟度：实验研究中）
+- [总览：计算机形式化与可信软件](24-frontier/122-formal-methods.md)（成熟度：工程发展中）
+- [计算理论和数学逻辑](24-frontier/123-computing-theory-logic.md)（成熟度：成熟应用）
+- [自动定理证明](24-frontier/124-automated-theorem-proving.md)（成熟度：工程发展中）
+- [形式化验证和模型检测](24-frontier/125-formal-verification.md)（成熟度：工程发展中）
+- [程序正确性证明](24-frontier/126-program-correctness.md)（成熟度：工程发展中）
+- [类型系统和依赖类型](24-frontier/127-type-systems.md)（成熟度：工程发展中）
+- [编译器正确性](24-frontier/128-compiler-correctness.md)（成熟度：工程发展中）
+- [操作系统验证（形式化方法视角）](24-frontier/129-os-verification-formal.md)（成熟度：实验研究中）
+- [智能合约验证](24-frontier/130-smart-contract-verification.md)（成熟度：工程发展中）
+- [安全关键软件](24-frontier/131-safety-critical-software.md)（成熟度：成熟应用）
+- [自动程序修复](24-frontier/132-automated-program-repair.md)（成熟度：实验研究中）
+- [计算机自动化与自主系统：总览](24-frontier/133-autonomous-systems.md)（成熟度：工程发展中）
+- [自主软件开发](24-frontier/134-autonomous-dev.md)（成熟度：工程发展中）
+- [AI 自动编程和代码维护](24-frontier/135-ai-programming.md)（成熟度：工程发展中）
+- [自动测试、调试和修复](24-frontier/136-auto-testing-repair.md)（成熟度：工程发展中）
+- [自主网络管理](24-frontier/137-autonomous-network-mgmt.md)（成熟度：工程发展中）
+- [自主安全响应](24-frontier/138-autonomous-security-response.md)（成熟度：工程发展中）
+- [自适应计算系统](24-frontier/139-adaptive-computing.md)（成熟度：工程发展中）
+- [自愈系统和自动恢复](24-frontier/140-self-healing.md)（成熟度：工程发展中）
+- [自动资源调度](24-frontier/141-auto-resource-scheduling.md)（成熟度：成熟应用）
+- [多 Agent 工作流：编排、调度、容错与可观测性](24-frontier/142-multi-agent-workflows.md)（成熟度：实验研究中）
+- [人机协同和可控自主系统](24-frontier/143-human-machine-collaboration.md)（成熟度：工程发展中）
+- [总览：未来计算范式](24-frontier/144-future-paradigms.md)（成熟度：理论探索中）
+- [DNA 分子计算](24-frontier/145-dna-molecular-computing.md)（成熟度：实验研究中）
+- [生物计算](24-frontier/146-biocomputing.md)（成熟度：实验研究中）
+- [化学计算](24-frontier/147-chemical-computing.md)（成熟度：实验研究中）
+- [波计算](24-frontier/148-wave-computing.md)（成熟度：实验研究中）
+- [可逆计算](24-frontier/149-reversible-computing.md)（成熟度：实验研究中）
+- [超低功耗计算](24-frontier/150-ultra-low-power.md)（成熟度：实验研究中）
+- [自适应硬件](24-frontier/151-adaptive-hardware.md)（成熟度：实验研究中）
+- [非传统计算模型](24-frontier/152-nontraditional-models.md)（成熟度：理论探索中）
 
 ## 相关现有内容
 
