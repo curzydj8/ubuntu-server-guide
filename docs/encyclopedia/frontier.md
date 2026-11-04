@@ -4,13 +4,13 @@ description: "前沿研究领域组说明：24 现代计算机前沿研究。"
 
 # 前沿研究
 
-本组包含一个知识领域，共 17 篇知识文章：
+本组包含一个知识领域，共 27 篇知识文章：
 
 | 领域 | 篇数 | 入口 |
 | --- | --- | --- |
-| 24 现代计算机前沿研究 | 17 篇 | [量子计算基础](24-frontier/01-quantum-computing.md) |
+| 24 现代计算机前沿研究 | 27 篇 | [量子计算基础](24-frontier/01-quantum-computing.md) |
 
-24 域文章按总纲第 5 章方向组织，每篇必须标注成熟度（成熟应用 / 工程发展中 / 实验研究中 / 理论探索中）与证据日期，不把预测写成事实。本组文章（17 篇）：
+24 域文章按总纲第 5 章方向组织，每篇必须标注成熟度（成熟应用 / 工程发展中 / 实验研究中 / 理论探索中）与证据日期，不把预测写成事实。本组文章（27 篇）：
 
 - [量子计算基础](24-frontier/01-quantum-computing.md)（成熟度：实验研究中）
 - [神经形态计算](24-frontier/02-neuromorphic-computing.md)（成熟度：实验研究中）
@@ -29,6 +29,16 @@ description: "前沿研究领域组说明：24 现代计算机前沿研究。"
 - [集群调度、容错与资源管理](24-frontier/15-cluster-scheduling.md)（成熟度：成熟应用）
 - [AI 与 HPC 融合](24-frontier/16-ai-hpc-fusion.md)（成熟度：工程发展中）
 - [液冷、能效与绿色超算](24-frontier/17-green-hpc-cooling.md)（成熟度：工程发展中）
+- [MRAM、ReRAM 与 PCM：三种新型存储器件](24-frontier/18-mram-reram-pcm.md)（成熟度：工程发展中）
+- [新型非易失性存储：FeRAM、FeFET 与通用存储器之问](24-frontier/19-novel-nvm.md)（成熟度：实验研究中）
+- [计算型存储：把算力放到数据所在的地方](24-frontier/20-computational-storage.md)（成熟度：工程发展中）
+- [DNA 数据存储研究](24-frontier/21-dna-storage.md)（成熟度：实验研究中）
+- [分布式对象存储](24-frontier/22-distributed-object-storage.md)（成熟度：成熟应用）
+- [全闪存与超大规模存储](24-frontier/23-all-flash-hyperscale.md)（成熟度：成熟应用）
+- [内存池化与 CXL](24-frontier/24-memory-pooling-cxl.md)（成熟度：工程发展中）
+- [HBM 各代：带宽、容量与单引脚速率](24-frontier/25-hbm-generations.md)（成熟度：工程发展中）
+- [数据压缩、去重与纠删码](24-frontier/26-compression-dedup-erasure.md)（成熟度：成熟应用）
+- [存储可靠性与能效](24-frontier/27-storage-reliability-efficiency.md)（成熟度：成熟应用）
 
 本组说明页不是正式文章，只作导航与口径说明；各领域文章以导航所列为准。
 

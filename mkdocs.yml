@@ -416,6 +416,16 @@ nav:
           - 集群调度、容错与资源管理: encyclopedia/24-frontier/15-cluster-scheduling.md
           - AI 与 HPC 融合: encyclopedia/24-frontier/16-ai-hpc-fusion.md
           - 液冷、能效与绿色超算: encyclopedia/24-frontier/17-green-hpc-cooling.md
+          - MRAM、ReRAM 与 PCM: encyclopedia/24-frontier/18-mram-reram-pcm.md
+          - 新型非易失性存储: encyclopedia/24-frontier/19-novel-nvm.md
+          - 计算型存储: encyclopedia/24-frontier/20-computational-storage.md
+          - DNA 数据存储研究: encyclopedia/24-frontier/21-dna-storage.md
+          - 分布式对象存储: encyclopedia/24-frontier/22-distributed-object-storage.md
+          - 全闪存与超大规模存储: encyclopedia/24-frontier/23-all-flash-hyperscale.md
+          - 内存池化与 CXL: encyclopedia/24-frontier/24-memory-pooling-cxl.md
+          - HBM 各代：带宽、容量与单引脚速率: encyclopedia/24-frontier/25-hbm-generations.md
+          - 数据压缩、去重与纠删码: encyclopedia/24-frontier/26-compression-dedup-erasure.md
+          - 存储可靠性与能效: encyclopedia/24-frontier/27-storage-reliability-efficiency.md
   - 互动工具: tools/index.md
   - 开源软件精选目录: https://crozz.me/software/
   - 更新日志: changelog.md
