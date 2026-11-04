@@ -1,6 +1,6 @@
 # Copilot 工作须知（本站协作规则）
 
-本站是 MkDocs Material 中文知识站，源码即网站内容。改动前请先读 `mkdocs.yml`（导航结构）与 `docs/encyclopedia/_templates/`（文章模板）。
+本站是 MkDocs Material 中文知识站，源码即网站内容。改动前请先读 `mkdocs.yml`（导航结构）与 `encyclopedia-authoring/_templates/`（文章模板，写作参考，不参与网站构建）。
 
 ## 铁律
 

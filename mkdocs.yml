@@ -67,6 +67,7 @@ plugins:
 
 extra_css:
   - stylesheets/tabs-arrows.css
+  - stylesheets/code-scroll.css
 
 extra_javascript:
   - javascripts/tabs-arrows.js
@@ -78,6 +79,7 @@ extra:
 
 nav:
   - 基础与底层:
+      - 百科总览: encyclopedia/index.md
       - 本组说明与筹备计划: encyclopedia/foundations.md
       - 01 计算机基础与硬件:
           - 数字逻辑与组成基础: encyclopedia/01-computer-basics/01-digital-logic.md
@@ -251,6 +253,7 @@ nav:
               - 互联网、HTTP/HTTPS、浏览器、DNS、域名、IP、端口完整教程: website-guide/basics/01-internet.md
               - 域名购买、注册商选择、实名、备案适用范围、泛域名、多域名完整教程: website-guide/basics/02-domain.md
       - 08 网站建设与互联网应用:
+          - 建站指南总览: website-guide/index.md
           - 09 网站搭建、域名与应用部署:
               - 09-web-hosting/index.md
               - 域名解析与网络连接: 09-web-hosting/01-dns-resolution.md

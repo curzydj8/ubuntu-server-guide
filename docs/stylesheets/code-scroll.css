@@ -1,0 +1,10 @@
+/* 长代码行横向滚动：超宽代码行允许横向滚动读全，不被容器截断。
+   仅作用于正文代码块，不影响其他布局。 */
+.md-typeset pre {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.md-typeset pre > code {
+  white-space: pre;
+}
