@@ -408,6 +408,14 @@ nav:
           - 具身智能: encyclopedia/24-frontier/07-embodied-intelligence.md
           - 新型计算架构：光子与存算一体: encyclopedia/24-frontier/08-new-computing-arch.md
           - 新型存储与互连：HBM 与 CXL: encyclopedia/24-frontier/09-new-storage-interconnect.md
+          - Exascale 与 Post-Exascale: encyclopedia/24-frontier/10-exascale-post.md
+          - GPU 集群与异构集群: encyclopedia/24-frontier/11-gpu-hetero-clusters.md
+          - MPI、OpenMP、CUDA、HIP、SYCL：并行编程模型与接口: encyclopedia/24-frontier/12-parallel-programming.md
+          - 并行算法与大规模矩阵计算: encyclopedia/24-frontier/13-parallel-algorithms.md
+          - 高性能网络与并行文件系统: encyclopedia/24-frontier/14-hpc-network-storage.md
+          - 集群调度、容错与资源管理: encyclopedia/24-frontier/15-cluster-scheduling.md
+          - AI 与 HPC 融合: encyclopedia/24-frontier/16-ai-hpc-fusion.md
+          - 液冷、能效与绿色超算: encyclopedia/24-frontier/17-green-hpc-cooling.md
   - 互动工具: tools/index.md
   - 开源软件精选目录: https://crozz.me/software/
   - 更新日志: changelog.md
