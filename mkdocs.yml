@@ -339,10 +339,15 @@ nav:
           - 恶意软件分类与历史: encyclopedia/11-malware-reverse/01-malware-types-history.md
           - 逆向分析基础：静态与动态方法: encyclopedia/11-malware-reverse/02-reverse-analysis-basics.md
           - 样本隔离、处置与防御清除: encyclopedia/11-malware-reverse/03-sample-isolation-defense.md
+          - 逆向工具与隔离实验环境: encyclopedia/11-malware-reverse/04-reverse-tools-lab.md
+          - 反调试与加壳原理与识别: encyclopedia/11-malware-reverse/05-anti-debug-packing.md
       - 12 数字取证与安全调查:
           - 取证基础与证据链: encyclopedia/12-forensics/01-forensics-basics-evidence-chain.md
           - 磁盘与文件系统取证入门: encyclopedia/12-forensics/02-disk-filesystem-forensics.md
           - 内存取证与日志分析入门: encyclopedia/12-forensics/03-memory-log-forensics.md
+          - 网络取证入门: encyclopedia/12-forensics/04-network-forensics.md
+          - 移动设备取证入门: encyclopedia/12-forensics/05-mobile-forensics.md
+          - 取证报告与法律边界: encyclopedia/12-forensics/06-forensics-report-legal.md
       - 13 密码学与隐私保护:
           - 对称与非对称密码: encyclopedia/13-cryptography/01-symmetric-asymmetric.md
           - 哈希与数字签名: encyclopedia/13-cryptography/02-hash-signature.md
@@ -397,6 +402,12 @@ nav:
           - 量子计算基础: encyclopedia/24-frontier/01-quantum-computing.md
           - 神经形态计算: encyclopedia/24-frontier/02-neuromorphic-computing.md
           - 超算与高性能计算入门: encyclopedia/24-frontier/03-hpc-supercomputing.md
+          - RISC-V 生态: encyclopedia/24-frontier/04-riscv-ecosystem.md
+          - 先进芯片与 Chiplet: encyclopedia/24-frontier/05-advanced-chips-chiplet.md
+          - AI Agent 前沿：多智能体与自主研究: encyclopedia/24-frontier/06-frontier-ai-agents.md
+          - 具身智能: encyclopedia/24-frontier/07-embodied-intelligence.md
+          - 新型计算架构：光子与存算一体: encyclopedia/24-frontier/08-new-computing-arch.md
+          - 新型存储与互连：HBM 与 CXL: encyclopedia/24-frontier/09-new-storage-interconnect.md
   - 互动工具: tools/index.md
   - 开源软件精选目录: https://crozz.me/software/
   - 更新日志: changelog.md
