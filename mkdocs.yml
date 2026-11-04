@@ -103,6 +103,20 @@ nav:
               - 数据结构与算法基础: encyclopedia/02-programming-basics/01-data-structures-algorithms.md
               - 版本控制进阶：Git 工作流: encyclopedia/02-programming-basics/02-git-workflows.md
               - 调试与测试方法: encyclopedia/02-programming-basics/03-debugging-testing.md
+              - 编程范式比较：命令式、声明式、函数式、面向对象: encyclopedia/02-programming-basics/04-programming-paradigms.md
+              - 编程语言选型与类型系统入门（实践视角）: encyclopedia/02-programming-basics/05-language-selection-types.md
+              - 编译原理入门：词法、语法、语义、代码生成: encyclopedia/02-programming-basics/06-compilation-principles.md
+              - 解释器、虚拟机与 JIT 入门: encyclopedia/02-programming-basics/07-interpreters-vm-jit.md
+              - 排序与查找算法: encyclopedia/02-programming-basics/08-sorting-searching.md
+              - 图算法入门: encyclopedia/02-programming-basics/09-graph-algorithms.md
+              - Git 对象模型与内部原理: encyclopedia/02-programming-basics/10-git-internals.md
+              - 分支策略与代码评审流程: encyclopedia/02-programming-basics/11-branching-code-review.md
+              - 单元测试与测试替身: encyclopedia/02-programming-basics/12-unit-testing-mocks.md
+              - 性能分析与故障定位方法: encyclopedia/02-programming-basics/13-profiling-debugging.md
+              - 开发环境搭建与容器化开发: encyclopedia/02-programming-basics/14-dev-environment-setup.md
+              - 构建系统与依赖管理入门: encyclopedia/02-programming-basics/15-build-systems-dependency.md
+              - 代码规范与风格指南: encyclopedia/02-programming-basics/16-code-style-lint.md
+              - 重构方法与技术债管理: encyclopedia/02-programming-basics/17-refactoring-tech-debt.md
           - JavaScript:
               - JavaScript 基础完整教程: website-guide/javascript/01-basics.md
               - DOM、事件、异步完整教程: website-guide/javascript/02-dom-async.md
