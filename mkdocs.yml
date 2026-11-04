@@ -150,6 +150,10 @@ nav:
               - Java 框架完整教程: website-guide/backend/05-java.md
           - API 与系统集成:
               - REST、GraphQL、WebSocket、JSON、OAuth、JWT、第三方接口完整教程: website-guide/api/01-integration.md
+          - 百科文章:
+              - 微服务架构入门: encyclopedia/04-backend-dev/01-microservices.md
+              - API 治理与版本管理: encyclopedia/04-backend-dev/02-api-governance.md
+              - 领域驱动设计入门: encyclopedia/04-backend-dev/03-domain-driven-design.md
       - 05 数据库与数据技术:
           - 数据库安装、管理与高可用:
               - 11-databases/index.md
@@ -168,11 +172,19 @@ nav:
           - 数据库:
               - 数据库选型、表设计、SQL、索引、事务、连接池完整教程: website-guide/database/01-design.md
               - 备份、恢复、迁移、慢查询、主从复制、高可用完整教程: website-guide/database/02-ops.md
+          - 百科文章:
+              - NoSQL 选型入门: encyclopedia/05-data-tech/01-nosql-selection.md
+              - 数据仓库基础: encyclopedia/05-data-tech/02-data-warehouse.md
+              - 流处理入门: encyclopedia/05-data-tech/03-stream-processing.md
       - 16 软件工程与系统架构:
           - 架构:
               - 网站完整架构总览完整教程: website-guide/architecture/01-overview.md
               - 单体、前后端分离、SSR、SSG、微服务、多站点架构对比与升级路径完整教程: website-guide/architecture/02-patterns.md
               - 建站方案选型决策树完整教程: website-guide/architecture/03-decision-tree.md
+          - 百科文章:
+              - 测试体系入门: encyclopedia/16-software-engineering/01-testing-system.md
+              - 需求与项目管理入门: encyclopedia/16-software-engineering/02-requirements-project-management.md
+              - 代码评审与质量实践: encyclopedia/16-software-engineering/03-code-review-quality.md
   - 运维与网络:
       - 本组说明: encyclopedia/groups/ops.md
       - 06 操作系统与服务器:
@@ -254,6 +266,10 @@ nav:
           - 网络基础:
               - 互联网、HTTP/HTTPS、浏览器、DNS、域名、IP、端口完整教程: website-guide/basics/01-internet.md
               - 域名购买、注册商选择、实名、备案适用范围、泛域名、多域名完整教程: website-guide/basics/02-domain.md
+          - 百科文章:
+              - IPv6 部署入门: encyclopedia/07-network-comms/01-ipv6-deployment.md
+              - QUIC 与 HTTP/3 原理: encyclopedia/07-network-comms/02-quic-http3.md
+              - SDN 原理入门: encyclopedia/07-network-comms/03-sdn-principles.md
       - 08 网站建设与互联网应用:
           - 建站指南总览: website-guide/index.md
           - 网站搭建、域名与应用部署:
@@ -319,6 +335,14 @@ nav:
               - 漏洞分类与研究方法: encyclopedia/10-security/01-vulnerability-classification-research.md
               - 授权测试流程: encyclopedia/10-security/02-authorized-testing-workflow.md
               - 检测与应急响应: encyclopedia/10-security/03-detection-incident-response.md
+      - 11 逆向工程与恶意软件研究:
+          - 恶意软件分类与历史: encyclopedia/11-malware-reverse/01-malware-types-history.md
+          - 逆向分析基础：静态与动态方法: encyclopedia/11-malware-reverse/02-reverse-analysis-basics.md
+          - 样本隔离、处置与防御清除: encyclopedia/11-malware-reverse/03-sample-isolation-defense.md
+      - 12 数字取证与安全调查:
+          - 取证基础与证据链: encyclopedia/12-forensics/01-forensics-basics-evidence-chain.md
+          - 磁盘与文件系统取证入门: encyclopedia/12-forensics/02-disk-filesystem-forensics.md
+          - 内存取证与日志分析入门: encyclopedia/12-forensics/03-memory-log-forensics.md
       - 13 密码学与隐私保护:
           - 对称与非对称密码: encyclopedia/13-cryptography/01-symmetric-asymmetric.md
           - 哈希与数字签名: encyclopedia/13-cryptography/02-hash-signature.md
@@ -359,12 +383,20 @@ nav:
               - 游戏服务端实战: 10-game-servers/02-game-server-setup.md
               - 性能调优与守护: 10-game-servers/03-performance-daemon.md
               - 内网穿透与公网映射: 10-game-servers/04-nat-traversal.md
+          - 百科文章:
+              - 游戏开发基础: encyclopedia/21-game-graphics/01-game-dev-basics.md
+              - 图形渲染原理入门: encyclopedia/21-game-graphics/02-rendering-principles.md
+              - 游戏引擎选型: encyclopedia/21-game-graphics/03-game-engine-selection.md
       - 22 数字媒体与多媒体技术:
           - 音视频编码基础: encyclopedia/22-digital-media/01-media-codec-basics.md
           - 流媒体与直播基础: encyclopedia/22-digital-media/02-streaming-live-basics.md
           - 图像处理基础: encyclopedia/22-digital-media/03-image-processing-basics.md
   - 前沿:
-      - 本组说明与筹备计划: encyclopedia/frontier.md
+      - 本组说明: encyclopedia/frontier.md
+      - 24 现代计算机前沿研究:
+          - 量子计算基础: encyclopedia/24-frontier/01-quantum-computing.md
+          - 神经形态计算: encyclopedia/24-frontier/02-neuromorphic-computing.md
+          - 超算与高性能计算入门: encyclopedia/24-frontier/03-hpc-supercomputing.md
   - 互动工具: tools/index.md
   - 开源软件精选目录: https://crozz.me/software/
   - 更新日志: changelog.md
