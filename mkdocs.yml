@@ -112,6 +112,16 @@ nav:
           - 计算机发展史：从机械计算到个人计算机: encyclopedia/23-history-culture/01-computer-history.md
           - 互联网历史：从 ARPANET 到万维网: encyclopedia/23-history-culture/02-internet-history.md
           - 开源文化与社区: encyclopedia/23-history-culture/03-open-source-culture.md
+          - 大型机与小型机时代: encyclopedia/23-history-culture/04-mainframe-minicomputer.md
+          - 微型计算机革命: encyclopedia/23-history-culture/05-microcomputer-revolution.md
+          - 浏览器大战与 Web 2.0: encyclopedia/23-history-culture/06-browser-wars-web2.md
+          - 移动互联网与社交网络时代: encyclopedia/23-history-culture/07-mobile-internet-social.md
+          - 自由软件运动与 GPL: encyclopedia/23-history-culture/08-free-software-gpl.md
+          - GitHub 时代的协作文化: encyclopedia/23-history-culture/09-github-era-collaboration.md
+          - 图灵与冯·诺依曼: encyclopedia/23-history-culture/10-turing-von-neumann.md
+          - 互联网先驱与万维网发明: encyclopedia/23-history-culture/11-internet-pioneers-www.md
+          - 摩尔定律与计算范式演进: encyclopedia/23-history-culture/12-moores-law-paradigms.md
+          - 开源与开放标准思想史: encyclopedia/23-history-culture/13-open-standards-history.md
   - 开发:
       - 本组说明: encyclopedia/groups/dev.md
       - 02 编程语言与开发基础:
