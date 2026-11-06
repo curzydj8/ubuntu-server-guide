@@ -462,6 +462,16 @@ nav:
           - 音视频编码基础: encyclopedia/22-digital-media/01-media-codec-basics.md
           - 流媒体与直播基础: encyclopedia/22-digital-media/02-streaming-live-basics.md
           - 图像处理基础: encyclopedia/22-digital-media/03-image-processing-basics.md
+          - 视频编码标准演进（H.264/AV1）: encyclopedia/22-digital-media/04-video-codec-standards.md
+          - 音频编码与封装格式: encyclopedia/22-digital-media/05-audio-codec-container.md
+          - 图像压缩与格式选型: encyclopedia/22-digital-media/06-image-compression-formats.md
+          - 色彩管理与 HDR: encyclopedia/22-digital-media/07-color-management-hdr.md
+          - HLS/DASH 自适应码流: encyclopedia/22-digital-media/08-hls-dash-adaptive.md
+          - 直播推流与低延迟: encyclopedia/22-digital-media/09-live-streaming-low-latency.md
+          - FFmpeg 常用工作流: encyclopedia/22-digital-media/10-ffmpeg-workflows.md
+          - 非编与调色工具链: encyclopedia/22-digital-media/11-nle-color-grading.md
+          - Web 音视频播放开发: encyclopedia/22-digital-media/12-web-av-playback.md
+          - 跨平台播放器架构: encyclopedia/22-digital-media/13-cross-platform-player.md
   - 前沿:
       - 本组说明: encyclopedia/frontier.md
       - 24 现代计算机前沿研究:
