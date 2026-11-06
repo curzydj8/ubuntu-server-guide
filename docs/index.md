@@ -98,9 +98,28 @@ description: "Ubuntu Server 终极指南与实战教程：从安装、安全加�
 | 14 | SSH 专题：连接、密钥与隧道 | 原理与安装、连接与配置、密钥与 Agent、传输与远程执行、隧道与跳板机、排错与加固 |
 | 15 | Linux 命令速查手册 | 文件权限、软件包服务、网络诊断、磁盘进程、文本归档、定时容器系统 |
 
-另有：[参考索引](reference/index.md)（术语表、命令索引、端口与协议目录、配置文件索引、内容贡献规范）、[互动工具](tools/index.md)（38 个在线工具，除 DNS 查询外全部在浏览器本地运行、不上传数据：Netplan 配置、UFW 规则、SSH 命令与配置、子网 / CIDR 计算（含 IPv6）、Cron 表达式、systemd Unit、Nginx 反向代理、Docker Compose 模板、LVM 扩容步骤、TLS 证书检查、Linux 权限计算、Hash 计算、版本号比较、Docker 资源换算、HTTP 状态码查询、格式校验与转换、配置差异比较、cloud-init 配置、SSH 服务端配置、systemd Timer、故障诊断决策树、Compose 安全审查、磁盘容量规划、备份策略计算、正则表达式测试、.env 检查、GitHub Actions 工作流、服务器资源规划、日志分析、APT 源辅助、服务器迁移计划、curl 命令构建、SSH 日志分析、Git 命令、命令解释、DNS 解析与记录查询、HTTP 响应头分析、端口与防火墙规划）、[开源软件精选目录](https://crozz.me/software/)（1,474 款 GitHub 高星开源软件目录，下载链接指向各项目 Releases 页）与[更新日志](changelog.md)。
+另有：[参考索引](reference/index.md)（术语表、命令索引、端口与协议目录、配置文件索引、内容贡献规范）、[互动工具](tools/index.md)（38 个在线工具，除 DNS 查询外全部在浏览器本地运行、不上传数据：Netplan 配置、UFW 规则、SSH 命令与配置、子网 / CIDR 计算（含 IPv6）、Cron 表达式、systemd Unit、Nginx 反向代理、Docker Compose 模板、LVM 扩容步骤、TLS 证书检查、Linux 权限计算、Hash 计算、版本号比较、Docker 资源换算、HTTP 状态码查询、格式校验与转换、配置差异比较、cloud-init 配置、SSH 服务端配置、systemd Timer、故障诊断决策树、Compose 安全审查、磁盘容量规划、备份策略计算、正则表达式测试、.env 检查、GitHub Actions 工作流、服务器资源规划、日志分析、APT 源辅助、服务器迁移计划、curl 命令构建、SSH 日志分析、Git 命令、命令解释、DNS 解析与记录查询、HTTP 响应头分析、端口与防火墙规划）、[开源软件精选目录](https://crozz.me/software/)（1,474 款 GitHub 高星开源软件目录，下载链接指向各项目 Releases 页）、[更新日志](changelog.md)与[留言板](https://crozz.me/board)（登录后可留言，人人能看）。
+
+## 最新留言
+
+<div id="recent-board">正在加载留言…</div>
+<p><a href="https://crozz.me/board">去留言板 →</a></p>
+<script>
+(function(){
+  var el = document.getElementById('recent-board');
+  function esc(s){ return String(s).replace(/[&<>"']/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]; }); }
+  fetch('https://crozz.me/board/recent').then(function(r){ return r.json(); }).then(function(d){
+    if (!d.messages || !d.messages.length) { el.innerHTML = '<p>还没有留言，来抢沙发吧。</p>'; return; }
+    el.innerHTML = d.messages.map(function(m){
+      return '<div style="border-top:1px solid #eee;padding:8px 0"><b>' + esc(m.username) + '</b> <span style="color:#888">' + esc(m.time) + '</span><br>' + esc(m.content) + '</div>';
+    }).join('');
+  }).catch(function(){ el.innerHTML = '<p>留言加载失败，<a href="https://crozz.me/board">去留言板看看</a>。</p>'; });
+})();
+</script>
 
 ## 最近更新
+
+- **2026-11-06 · 留言板上线**：登录后可在[留言板](https://crozz.me/board)留言，人人能看；每人每分钟 1 条、每天 20 条，每条最多 500 字，可删自己的留言。
 
 - **2026-10-23 · 互动工具扩充至 38 个**：新增格式校验与转换、配置差异比较、cloud-init 配置、SSH 服务端配置、systemd Timer、故障诊断决策树、Compose 安全审查、磁盘容量规划、备份策略计算、正则测试、.env 检查、Actions 工作流、资源规划、日志分析、APT 源辅助、迁移计划、curl 构建、SSH 日志分析、Git 命令、命令解释、DNS 查询、HTTP 响应头分析、端口规划等 23 个工具；UFW 规则生成器补齐 IPv6 来源支持。
 
