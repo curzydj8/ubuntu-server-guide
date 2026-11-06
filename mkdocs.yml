@@ -443,6 +443,18 @@ nav:
           - Android 开发基础: encyclopedia/19-mobile-dev/01-android-basics.md
           - 跨平台框架选型: encyclopedia/19-mobile-dev/02-cross-platform.md
           - 移动端性能与适配: encyclopedia/19-mobile-dev/03-performance-adaptation.md
+          - Jetpack Compose 入门: encyclopedia/19-mobile-dev/04-jetpack-compose.md
+          - Android 权限与后台机制: encyclopedia/19-mobile-dev/05-android-permissions-background.md
+          - Swift 语言与 SwiftUI 入门: encyclopedia/19-mobile-dev/06-swift-swiftui.md
+          - iOS 应用生命周期与沙盒: encyclopedia/19-mobile-dev/07-ios-lifecycle-sandbox.md
+          - Flutter 入门与 Widget 体系: encyclopedia/19-mobile-dev/08-flutter-widgets.md
+          - React Native 与原生桥接: encyclopedia/19-mobile-dev/09-react-native-bridge.md
+          - 启动优化与卡顿排查: encyclopedia/19-mobile-dev/10-startup-optimization.md
+          - 屏幕适配与多机型兼容: encyclopedia/19-mobile-dev/11-screen-adaptation.md
+          - Google Play 上架流程: encyclopedia/19-mobile-dev/12-google-play-publish.md
+          - 应用签名与渠道分发: encyclopedia/19-mobile-dev/13-app-signing-distribution.md
+          - 应用加固与代码混淆: encyclopedia/19-mobile-dev/14-app-hardening-obfuscation.md
+          - 数据存储与传输安全: encyclopedia/19-mobile-dev/15-mobile-data-security.md
       - 20 嵌入式与物联网:
           - 嵌入式基础与单片机: encyclopedia/20-embedded-iot/01-mcu-basics.md
           - 嵌入式 Linux：启动流程、设备树与交叉编译: encyclopedia/20-embedded-iot/02-embedded-linux.md
