@@ -433,6 +433,20 @@ nav:
           - 机器学习基础：问题形态、泛化与评估思想: encyclopedia/17-ai-ml/01-ml-basics.md
           - 深度学习与神经网络：从感知机到注意力: encyclopedia/17-ai-ml/02-deep-learning-neural-networks.md
           - 模型训练与评估：数据划分、指标取舍与早停: encyclopedia/17-ai-ml/03-model-training-evaluation.md
+          - 线性回归与逻辑回归：一条直线，两种任务: encyclopedia/17-ai-ml/04-linear-logistic-regression.md
+          - 决策树与集成方法：会提问的模型，与“三个臭皮匠”: encyclopedia/17-ai-ml/05-decision-tree-ensemble.md
+          - 卷积神经网络入门：局部连接、权值共享与残差连接: encyclopedia/17-ai-ml/06-cnn-intro.md
+          - 循环网络与注意力机制：序列里的记忆与相关性: encyclopedia/17-ai-ml/07-rnn-attention.md
+          - 词向量与语言模型：从词的表示到预训练: encyclopedia/17-ai-ml/08-word-embeddings-language-models.md
+          - 文本分类与序列标注：任务方法与微调思路: encyclopedia/17-ai-ml/09-text-classification-sequence-labeling.md
+          - 图像分类与目标检测：认出是什么，框出在哪里: encyclopedia/17-ai-ml/10-image-classification-object-detection.md
+          - 图像分割与生成模型：从逐像素理解到凭空作画: encyclopedia/17-ai-ml/11-image-segmentation-generative.md
+          - 超参数调优与交叉验证：怎么挑模型，而不是猜模型: encyclopedia/17-ai-ml/12-hyperparameter-tuning-cross-validation.md
+          - 过拟合诊断与正则化：认出过拟合，再把它压回去: encyclopedia/17-ai-ml/13-overfitting-diagnosis-regularization.md
+          - 模型量化与 ONNX：格式、转换与低精度推理: encyclopedia/17-ai-ml/14-model-quantization-onnx.md
+          - 推理服务与性能优化：从模型到在线服务: encyclopedia/17-ai-ml/15-inference-serving-optimization.md
+          - 数据偏见与公平性：来源、度量与缓解: encyclopedia/17-ai-ml/16-data-bias-fairness.md
+          - 模型幻觉与可解释性：成因、缓解与解释方法: encyclopedia/17-ai-ml/17-model-hallucination-explainability.md
       - 18 本地 AI 与自动化:
           - 本地模型部署：工具与推理引擎的定位: encyclopedia/18-local-ai/01-local-model-deployment.md
           - 量化与推理优化：精度、速度与显存的取舍: encyclopedia/18-local-ai/02-quantization-inference.md
