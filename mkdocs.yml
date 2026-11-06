@@ -459,6 +459,18 @@ nav:
           - 嵌入式基础与单片机: encyclopedia/20-embedded-iot/01-mcu-basics.md
           - 嵌入式 Linux：启动流程、设备树与交叉编译: encyclopedia/20-embedded-iot/02-embedded-linux.md
           - 传感器与通信协议: encyclopedia/20-embedded-iot/03-sensors-protocols.md
+          - GPIO/中断与定时器实务: encyclopedia/20-embedded-iot/04-gpio-interrupt-timer.md
+          - RTOS 任务调度入门: encyclopedia/20-embedded-iot/05-rtos-task-scheduling.md
+          - Buildroot/Yocto 构建系统: encyclopedia/20-embedded-iot/06-buildroot-yocto.md
+          - 驱动开发与设备树实战: encyclopedia/20-embedded-iot/07-driver-devicetree.md
+          - I2C/SPI/UART 总线详解: encyclopedia/20-embedded-iot/08-i2c-spi-uart.md
+          - MQTT/CoAP 协议与选型: encyclopedia/20-embedded-iot/09-mqtt-coap.md
+          - MQTT Broker 与设备接入: encyclopedia/20-embedded-iot/10-mqtt-broker-device-access.md
+          - 物联网云平台对比: encyclopedia/20-embedded-iot/11-iot-cloud-platforms.md
+          - 边缘网关架构: encyclopedia/20-embedded-iot/12-edge-gateway-architecture.md
+          - 边缘 AI 推理部署: encyclopedia/20-embedded-iot/13-edge-ai-inference.md
+          - 固件签名与安全启动: encyclopedia/20-embedded-iot/14-firmware-signing-secure-boot.md
+          - 设备身份与密钥管理: encyclopedia/20-embedded-iot/15-device-identity-key-management.md
       - 21 游戏与图形计算:
           - 游戏服务器部署与端口映射:
               - 10-game-servers/index.md
