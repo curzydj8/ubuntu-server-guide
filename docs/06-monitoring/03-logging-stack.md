@@ -266,7 +266,7 @@ sudo cp /etc/logrotate.d/rsyslog /etc/logrotate.d/rsyslog.bak-20260101
 
 ### 3.6 在 Grafana 中接入 Loki 并查询
 
-操作顺序：进入 Connections 下的 Data sources，点击 Add data source 选择 Loki，URL 填 http://192.0.2.30:3100（与 Grafana 同机时填 http://localhost:3100），点击 Save and test 出现成功提示。进入 Explore 页面，数据源选 Loki，输入下面的 LogQL 查询验证：
+操作顺序：进入 Connections 下的 Data sources，点击 Add data source 选择 Loki，URL 填 http://192.0.2.30:3100（与 Grafana 同机时填 `http://localhost:3100`），点击 Save and test 出现成功提示。进入 Explore 页面，数据源选 Loki，输入下面的 LogQL 查询验证：
 
 ```text
 {job="server-logs", host="app-01"}
