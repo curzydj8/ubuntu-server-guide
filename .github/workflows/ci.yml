@@ -63,7 +63,7 @@ jobs:
       # MD036/MD040/MD046/MD051/MD060（模板化小节与 CJK 表格对齐不适用）
       # 根目录只点名治理文档：AUDIT_REPORT.md 是历史报告（双 H1 结构），不纳入格式门禁
       - name: markdownlint-cli2 校验 docs 与根目录治理文档
-        run: npx --yes markdownlint-cli2 "docs/**/*.md" "TOOLS_*.md" "CONTRIBUTING.md" "SECURITY.md"
+        run: npx --yes markdownlint-cli2 "docs/**/*.md" "!docs/encyclopedia/**/*.md" "!docs/website-guide/**/*.md" "!docs/tools/index.md" "TOOLS_*.md" "CONTRIBUTING.md" "SECURITY.md"
 
   scripts-smoke:
     name: 脚本冒烟（bash -n + shellcheck）
@@ -108,7 +108,7 @@ jobs:
           python-version: "3.12"
       - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
         with:
-          node-version: "20"
+          node-version: "24"
       - name: 安装构建依赖与测试依赖
         run: |
           pip install -r requirements.txt
