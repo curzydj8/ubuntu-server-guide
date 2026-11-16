@@ -335,7 +335,6 @@ nav:
               - SSL 到期计算器、DNS 检查、HTTPS/安全/上线前检查工具: website-guide/tools/03-checkers.md
           - 生产运营·SEO 与性能:
               - SEO、性能、缓存、图片优化、访问统计完整教程: website-guide/ops/01-seo-performance.md
-          - 网站指南·全站整合验收报告: website-guide/FINAL_REPORT.md
       - 09 云计算与 DevOps:
           - 容器化与云原生:
               - 05-containers/index.md
