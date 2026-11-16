@@ -3,6 +3,10 @@
 {# 站点级 Open Graph / Twitter Card 标签：Material 默认不输出 og 标签，统一在此补齐。
    标题与描述优先取页面 front-matter（description），缺省回退到站点级配置。 #}
 {% block extrahead %}
+  {# AdSense 整改（2026-11-16 接手维护）：百科与建站指南整块 noindex，核心章节不受影响 #}
+  {% if page and page.url and (page.url.startswith("encyclopedia/") or page.url.startswith("website-guide/")) %}
+  <meta name="robots" content="noindex">
+  {% endif %}
   {% set og_title = config.site_name %}
   {% if page and page.title and not page.is_homepage %}
     {% set og_title = page.title ~ " - " ~ config.site_name %}
