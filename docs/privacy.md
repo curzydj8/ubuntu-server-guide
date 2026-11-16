@@ -48,7 +48,7 @@ description: "crozz.me 隐私政策：本站在指南浏览、账号注册与登
 - Cloudflare：域名解析与隧道，指南流量经其网络到达本站服务器。
 - GitHub：第三方登录，以及内容源码仓库。
 - Google：第三方登录，以及广告投放（含 AdSense）与意见征求管理。
-- 阿里云邮件推送（DirectMail）：仅用于发送注册与找回密码的验证码邮件，发信地址为 noreply@mail.crozz.me。
+- 阿里云邮件推送（DirectMail）：仅用于发送注册与找回密码的验证码邮件，发信地址为 `noreply@mail.crozz.me`。
 
 点击本站内的站外链接后，适用对方的隐私政策，不适用本政策。
 
